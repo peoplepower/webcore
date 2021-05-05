@@ -1,0 +1,5 @@
+export enum WsSubscriptionType {
+  LOCATION_NARRATIVES = 1,
+  ORGANIZATION_NARRATIVES = 2,
+  LOCATION_STATES = 3
+}
