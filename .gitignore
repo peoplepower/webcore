@@ -3,6 +3,8 @@ node_modules/
 .idea/
 dist/
 .DS_Store
+yarn.lock
+package-lock.json
 
 # Optional npm cache directory
 .npm

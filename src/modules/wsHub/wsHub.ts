@@ -459,7 +459,12 @@ export class WsHub {
       }
       handled = true;
     } else if (typeof data === 'string') { // handle plain JSON packet
-      let jsonObj: WsResponseBase = this.decode(data);
+      let decoded = this.decode(data);
+      if (!decoded) {
+        return;
+      }
+      let jsonObj: WsResponseBase = decoded!;
+
       this.lastPacketSendOrReceived = new Date();
       this.logger.debug('[WebSocket] Received message: ' + data);
 
@@ -629,7 +634,7 @@ export class WsHub {
     return JSON.stringify(request);
   }
 
-  private decode(response: string): WsResponseBase {
+  private decode(response: string): WsResponseBase | undefined {
     let jsonObj: WsResponseBase;
     try {
       jsonObj = JSON.parse(response);

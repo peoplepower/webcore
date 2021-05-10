@@ -1,11 +1,12 @@
-import nodeResolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import typescript from 'rollup-plugin-typescript2'
-import sourcemaps from 'rollup-plugin-sourcemaps'
-import { terser } from 'rollup-plugin-terser'
-import pkg from './package.json'
+import nodeResolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from 'rollup-plugin-typescript2';
+import sourcemaps from 'rollup-plugin-sourcemaps';
+import {terser} from 'rollup-plugin-terser';
+import pkg from './package.json';
 
 const tsConfig = {
+  tsconfig: './tsconfig.bundle.json',
   clean: true,
   check: false,
   useTsconfigDeclarationDir: true

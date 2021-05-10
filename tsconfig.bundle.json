@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "ES5",
+    "module": "ES6",
+    "lib": [
+      "ESNext",
+      "dom"
+    ],
+    "strict": true,
+    "sourceMap": true,
+    "declaration": false,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "dist/",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
