@@ -21,7 +21,6 @@ const API_KEY_EXPIRE_ADDITIONAL_DELAY = 2 * 60 * 1000; // 2 minutes
 
 @injectable('AuthService')
 export class AuthService extends BaseService {
-
   @inject('AuthApi') protected readonly authApi: AuthApi;
   @inject('OAuthHostApi') protected readonly oAuthHostApi: OAuthHostApi;
   @inject('UserAccountsApi') protected readonly userAccountsApi: UserAccountsApi;
@@ -95,7 +94,7 @@ export class AuthService extends BaseService {
       return Promise.resolve(true);
     }
     if (!this.ensureAuthenticatedPromise) {
-      this.ensureAuthenticatedPromise = new Promise<boolean>(resolve => {
+      this.ensureAuthenticatedPromise = new Promise<boolean>((resolve) => {
         let eventSubscriptionCanceller = this.onLogin.on(() => {
           eventSubscriptionCanceller();
           delete this.ensureAuthenticatedPromise;
@@ -115,10 +114,10 @@ export class AuthService extends BaseService {
    */
   public login(username: string, pwd: string, admin?: boolean): Promise<LoginInfo> {
     let me = this;
-    let params = admin ? {keyType: 11} : undefined;
+    let params = admin ? { keyType: 11 } : undefined;
     return this.logoutFromThisBrowser()
       .then(() => this.authApi.login(username, pwd, params))
-      .then(result => {
+      .then((result) => {
         me.logger.debug('Logged in as: ' + username, result);
         me._apiKey = result.key;
         me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
@@ -142,8 +141,8 @@ export class AuthService extends BaseService {
     let me = this;
     let keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
-      .then(() => this.authApi.login(username, undefined, {passcode: passcode, keyType: keyType}))
-      .then(result => {
+      .then(() => this.authApi.login(username, undefined, { passcode: passcode, keyType: keyType }))
+      .then((result) => {
         me.logger.debug('Logged in as: ' + username, result);
         me._apiKey = result.key;
         me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
@@ -169,8 +168,8 @@ export class AuthService extends BaseService {
     let me = this;
     let keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
-      .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType}))
-      .then(result => {
+      .then(() => this.authApi.loginByKey({ apiKey: apiKey, keyType: keyType }))
+      .then((result) => {
         me.logger.debug('Logged in by API_KEY', result);
         me._apiKey = result.key;
         me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
@@ -189,16 +188,15 @@ export class AuthService extends BaseService {
    */
   public refreshToken(): Promise<LoginInfo> {
     let me = this;
-    return me.authApi.loginByKey({apiKey: me._apiKey})
-      .then(result => {
-        me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
-        me._apiKey = result.key;
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-        me.setUpKeyExpireTimeout(result.keyExpire!);
-        return result;
-      });
+    return me.authApi.loginByKey({ apiKey: me._apiKey }).then((result) => {
+      me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
+      me._apiKey = result.key;
+      me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+      me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
+      me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
+      me.setUpKeyExpireTimeout(result.keyExpire!);
+      return result;
+    });
   }
 
   /**
@@ -214,14 +212,16 @@ export class AuthService extends BaseService {
     }
     let keyType = admin ? 11 : 0; // Admin or User key type
     let brandName = brand ? brand : undefined;
-    return this.authApi.sendPasscode({
-      username: username,
-      type: 2,
-      keyType: keyType,
-      brand: brandName,
-    }).then(result => {
-      return result;
-    });
+    return this.authApi
+      .sendPasscode({
+        username: username,
+        type: 2,
+        keyType: keyType,
+        brand: brandName,
+      })
+      .then((result) => {
+        return result;
+      });
   }
 
   /**
@@ -229,11 +229,10 @@ export class AuthService extends BaseService {
    * @returns {Promise<LoginInfo>}
    */
   public getTempToken(): Promise<LoginInfo> {
-    return this.authApi.loginByKey({keyType: 1})
-      .then(result => {
-        this.logger.debug('Temporary API key has been requested.', result);
-        return result;
-      });
+    return this.authApi.loginByKey({ keyType: 1 }).then((result) => {
+      this.logger.debug('Temporary API key has been requested.', result);
+      return result;
+    });
   }
 
   /**
@@ -251,8 +250,8 @@ export class AuthService extends BaseService {
         me.onNeedRelogin.trigger();
       } else {
         // setTimeout is buggy: it will fire immediately if timeout is bigger that 0x7FFFFFFF
-        if (expirePeriod >= 0x7FFFFFFF) {
-          expirePeriod = 0x7FFFFFFE;
+        if (expirePeriod >= 0x7fffffff) {
+          expirePeriod = 0x7ffffffe;
         }
 
         if (this.apiKeyExpireTimeout) {
@@ -263,11 +262,10 @@ export class AuthService extends BaseService {
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, keyExpireDateObj.toISOString());
         this.apiKeyExpireTimeout = setTimeout(function () {
           me.logger.debug(`API key (${me._apiKey}) is about to expire. Refreshing...`);
-          me.refreshToken()
-            .catch(() => {
-              me.logoutFromThisBrowser();
-              me.onNeedRelogin.trigger();
-            });
+          me.refreshToken().catch(() => {
+            me.logoutFromThisBrowser();
+            me.onNeedRelogin.trigger();
+          });
         }, expirePeriod);
       }
     } else {
@@ -307,14 +305,13 @@ export class AuthService extends BaseService {
    */
   public logoutFromAllBrowsers() {
     let me = this;
-    return me.authApi.logout()
-      .then(() => {
-        me.logger.debug('System logged out from all the browsers');
-        me._apiKey = undefined;
-        me.wcStorage.remove(LOCAL_STORAGE_API_KEY);
-        this.clearKeyExpireTimeout();
-        me.onLogout.trigger();
-      });
+    return me.authApi.logout().then(() => {
+      me.logger.debug('System logged out from all the browsers');
+      me._apiKey = undefined;
+      me.wcStorage.remove(LOCAL_STORAGE_API_KEY);
+      this.clearKeyExpireTimeout();
+      me.onLogout.trigger();
+    });
   }
 
   /**
@@ -335,15 +332,18 @@ export class AuthService extends BaseService {
    * @param {string} [params.passcode] SMS passcode if it was sent (this API can return resultCode=17 which force user to enter passcode)
    * @returns {Promise<ApiResponseBase>}
    */
-  public setNewPasswordByTempKey(newPassword: string, tempKey: string, params?: {
-    brand?: string,
-    appName?: string,
-    passcode?: string
-  }): Promise<ApiResponseBase> {
-    return this.userAccountsApi.newPasswordByTempKey(newPassword, tempKey, params)
-      .then(result => {
-        return result;
-      });
+  public setNewPasswordByTempKey(
+    newPassword: string,
+    tempKey: string,
+    params?: {
+      brand?: string;
+      appName?: string;
+      passcode?: string;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.userAccountsApi.newPasswordByTempKey(newPassword, tempKey, params).then((result) => {
+      return result;
+    });
   }
 
   /**
@@ -357,14 +357,18 @@ export class AuthService extends BaseService {
    * @param {string} [params.appName] App name to identify the brand
    * @returns {Promise<ApiResponseBase>}
    */
-  public setNewPassword(newPassword: string, oldPassword: string, passcode?: string, params?: {
-    brand?: string,
-    appName?: string
-  }): Promise<ApiResponseBase> {
-    return this.ensureAuthenticated()
-      .then(() => {
-        return this.userAccountsApi.newPassword(newPassword, oldPassword, passcode, params);
-      });
+  public setNewPassword(
+    newPassword: string,
+    oldPassword: string,
+    passcode?: string,
+    params?: {
+      brand?: string;
+      appName?: string;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.ensureAuthenticated().then(() => {
+      return this.userAccountsApi.newPassword(newPassword, oldPassword, passcode, params);
+    });
   }
 
   /**
@@ -380,21 +384,21 @@ export class AuthService extends BaseService {
    * @param {string} [params.state] The client's state which will be returned in the callback URL.
    * @returns {Promise<string>}
    */
-  getUrlToApproveOrDenyAuthorization(approved: boolean,
-                                     params: {
-                                       clientId: string,
-                                       responseType: string,
-                                       apiKey: string
-                                       state?: string,
-                                       locationId?: number,
-                                       brand?: string,
-                                     }): Promise<string> {
+  getUrlToApproveOrDenyAuthorization(
+    approved: boolean,
+    params: {
+      clientId: string;
+      responseType: string;
+      apiKey: string;
+      state?: string;
+      locationId?: number;
+      brand?: string;
+    },
+  ): Promise<string> {
     return this.oAuthHostApi.getUrlToApproveOrDenyAuthorization(approved, params);
   }
 }
 
-export interface LoginInfo extends LoginApiResponse {
-}
+export interface LoginInfo extends LoginApiResponse {}
 
-export interface LogoutApiResponse extends ApiResponseBase {
-}
+export interface LogoutApiResponse extends ApiResponseBase {}

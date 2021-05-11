@@ -2,9 +2,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { CallCenterAlertStatus } from './getCallCenterApiResponse';
 import { PhoneType } from '../userAccounts/createUserAndLocationApiResponse';
 
-export interface UpdateCallCenterApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateCallCenterApiResponse extends ApiResponseBase {}
 
 export interface UpdateCallCenterModel {
   callCenter: {

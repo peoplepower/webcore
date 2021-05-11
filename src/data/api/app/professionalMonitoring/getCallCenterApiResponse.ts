@@ -28,7 +28,7 @@ export enum CallCenterStatus {
   /**
    * Cancellation completed
    */
-  Cancelled = 5
+  Cancelled = 5,
 }
 
 /**
@@ -46,7 +46,7 @@ export enum CallCenterAlertStatus {
   /**
    * The alert reported to the call center
    */
-  Reported = 3
+  Reported = 3,
 }
 
 export interface GetCallCenterApiResponse extends ApiResponseBase {

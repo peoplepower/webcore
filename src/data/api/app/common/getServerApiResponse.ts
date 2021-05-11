@@ -4,7 +4,7 @@ import { ServerType } from './getApiSettingsApiResponse';
 export interface GetServerApiResponse extends ApiResponseBase {
   server: {
     type: ServerType;
-    host: string
+    host: string;
     port: number;
     ssl: boolean;
     altPort: number;

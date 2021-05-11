@@ -6,12 +6,12 @@ export enum BotAccessCategory {
   CallCenter = 3,
   Devices = 4,
   Challenges = 5,
-  Rules = 6
+  Rules = 6,
 }
 
 export enum BotCommunicationCategory {
   LocationUsers = 0,
-  OrganizationAdmins = 4
+  OrganizationAdmins = 4,
 }
 
 export interface GetBotInfoApiResponse extends ApiResponseBase {

@@ -37,7 +37,6 @@ const WS_REQUEST_TIMEOUT = 30 * 1000; // 30 sec
  */
 @injectable('WsHub')
 export class WsHub {
-
   @inject('Logger') private readonly logger: Logger;
   @inject('Tuner') private readonly tuner: Tuner;
   @inject('CloudConfigService') private readonly cloudConfigService: CloudConfigService;
@@ -149,10 +148,9 @@ export class WsHub {
   constructor() {
     this.authService.onLogin.on(() => {
       if (this.status === WebSocketConnectionStatus.OPEN || this.status === WebSocketConnectionStatus.OPEN_AND_AUTHENTICATED) {
-        this.authenticate()
-          .catch(() => {
-            // Avoid unhandled rejection
-          });
+        this.authenticate().catch(() => {
+          // Avoid unhandled rejection
+        });
       }
     });
 
@@ -203,7 +201,7 @@ export class WsHub {
    * @param {boolean} noAuth set true to send without authentication
    * @return {Promise<WsResponseBase>}
    */
-  send(data: { goal: WsPacketGoal, [propName: string]: any }, noAuth: boolean = false): Promise<WsResponseBase> {
+  send(data: { goal: WsPacketGoal; [propName: string]: any }, noAuth: boolean = false): Promise<WsResponseBase> {
     this.ensureConnected();
     let request: WsRequestBase = {
       ...data,
@@ -215,9 +213,7 @@ export class WsHub {
     return packet.receiveDeferred.promise; // return deferred that will be resolved when packet response will be received;
   }
 
-  subscribe(type: WsSubscriptionType,
-            operation: WsSubscriptionOperation,
-            params: WsSubscriptionParams): WsSubscription {
+  subscribe(type: WsSubscriptionType, operation: WsSubscriptionOperation, params: WsSubscriptionParams): WsSubscription {
     let subscription = new WsSubscription(type, operation, params);
 
     this.ensureConnectedAndAuthenticated();
@@ -227,7 +223,7 @@ export class WsHub {
     this.processPacketQueue();
 
     subscription.onUnsubscribe(() => {
-      this.subscriptions = this.subscriptions.filter(s => s !== subscription);
+      this.subscriptions = this.subscriptions.filter((s) => s !== subscription);
       subscription.status = SubscriptionStatus.CANCELLED;
       if (this.webSocket!.readyState === WebSocket.OPEN && !!subscription.id) {
         let dataString = this.encode({
@@ -320,8 +316,7 @@ export class WsHub {
     }
 
     this.setStatus(WebSocketConnectionStatus.CONNECTING);
-    return this.cloudConfigService.getWebSocketUrl()
-      .then(url => this.initWebSocket(url));
+    return this.cloudConfigService.getWebSocketUrl().then((url) => this.initWebSocket(url));
   }
 
   /**
@@ -378,10 +373,9 @@ export class WsHub {
     this.startPingPong();
 
     // Try authenticate as soon as we connected
-    this.authenticate()
-      .catch(() => {
-        // Avoid unhandled rejection
-      });
+    this.authenticate().catch(() => {
+      // Avoid unhandled rejection
+    });
 
     this.processSubscriptions();
     this.processPacketQueue();
@@ -407,12 +401,7 @@ export class WsHub {
       if (!packet.received) {
         packet.sent = undefined;
       }
-      if ([
-        WsPacketGoal.Auth,
-        WsPacketGoal.Subscribe,
-        WsPacketGoal.Unsubscribe,
-        WsPacketGoal.Status,
-      ].includes(packet.goal)) {
+      if ([WsPacketGoal.Auth, WsPacketGoal.Subscribe, WsPacketGoal.Unsubscribe, WsPacketGoal.Status].includes(packet.goal)) {
         packet.receiveDeferred.reject('WebSocket connection was terminated. This request no longer makes sense.');
         return false;
       }
@@ -420,7 +409,7 @@ export class WsHub {
       return true;
     });
 
-    this.subscriptions.forEach(s => {
+    this.subscriptions.forEach((s) => {
       s.status = SubscriptionStatus.INACTIVE;
     });
 
@@ -448,17 +437,20 @@ export class WsHub {
 
     let handled = false;
 
-    if (data === PING_SEQUENCE) { // Handle ping packet
+    if (data === PING_SEQUENCE) {
+      // Handle ping packet
       if (this.webSocket?.readyState === WebSocket.OPEN) {
         this.webSocket.send(PONG_SEQUENCE);
       }
       handled = true;
-    } else if (data === PONG_SEQUENCE) { // Handle pong packet
+    } else if (data === PONG_SEQUENCE) {
+      // Handle pong packet
       if (this.webSocket?.readyState === WebSocket.OPEN) {
         this.lastPongReceivedTime = new Date();
       }
       handled = true;
-    } else if (typeof data === 'string') { // handle plain JSON packet
+    } else if (typeof data === 'string') {
+      // handle plain JSON packet
       let decoded = this.decode(data);
       if (!decoded) {
         return;
@@ -484,10 +476,10 @@ export class WsHub {
           }
         }
       });
-      this.packetQueue = this.packetQueue.filter(p => !p.received);
+      this.packetQueue = this.packetQueue.filter((p) => !p.received);
 
       // Process subscriptions
-      this.subscriptions.filter(s => {
+      this.subscriptions.filter((s) => {
         if (s.id === jsonObj.id) {
           handled = true;
           if (jsonObj.goal === WsPacketGoal.Subscribe) {
@@ -566,39 +558,46 @@ export class WsHub {
       return;
     }
 
-    this.packetQueue
-      .forEach((packet) => {
-        if (packet.sent) {
-          return;
-        }
+    this.packetQueue.forEach((packet) => {
+      if (packet.sent) {
+        return;
+      }
 
-        if (this.status === WebSocketConnectionStatus.OPEN_AND_AUTHENTICATED ||
-          (packet.needAuth === false && this.status === WebSocketConnectionStatus.OPEN)) {
-          packet.attempt++;
-          packet.sent = new Date();
-          let dataString = this.encode(packet.request);
-          this.webSocket!.send(dataString);
-          this.logger.debug('[WebSocket] Message sent: ' + dataString);
+      if (
+        this.status === WebSocketConnectionStatus.OPEN_AND_AUTHENTICATED ||
+        (packet.needAuth === false && this.status === WebSocketConnectionStatus.OPEN)
+      ) {
+        packet.attempt++;
+        packet.sent = new Date();
+        let dataString = this.encode(packet.request);
+        this.webSocket!.send(dataString);
+        this.logger.debug('[WebSocket] Message sent: ' + dataString);
 
-          // Start response check timeout
-          setTimeout(() => {
-            if (this.packetQueue.includes(packet)
-              && !packet.received
-              && !!packet.sent
-              && new Date().getTime() - packet.sent.getTime() >= WS_REQUEST_TIMEOUT) {
-              packet.sent = undefined; // drop packet send status
-              this.logger.warn(`[WebSockets] Request timeout. Server did not respond within ${WS_REQUEST_TIMEOUT / 1000} seconds for request with id="${packet.id}"`);
+        // Start response check timeout
+        setTimeout(() => {
+          if (
+            this.packetQueue.includes(packet) &&
+            !packet.received &&
+            !!packet.sent &&
+            new Date().getTime() - packet.sent.getTime() >= WS_REQUEST_TIMEOUT
+          ) {
+            packet.sent = undefined; // drop packet send status
+            this.logger.warn(
+              `[WebSockets] Request timeout. Server did not respond within ${WS_REQUEST_TIMEOUT / 1000} seconds for request with id="${
+                packet.id
+              }"`,
+            );
 
-              // Maybe we need to reconnect?
-              // this.webSocket.close(1012, `Request timeout. Server did not respond within ${WS_REQUEST_TIMEOUT/1000} seconds`);
-              // this.webSocket = undefined;
-              // this.setStatus(WebSocketConnectionStatus.DISCONNECTED);
-            }
-          }, WS_REQUEST_TIMEOUT);
+            // Maybe we need to reconnect?
+            // this.webSocket.close(1012, `Request timeout. Server did not respond within ${WS_REQUEST_TIMEOUT/1000} seconds`);
+            // this.webSocket = undefined;
+            // this.setStatus(WebSocketConnectionStatus.DISCONNECTED);
+          }
+        }, WS_REQUEST_TIMEOUT);
 
-          this.lastPacketSendOrReceived = new Date();
-        }
-      });
+        this.lastPacketSendOrReceived = new Date();
+      }
+    });
   }
 
   private processSubscriptions() {
@@ -611,8 +610,8 @@ export class WsHub {
     }
 
     this.subscriptions
-      .filter(s => s.status === SubscriptionStatus.INACTIVE)
-      .forEach(s => {
+      .filter((s) => s.status === SubscriptionStatus.INACTIVE)
+      .forEach((s) => {
         s.status = SubscriptionStatus.PENDING;
         s.id = this.generateMessageId();
         let dataString = this.encode({
@@ -660,7 +659,9 @@ export class WsHub {
     }
 
     if (!this.authService.isAuthenticated()) {
-      this.logger.debug('[WebSocket] Unable to authenticate on WebSocket channel. No authentication token present in WebCore. Authenticate in authService first.');
+      this.logger.debug(
+        '[WebSocket] Unable to authenticate on WebSocket channel. No authentication token present in WebCore. Authenticate in authService first.',
+      );
       return Promise.reject();
     }
 
@@ -669,10 +670,13 @@ export class WsHub {
       return Promise.resolve();
     }
     this.lastUsedApiKey = this.authService.apiKey;
-    return this.send({
-      key: this.authService.apiKey,
-      goal: WsPacketGoal.Auth,
-    }, true)
+    return this.send(
+      {
+        key: this.authService.apiKey,
+        goal: WsPacketGoal.Auth,
+      },
+      true,
+    )
       .then(() => {
         if (this.status !== WebSocketConnectionStatus.OPEN) {
           return;
@@ -737,11 +741,12 @@ export class WsHub {
 
   private startIdleCheck() {
     setInterval(() => {
-      if (this.webSocket?.readyState === WebSocket.OPEN
-        && this.packetQueue?.length === 0
-        && this.subscriptions?.length === 0
-        && new Date().getTime() - this.lastPacketSendOrReceived.getTime() >= WS_IDLE_TIMEOUT) {
-
+      if (
+        this.webSocket?.readyState === WebSocket.OPEN &&
+        this.packetQueue?.length === 0 &&
+        this.subscriptions?.length === 0 &&
+        new Date().getTime() - this.lastPacketSendOrReceived.getTime() >= WS_IDLE_TIMEOUT
+      ) {
         this.logger.debug('[WebSocket] Closing idle WebSocket connection');
         // @ts-ignore
         this.webSocket.unsubscribeEvents();
@@ -751,5 +756,4 @@ export class WsHub {
       }
     }, WS_IDLE_TIMEOUT);
   }
-
 }

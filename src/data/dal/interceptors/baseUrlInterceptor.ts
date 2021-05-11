@@ -9,7 +9,6 @@ import { Path } from '../../../modules/common/path';
  * Here we trying to determine which request is successful, which is not, resolving the promise according to that
  */
 export class BaseUrlInterceptor implements Interceptor {
-
   private readonly apiBase: string;
 
   @inject('CloudConfigService') protected readonly cloudConfigService: CloudConfigService;
@@ -29,12 +28,11 @@ export class BaseUrlInterceptor implements Interceptor {
         config.baseURL = Path.Combine(this.cloudConfigService.baseUrl, this.apiBase);
         config.url = Path.Combine(this.cloudConfigService.baseUrl, this.apiBase, config.url!);
       } else {
-        return this.cloudConfigService.getBaseUrl()
-          .then(url => {
-            config.baseURL = Path.Combine(url, this.apiBase);
-            config.url = Path.Combine(url, this.apiBase, config.url!);
-            return config;
-          });
+        return this.cloudConfigService.getBaseUrl().then((url) => {
+          config.baseURL = Path.Combine(url, this.apiBase);
+          config.url = Path.Combine(url, this.apiBase, config.url!);
+          return config;
+        });
       }
     }
     return config;

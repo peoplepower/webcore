@@ -31,25 +31,25 @@ export class WebCoreConfig {
      * Initial ping interval.
      * @type {number}
      */
-    initialPingInterval?: number,
+    initialPingInterval?: number;
 
     /**
      * Step of increasing ping interval.
      * @type {number}
      */
-    pingIntervalIncrease?: number,
+    pingIntervalIncrease?: number;
 
     /**
      * Max ping interval
      * @type {number}
      */
-    maxPingInterval?: number,
+    maxPingInterval?: number;
 
     /**
      * Additional time to wait after successful ping when server will be ready
      * @type {number}
      */
-    afterPingTimeout?: number
+    afterPingTimeout?: number;
   };
 
   /**

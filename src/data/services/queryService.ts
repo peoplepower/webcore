@@ -5,7 +5,6 @@ import { IStringifyOptions } from 'qs';
 
 @injectable('QueryService')
 export class QueryService extends BaseService {
-
   constructor() {
     super();
   }
@@ -32,5 +31,4 @@ export class QueryService extends BaseService {
   encodeQueryParams(obj: any, options?: IStringifyOptions): string {
     return qs.stringify(obj, options);
   }
-
 }

@@ -13,7 +13,6 @@ const DEFAULT_MAX_LEVEL = LogLevel.Emergency;
 
 @injectable('Logger')
 export class Logger {
-
   @inject('Tuner') private readonly tuner: Tuner;
 
   /**
@@ -115,5 +114,4 @@ export class Logger {
   debug(...args: any[]) {
     this.log(LogLevel.Debug, ...args);
   }
-
 }

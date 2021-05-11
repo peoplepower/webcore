@@ -13,6 +13,4 @@ export interface UpdateDeviceModel {
   };
 }
 
-export interface UpdateDeviceApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateDeviceApiResponse extends ApiResponseBase {}

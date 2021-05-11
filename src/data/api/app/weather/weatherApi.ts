@@ -11,7 +11,6 @@ import { GetCurrentWeatherByLocationApiResponse } from './getCurrentWeatherByLoc
  */
 @injectable('WeatherApi')
 export class WeatherApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -26,15 +25,18 @@ export class WeatherApi {
    * @param {number} [params.organizationId] For specific organization. Used by administrator only.
    * @returns {Promise<GetForecastByGeocodeApiResponse>}
    */
-  getForecastByGeocode(latitude: number, longitude: number,
-                       params?: {
-                         units?: Units,
-                         hours?: ForecastDepth,
-                         organizationId?: number
-                       }): Promise<GetForecastByGeocodeApiResponse> {
-    return this.dal.get(
-      `weather/forecast/geocode/${encodeURIComponent(latitude.toString())}/${encodeURIComponent(longitude.toString())}`,
-      {params: params});
+  getForecastByGeocode(
+    latitude: number,
+    longitude: number,
+    params?: {
+      units?: Units;
+      hours?: ForecastDepth;
+      organizationId?: number;
+    },
+  ): Promise<GetForecastByGeocodeApiResponse> {
+    return this.dal.get(`weather/forecast/geocode/${encodeURIComponent(latitude.toString())}/${encodeURIComponent(longitude.toString())}`, {
+      params: params,
+    });
   }
 
   /**
@@ -48,9 +50,8 @@ export class WeatherApi {
    * @param {number} [params.organizationId] For specific organization. Used by administrator only.
    * @returns {Promise<GetForecastByLocationApiResponse>}
    */
-  getForecastByLocation(locationId: number, params?: { units?: Units, hours?: ForecastDepth }): Promise<GetForecastByLocationApiResponse> {
-    return this.dal.get(
-      `weather/forecast/location/${encodeURIComponent(locationId.toString())}`, {params: params});
+  getForecastByLocation(locationId: number, params?: { units?: Units; hours?: ForecastDepth }): Promise<GetForecastByLocationApiResponse> {
+    return this.dal.get(`weather/forecast/location/${encodeURIComponent(locationId.toString())}`, { params: params });
   }
 
   /**
@@ -64,14 +65,17 @@ export class WeatherApi {
    * @param {number} [params.organizationId] For specific organization. Used by administrator only.
    * @returns {Promise<GetCurrentWeatherByGeocodeApiResponse>}
    */
-  getCurrentWeatherByGeocode(latitude: number, longitude: number,
-                             params?: {
-                               units?: Units,
-                               organizationId?: number
-                             }): Promise<GetCurrentWeatherByGeocodeApiResponse> {
-    return this.dal.get(
-      `weather/current/geocode/${encodeURIComponent(latitude.toString())}/${encodeURIComponent(longitude.toString())}`,
-      {params: params});
+  getCurrentWeatherByGeocode(
+    latitude: number,
+    longitude: number,
+    params?: {
+      units?: Units;
+      organizationId?: number;
+    },
+  ): Promise<GetCurrentWeatherByGeocodeApiResponse> {
+    return this.dal.get(`weather/current/geocode/${encodeURIComponent(latitude.toString())}/${encodeURIComponent(longitude.toString())}`, {
+      params: params,
+    });
   }
 
   /**
@@ -84,8 +88,6 @@ export class WeatherApi {
    * @returns {Promise<GetCurrentWeatherByLocationApiResponse>}
    */
   getCurrentWeatherByLocation(locationId: number, params?: { units?: Units }): Promise<GetCurrentWeatherByLocationApiResponse> {
-    return this.dal.get(
-      `weather/current/location/${encodeURIComponent(locationId.toString())}`, {params: params});
+    return this.dal.get(`weather/current/location/${encodeURIComponent(locationId.toString())}`, { params: params });
   }
-
 }

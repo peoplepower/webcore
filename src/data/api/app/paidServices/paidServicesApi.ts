@@ -17,7 +17,6 @@ import { GetUserPaymentProfilesApiResponse, PaymentProfileType } from './getUser
  */
 @injectable('PaidServicesApi')
 export class PaidServicesApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -39,14 +38,14 @@ export class PaidServicesApi {
    * @returns {Promise<GetSoftwareSubscriptionsApiResponse>}
    */
   getSoftwareSubscriptions(params?: {
-    locationId?: number,
-    userId?: number,
-    appName?: string,
-    organizationId?: number,
-    hiddenPrices?: boolean,
-    plansOnly?: boolean
+    locationId?: number;
+    userId?: number;
+    appName?: string;
+    organizationId?: number;
+    hiddenPrices?: boolean;
+    plansOnly?: boolean;
   }): Promise<GetSoftwareSubscriptionsApiResponse> {
-    return this.dal.get('servicePlans', {params: params});
+    return this.dal.get('servicePlans', { params: params });
   }
 
   /**
@@ -63,13 +62,16 @@ export class PaidServicesApi {
    * @param {number} [params.locationId] Location ID.
    * @returns {Promise<AssignServicesToLocationsApiResponse>}
    */
-  assignServicesToLocations(servicePlanId: number, services?: AssignServicesToLocationsModel,
-                            params?: {
-                              organizationId?: number,
-                              endDate?: string,
-                              locationId?: number
-                            }): Promise<AssignServicesToLocationsApiResponse> {
-    return this.dal.post('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), services || {}, {params: params});
+  assignServicesToLocations(
+    servicePlanId: number,
+    services?: AssignServicesToLocationsModel,
+    params?: {
+      organizationId?: number;
+      endDate?: string;
+      locationId?: number;
+    },
+  ): Promise<AssignServicesToLocationsApiResponse> {
+    return this.dal.post('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), services || {}, { params: params });
   }
 
   /**
@@ -87,16 +89,16 @@ export class PaidServicesApi {
    * @returns {Promise<GetLocationSubscriptionsApiResponse>}
    */
   getLocationSubscriptions(params?: {
-    locationId?: number,
-    userId?: number,
-    userPlanId?: number,
-    status?: SubscriptionStatus | SubscriptionStatus[],
-    getCard?: boolean,
-    sortBy?: string,
-    sortOrder?: string,
-    sortCollection?: string
+    locationId?: number;
+    userId?: number;
+    userPlanId?: number;
+    status?: SubscriptionStatus | SubscriptionStatus[];
+    getCard?: boolean;
+    sortBy?: string;
+    sortOrder?: string;
+    sortCollection?: string;
   }): Promise<GetLocationSubscriptionsApiResponse> {
-    return this.dal.get('userServicePlans', {params: params});
+    return this.dal.get('userServicePlans', { params: params });
   }
 
   /**
@@ -112,13 +114,13 @@ export class PaidServicesApi {
    */
   upgradeSubscription(
     params: {
-      userPlanId: number,
-      targetPlanId: number,
-      userId?: number
+      userPlanId: number;
+      targetPlanId: number;
+      userId?: number;
     },
     upgradeModel?: UpgradeSubscriptionInfoModel,
   ): Promise<UpgradeSubscriptionApiResponse> {
-    return this.dal.post('purchase/upgrade', upgradeModel, {params: params});
+    return this.dal.post('purchase/upgrade', upgradeModel, { params: params });
   }
 
   /**
@@ -131,9 +133,8 @@ export class PaidServicesApi {
    * @param {number} [params.organizationId] Organization ID. Required if called by an administrator.
    * @returns {Promise<ApiResponseBase>}
    */
-  cancelSubscription(servicePlanId: number, params?: { locationId?: number, organizationId?: number })
-    : Promise<ApiResponseBase> {
-    return this.dal.delete('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), {params: params});
+  cancelSubscription(servicePlanId: number, params?: { locationId?: number; organizationId?: number }): Promise<ApiResponseBase> {
+    return this.dal.delete('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), { params: params });
   }
 
   /**
@@ -146,9 +147,11 @@ export class PaidServicesApi {
    * @param {boolean} [params.upgrade] Return only transactions, which caused service plan change.
    * @returns {Promise<GetSubscriptionTransactionsApiResponse>}
    */
-  getSubscriptionTransactions(servicePlanId: number, params?: { locationId?: number, upgrade?: boolean })
-    : Promise<GetSubscriptionTransactionsApiResponse> {
-    return this.dal.get(`userServicePlanTransactions/${encodeURIComponent(servicePlanId.toString())}`, {params: params});
+  getSubscriptionTransactions(
+    servicePlanId: number,
+    params?: { locationId?: number; upgrade?: boolean },
+  ): Promise<GetSubscriptionTransactionsApiResponse> {
+    return this.dal.get(`userServicePlanTransactions/${encodeURIComponent(servicePlanId.toString())}`, { params: params });
   }
 
   /**
@@ -164,15 +167,16 @@ export class PaidServicesApi {
    * @param {number} [params.userId] Purchase as specific user
    * @param {boolean} [params.sandbox] Set to true, if need to test the process on sandbox payment provider service
    */
-  provideNewPurchaseInfo(newPurchaseInfo: NewPurchaseInfoModel,
-                         params: {
-                           priceId: number,
-                           locationId: number,
-                           userId?: number,
-                           sandbox?: boolean
-                         })
-    : Promise<ProvideNewPurchaseInfoApiResponse> {
-    return this.dal.post(`purchase`, newPurchaseInfo, {params: params});
+  provideNewPurchaseInfo(
+    newPurchaseInfo: NewPurchaseInfoModel,
+    params: {
+      priceId: number;
+      locationId: number;
+      userId?: number;
+      sandbox?: boolean;
+    },
+  ): Promise<ProvideNewPurchaseInfoApiResponse> {
+    return this.dal.post(`purchase`, newPurchaseInfo, { params: params });
   }
 
   /**
@@ -186,9 +190,11 @@ export class PaidServicesApi {
    * @param {number} params.locationId Location ID.
    * @param {number} [params.userId] Act as specific user.
    */
-  updatePurchaseInfo(purchaseInfo: UpdatePurchaseInfoModel, params: { userPlanId: number, locationId: number, userId?: number })
-    : Promise<UpdatePurchaseInfoApiResponse> {
-    return this.dal.put(`purchase`, purchaseInfo, {params: params});
+  updatePurchaseInfo(
+    purchaseInfo: UpdatePurchaseInfoModel,
+    params: { userPlanId: number; locationId: number; userId?: number },
+  ): Promise<UpdatePurchaseInfoApiResponse> {
+    return this.dal.put(`purchase`, purchaseInfo, { params: params });
   }
 
   /**
@@ -203,13 +209,12 @@ export class PaidServicesApi {
    * @param {boolean} [params.appName] PPC cloud related appName (brand). Required if paymentType=4
    */
   getUserPaymentProfiles(params: {
-    paymentType: PaymentProfileType,
-    userId?: number,
-    customerId?: string,
-    includeDisabled?: boolean,
-    appName?: string
-  })
-    : Promise<GetUserPaymentProfilesApiResponse> {
-    return this.dal.get(`userPaymentProfiles`, {params: params});
+    paymentType: PaymentProfileType;
+    userId?: number;
+    customerId?: string;
+    includeDisabled?: boolean;
+    appName?: string;
+  }): Promise<GetUserPaymentProfilesApiResponse> {
+    return this.dal.get(`userPaymentProfiles`, { params: params });
   }
 }

@@ -4,9 +4,7 @@ import { inject, injectable } from '../../modules/common/di';
 
 @injectable('OperationTokenService')
 export class OperationTokenService {
-
-  constructor() {
-  }
+  constructor() {}
 
   /**
    * Get new OperationTokenProvider. After creation it will refresh Operation Token when expired, until getToken()
@@ -37,7 +35,7 @@ export class OperationTokenProvider {
   }
 
   public getToken(): Promise<string> {
-    return this.getTokenFromApiPromise!.then(result => {
+    return this.getTokenFromApiPromise!.then((result) => {
       this.isStopped = true;
       return result.token;
     });
@@ -51,21 +49,20 @@ export class OperationTokenProvider {
     if (this.isStopped) {
       return;
     }
-    this.getTokenFromApiPromise = this.authApi.getOperationToken(this.tokenType)
-      .then(result => {
-        setTimeout(() => {
-          this.getTokenFromApi();
-        }, result.expire - result.validFrom);
+    this.getTokenFromApiPromise = this.authApi.getOperationToken(this.tokenType).then((result) => {
+      setTimeout(() => {
+        this.getTokenFromApi();
+      }, result.expire - result.validFrom);
 
-        return new Promise<GetOperationTokenApiResponse>((resolve, reject) => {
-          if (result.validFrom || result.validFrom === 0) {
-            setTimeout(() => {
-              resolve(result);
-            }, result.validFrom);
-          } else {
-            reject();
-          }
-        });
+      return new Promise<GetOperationTokenApiResponse>((resolve, reject) => {
+        if (result.validFrom || result.validFrom === 0) {
+          setTimeout(() => {
+            resolve(result);
+          }, result.validFrom);
+        } else {
+          reject();
+        }
       });
+    });
   }
 }

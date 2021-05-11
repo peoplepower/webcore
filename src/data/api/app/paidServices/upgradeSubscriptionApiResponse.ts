@@ -1,8 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface UpgradeSubscriptionApiResponse extends ApiResponseBase {
-
-}
+export interface UpgradeSubscriptionApiResponse extends ApiResponseBase {}
 
 export interface UpgradeSubscriptionInfoModel {
   services?: Array<{

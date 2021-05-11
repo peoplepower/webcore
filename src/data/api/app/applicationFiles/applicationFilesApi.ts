@@ -14,7 +14,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('ApplicationFilesApi')
 export class ApplicationFilesApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -40,26 +39,24 @@ export class ApplicationFilesApi {
   uploadAppFileContent(
     file: ArrayBuffer,
     params: {
-      type: AppFileType,
-      fileId?: number,
-      userId?: number,
-      locationId?: number,
-      deviceId?: string,
-      name?: string,
-      publicAccess?: boolean
+      type: AppFileType;
+      fileId?: number;
+      userId?: number;
+      locationId?: number;
+      deviceId?: string;
+      name?: string;
+      publicAccess?: boolean;
     },
     contentType: string = 'application/octet-stream',
-    onUploadProgress?: (progressEvent: any) => void): Promise<UploadAppFileContentApiResponse> {
+    onUploadProgress?: (progressEvent: any) => void,
+  ): Promise<UploadAppFileContentApiResponse> {
     // TODO: In order to actually conveniently use this method we need to introduce the service around it with public
     //  access which uses the html5 FileReader component
-    return this.dal.post(
-      'appfiles',
-      file,
-      {
-        params: params,
-        onUploadProgress: onUploadProgress,
-        headers: {'Content-Type': contentType},
-      });
+    return this.dal.post('appfiles', file, {
+      params: params,
+      onUploadProgress: onUploadProgress,
+      headers: { 'Content-Type': contentType },
+    });
   }
 
   /**
@@ -78,14 +75,14 @@ export class ApplicationFilesApi {
    * @returns {Promise<GetApplicationFilesApiResponse>}
    */
   getApplicationFiles(params?: {
-    fileId?: number,
-    type?: AppFileType,
-    userId?: number,
-    locationId?: number,
-    deviceId?: string,
-    name?: string
+    fileId?: number;
+    type?: AppFileType;
+    userId?: number;
+    locationId?: number;
+    deviceId?: string;
+    name?: string;
   }): Promise<GetApplicationFilesApiResponse> {
-    return this.dal.get('appfiles', {params: params});
+    return this.dal.get('appfiles', { params: params });
   }
 
   /**
@@ -100,12 +97,15 @@ export class ApplicationFilesApi {
    *
    * @returns {Promise<GetApplicationFileUrlApiResponse>}
    */
-  getApplicationFileUrl(fileId: number, params?: {
-    userId?: number,
-    locationId?: number,
-    expiration?: string
-  }): Promise<GetApplicationFileUrlApiResponse> {
-    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}/url`, {params: params});
+  getApplicationFileUrl(
+    fileId: number,
+    params?: {
+      userId?: number;
+      locationId?: number;
+      expiration?: string;
+    },
+  ): Promise<GetApplicationFileUrlApiResponse> {
+    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}/url`, { params: params });
   }
 
   /**
@@ -151,16 +151,19 @@ export class ApplicationFilesApi {
    *
    * @returns {ArrayBuffer} File content.
    */
-  downloadFile(fileId: number, params?: {
-    API_KEY?: string,
-    userId?: number,
-    locationId?: number,
-    attach?: boolean
-  }): Promise<ArrayBuffer> {
+  downloadFile(
+    fileId: number,
+    params?: {
+      API_KEY?: string;
+      userId?: number;
+      locationId?: number;
+      attach?: boolean;
+    },
+  ): Promise<ArrayBuffer> {
     // TODO: In order to actually conveniently use this method we need to introduce the service around it with public
     //  access The response stream with file content actually can be used as: .then(function(response) {
     //  response.data.pipe(fs.createWriteStream('ada_lovelace.jpg')) })
-    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}`, {params: params, responseType: 'stream'});
+    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}`, { params: params, responseType: 'stream' });
   }
 
   /**
@@ -173,10 +176,13 @@ export class ApplicationFilesApi {
    * @param {number} [params.locationId] Location ID to delete the file as an administrator.
    * @returns {Promise<DeleteApplicationFileApiResponse>}
    */
-  deleteFile(fileId: number, params?: {
-    userId?: number,
-    locationId?: number
-  }): Promise<ApiResponseBase> {
-    return this.dal.delete(`appfiles/${encodeURIComponent(fileId.toString())}`, {params: params});
+  deleteFile(
+    fileId: number,
+    params?: {
+      userId?: number;
+      locationId?: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.delete(`appfiles/${encodeURIComponent(fileId.toString())}`, { params: params });
   }
 }

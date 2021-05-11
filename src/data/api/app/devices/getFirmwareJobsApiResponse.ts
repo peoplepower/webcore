@@ -7,8 +7,8 @@ export interface GetFirmwareJobsApiResponse extends ApiResponseBase {
     firmware: string;
     currentFirmware: string;
     status: FirmwareStatus;
-    url: string,
-    checkSum: string,
+    url: string;
+    checkSum: string;
     notificationDate: string;
     notificationDateMs: number;
     startDate: string;
@@ -20,7 +20,7 @@ export interface GetFirmwareJobsApiResponse extends ApiResponseBase {
       desc: string;
       lastDataReceivedDate: string;
       lastDataReceivedDateMs: number;
-    }
+    };
   }>;
 }
 
@@ -28,5 +28,5 @@ export enum FirmwareStatus {
   Available = 1,
   Approved = 2,
   Decline = 3,
-  Started = 4
+  Started = 4,
 }

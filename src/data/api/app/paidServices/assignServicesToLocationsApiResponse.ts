@@ -19,7 +19,7 @@ export interface AssignServicesToLocationsApiResponse extends ApiResponseBase {
       startDateMs: number;
       endDate: string;
       endDateMs: number;
-    }
+    };
   }>;
 }
 

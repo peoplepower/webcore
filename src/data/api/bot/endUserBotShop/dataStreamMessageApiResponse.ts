@@ -1,7 +1,7 @@
 export enum DataStreamScope {
   Individual = 1,
   OrgLocational = 2,
-  Circle = 4
+  Circle = 4,
 }
 
 export interface DataStreamMessage {

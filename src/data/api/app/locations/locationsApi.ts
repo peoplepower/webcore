@@ -29,7 +29,6 @@ import { GetLocationPrioritiesApiResponse } from './getLocationPrioritiesApiResp
  */
 @injectable('LocationsApi')
 export class LocationsApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -41,7 +40,7 @@ export class LocationsApi {
    * @returns {Promise<AddNewLocationToUserApiResponse>}
    */
   addNewLocationToUser(location: AddNewLocationToUserModel, userId?: number): Promise<AddNewLocationToUserApiResponse> {
-    return this.dal.post('location', location, {params: {userId: userId}});
+    return this.dal.post('location', location, { params: { userId: userId } });
   }
 
   /**
@@ -93,11 +92,7 @@ export class LocationsApi {
    * @param {string} [endDate] Optional. End date to stop receiving data. Default is the current date.
    * @returns {Promise<GetLocationScenesHistoryApiResponse>}
    */
-  getLocationScenesHistory(
-    locationId: number,
-    startDate?: string,
-    endDate?: string,
-  ): Promise<GetLocationScenesHistoryApiResponse> {
+  getLocationScenesHistory(locationId: number, startDate?: string, endDate?: string): Promise<GetLocationScenesHistoryApiResponse> {
     return this.dal.get('location/' + encodeURIComponent(locationId.toString()) + '/events', {
       params: {
         startDate: startDate,
@@ -117,13 +112,13 @@ export class LocationsApi {
    * @returns {Promise<GetCountriesApiResponse>}
    */
   getCountries(params?: {
-    organizationId?: number,
-    countryCode?: string | string[],
-    lang?: string,
-    sortCollection?: string,
-    sortBy?: string
+    organizationId?: number;
+    countryCode?: string | string[];
+    lang?: string;
+    sortCollection?: string;
+    sortBy?: string;
   }): Promise<GetCountriesApiResponse> {
-    return this.dal.get('countries', {params: params});
+    return this.dal.get('countries', { params: params });
   }
 
   // #region --------------------- Location Users -----------------------
@@ -141,7 +136,7 @@ export class LocationsApi {
    */
   getLocationUsers(locationId: number, analyticKey?: string): Promise<GetLocationUsersApiResponse> {
     return this.dal.get(`location/${encodeURIComponent(locationId.toString())}/users`, {
-      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
+      headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
     });
   }
 
@@ -247,14 +242,15 @@ export class LocationsApi {
   createOrUpdateNarrative(
     locationId: number,
     narrative: CreateOrUpdateNarrativeModel,
-    params: { scope: NarrativeScope, narrativeId?: number, narrativeTime?: number },
+    params: { scope: NarrativeScope; narrativeId?: number; narrativeTime?: number },
     analyticKey?: string,
   ): Promise<CreateOrUpdateNarrativeApiResponse> {
     return this.dal.put(
       `locations/${encodeURIComponent(locationId.toString())}/narratives`,
-      {narrative: narrative}, {
+      { narrative: narrative },
+      {
         params: params,
-        headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
+        headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
       },
     );
   }
@@ -273,12 +269,12 @@ export class LocationsApi {
    */
   deleteNarrative(
     locationId: number,
-    params: { scope: NarrativeScope, narrativeId: number, narrativeTime: number },
+    params: { scope: NarrativeScope; narrativeId: number; narrativeTime: number },
     analyticKey?: string,
   ): Promise<ApiResponseBase> {
     return this.dal.delete(`locations/${encodeURIComponent(locationId.toString())}/narratives`, {
       params: params,
-      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
+      headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
     });
   }
 
@@ -308,20 +304,21 @@ export class LocationsApi {
   getNarratives(
     locationId: number,
     params: {
-      rowCount: number,
-      narrativeId?: number,
-      priority?: NarrativePriority,
-      toPriority?: NarrativePriority,
-      status?: NarrativeStatus,
-      searchBy?: string,
-      startDate?: string,
-      endDate?: string,
-      pageMarker?: string
-    }, analyticKey?: string,
+      rowCount: number;
+      narrativeId?: number;
+      priority?: NarrativePriority;
+      toPriority?: NarrativePriority;
+      status?: NarrativeStatus;
+      searchBy?: string;
+      startDate?: string;
+      endDate?: string;
+      pageMarker?: string;
+    },
+    analyticKey?: string,
   ): Promise<GetNarrativesApiResponse> {
     return this.dal.get(`locations/${encodeURIComponent(locationId.toString())}/narratives`, {
       params: params,
-      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
+      headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
     });
   }
 
@@ -364,14 +361,17 @@ export class LocationsApi {
    * @param {SetLocationStateModel} value any valid JSON node - string, integer, boolean, array, object, etc.
    * @returns {Promise<SetLocationStateApiResponse>}
    */
-  setLocationState(locationId: number, params: {
-    name: string,
-    overwrite?: boolean
-  }, value: SetLocationStateModel): Promise<SetLocationStateApiResponse> {
-    return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/state`,
-      value || {}, {
-        params: params,
-      });
+  setLocationState(
+    locationId: number,
+    params: {
+      name: string;
+      overwrite?: boolean;
+    },
+    value: SetLocationStateModel,
+  ): Promise<SetLocationStateApiResponse> {
+    return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/state`, value || {}, {
+      params: params,
+    });
   }
 
   /**
@@ -391,14 +391,17 @@ export class LocationsApi {
    * @param {LocationTimeStateAggregation} [params.aggregation] Aggregate field values by 1 = hour, 2 = day, 3 = month, 4 = week
    * @returns {Promise<GetLocationTimeStateApiResponse>}
    */
-  getLocationTimeState(locationId: number, params: {
-    startDate: string | number,
-    endDate?: string | number,
-    name?: string | string[],
-    field?: string | string[],
-    keepParent?: boolean,
-    aggregation?: LocationTimeStateAggregation
-  }): Promise<GetLocationTimeStateApiResponse> {
+  getLocationTimeState(
+    locationId: number,
+    params: {
+      startDate: string | number;
+      endDate?: string | number;
+      name?: string | string[];
+      field?: string | string[];
+      keepParent?: boolean;
+      aggregation?: LocationTimeStateAggregation;
+    },
+  ): Promise<GetLocationTimeStateApiResponse> {
     return this.dal.get(`locations/${encodeURIComponent(locationId.toString())}/timeStates`, {
       params: params,
     });
@@ -418,15 +421,18 @@ export class LocationsApi {
    * @param {SetLocationStateModel} value any valid JSON node - string, integer, boolean, array, object, etc.
    * @returns {Promise<SetLocationStateApiResponse>}
    */
-  setLocationTimeState(locationId: number, params: {
-    name: string,
-    date: string | number,
-    overwrite?: boolean
-  }, value: SetLocationStateModel): Promise<SetLocationStateApiResponse> {
-    return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/timeStates`,
-      value || {}, {
-        params: params,
-      });
+  setLocationTimeState(
+    locationId: number,
+    params: {
+      name: string;
+      date: string | number;
+      overwrite?: boolean;
+    },
+    value: SetLocationStateModel,
+  ): Promise<SetLocationStateApiResponse> {
+    return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/timeStates`, value || {}, {
+      params: params,
+    });
   }
 
   // #endregion
@@ -444,12 +450,12 @@ export class LocationsApi {
    * @returns {Promise<GetLocationTotalsApiResponse>}
    */
   getLocationTotals(params: {
-    locationId: number,
-    devices?: boolean,
-    files?: boolean,
-    rules?: boolean
+    locationId: number;
+    devices?: boolean;
+    files?: boolean;
+    rules?: boolean;
   }): Promise<GetLocationTotalsApiResponse> {
-    return this.dal.get('locationTotals', {params: params});
+    return this.dal.get('locationTotals', { params: params });
   }
 
   /**
@@ -464,15 +470,17 @@ export class LocationsApi {
    * @param {number} [params.rowCount] Maximum number of results.
    * @returns {Promise<GetLocationPrioritiesApiResponse>}
    */
-  getLocationPriorityHistory(locationId: number, params: {
-    startDate: string | number,
-    endDate?: string | number,
-    priority?: number,
-    rowCount?: number
-  }): Promise<GetLocationPrioritiesApiResponse> {
+  getLocationPriorityHistory(
+    locationId: number,
+    params: {
+      startDate: string | number;
+      endDate?: string | number;
+      priority?: number;
+      rowCount?: number;
+    },
+  ): Promise<GetLocationPrioritiesApiResponse> {
     return this.dal.get(`location/${encodeURIComponent(locationId.toString())}/priorities`, {
       params: params,
     });
   }
-
 }

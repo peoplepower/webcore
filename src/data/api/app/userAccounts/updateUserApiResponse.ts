@@ -1,9 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { PhoneType } from './createUserAndLocationApiResponse';
 
-export interface UpdateUserApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateUserApiResponse extends ApiResponseBase {}
 
 export interface UserModel {
   username?: string;

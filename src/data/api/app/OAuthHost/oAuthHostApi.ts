@@ -12,7 +12,6 @@ import { QueryService } from '../../../services/queryService';
  */
 @injectable('OAuthHostApi')
 export class OAuthHostApi {
-
   @inject('AppApiOAuthDal') protected readonly dal: AppApiOAuthDal;
   @inject('AuthService') protected readonly authService: AuthService;
   @inject('QueryService') protected readonly queryService: QueryService;
@@ -31,21 +30,24 @@ export class OAuthHostApi {
    * @param {string} [params.state] The client's state which will be returned in the callback URL.
    * @returns {Promise<string>}
    */
-  getUrlToAuthorizeThirdPartyApp(brand: string,
-                                 params: {
-                                   clientId: string,
-                                   responseType: string,
-                                   state?: string
-                                 }): Promise<string> {
-    let paramsStr = this.queryService.encodeQueryParams({
-      client_id: params.clientId,
-      response_type: params.responseType,
-      state: params.state,
-    }, {addQueryPrefix: true});
-
-    return this.dal.GetFullUrl(
-      `oauth/authorize/${encodeURIComponent(brand)}${paramsStr}`,
+  getUrlToAuthorizeThirdPartyApp(
+    brand: string,
+    params: {
+      clientId: string;
+      responseType: string;
+      state?: string;
+    },
+  ): Promise<string> {
+    let paramsStr = this.queryService.encodeQueryParams(
+      {
+        client_id: params.clientId,
+        response_type: params.responseType,
+        state: params.state,
+      },
+      { addQueryPrefix: true },
     );
+
+    return this.dal.GetFullUrl(`oauth/authorize/${encodeURIComponent(brand)}${paramsStr}`);
   }
 
   /**
@@ -63,27 +65,30 @@ export class OAuthHostApi {
    * @param {string} [params.state] The client's state which will be returned in the callback URL.
    * @returns {Promise<string>}
    */
-  getUrlToApproveOrDenyAuthorization(approved: boolean,
-                                     params: {
-                                       clientId: string,
-                                       responseType: string,
-                                       apiKey: string
-                                       state?: string,
-                                       locationId?: number,
-                                       brand?: string,
-                                     }): Promise<string> {
-    let paramsStr = this.queryService.encodeQueryParams({
-      client_id: params.clientId,
-      response_type: params.responseType,
-      state: params.state,
-      locationId: params.locationId,
-      brand: params.brand,
-      API_KEY: params.apiKey,
-    }, {addQueryPrefix: true});
-
-    return this.dal.GetFullUrl(
-      `oauth/approve/${encodeURIComponent(approved.toString())}${paramsStr}`,
+  getUrlToApproveOrDenyAuthorization(
+    approved: boolean,
+    params: {
+      clientId: string;
+      responseType: string;
+      apiKey: string;
+      state?: string;
+      locationId?: number;
+      brand?: string;
+    },
+  ): Promise<string> {
+    let paramsStr = this.queryService.encodeQueryParams(
+      {
+        client_id: params.clientId,
+        response_type: params.responseType,
+        state: params.state,
+        locationId: params.locationId,
+        brand: params.brand,
+        API_KEY: params.apiKey,
+      },
+      { addQueryPrefix: true },
     );
+
+    return this.dal.GetFullUrl(`oauth/approve/${encodeURIComponent(approved.toString())}${paramsStr}`);
   }
 
   /**
@@ -104,33 +109,25 @@ export class OAuthHostApi {
    * @param {string} [params.code] The authorization code.
    * @returns {Promise<GetAccessTokenApiResponse>}
    */
-  getAccessToken(params: {
-    code?: string,
-    refresh_token?: string,
-    client_id?: string
-  }): Promise<GetAccessTokenApiResponse> {
-
+  getAccessToken(params: { code?: string; refresh_token?: string; client_id?: string }): Promise<GetAccessTokenApiResponse> {
     //TODO: Find out what should be put as 'secret' actually. Putting apiKey for now
     let clientIdAndSecretEncoded = btoa(`${params.client_id}:${this.authService.apiKey}`);
 
     let body = this.queryService.encodeQueryParams({
-      'code': params.code,
-      'refresh_token': params.refresh_token,
-      'client_id': params.client_id,
-      'client_secret': this.authService.apiKey,
-      'grant_type': (params.refresh_token || params.code) ? undefined : 'client_credentials',
+      code: params.code,
+      refresh_token: params.refresh_token,
+      client_id: params.client_id,
+      client_secret: this.authService.apiKey,
+      grant_type: params.refresh_token || params.code ? undefined : 'client_credentials',
     });
 
-    return this.dal.post(
-      'oauth/token',
-      body,
-      {
-        // params: params,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': `Basic ${clientIdAndSecretEncoded}`,
-        },
-      });
+    return this.dal.post('oauth/token', body, {
+      // params: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${clientIdAndSecretEncoded}`,
+      },
+    });
   }
 
   /**
@@ -143,7 +140,7 @@ export class OAuthHostApi {
    * @param {string} [params.userId] Administrators may revoke access to third-party clients on behalf of a user.
    * @returns {Promise<ApiResponseBase>}
    */
-  revokeOAuthClients(params: { client_id: string, userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('cloud/json/authClient', {params: params});
+  revokeOAuthClients(params: { client_id: string; userId?: number }): Promise<ApiResponseBase> {
+    return this.dal.delete('cloud/json/authClient', { params: params });
   }
 }

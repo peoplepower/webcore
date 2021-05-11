@@ -15,7 +15,6 @@ import { CommandParametersModel, SendCommandToDeviceApiResponse } from './sendCo
  */
 @injectable('DeviceMeasurementsApi')
 export class DeviceMeasurementsApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -31,16 +30,15 @@ export class DeviceMeasurementsApi {
    * @param {number} [params.userId] User ID to receive alerts from, used only by administrators.
    * @returns {Promise<GetAlertsHistoryApiResponse>}
    */
-  getAlertsHistory(
-    params: {
-      startDate: string,
-      locationId: number,
-      endDate?: string,
-      alertType?: string,
-      deviceId?: string,
-      userId?: number
-    }): Promise<GetAlertsHistoryApiResponse> {
-    return this.dal.get('alerts', {params: params});
+  getAlertsHistory(params: {
+    startDate: string;
+    locationId: number;
+    endDate?: string;
+    alertType?: string;
+    deviceId?: string;
+    userId?: number;
+  }): Promise<GetAlertsHistoryApiResponse> {
+    return this.dal.get('alerts', { params: params });
   }
 
   /**
@@ -61,19 +59,22 @@ export class DeviceMeasurementsApi {
    * @param {boolean} [params.reduceNoise] Return tiny parameter values less than defined threshold as zero.
    * @returns {Promise<GetLastNMeasurementsApiResponse>}
    */
-  getLastNMeasurements(deviceId: string, rowCount: number,
-                       params: {
-                         locationId: number,
-                         startDate?: string,
-                         endDate?: string,
-                         userId?: number,
-                         paramName?: string | string[],
-                         index?: string,
-                         reduceNoise?: boolean
-                       }): Promise<GetLastNMeasurementsApiResponse> {
-    return this.dal.get(
-      `devices/${encodeURIComponent(deviceId)}/parametersByCount/${encodeURIComponent(rowCount.toString())}`,
-      {params: params});
+  getLastNMeasurements(
+    deviceId: string,
+    rowCount: number,
+    params: {
+      locationId: number;
+      startDate?: string;
+      endDate?: string;
+      userId?: number;
+      paramName?: string | string[];
+      index?: string;
+      reduceNoise?: boolean;
+    },
+  ): Promise<GetLastNMeasurementsApiResponse> {
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parametersByCount/${encodeURIComponent(rowCount.toString())}`, {
+      params: params,
+    });
   }
 
   /**
@@ -88,14 +89,16 @@ export class DeviceMeasurementsApi {
    * @param {number} [params.shared] Send command to a device shared in circle. If 'true', the location ID is not required.
    * @returns {Promise<GetCurrentDeviceMeasurementsApiResponse>}
    */
-  getCurrentMeasurements(deviceId: string,
-                         params: {
-                           locationId: number,
-                           userId?: number,
-                           paramName?: string,
-                           shared?: boolean
-                         }): Promise<GetCurrentDeviceMeasurementsApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parameters`, {params: params});
+  getCurrentMeasurements(
+    deviceId: string,
+    params: {
+      locationId: number;
+      userId?: number;
+      paramName?: string;
+      shared?: boolean;
+    },
+  ): Promise<GetCurrentDeviceMeasurementsApiResponse> {
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parameters`, { params: params });
   }
 
   /**
@@ -113,12 +116,15 @@ export class DeviceMeasurementsApi {
    * @param {number} [params.shared] Send command to a device shared in circle. If 'true', the location ID is not required.
    * @returns {Promise<SendCommandToDeviceApiResponse>}
    */
-  sendCommandToDevice(deviceId: string, commandParameters: CommandParametersModel,
-                      params: {
-                        locationId: number,
-                        shared?: boolean
-                      }): Promise<SendCommandToDeviceApiResponse> {
-    return this.dal.put(`devices/${encodeURIComponent(deviceId)}/parameters`, commandParameters, {params: params});
+  sendCommandToDevice(
+    deviceId: string,
+    commandParameters: CommandParametersModel,
+    params: {
+      locationId: number;
+      shared?: boolean;
+    },
+  ): Promise<SendCommandToDeviceApiResponse> {
+    return this.dal.put(`devices/${encodeURIComponent(deviceId)}/parameters`, commandParameters, { params: params });
   }
 
   /**
@@ -145,18 +151,21 @@ export class DeviceMeasurementsApi {
    * @param {boolean} [params.rangeOnly] Return parameters stored exactly between start and end dates
    * @returns {Promise<GetMeasurementsHistoryApiResponse>}
    */
-  getMeasurementsHistory(deviceId: string, startDate: string,
-                         params: {
-                           locationId: number,
-                           endDate?: string,
-                           userId?: number,
-                           paramName?: string | string[],
-                           index?: string,
-                           interval?: number;
-                           aggregation?: IntervalAggregationAlgorithm,
-                           reduceNoise?: boolean,
-                           rangeOnly?: boolean
-                         }): Promise<GetMeasurementsHistoryApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parametersByDate/${encodeURIComponent(startDate)}`, {params: params});
+  getMeasurementsHistory(
+    deviceId: string,
+    startDate: string,
+    params: {
+      locationId: number;
+      endDate?: string;
+      userId?: number;
+      paramName?: string | string[];
+      index?: string;
+      interval?: number;
+      aggregation?: IntervalAggregationAlgorithm;
+      reduceNoise?: boolean;
+      rangeOnly?: boolean;
+    },
+  ): Promise<GetMeasurementsHistoryApiResponse> {
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parametersByDate/${encodeURIComponent(startDate)}`, { params: params });
   }
 }

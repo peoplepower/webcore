@@ -3,10 +3,10 @@ import { QuestionStatus } from './getQuestionsApiResponse';
 
 export interface AnswerQuestionsModel {
   questions: Array<{
-    id: number,
-    answer?: string | boolean | number,
-    answerStatus?: QuestionStatus
-  }>
+    id: number;
+    answer?: string | boolean | number;
+    answerStatus?: QuestionStatus;
+  }>;
 }
 
 export interface AnswerQuestionsApiResponse extends ApiResponseBase {
@@ -14,20 +14,20 @@ export interface AnswerQuestionsApiResponse extends ApiResponseBase {
     /**
      * Question ID to answer
      */
-    id: number,
+    id: number;
     /**
      * User's answer
      */
-    answer?: string,
+    answer?: string;
     /**
      * Indicate if the original answer has been modified
      */
-    answerModified?: boolean,
+    answerModified?: boolean;
     /**
      * Optionally change question status
      */
-    answerStatus?: QuestionStatus,
-    answerDate?: string,
-    answerDateMs?: number,
-  }>
+    answerStatus?: QuestionStatus;
+    answerDate?: string;
+    answerDateMs?: number;
+  }>;
 }

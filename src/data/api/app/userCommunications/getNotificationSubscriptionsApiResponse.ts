@@ -33,5 +33,5 @@ export enum NotificationType {
   BotErrors = 19,
   AppBadgeChange = 20,
   Community = 21,
-  BotReports = 22
+  BotReports = 22,
 }

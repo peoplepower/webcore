@@ -9,25 +9,27 @@ import { OfflineInterceptor } from '../../dal/interceptors/offlineInterceptor';
 
 @injectable('DeviceStreamingApiDal')
 export class DeviceStreamingApiDal extends Dal {
-
   constructor() {
     const offlineInterceptor = new OfflineInterceptor();
 
-    super({
-      // custom params serializer
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          arrayFormat: 'repeat', // this will make {a: ['b', 'c']} compiles to 'a=b&a=c' not 'a[]=b&a[]=c'
-          //indices: false
-        });
+    super(
+      {
+        // custom params serializer
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            arrayFormat: 'repeat', // this will make {a: ['b', 'c']} compiles to 'a=b&a=c' not 'a[]=b&a[]=c'
+            //indices: false
+          });
+        },
       },
-    }, [
-      new BaseUrlInterceptor('/cloud/json/'),
-      offlineInterceptor,
-      new AuthInterceptor(),
-      new ApiResponseInterceptor(),
-      new JsonContentTypeInterceptor(),
-    ]);
+      [
+        new BaseUrlInterceptor('/cloud/json/'),
+        offlineInterceptor,
+        new AuthInterceptor(),
+        new ApiResponseInterceptor(),
+        new JsonContentTypeInterceptor(),
+      ],
+    );
 
     offlineInterceptor.dal = this;
   }

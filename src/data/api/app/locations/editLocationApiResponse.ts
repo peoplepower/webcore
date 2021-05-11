@@ -7,12 +7,10 @@ export enum LocationType {
   HotelLodging = 22,
   Restaurant = 23,
   Retail = 24,
-  Office = 25
+  Office = 25,
 }
 
-export interface EditLocationApiResponse extends ApiResponseBase {
-
-}
+export interface EditLocationApiResponse extends ApiResponseBase {}
 
 export interface LocationModel {
   name?: string;

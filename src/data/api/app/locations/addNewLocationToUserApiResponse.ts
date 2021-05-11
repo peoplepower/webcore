@@ -12,7 +12,7 @@ export interface AddNewLocationToUserModel {
     utilityAccountNo?: string;
     timezone?: {
       id: string;
-    },
+    };
     addrStreet1?: string;
     addrStreet2?: string;
     addrCity?: string;

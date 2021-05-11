@@ -28,12 +28,12 @@ export class FilesService extends BaseService {
    * @returns {Promise<GetApplicationFilesApiResponse>}
    */
   getApplicationFiles(params?: {
-    fileId?: number,
-    type?: AppFileType,
-    userId?: number,
-    locationId?: number,
-    deviceId?: string,
-    name?: string
+    fileId?: number;
+    type?: AppFileType;
+    userId?: number;
+    locationId?: number;
+    deviceId?: string;
+    name?: string;
   }): Promise<GetApplicationFilesApiResponse> {
     return this.applicationFilesApi.getApplicationFiles(params);
   }
@@ -56,23 +56,25 @@ export class FilesService extends BaseService {
    *
    * @returns {Promise<string>}
    */
-  getApplicationFileDownloadUrl(fileId: number, params?: {
-    API_KEY?: string,
-    userId?: number,
-    locationId?: number,
-    attach?: boolean
-  }): Promise<string> {
-    return this.cloudConfigService.getBaseUrl()
-      .then(baseUrl => {
-        let downloadFileUrl: string = Path.Combine(baseUrl, `/cloud/json/appfiles/${encodeURIComponent(fileId.toString())}`);
-        if (params) {
-          let queryParams = qs.stringify(params);
-          if (queryParams) {
-            downloadFileUrl = `${downloadFileUrl}?${queryParams}`;
-          }
+  getApplicationFileDownloadUrl(
+    fileId: number,
+    params?: {
+      API_KEY?: string;
+      userId?: number;
+      locationId?: number;
+      attach?: boolean;
+    },
+  ): Promise<string> {
+    return this.cloudConfigService.getBaseUrl().then((baseUrl) => {
+      let downloadFileUrl: string = Path.Combine(baseUrl, `/cloud/json/appfiles/${encodeURIComponent(fileId.toString())}`);
+      if (params) {
+        let queryParams = qs.stringify(params);
+        if (queryParams) {
+          downloadFileUrl = `${downloadFileUrl}?${queryParams}`;
         }
-        return downloadFileUrl;
-      });
+      }
+      return downloadFileUrl;
+    });
   }
 
   /**
@@ -87,15 +89,17 @@ export class FilesService extends BaseService {
    *
    * @returns {Promise<GetDownloadUrlApiResponse>}
    */
-  getApplicationFileUrl(fileId: number, params?: {
-    userId?: number,
-    locationId?: number,
-    expiration?: string
-  }): Promise<GetApplicationFileUrlApiResponse> {
+  getApplicationFileUrl(
+    fileId: number,
+    params?: {
+      userId?: number;
+      locationId?: number;
+      expiration?: string;
+    },
+  ): Promise<GetApplicationFileUrlApiResponse> {
     if (!fileId || isNaN(fileId)) {
       return this.reject(`File ID can not be empty [${fileId}].`);
     }
     return this.applicationFilesApi.getApplicationFileUrl(fileId, params);
   }
-
 }

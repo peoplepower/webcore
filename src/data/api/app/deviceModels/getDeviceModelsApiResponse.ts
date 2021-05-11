@@ -7,7 +7,7 @@ export enum DevicePairingType {
   OAuth2 = 4,
   ZigBee = 8,
   WiFi = 16,
-  GenerateQRCode = 32
+  GenerateQRCode = 32,
 }
 
 /**
@@ -19,7 +19,7 @@ export enum DevicePairingType {
 export enum ParamPositionType {
   RightAlignedFirst = 0,
   RightAlignedSecond = 1,
-  Subtitle = 2
+  Subtitle = 2,
 }
 
 export interface GetDeviceModelsApiResponse extends ApiResponseBase {

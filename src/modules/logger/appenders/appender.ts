@@ -5,7 +5,6 @@ import { LogLevel } from '../logLevel';
  * Abstract logger appender
  */
 export abstract class Appender {
-
   protected config: AppenderConfig;
 
   constructor(config: AppenderConfig) {
@@ -23,5 +22,5 @@ export abstract class Appender {
     this.config = config;
   }
 
-  public abstract log(level: LogLevel, ...args: any[]): void
+  public abstract log(level: LogLevel, ...args: any[]): void;
 }

@@ -19,11 +19,11 @@ import { GetLastNMeasurementsApiResponse } from '../api/app/deviceMeasurements/g
 
 @injectable('DeviceService')
 export class DeviceService extends BaseService {
-  @inject('AuthService') private readonly authService: AuthService;
-  @inject('DevicesApi') private readonly devicesApi: DevicesApi;
-  @inject('DevicesConfigurationApi') private readonly devicesConfigurationApi: DevicesConfigurationApi;
-  @inject('DeviceMeasurementsApi') private readonly deviceMeasurementsApi: DeviceMeasurementsApi;
-  @inject('DeviceModelsApi') private readonly deviceModelsApi: DeviceModelsApi;
+  @inject('AuthService') protected readonly authService: AuthService;
+  @inject('DevicesApi') protected readonly devicesApi: DevicesApi;
+  @inject('DevicesConfigurationApi') protected readonly devicesConfigurationApi: DevicesConfigurationApi;
+  @inject('DeviceMeasurementsApi') protected readonly deviceMeasurementsApi: DeviceMeasurementsApi;
+  @inject('DeviceModelsApi') protected readonly deviceModelsApi: DeviceModelsApi;
 
   constructor() {
     super();
@@ -35,12 +35,17 @@ export class DeviceService extends BaseService {
    * Gets supported device types.
    * @returns {Promise<DeviceTypes>}
    */
-  public getSupportedDeviceTypes(simple?: boolean, sortCollection?: string, sortBy?: string, organizationId?: number): Promise<DeviceTypes> {
+  public getSupportedDeviceTypes(
+    simple?: boolean,
+    sortCollection?: string,
+    sortBy?: string,
+    organizationId?: number,
+  ): Promise<DeviceTypes> {
     const params: {
-      simple?: boolean,
-      sortCollection?: string,
-      sortBy?: string,
-      organizationId?: number
+      simple?: boolean;
+      sortCollection?: string;
+      sortBy?: string;
+      organizationId?: number;
     } = {};
 
     if (simple) {
@@ -80,9 +85,9 @@ export class DeviceService extends BaseService {
     }
 
     const params: {
-      checkConnected?: boolean,
-      locationId: number,
-      userId?: number
+      checkConnected?: boolean;
+      locationId: number;
+      userId?: number;
     } = {
       locationId: locationId,
     };
@@ -94,8 +99,7 @@ export class DeviceService extends BaseService {
       params.userId = userId;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.devicesApi.getDeviceById(deviceId, params));
+    return this.authService.ensureAuthenticated().then(() => this.devicesApi.getDeviceById(deviceId, params));
   }
 
   /**
@@ -109,27 +113,30 @@ export class DeviceService extends BaseService {
    * @param {string} [params.sortBy] Sort collection by field.
    * @returns {Promise<LocationDevicesList>}
    */
-  public getLocationDevices(locationId: number, params?: {
-    checkPersistent?: boolean,
-    getTags?: boolean,
-    spaceId?: number,
-    spaceType?: number,
-    sortBy?: string,
-    sortOrder?: string
-  }): Promise<LocationDevicesList> {
+  public getLocationDevices(
+    locationId: number,
+    params?: {
+      checkPersistent?: boolean;
+      getTags?: boolean;
+      spaceId?: number;
+      spaceType?: number;
+      sortBy?: string;
+      sortOrder?: string;
+    },
+  ): Promise<LocationDevicesList> {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
     const parameters: {
-      locationId: number,
-      sortCollection: string,
-      checkPersistent?: boolean,
-      getTags?: boolean,
-      spaceId?: number,
-      spaceType?: number,
-      sortBy?: string,
-      sortOrder?: string
+      locationId: number;
+      sortCollection: string;
+      checkPersistent?: boolean;
+      getTags?: boolean;
+      spaceId?: number;
+      spaceType?: number;
+      sortBy?: string;
+      sortOrder?: string;
     } = {
       locationId: locationId,
       sortCollection: 'devices',
@@ -152,10 +159,9 @@ export class DeviceService extends BaseService {
       }
     }
 
-    return this.devicesApi.getDevicesList(parameters)
-      .then(response => {
-        return response as LocationDevicesList;
-      });
+    return this.devicesApi.getDevicesList(parameters).then((response) => {
+      return response as LocationDevicesList;
+    });
   }
 
   /**
@@ -172,10 +178,9 @@ export class DeviceService extends BaseService {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.devicesApi.getDeviceById(deviceId, {locationId: locationId, checkConnected: checkConnected});
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.devicesApi.getDeviceById(deviceId, { locationId: locationId, checkConnected: checkConnected });
+    });
   }
 
   // #endregion
@@ -189,8 +194,7 @@ export class DeviceService extends BaseService {
    * @returns {Promise<RegisterDeviceApiResponse>}
    */
   registerDevice(properties: DevicePropertiesModel, params?: RegisterDeviceParams): Promise<RegisterDeviceApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.devicesApi.registerDevice(properties, params));
+    return this.authService.ensureAuthenticated().then(() => this.devicesApi.registerDevice(properties, params));
   }
 
   /**
@@ -219,7 +223,12 @@ export class DeviceService extends BaseService {
    * With this field, it's possible to retroactively declare that the device was at a different location in the past.
    * @returns {Promise<ApiResponseBase>}
    */
-  public moveDeviceToLocation(deviceId: string, oldLocationId: number, newLocationId: number, deviceMoveTime?: string): Promise<ApiResponseBase> {
+  public moveDeviceToLocation(
+    deviceId: string,
+    oldLocationId: number,
+    newLocationId: number,
+    deviceMoveTime?: string,
+  ): Promise<ApiResponseBase> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
     }
@@ -247,7 +256,13 @@ export class DeviceService extends BaseService {
    * @param {number} goalId Goal ID
    * @returns {Promise<ApiResponseBase>}
    */
-  public updateDeviceAtLocation(deviceId: string, locationId: number, deviceDescription?: string, deviceModelId?: string, goalId?: number): Promise<ApiResponseBase> {
+  public updateDeviceAtLocation(
+    deviceId: string,
+    locationId: number,
+    deviceDescription?: string,
+    deviceModelId?: string,
+    goalId?: number,
+  ): Promise<ApiResponseBase> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
     }
@@ -255,7 +270,7 @@ export class DeviceService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    const device: { desc?: string, modelId?: string, goalId?: number } = {};
+    const device: { desc?: string; modelId?: string; goalId?: number } = {};
     if (deviceDescription && deviceDescription.length > 0) {
       device.desc = deviceDescription;
     }
@@ -266,7 +281,7 @@ export class DeviceService extends BaseService {
       device.goalId = goalId;
     }
 
-    return this.devicesApi.updateDeviceAtLocation(deviceId, locationId, {device: device});
+    return this.devicesApi.updateDeviceAtLocation(deviceId, locationId, { device: device });
   }
 
   // #endregion
@@ -289,10 +304,9 @@ export class DeviceService extends BaseService {
       params.appName = appName;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.devicesConfigurationApi.getDeviceGoalsByDeviceType(deviceTypeId, params);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.devicesConfigurationApi.getDeviceGoalsByDeviceType(deviceTypeId, params);
+    });
   }
 
   // #endregion
@@ -309,9 +323,9 @@ export class DeviceService extends BaseService {
    */
   public getCurrentMeasurements(deviceId: string, locationId: number, userId?: number, paramName?: string): Promise<DeviceMeasurements> {
     const params: {
-      locationId: number,
-      userId?: number,
-      paramName?: string
+      locationId: number;
+      userId?: number;
+      paramName?: string;
     } = {
       locationId: locationId,
     };
@@ -326,10 +340,9 @@ export class DeviceService extends BaseService {
       params.paramName = paramName;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.deviceMeasurementsApi.getCurrentMeasurements(deviceId, params);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.deviceMeasurementsApi.getCurrentMeasurements(deviceId, params);
+    });
   }
 
   /**
@@ -349,24 +362,26 @@ export class DeviceService extends BaseService {
    * @param {boolean} [params.reduceNoise] Return tiny parameter values less than defined threshold as zero.
    * @returns {Promise<GetLastNMeasurementsApiResponse>}
    */
-  getLastNMeasurements(deviceId: string, rowCount: number,
-                       params: {
-                         locationId: number,
-                         startDate?: string,
-                         endDate?: string,
-                         userId?: number,
-                         paramName?: string | string[],
-                         index?: string,
-                         reduceNoise?: boolean
-                       }): Promise<GetLastNMeasurementsApiResponse> {
+  getLastNMeasurements(
+    deviceId: string,
+    rowCount: number,
+    params: {
+      locationId: number;
+      startDate?: string;
+      endDate?: string;
+      userId?: number;
+      paramName?: string | string[];
+      index?: string;
+      reduceNoise?: boolean;
+    },
+  ): Promise<GetLastNMeasurementsApiResponse> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.deviceMeasurementsApi.getLastNMeasurements(deviceId, rowCount, params);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.deviceMeasurementsApi.getLastNMeasurements(deviceId, rowCount, params);
+    });
   }
 
   /**
@@ -381,7 +396,12 @@ export class DeviceService extends BaseService {
    * @param {boolean} shared Send command to a device shared in circle. If true, the location ID is not required.
    * @returns {Promise<DeviceCommandResult>}
    */
-  public sendCommandToDevice(deviceId: string, locationId: number, command: CommandParametersModel, shared?: boolean): Promise<DeviceCommandResult> {
+  public sendCommandToDevice(
+    deviceId: string,
+    locationId: number,
+    command: CommandParametersModel,
+    shared?: boolean,
+  ): Promise<DeviceCommandResult> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
     }
@@ -389,10 +409,9 @@ export class DeviceService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.deviceMeasurementsApi.sendCommandToDevice(deviceId, command, {locationId: locationId});
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.deviceMeasurementsApi.sendCommandToDevice(deviceId, command, { locationId: locationId });
+    });
   }
 
   // #endregion
@@ -412,13 +431,13 @@ export class DeviceService extends BaseService {
    * @returns {Promise<GetDeviceModelsApiResponse>}
    */
   getDeviceModels(params?: {
-    modelId?: string,
-    brand?: string,
-    lang?: string,
-    hidden?: boolean,
-    searchBy?: string,
-    includePairingType?: DevicePairingType,
-    excludePairingType?: DevicePairingType
+    modelId?: string;
+    brand?: string;
+    lang?: string;
+    hidden?: boolean;
+    searchBy?: string;
+    includePairingType?: DevicePairingType;
+    excludePairingType?: DevicePairingType;
   }): Promise<GetDeviceModelsApiResponse> {
     return this.deviceModelsApi.getDeviceModels(params);
   }
@@ -440,10 +459,9 @@ export class DeviceService extends BaseService {
    * @returns {Promise<GetDeviceParametersApiResponse>}
    */
   getDeviceParameters(paramName: string | string[]): Promise<GetDeviceParametersApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.devicesConfigurationApi.getDeviceParameters({paramName: paramName});
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.devicesConfigurationApi.getDeviceParameters({ paramName: paramName });
+    });
   }
 
   // #endregion
@@ -469,10 +487,9 @@ export class DeviceService extends BaseService {
       return this.reject(`Space ID is incorrect [${spaceId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.devicesApi.linkSpace(deviceId, locationId, spaceId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.devicesApi.linkSpace(deviceId, locationId, spaceId);
+    });
   }
 
   /**
@@ -494,33 +511,24 @@ export class DeviceService extends BaseService {
       return this.reject(`Space ID is incorrect [${spaceId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.devicesApi.unlinkSpace(deviceId, locationId, spaceId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.devicesApi.unlinkSpace(deviceId, locationId, spaceId);
+    });
   }
 
   // #endregion
-
 }
 
-export interface DeviceCommandResult extends SendCommandToDeviceApiResponse {
-}
+export interface DeviceCommandResult extends SendCommandToDeviceApiResponse {}
 
-export interface Device extends GetDeviceByIdApiResponse {
-}
+export interface Device extends GetDeviceByIdApiResponse {}
 
-export interface DeviceMeasurements extends GetCurrentDeviceMeasurementsApiResponse {
-}
+export interface DeviceMeasurements extends GetCurrentDeviceMeasurementsApiResponse {}
 
-export interface DeviceGoals extends GetDeviceGoalsByDeviceTypeApiResponse {
-}
+export interface DeviceGoals extends GetDeviceGoalsByDeviceTypeApiResponse {}
 
-export interface LocationDevicesList extends GetDevicesListApiResponse {
-}
+export interface LocationDevicesList extends GetDevicesListApiResponse {}
 
-export interface DeviceInformation extends GetDeviceByIdApiResponse {
-}
+export interface DeviceInformation extends GetDeviceByIdApiResponse {}
 
-export interface DeviceTypes extends GetSupportedDeviceTypesApiResponse {
-}
+export interface DeviceTypes extends GetSupportedDeviceTypesApiResponse {}

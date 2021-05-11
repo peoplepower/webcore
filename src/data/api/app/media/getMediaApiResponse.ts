@@ -4,7 +4,7 @@ export enum MediaType {
   Video = 1,
   Image = 2,
   Audio = 3,
-  TextDocument = 6
+  TextDocument = 6,
 }
 
 export interface Media {

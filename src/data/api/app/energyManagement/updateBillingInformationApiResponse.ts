@@ -1,8 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface UpdateBillingInformationApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateBillingInformationApiResponse extends ApiResponseBase {}
 
 export interface UpdateBillingInformationModel {
   billingInfo?: {
@@ -11,7 +9,7 @@ export interface UpdateBillingInformationModel {
       budget?: Array<{
         month: number;
         content: string;
-      }>
+      }>;
     };
     utility?: string;
     billingRate?: {

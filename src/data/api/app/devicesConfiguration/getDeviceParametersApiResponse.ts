@@ -12,8 +12,8 @@ export enum UnitMultipliers {
   Centi = 'c', //0.01,
   Percent = '%', //0.01,
   Deci = 'd', //0.1,
-  Empty = '',  //1,
-  Deca = 'Da',//10,
+  Empty = '', //1,
+  Deca = 'Da', //10,
   Hecto = 'h', //100,
   Kilo = 'k', //1000,
   Mega = 'M', //1000000,
@@ -28,7 +28,7 @@ export enum UnitMultipliers {
 export enum MeasurementsHistoryUpdateBehavior {
   DontSave = 0,
   UpdatePeriodicallyOrOnSignificantChange = 1,
-  UpdateOnEveryChange = 2
+  UpdateOnEveryChange = 2,
 }
 
 /**
@@ -82,7 +82,7 @@ export enum ParamDisplayType {
   TimeMinutesSeconds = 81,
   Datetime = 9,
   DatetimeDateAndTimePicker = 90,
-  DatetimeTimePicker = 91
+  DatetimeTimePicker = 91,
 }
 
 /**
@@ -104,7 +104,7 @@ export enum ParamValueType {
   ArrayOfAny = 5,
   ArrayOfNumbers = 6,
   ArrayOfStrings = 7,
-  Object = 8
+  Object = 8,
 }
 
 export interface GetDeviceParametersApiResponse extends ApiResponseBase {

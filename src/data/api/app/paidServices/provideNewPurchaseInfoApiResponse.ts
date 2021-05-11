@@ -1,8 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface ProvideNewPurchaseInfoApiResponse extends ApiResponseBase {
-
-}
+export interface ProvideNewPurchaseInfoApiResponse extends ApiResponseBase {}
 
 export interface NewPurchaseInfoModel {
   subscriptionId?: string;
@@ -25,12 +23,12 @@ export interface NewPurchaseInfoModel {
   customerId?: string;
 
   services?: Array<{
-    name: string,
-    resourceId: string
+    name: string;
+    resourceId: string;
   }>;
 
   bots?: Array<{
-    bundle: string,
-    resourceId: number
+    bundle: string;
+    resourceId: number;
   }>;
 }

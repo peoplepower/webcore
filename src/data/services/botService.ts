@@ -13,7 +13,6 @@ import { DataStreamMessage, DataStreamScope } from '../api/bot/endUserBotShop/da
 
 @injectable('BotService')
 export class BotService extends BaseService {
-
   @inject('AuthService') protected readonly authService: AuthService;
   @inject('BotShopApi') protected readonly botShopApi: BotShopApi;
 
@@ -34,13 +33,13 @@ export class BotService extends BaseService {
    * @returns {Promise<BotsList>}
    */
   public searchBots(params?: {
-    organizationId?: number,
-    locationId?: number,
-    searchBy?: string,
-    category?: string,
-    compatible?: boolean,
-    lang?: string,
-    type?: BotType
+    organizationId?: number;
+    locationId?: number;
+    searchBy?: string;
+    category?: string;
+    compatible?: boolean;
+    lang?: string;
+    type?: BotType;
   }): Promise<BotsList> {
     if (params) {
       if (params.organizationId && (params.organizationId < 0 || isNaN(params.organizationId))) {
@@ -51,8 +50,7 @@ export class BotService extends BaseService {
       }
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.searchBots(params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.searchBots(params));
   }
 
   /**
@@ -75,10 +73,10 @@ export class BotService extends BaseService {
     }
 
     const params: {
-      bundle: string,
-      organizationId?: number,
-      locationId?: number,
-      lang?: string
+      bundle: string;
+      organizationId?: number;
+      locationId?: number;
+      lang?: string;
     } = {
       bundle: bundle,
       organizationId: organizationId,
@@ -86,8 +84,7 @@ export class BotService extends BaseService {
       lang: lang,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.getBotInfo(params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.getBotInfo(params));
   }
 
   /**
@@ -109,17 +106,16 @@ export class BotService extends BaseService {
     }
 
     const params: {
-      bundle: string,
-      organizationId?: number,
-      locationId?: number
+      bundle: string;
+      organizationId?: number;
+      locationId?: number;
     } = {
       bundle: bundle,
       organizationId: organizationId,
       locationId: locationId,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.purchaseBot(params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.purchaseBot(params));
   }
 
   /**
@@ -131,8 +127,13 @@ export class BotService extends BaseService {
    * @param {number} [userId] Administrator user ID.
    * @returns {Promise<GetListOfBotsApiResponse>}
    */
-  public getListOfBotInstances(appInstanceId?: number, organizationId?: number, locationId?: number, bundle?: string, userId?: number):
-    Promise<GetListOfBotsApiResponse> {
+  public getListOfBotInstances(
+    appInstanceId?: number,
+    organizationId?: number,
+    locationId?: number,
+    bundle?: string,
+    userId?: number,
+  ): Promise<GetListOfBotsApiResponse> {
     if (appInstanceId && (appInstanceId < 0 || isNaN(appInstanceId))) {
       return this.reject(`Bot Instance ID is incorrect [${appInstanceId}].`);
     }
@@ -147,11 +148,11 @@ export class BotService extends BaseService {
     }
 
     const params: {
-      appInstanceId?: number,
-      organizationId?: number,
-      locationId?: number,
-      bundle?: string,
-      userId?: number
+      appInstanceId?: number;
+      organizationId?: number;
+      locationId?: number;
+      bundle?: string;
+      userId?: number;
     } = {
       appInstanceId: appInstanceId,
       organizationId: organizationId,
@@ -160,8 +161,7 @@ export class BotService extends BaseService {
       userId: userId,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.getListOfBots(params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.getListOfBots(params));
   }
 
   /**
@@ -171,7 +171,11 @@ export class BotService extends BaseService {
    * @param {ConfigureBotBody} [objectBotInstance] Bot properties.
    * @returns {Promise<ApiResponseBase>}
    */
-  public configureBotInstance(appInstanceId: number, status?: BotInstanceStatus, objectBotInstance?: ConfigureBotBody): Promise<ApiResponseBase> {
+  public configureBotInstance(
+    appInstanceId: number,
+    status?: BotInstanceStatus,
+    objectBotInstance?: ConfigureBotBody,
+  ): Promise<ApiResponseBase> {
     if (!appInstanceId || appInstanceId < 0 || isNaN(appInstanceId)) {
       return this.reject(`Bot Instance ID is incorrect [${appInstanceId}].`);
     }
@@ -183,15 +187,14 @@ export class BotService extends BaseService {
       objectBotInstance = {} as ConfigureBotBody;
     }
     const params: {
-      appInstanceId: number,
-      status?: number
+      appInstanceId: number;
+      status?: number;
     } = {
       appInstanceId: appInstanceId,
       status: status,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.configureBot(objectBotInstance!, params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.configureBot(objectBotInstance!, params));
   }
 
   /**
@@ -205,13 +208,12 @@ export class BotService extends BaseService {
     }
 
     const params: {
-      appInstanceId: number
+      appInstanceId: number;
     } = {
       appInstanceId: appInstanceId,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.deleteBot(params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.deleteBot(params));
   }
 
   /**
@@ -226,15 +228,14 @@ export class BotService extends BaseService {
     }
 
     const params: {
-      locationId?: number,
-      organizationId?: number
+      locationId?: number;
+      organizationId?: number;
     } = {
       locationId: locationId,
       organizationId: organizationId,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.getBotSummary(params));
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.getBotSummary(params));
   }
 
   /**
@@ -251,20 +252,19 @@ export class BotService extends BaseService {
    * @param {number} [params.organizationId] Send data to bots of this organization, used by an administrators.
    * @returns {Promise<ApiResponseBase>}
    */
-  sendDataStreamMessage(message: DataStreamMessage, params: {
-    scope: DataStreamScope,
-    address: string,
-    locationId?: number,
-    organizationId?: number
-  }): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.botShopApi.sendDataStreamMessage(message, params));
+  sendDataStreamMessage(
+    message: DataStreamMessage,
+    params: {
+      scope: DataStreamScope;
+      address: string;
+      locationId?: number;
+      organizationId?: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.sendDataStreamMessage(message, params));
   }
-
 }
 
-export interface BotsList extends SearchBotsApiResponse {
-}
+export interface BotsList extends SearchBotsApiResponse {}
 
-export interface BotInformation extends GetBotInfoApiResponse {
-}
+export interface BotInformation extends GetBotInfoApiResponse {}

@@ -13,6 +13,6 @@ export interface GetAlertsHistoryApiResponse extends ApiResponseBase {
     alertType: string;
     receivingDate: string;
     receivingDateMs: number;
-    params: Array<{ name: string; value: string; }>;
+    params: Array<{ name: string; value: string }>;
   }>;
 }

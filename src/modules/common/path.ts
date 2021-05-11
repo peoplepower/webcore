@@ -22,5 +22,4 @@ export class Path {
     //Combine one by one
     return args.reduce((result, currentValue) => this.CombineInternal(result, currentValue), '');
   }
-
 }

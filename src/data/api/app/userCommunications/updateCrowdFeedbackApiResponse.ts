@@ -1,64 +1,62 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { CrowdFeedbackType } from './postCrowdFeedbackApiResponse';
 
-export interface UpdateCrowdFeedbackApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateCrowdFeedbackApiResponse extends ApiResponseBase {}
 
 export interface UpdateCrowdFeedbackModel {
   feedback: {
     /**
      * Unique name / identifier of the app or product, selected by the developer
      */
-    appName: string,
+    appName: string;
     /**
      * Version of the app that generated this request
      */
-    appVersion: string,
+    appVersion: string;
     /**
      * 1 - New feature request
      * 2 - Problem report
      */
-    type: CrowdFeedbackType,
+    type: CrowdFeedbackType;
     /**
      * Subject line describing the feature or issue
      */
-    subject: string,
+    subject: string;
     /**
      * Email address of the user generating this request, not shown publicly.
      */
-    email: string,
+    email: string;
     /**
      * Problem device ID
      */
-    deviceId: string,
+    deviceId: string;
     /**
      * Model of the device that generated the request (i.e. iPhone5,1)
      */
-    deviceModel: string,
+    deviceModel: string;
     /**
      * Operating system on the device that generated the request (i.e. iOS 8.1.2)
      */
-    deviceOs: string,
+    deviceOs: string;
     /**
      * Product ID, present if the user is giving feedback on a specific type of product.
      */
-    productId: number,
+    productId: number;
     /**
      * Category of the product, present if the user is giving feedback on a specific type of product.
      */
-    productCategory: number,
+    productCategory: number;
     /**
      * Viewer description
      */
-    viewer: string,
+    viewer: string;
     /**
      * Feedback content - what user suggests or the problem description, etc.
      */
-    description: string,
+    description: string;
     /**
      * Indicates whether the entry is enabled or not
      */
-    enabled: boolean
-  }
+    enabled: boolean;
+  };
 }

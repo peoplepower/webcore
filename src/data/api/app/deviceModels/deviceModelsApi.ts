@@ -20,7 +20,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('DeviceModelsApi')
 export class DeviceModelsApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -38,16 +37,15 @@ export class DeviceModelsApi {
    * @returns {Promise<GetDeviceModelsApiResponse>}
    */
   getDeviceModels(params?: {
-    modelId?: string,
-    brand?: string,
-    lang?: string,
-    hidden?: boolean,
-    searchBy?: string,
-    includePairingType?: DevicePairingType,
-    excludePairingType?: DevicePairingType
-  })
-    : Promise<GetDeviceModelsApiResponse> {
-    return this.dal.get('devicemodels', {params: params});
+    modelId?: string;
+    brand?: string;
+    lang?: string;
+    hidden?: boolean;
+    searchBy?: string;
+    includePairingType?: DevicePairingType;
+    excludePairingType?: DevicePairingType;
+  }): Promise<GetDeviceModelsApiResponse> {
+    return this.dal.get('devicemodels', { params: params });
   }
 
   /**
@@ -73,7 +71,7 @@ export class DeviceModelsApi {
    * @param {number} [params.categoryId] Remove data for specific category.
    * @returns {Promise<ApiResponseBase>}
    */
-  deleteDeviceModels(params?: { brand?: string, modelId?: string, categoryId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('devicemodels', {params: params});
+  deleteDeviceModels(params?: { brand?: string; modelId?: string; categoryId?: number }): Promise<ApiResponseBase> {
+    return this.dal.delete('devicemodels', { params: params });
   }
 }

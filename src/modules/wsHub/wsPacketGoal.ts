@@ -30,7 +30,7 @@ export enum WsPacketGoal {
   /**
    * Data from the server on which the client subscribed (responses only)
    */
-  Data = 6
+  Data = 6,
 
   // Following goals are not supported yet
   // NOTE: numbers may change!

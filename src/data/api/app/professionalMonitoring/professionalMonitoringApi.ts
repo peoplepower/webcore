@@ -10,7 +10,6 @@ import { GetCallCenterAlertsApiResponse } from './getCallCenterAlertsApiResponse
  */
 @injectable('ProfessionalMonitoringApi')
 export class ProfessionalMonitoringApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -29,7 +28,7 @@ export class ProfessionalMonitoringApi {
    * @returns {Promise<GetCallCenterApiResponse>}
    */
   getCallCenter(params: { locationId: number }): Promise<GetCallCenterApiResponse> {
-    return this.dal.get('callCenter', {params: params});
+    return this.dal.get('callCenter', { params: params });
   }
 
   /**
@@ -46,7 +45,7 @@ export class ProfessionalMonitoringApi {
    * @returns {Promise<UpdateCallCenterApiResponse>}
    */
   updateCallCenter(model: UpdateCallCenterModel, params: { locationId: number }): Promise<UpdateCallCenterApiResponse> {
-    return this.dal.put('callCenter', model, {params: params});
+    return this.dal.put('callCenter', model, { params: params });
   }
 
   /**
@@ -58,7 +57,6 @@ export class ProfessionalMonitoringApi {
    * @returns {Promise<GetCallCenterAlertsApiResponse>}
    */
   getCallCenterAlerts(params: { locationId: number }): Promise<GetCallCenterAlertsApiResponse> {
-    return this.dal.get('callCenterAlerts', {params: params});
+    return this.dal.get('callCenterAlerts', { params: params });
   }
-
 }

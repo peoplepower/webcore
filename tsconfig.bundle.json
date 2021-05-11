@@ -3,10 +3,7 @@
     "moduleResolution": "node",
     "target": "ES5",
     "module": "ES6",
-    "lib": [
-      "ESNext",
-      "dom"
-    ],
+    "lib": ["ESNext", "dom"],
     "strict": true,
     "sourceMap": true,
     "declaration": false,
@@ -14,11 +11,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "outDir": "dist/",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "typeRoots": ["node_modules/@types"]
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

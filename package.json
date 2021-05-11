@@ -9,8 +9,6 @@
   ],
   "main": "dist/ppc-webcore.cjs.js",
   "module": "dist/ppc-webcore.esm.js",
-  "reactNative": "dist/ppc-webcore.rn.js",
-  "browser": "dist/ppc-webcore.umd.js",
   "typings": "dist/types/ppc-webcore.d.ts",
   "files": [
     "dist"

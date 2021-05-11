@@ -5,7 +5,7 @@ export enum PhoneType {
   Cell = 1,
   Home = 2,
   Work = 3,
-  Office = 4
+  Office = 4,
 }
 
 export interface CreateUserAndLocationApiResponse extends ApiResponseBase {
@@ -31,7 +31,6 @@ export interface CreateUserAndLocationApiResponse extends ApiResponseBase {
 }
 
 export interface CreateUserAndLocationModel {
-
   /**
    * User Account
    * A user account represents a person who can use the services provided by Ensemble.
@@ -40,7 +39,6 @@ export interface CreateUserAndLocationModel {
    * The user's password is always transmitted inside the HTTP body or header, allowing it to be encrypted.
    */
   user: {
-
     /**
      * If this is not set, then the email address will become the username.
      */
@@ -77,7 +75,6 @@ export interface CreateUserAndLocationModel {
      * Phone number
      */
     phone?: string;
-
 
     /**
      * Phone type is better to set when phone parameter is existed.
@@ -150,7 +147,7 @@ export interface CreateUserAndLocationModel {
      */
     timezone?: {
       id: string;
-    },
+    };
 
     /**
      * Address - Street 1
@@ -172,14 +169,14 @@ export interface CreateUserAndLocationModel {
      */
     state?: {
       id: number;
-    },
+    };
 
     /**
      * Country identifier. Use the Countries, states, and time zones API to obtain numeric identifiers for each state supported on Ensemble.
      */
     country?: {
       id: number;
-    },
+    };
 
     /**
      * Zip / Postal Code
@@ -208,7 +205,7 @@ export interface CreateUserAndLocationModel {
     size?: {
       unit: string;
       content: number;
-    },
+    };
 
     /**
      * Number of stories in the home / building

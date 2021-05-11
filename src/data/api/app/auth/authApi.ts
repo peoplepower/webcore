@@ -47,14 +47,16 @@ export class AuthApi {
    * @param {ApiKeyType} [params.keyType] Key type, 0 - User (default), 11 - Admin.
    * @returns {Promise<LoginApiResponse>}
    */
-  login(username: string,
-        pwd: string | undefined,
-        params?: {
-          passcode?: string,
-          expiry?: number,
-          clientId?: string,
-          keyType?: ApiKeyType
-        }): Promise<LoginApiResponse> {
+  login(
+    username: string,
+    pwd: string | undefined,
+    params?: {
+      passcode?: string;
+      expiry?: number;
+      clientId?: string;
+      keyType?: ApiKeyType;
+    },
+  ): Promise<LoginApiResponse> {
     params = params || {};
 
     // HTTP headers limited to ISO-8859-1 characters, so if we want to pass UTF symbols, we need to encode them
@@ -103,11 +105,11 @@ export class AuthApi {
    * @returns {Promise<LoginApiResponse>}
    */
   loginByKey(params: {
-    apiKey?: string,
-    keyType?: ApiKeyType,
-    expiry?: number,
-    clientId?: string,
-    cloudName?: string
+    apiKey?: string;
+    keyType?: ApiKeyType;
+    expiry?: number;
+    clientId?: string;
+    cloudName?: string;
   }): Promise<LoginApiResponse> {
     return this.dal.get('loginByKey', {
       params: {
@@ -137,16 +139,15 @@ export class AuthApi {
    * @returns {Promise<SendPasscodeApiResponse>}
    */
   sendPasscode(params: {
-    username: string,
-    type: PasscodeNotificationType,
-    keyType?: ApiKeyType,
-    brand?: string,
-    prefix?: PasscodeMessagePrefix,
-    appHash?: string
+    username: string;
+    type: PasscodeNotificationType;
+    keyType?: ApiKeyType;
+    brand?: string;
+    prefix?: PasscodeMessagePrefix;
+    appHash?: string;
   }): Promise<SendPasscodeApiResponse> {
     return this.dal.get('passcode', {
       params: params,
     });
   }
-
 }

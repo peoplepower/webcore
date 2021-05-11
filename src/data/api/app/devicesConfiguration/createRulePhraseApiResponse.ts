@@ -3,7 +3,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 export interface CreateRulePhraseApiResponse extends ApiResponseBase {
   ruleTemplate: {
     id: number;
-  }
+  };
 }
 
 /**
@@ -19,7 +19,7 @@ export enum RuleDataTypeToRetrieve {
   LocationData = 1,
   DeviceStatus = 2,
   Measurements = 4,
-  LastAlertInfo = 8
+  LastAlertInfo = 8,
 }
 
 /**
@@ -27,7 +27,7 @@ export enum RuleDataTypeToRetrieve {
  */
 export enum RuleSourceType {
   Drools = 0,
-  Python = 1
+  Python = 1,
 }
 
 /**
@@ -37,7 +37,7 @@ export enum RuleSourceType {
  */
 export enum RuleParameterValueType {
   Integer = 1,
-  Float = 2
+  Float = 2,
 }
 
 /**
@@ -92,7 +92,7 @@ export enum RuleParameterCategory {
   /**
    * A list of id/name pairs selecting by other parameter value.
    */
-  SelectingEnumeration = 15
+  SelectingEnumeration = 15,
 }
 
 /**
@@ -157,7 +157,7 @@ export interface RuleTemplate {
   /**
    * Source code type: 0 - Drools, 1 - Python.
    */
-  sourceType: RuleSourceType,
+  sourceType: RuleSourceType;
   updateDate?: string;
   updateDateMs?: number;
   /**
@@ -173,7 +173,7 @@ export interface RuleTemplate {
     /**
      * Category of the parameter
      */
-    category: RuleParameterCategory,
+    category: RuleParameterCategory;
     hidden: boolean;
     optional: boolean;
     /**

@@ -7,12 +7,7 @@ import { LiteEvent } from '../../modules/common/liteEvent';
 import { Logger } from '../../modules/logger/logger';
 import { CommonApi } from '../api/app/common/commonApi';
 
-const localhostSynonyms: string[] = [
-  'localhost',
-  '127.0.0.1',
-  '0.0.0.0',
-  '::',
-];
+const localhostSynonyms: string[] = ['localhost', '127.0.0.1', '0.0.0.0', '::'];
 const sboxServerUrl = 'https://sboxall.peoplepowerco.com';
 const apiServerTypeName = ServerType.AppApi;
 const apiPath = '/cloud/json/';
@@ -20,7 +15,6 @@ const localStorageCurrentCloudKey = 'Main-Cloud';
 
 @injectable('CloudConfigService')
 export class CloudConfigService extends BaseService {
-
   @inject('CommonApi') public readonly commonApi: CommonApi;
   @inject('WcStorage') protected readonly wcStorage: WcStorage;
   @inject('Logger') protected readonly logger: Logger;
@@ -67,14 +61,16 @@ export class CloudConfigService extends BaseService {
     }
 
     let getSettingsBaseUrl: string;
-    if (!window.location.hostname || ~localhostSynonyms.indexOf(window.location.hostname)) { // if in developer's environment
+    if (!window.location.hostname || ~localhostSynonyms.indexOf(window.location.hostname)) {
+      // if in developer's environment
       getSettingsBaseUrl = sboxServerUrl;
     } else {
       getSettingsBaseUrl = window.location.protocol + '//' + window.location.host;
     }
     getSettingsBaseUrl += apiPath;
-    this.getCloudPromise = this.commonApi.getApiSettings({}, getSettingsBaseUrl)
-      .then(settings => {
+    this.getCloudPromise = this.commonApi
+      .getApiSettings({}, getSettingsBaseUrl)
+      .then((settings) => {
         delete this.getCloudPromise;
         if (!settings) {
           this.logger.error(`Unexpected error: Get Connection Settings API returns empty result`);
@@ -91,7 +87,7 @@ export class CloudConfigService extends BaseService {
 
         return this.clouds;
       })
-      .catch(error => {
+      .catch((error) => {
         delete this.getCloudPromise;
         return Promise.reject(error);
       });
@@ -123,29 +119,28 @@ export class CloudConfigService extends BaseService {
       return Promise.resolve(this.currentCloud);
     }
 
-    return this.getClouds()
-      .then(clouds => {
-        let savedCloud = this.wcStorage.get<CloudConfig>(localStorageCurrentCloudKey);
+    return this.getClouds().then((clouds) => {
+      let savedCloud = this.wcStorage.get<CloudConfig>(localStorageCurrentCloudKey);
 
-        if (savedCloud) {
-          if (!clouds || clouds.length <= 0) {
-            return this.setCurrentCloud(savedCloud);
-          }
-          let savedCloudFromServer = clouds.find(c => {
-            return savedCloud!.name && c.name && savedCloud!.name.toLowerCase() === c.name.toLowerCase();
-          });
-          if (savedCloudFromServer) {
-            return this.setCurrentCloud(savedCloudFromServer);
-          }
-        }
-
+      if (savedCloud) {
         if (!clouds || clouds.length <= 0) {
-          return Promise.reject(new CoreApiError('Empty clouds list'));
+          return this.setCurrentCloud(savedCloud);
         }
+        let savedCloudFromServer = clouds.find((c) => {
+          return savedCloud!.name && c.name && savedCloud!.name.toLowerCase() === c.name.toLowerCase();
+        });
+        if (savedCloudFromServer) {
+          return this.setCurrentCloud(savedCloudFromServer);
+        }
+      }
 
-        // By default, choose the first one
-        return this.setCurrentCloud(clouds[0]);
-      });
+      if (!clouds || clouds.length <= 0) {
+        return Promise.reject(new CoreApiError('Empty clouds list'));
+      }
+
+      // By default, choose the first one
+      return this.setCurrentCloud(clouds[0]);
+    });
   }
 
   /**
@@ -157,10 +152,9 @@ export class CloudConfigService extends BaseService {
       return Promise.resolve(this._baseUrl);
     }
     // get first / appapi server settings
-    return this.getCurrentCloud()
-      .then((currentCloud: CloudConfig) => {
-        return this.getApiUrlForCloud(currentCloud);
-      });
+    return this.getCurrentCloud().then((currentCloud: CloudConfig) => {
+      return this.getApiUrlForCloud(currentCloud);
+    });
   }
 
   /**
@@ -170,11 +164,9 @@ export class CloudConfigService extends BaseService {
    */
   protected getApiUrlForCloud(cloud: CloudConfig): string {
     if (cloud && cloud.servers) {
-      let apiInfo = cloud.servers.find(c => c.type?.toLocaleLowerCase() === apiServerTypeName.toLowerCase());
+      let apiInfo = cloud.servers.find((c) => c.type?.toLocaleLowerCase() === apiServerTypeName.toLowerCase());
       if (apiInfo) {
-        return (apiInfo.ssl ? 'https://' : 'http://') +
-          apiInfo.host +
-          (apiInfo.port ? ':' + apiInfo.port : '');
+        return (apiInfo.ssl ? 'https://' : 'http://') + apiInfo.host + (apiInfo.port ? ':' + apiInfo.port : '');
         // apiInfo.path; // todo this field should contains path to the API
       } else {
         throw new Error('Cloud configuration has no `appapi` server');
@@ -188,9 +180,10 @@ export class CloudConfigService extends BaseService {
    * @returns {Promise<string>} URL for the ws connections
    */
   public getWebSocketUrl(): Promise<string> {
-    return this.commonApi.getServer({
-      type: ServerType.WsApi,
-    })
+    return this.commonApi
+      .getServer({
+        type: ServerType.WsApi,
+      })
       .then((data) => {
         let server = data.server;
 
@@ -199,10 +192,7 @@ export class CloudConfigService extends BaseService {
           path = '/' + path;
         }
 
-        return (server.ssl ? 'wss://' : 'ws://') +
-          server.host +
-          (server.port ? ':' + server.port : '') +
-          (path || '');
+        return (server.ssl ? 'wss://' : 'ws://') + server.host + (server.port ? ':' + server.port : '') + (path || '');
       });
   }
 }

@@ -4,7 +4,7 @@ export enum MessageStatus {
   SentMessages = 0,
   InboundUnreadMessages = 1,
   InboundReadMessages = 2,
-  AllInboundMessages = 3
+  AllInboundMessages = 3,
 }
 
 export interface Message {
@@ -22,7 +22,7 @@ export interface Message {
     userId: number;
     email: string;
     firstName: string;
-    lastName: string
+    lastName: string;
   };
   subject: string;
   type: number;
@@ -39,7 +39,7 @@ export interface Message {
     firstName?: string;
     lastName?: string;
     userTag?: string;
-    deviceTag?: string
+    deviceTag?: string;
   }>;
   parameters: {
     [key: string]: string;

@@ -50,7 +50,7 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     size?: {
       unit: string;
       content: number;
-    },
+    };
     appName?: string;
     type?: number;
   };

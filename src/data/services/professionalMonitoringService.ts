@@ -8,7 +8,6 @@ import { UpdateCallCenterApiResponse, UpdateCallCenterModel } from '../api/app/p
 
 @injectable('ProfessionalMonitoringService')
 export class ProfessionalMonitoringService extends BaseService {
-
   @inject('AuthService') private readonly authService: AuthService;
   @inject('ProfessionalMonitoringApi') protected readonly professionalMonitoringApi: ProfessionalMonitoringApi;
 
@@ -25,10 +24,11 @@ export class ProfessionalMonitoringService extends BaseService {
    * @return {Promise<CallCenter>}
    */
   public getCallCenter(locationId: number): Promise<CallCenter> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.professionalMonitoringApi.getCallCenter({
+    return this.authService.ensureAuthenticated().then(() =>
+      this.professionalMonitoringApi.getCallCenter({
         locationId: locationId,
-      }));
+      }),
+    );
   }
 
   /**
@@ -40,10 +40,11 @@ export class ProfessionalMonitoringService extends BaseService {
    * @return {Promise<UpdateCallCenterResponse>}
    */
   public updateCallCenter(callCenter: UpdateCallCenter, locationId: number): Promise<UpdateCallCenterResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.professionalMonitoringApi.updateCallCenter(callCenter, {
+    return this.authService.ensureAuthenticated().then(() =>
+      this.professionalMonitoringApi.updateCallCenter(callCenter, {
         locationId: locationId,
-      }));
+      }),
+    );
   }
 
   /**
@@ -58,12 +59,12 @@ export class ProfessionalMonitoringService extends BaseService {
     }
 
     let parameters: {
-      locationId: number,
-      sortCollection?: string,
-      sortBy?: string,
-      sortOrder?: string,
-      firstRow?: number,
-      rowCount?: number
+      locationId: number;
+      sortCollection?: string;
+      sortBy?: string;
+      sortOrder?: string;
+      firstRow?: number;
+      rowCount?: number;
     } = params || {};
 
     parameters.locationId = locationId;
@@ -71,21 +72,14 @@ export class ProfessionalMonitoringService extends BaseService {
       parameters.sortCollection = 'callCenterAlerts';
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.professionalMonitoringApi.getCallCenterAlerts(parameters));
+    return this.authService.ensureAuthenticated().then(() => this.professionalMonitoringApi.getCallCenterAlerts(parameters));
   }
-
-
 }
 
-export interface CallCenter extends GetCallCenterApiResponse {
-}
+export interface CallCenter extends GetCallCenterApiResponse {}
 
-export interface UpdateCallCenter extends UpdateCallCenterModel {
-}
+export interface UpdateCallCenter extends UpdateCallCenterModel {}
 
-export interface CallCenterAlerts extends GetCallCenterAlertsApiResponse {
-}
+export interface CallCenterAlerts extends GetCallCenterAlertsApiResponse {}
 
-export interface UpdateCallCenterResponse extends UpdateCallCenterApiResponse {
-}
+export interface UpdateCallCenterResponse extends UpdateCallCenterApiResponse {}

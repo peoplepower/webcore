@@ -4,7 +4,6 @@ import { Tuner } from '../tuner/tuner';
 
 @injectable('WcStorage')
 export class WcStorage {
-
   @inject('Logger') private readonly logger: Logger;
   @inject('Tuner') private readonly tuner: Tuner;
 
@@ -28,7 +27,7 @@ export class WcStorage {
       try {
         return <T>JSON.parse(text);
       } catch (e) {
-        return <T><any>text;
+        return <T>(<any>text);
       }
     }
   }
@@ -44,7 +43,7 @@ export class WcStorage {
     }
 
     let dataStr: string;
-    if (typeof data === 'string' || typeof (data) === 'boolean' || typeof (data) === 'number') {
+    if (typeof data === 'string' || typeof data === 'boolean' || typeof data === 'number') {
       dataStr = data.toString();
     } else {
       dataStr = JSON.stringify(data);

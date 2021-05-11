@@ -7,6 +7,4 @@ export interface UpdateRuleAttributeModel {
   };
 }
 
-export interface UpdateRuleAttributeApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateRuleAttributeApiResponse extends ApiResponseBase {}

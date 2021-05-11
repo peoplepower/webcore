@@ -1,13 +1,12 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface ConfigureBotApiResponse extends ApiResponseBase {
-}
+export interface ConfigureBotApiResponse extends ApiResponseBase {}
 
 export enum BotInstanceStatus {
   Incomplete = 0,
   Active = 1,
   Inactive = 2,
-  Error = 5
+  Error = 5,
 }
 
 export interface ConfigureBotBody {

@@ -5,7 +5,7 @@ export enum AppFileType {
   LocationImage = 2,
   DeviceImage = 3,
   BitmapMask = 4,
-  Any = 5
+  Any = 5,
 }
 
 export interface GetApplicationFilesApiResponse extends ApiResponseBase {

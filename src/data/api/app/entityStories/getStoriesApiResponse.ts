@@ -18,7 +18,7 @@ export enum StoryType {
   DeviceReconnectionWireless = 13, // Troubleshooting if the wireless signal strength was bad and the device is now disconnected.
   OAuthSuccess = 20,
   OAuthFailure = 21,
-  FAQ = 30
+  FAQ = 30,
 }
 
 /**
@@ -29,7 +29,7 @@ export enum ActionType {
   InAppLink = 2,
   MakePhoto = 3,
   RecordAudio = 4,
-  OpenContacts = 5
+  OpenContacts = 5,
 }
 
 /**
@@ -37,7 +37,7 @@ export enum ActionType {
  */
 export enum ActionStyle {
   Button = 1,
-  Link = 2
+  Link = 2,
 }
 
 export interface GetStoriesApiResponse extends ApiResponseBase {
@@ -78,7 +78,7 @@ export interface GetStoriesApiResponse extends ApiResponseBase {
         desc?: string;
         storyId?: string;
         url?: string;
-      }>
+      }>;
     }>;
   }>;
 }

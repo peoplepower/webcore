@@ -5,7 +5,6 @@ import { LiteEvent } from '../common/liteEvent';
 import { DataWsMessage } from './wsResponse';
 
 export class WsSubscription {
-
   /**
    * Id of the request that create that subscription
    */
@@ -36,10 +35,11 @@ export class WsSubscription {
 
   private _status: SubscriptionStatus = SubscriptionStatus.INACTIVE;
 
-  constructor(public readonly type: WsSubscriptionType,
-              public readonly operation: WsSubscriptionOperation,
-              public readonly params: WsSubscriptionParams) {
-  }
+  constructor(
+    public readonly type: WsSubscriptionType,
+    public readonly operation: WsSubscriptionOperation,
+    public readonly params: WsSubscriptionParams,
+  ) {}
 
   onCreate(callback: (data?: DataWsMessage['data']) => void): () => void {
     this.createEvent.on(callback);
@@ -117,5 +117,5 @@ export enum SubscriptionStatus {
   /**
    * Subscription was cancelled (by unsubscribe method). Once unsubscribed, you can not use subscription.
    */
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }

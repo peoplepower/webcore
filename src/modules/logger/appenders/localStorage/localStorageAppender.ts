@@ -7,7 +7,6 @@ import { LogLevel } from '../../logLevel';
  * LocalStorage logger appender
  */
 export class LocalStorageAppender extends Appender {
-
   protected config: LocalStorageAppenderConfig;
   protected messages: LogMessage[];
 
@@ -21,6 +20,9 @@ export class LocalStorageAppender extends Appender {
     this.messages = [];
 
     if (globalThis && 'localStorage' in globalThis && globalThis['localStorage'] !== null) {
+      if (!this.config.enabled) {
+        return;
+      }
       let me = this;
       if (globalThis.addEventListener) {
         globalThis.addEventListener('unload', function () {
@@ -41,6 +43,9 @@ export class LocalStorageAppender extends Appender {
   }
 
   public log(level: LogLevel, ...args: any[]): void {
+    if (!this.config.enabled) {
+      return;
+    }
     if (this.config.maxLevel <= level && level <= this.config.minLevel) {
       // store messages
       this.messages.push(new LogMessage(level, args));
@@ -66,5 +71,4 @@ export class LocalStorageAppender extends Appender {
       console.warn(ex);
     }
   }
-
 }

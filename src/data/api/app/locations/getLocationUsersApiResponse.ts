@@ -6,13 +6,13 @@ export enum LocationAccessLevel {
   None = 0,
   Read = 10,
   Control = 20,
-  Admin = 30
+  Admin = 30,
 }
 
 export enum LocationNotificationsCategory {
   NoCategory = 0,
   HomeOwner = 1,
-  Supporter = 2
+  Supporter = 2,
 }
 
 export interface GetLocationUsersApiResponse extends ApiResponseBase {
@@ -27,7 +27,7 @@ export interface GetLocationUsersApiResponse extends ApiResponseBase {
       email: string;
       verified: boolean;
       status: EmailVerificationStatus;
-    },
+    };
     phone?: string;
     phoneType?: PhoneType;
     smsStatus?: PhoneVerificationStatus;

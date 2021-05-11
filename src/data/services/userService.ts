@@ -13,7 +13,6 @@ import { GetSignaturesApiResponse } from '../api/app/userAccounts/getSignaturesA
 
 @injectable('UserService')
 export class UserService extends BaseService {
-
   public readonly onCurrentUserInfoUpdated: LiteEvent<UserInformation> = new LiteEvent<UserInformation>();
 
   @inject('AuthService') protected readonly authService: AuthService;
@@ -45,17 +44,21 @@ export class UserService extends BaseService {
     if (me.currentUserInfo && !force) {
       return Promise.resolve(me.currentUserInfo);
     }
-    me.getCurrentUserInfoPromise = me.authService.ensureAuthenticated()
+    me.getCurrentUserInfoPromise = me.authService
+      .ensureAuthenticated()
       .then(() => {
         return me.initCurrentUserInfo(force);
       })
-      .then((data) => {
-        delete me.getCurrentUserInfoPromise;
-        return data;
-      }, (error) => {
-        delete me.getCurrentUserInfoPromise;
-        return Promise.reject(error);
-      });
+      .then(
+        (data) => {
+          delete me.getCurrentUserInfoPromise;
+          return data;
+        },
+        (error) => {
+          delete me.getCurrentUserInfoPromise;
+          return Promise.reject(error);
+        },
+      );
     return Promise.resolve(me.getCurrentUserInfoPromise);
   }
 
@@ -66,11 +69,12 @@ export class UserService extends BaseService {
    * @returns {Promise<UserInformation>}
    */
   public getUserInfo(userId: number, organizationId?: number): Promise<UserInformation> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.getUserInformation({
+    return this.authService.ensureAuthenticated().then(() =>
+      this.userAccountsApi.getUserInformation({
         userId: userId,
         organizationId: organizationId,
-      }));
+      }),
+    );
   }
 
   /**
@@ -80,8 +84,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UpdateUserResponse>}
    */
   public updateUserInfo(user: UserModel, userId?: number): Promise<UpdateUserResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.updateUser({user: user}, userId));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.updateUser({ user: user }, userId));
   }
 
   /**
@@ -91,8 +94,7 @@ export class UserService extends BaseService {
    * @returns {Promise<ApiResponseBase>}
    */
   public mergeAndDeleteUser(userToDeleteId: number, destinationUserId: number): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.mergeAndDeleteUser(userToDeleteId, destinationUserId));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.mergeAndDeleteUser(userToDeleteId, destinationUserId));
   }
 
   /**
@@ -101,8 +103,7 @@ export class UserService extends BaseService {
    * @returns {Promise<ApiResponseBase>}
    */
   public deleteUser(userId?: number): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.deleteUser(userId));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.deleteUser(userId));
   }
 
   /**
@@ -123,10 +124,7 @@ export class UserService extends BaseService {
    * @param {string} [operationToken]
    * @returns {Promise<UserCreationResult>}
    */
-  public registerNewUser(
-    user: CreateUserAndLocationModel,
-    operationToken?: string,
-  ): Promise<UserCreationResult> {
+  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string): Promise<UserCreationResult> {
     return this.userAccountsApi.createUserAndLocation(user, operationToken, false);
   }
 
@@ -136,8 +134,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UserCreationResult>}
    */
   public createNewUser(user: CreateUserAndLocationModel): Promise<UserCreationResult> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.createUserAndLocation(user));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.createUserAndLocation(user));
   }
 
   /**
@@ -145,10 +142,9 @@ export class UserService extends BaseService {
    * @returns {Promise<UserProperties>}
    */
   public getCurrentUserProperties(): Promise<UserProperties> {
-    return this.getCurrentUserInfo()
-      .then(userInfo => {
-        return this.systemAndUserPropertiesApi.getUserProperties({userId: userInfo.user.id});
-      });
+    return this.getCurrentUserInfo().then((userInfo) => {
+      return this.systemAndUserPropertiesApi.getUserProperties({ userId: userInfo.user.id });
+    });
   }
 
   /**
@@ -158,7 +154,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UserProperties>}
    */
   public getUserProperties(userId?: number, propertyName?: string | string[]): Promise<UserProperties> {
-    return this.systemAndUserPropertiesApi.getUserProperties({name: propertyName, userId: userId});
+    return this.systemAndUserPropertiesApi.getUserProperties({ name: propertyName, userId: userId });
   }
 
   /**
@@ -176,8 +172,8 @@ export class UserService extends BaseService {
    * @param {number} userId
    * @returns {Promise<ApiResponseBase>}
    */
-  public updateUserProperties(properties: Array<{ name: string, content: any }>, userId?: number): Promise<ApiResponseBase> {
-    return this.systemAndUserPropertiesApi.updateUserProperties({property: properties}, {userId: userId});
+  public updateUserProperties(properties: Array<{ name: string; content: any }>, userId?: number): Promise<ApiResponseBase> {
+    return this.systemAndUserPropertiesApi.updateUserProperties({ property: properties }, { userId: userId });
   }
 
   // #region -------------------- Terms Of Service --------------------
@@ -192,8 +188,7 @@ export class UserService extends BaseService {
    * @returns {Promise<ApiResponseBase>}
    */
   signTermsOfService(signatureId: string): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.signTermsOfService(signatureId));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.signTermsOfService(signatureId));
   }
 
   /**
@@ -203,24 +198,22 @@ export class UserService extends BaseService {
    * @returns {Promise<GetSignaturesApiResponse>}
    */
   getSignatures(userId?: number): Promise<GetSignaturesApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.getSignatures(userId));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.getSignatures(userId));
   }
 
   // #endregion
 
   private init() {
     let me = this;
-    me.authService.ensureAuthenticated()
-      .then(function () {
+    me.authService.ensureAuthenticated().then(function () {
+      me.initCurrentUserInfo();
+      me.authService.onLogin.on(() => {
         me.initCurrentUserInfo();
-        me.authService.onLogin.on(() => {
-          me.initCurrentUserInfo();
-        });
-        me.authService.onLogout.on(() => {
-          me.clearCurrentUserInfo();
-        });
       });
+      me.authService.onLogout.on(() => {
+        me.clearCurrentUserInfo();
+      });
+    });
   }
 
   private initCurrentUserInfo(force?: boolean): Promise<UserInformation> {
@@ -231,14 +224,13 @@ export class UserService extends BaseService {
     if (me.currentUserInfo && !force) {
       return Promise.resolve(me.currentUserInfo);
     }
-    me.initCurrentUserInfoPromise = me.userAccountsApi.getUserInformation()
-      .then(function (userInfo) {
-        // me.logger.debug('User info loaded', userInfo);
-        me.currentUserInfo = userInfo;
-        delete me.initCurrentUserInfoPromise;
-        me.onCurrentUserInfoUpdated.trigger(me.currentUserInfo);
-        return userInfo;
-      });
+    me.initCurrentUserInfoPromise = me.userAccountsApi.getUserInformation().then(function (userInfo) {
+      // me.logger.debug('User info loaded', userInfo);
+      me.currentUserInfo = userInfo;
+      delete me.initCurrentUserInfoPromise;
+      me.onCurrentUserInfoUpdated.trigger(me.currentUserInfo);
+      return userInfo;
+    });
     return Promise.resolve(me.initCurrentUserInfoPromise);
   }
 
@@ -249,20 +241,14 @@ export class UserService extends BaseService {
   }
 }
 
-export interface UserProperties extends GetUserPropertiesApiResponse {
-}
+export interface UserProperties extends GetUserPropertiesApiResponse {}
 
-export interface UpdateUserResponse extends UpdateUserApiResponse {
-}
+export interface UpdateUserResponse extends UpdateUserApiResponse {}
 
-export interface UserInformation extends GetUserInformationApiResponse {
-}
+export interface UserInformation extends GetUserInformationApiResponse {}
 
-export interface RecoverPasswordInfo extends ApiResponseBase {
-}
+export interface RecoverPasswordInfo extends ApiResponseBase {}
 
-export interface UserCreationResult extends CreateUserAndLocationApiResponse {
-}
+export interface UserCreationResult extends CreateUserAndLocationApiResponse {}
 
-export interface UserProperties extends GetUserPropertiesApiResponse {
-}
+export interface UserProperties extends GetUserPropertiesApiResponse {}

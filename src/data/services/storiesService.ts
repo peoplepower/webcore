@@ -20,15 +20,14 @@ export class StoriesService extends BaseService {
    * @returns {Promise<GetStoriesApiResponse>}
    */
   getStories(params?: {
-    storyId?: string,
-    modelId?: string,
-    brand?: string,
-    storyType?: number,
-    lang?: string,
-    hidden?: boolean,
-    searchBy?: string
+    storyId?: string;
+    modelId?: string;
+    brand?: string;
+    storyType?: number;
+    lang?: string;
+    hidden?: boolean;
+    searchBy?: string;
   }): Promise<GetStoriesApiResponse> {
     return this.entityStoriesApi.getStories(params);
   }
-
 }

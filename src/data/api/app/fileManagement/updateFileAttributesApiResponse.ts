@@ -8,6 +8,4 @@ export interface FileAttributesModel {
   };
 }
 
-export interface UpdateFileAttributesApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateFileAttributesApiResponse extends ApiResponseBase {}

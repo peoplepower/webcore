@@ -2,8 +2,7 @@
  * Dependency Injection container. Singleton only.
  */
 export class Container {
-
-  protected readonly constructors: { [key: string]: (new (...args: any[]) => any) } = {};
+  protected readonly constructors: { [key: string]: new (...args: any[]) => any } = {};
   protected readonly injectables: { [key: string]: any } = {};
 
   /**
@@ -11,7 +10,7 @@ export class Container {
    * @param {Function} constructor type (constructor function)
    * @param {string} [typeName]
    */
-  public addInjectable<T>(constructor: (new (...args: any[]) => T), typeName?: string) {
+  public addInjectable<T>(constructor: new (...args: any[]) => T, typeName?: string) {
     let name = typeName || constructor.name;
     if (this.constructors.hasOwnProperty(name)) {
       throw new Error(`DI error: injectable with such name already exists: ${name}`);
@@ -98,7 +97,9 @@ export function injectable<T>(typeName: string) {
 export function inject<T>(typeOrName?: string | (new (...args: any[]) => T)): Function {
   return function (target: Object, propertyName: string) {
     if (!typeOrName) {
-      throw new Error(`DI error: you should pass type name to @inject() decorator on "${propertyName}" property in "${target.constructor.name}" class`);
+      throw new Error(
+        `DI error: you should pass type name to @inject() decorator on "${propertyName}" property in "${target.constructor.name}" class`,
+      );
     }
     let identifier: string;
     if (typeof typeOrName === 'string') {

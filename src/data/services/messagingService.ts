@@ -32,16 +32,16 @@ export class MessagingService extends BaseService {
    * @returns {Promise<GetMessagesApiResponse>}
    */
   getMessages(params?: {
-    status?: MessageStatus,
-    messageId?: number,
-    userId?: number,
-    type?: number,
-    challengeId?: number,
-    searchBy?: string,
-    sortBy?: string,
-    sortOrder?: string,
-    sortCollection?: string,
-    rowCount?: number
+    status?: MessageStatus;
+    messageId?: number;
+    userId?: number;
+    type?: number;
+    challengeId?: number;
+    searchBy?: string;
+    sortBy?: string;
+    sortOrder?: string;
+    sortCollection?: string;
+    rowCount?: number;
   }): Promise<GetMessagesApiResponse> {
     if (params && !params.rowCount) {
       params.rowCount = 300;
@@ -62,16 +62,16 @@ export class MessagingService extends BaseService {
    * @returns {Promise<GetMessagesApiResponse>}
    */
   public getMessageChain(params: {
-    messageId: number,
-    status?: MessageStatus,
-    userId?: number,
-    type?: number,
-    challengeId?: number,
-    searchBy?: string,
-    sortBy?: string,
-    sortOrder?: string,
-    sortCollection?: string,
-    rowCount?: number
+    messageId: number;
+    status?: MessageStatus;
+    userId?: number;
+    type?: number;
+    challengeId?: number;
+    searchBy?: string;
+    sortBy?: string;
+    sortOrder?: string;
+    sortCollection?: string;
+    rowCount?: number;
   }): Promise<GetMessagesApiResponse> {
     if (!params || !params.messageId || params.messageId < 1) {
       return this.reject(`messageId parameter value is incorrect: ${params.messageId}`);
@@ -99,12 +99,14 @@ export class MessagingService extends BaseService {
    * @param {string} sortOrder
    * @returns {Promise<GetMessagesApiResponse>}
    */
-  public getMessagesForUser(userId?: number,
-                            status?: MessageStatus,
-                            searchBy?: string,
-                            type?: number,
-                            sortBy: string = 'creationDate',
-                            sortOrder: string = 'desc'): Promise<GetMessagesApiResponse> {
+  public getMessagesForUser(
+    userId?: number,
+    status?: MessageStatus,
+    searchBy?: string,
+    type?: number,
+    sortBy: string = 'creationDate',
+    sortOrder: string = 'desc',
+  ): Promise<GetMessagesApiResponse> {
     if (!userId || userId < 1) {
       return this.reject(`userId parameter value is incorrect: ${userId}`);
     }
@@ -131,7 +133,7 @@ export class MessagingService extends BaseService {
       return this.reject('Message to be sent can not be null.');
     }
 
-    return this.userCommunicationsApi.sendMessage({message: message});
+    return this.userCommunicationsApi.sendMessage({ message: message });
   }
 
   /**
@@ -140,16 +142,19 @@ export class MessagingService extends BaseService {
    * @param reply Reply model
    * @returns {Promise<ApiResponseBase>}
    */
-  public replyToMessage(replyToMessageId: number, reply: {
-    text: string,
-    email: boolean,
-    push: boolean
-  }): Promise<ApiResponseBase> {
+  public replyToMessage(
+    replyToMessageId: number,
+    reply: {
+      text: string;
+      email: boolean;
+      push: boolean;
+    },
+  ): Promise<ApiResponseBase> {
     if (!reply) {
       return this.reject('Reply message to be sent can not be null.');
     }
 
-    return this.userCommunicationsApi.replyToMessage(replyToMessageId, {message: reply});
+    return this.userCommunicationsApi.replyToMessage(replyToMessageId, { message: reply });
   }
 
   /**
@@ -159,19 +164,23 @@ export class MessagingService extends BaseService {
    * @param {boolean} [markAsRead]
    * @returns {Promise<ApiResponseBase>}
    */
-  public updateMessage(messageId: number, markAsRead: boolean = false, messageProperties?: {
-    subject?: string;
-    text?: string;
-    parameters?: {
-      [key: string]: string;
-    };
-  }): Promise<ApiResponseBase> {
+  public updateMessage(
+    messageId: number,
+    markAsRead: boolean = false,
+    messageProperties?: {
+      subject?: string;
+      text?: string;
+      parameters?: {
+        [key: string]: string;
+      };
+    },
+  ): Promise<ApiResponseBase> {
     if (!messageId || messageId < 1) {
       return this.reject(`messageId parameter value is incorrect: ${messageId}`);
     }
 
-    const messageModel: UpdateMessageModel | undefined = messageProperties ? {message: messageProperties} : undefined;
-    return this.userCommunicationsApi.updateMessage(messageId, messageModel, {read: markAsRead});
+    const messageModel: UpdateMessageModel | undefined = messageProperties ? { message: messageProperties } : undefined;
+    return this.userCommunicationsApi.updateMessage(messageId, messageModel, { read: markAsRead });
   }
 
   /**
@@ -196,7 +205,7 @@ export class MessagingService extends BaseService {
     if (userId && (isNaN(userId) || userId < 1)) {
       return this.reject(`userId parameter value is incorrect: ${userId}`);
     }
-    let params = userId ? {userId: userId} : undefined;
+    let params = userId ? { userId: userId } : undefined;
     return this.userCommunicationsApi.getNotificationSubscriptions(params);
   }
 
@@ -214,16 +223,19 @@ export class MessagingService extends BaseService {
    * @param {number} [params.smsPeriod] Minimum number of seconds between sms notifications.
    * @returns {Promise<ApiResponseBase>}
    */
-  public setNotificationSubscriptions(type: number, params?: {
-    userId?: number,
-    locationId?: number,
-    email?: boolean,
-    push?: boolean,
-    sms?: boolean,
-    emailPeriod?: number,
-    pushPeriod?: number,
-    smsPeriod?: number
-  }): Promise<ApiResponseBase> {
+  public setNotificationSubscriptions(
+    type: number,
+    params?: {
+      userId?: number;
+      locationId?: number;
+      email?: boolean;
+      push?: boolean;
+      sms?: boolean;
+      emailPeriod?: number;
+      pushPeriod?: number;
+      smsPeriod?: number;
+    },
+  ): Promise<ApiResponseBase> {
     if (isNaN(type) || type < 0) {
       return this.reject(`Type parameter value is incorrect: ${type}`);
     }
@@ -240,11 +252,11 @@ export class MessagingService extends BaseService {
    * @returns {Promise<GetNotificationsApiResponse>}
    */
   public getNotifications(params: {
-    startDate: string,
-    endDate?: string,
-    userId?: number,
-    locationId?: number,
-    rowCount?: number
+    startDate: string;
+    endDate?: string;
+    userId?: number;
+    locationId?: number;
+    rowCount?: number;
   }): Promise<GetNotificationsApiResponse> {
     if (!params || !params.startDate) {
       return this.reject(`startDate parameter is mandatory`);
@@ -262,8 +274,7 @@ export class MessagingService extends BaseService {
    * @returns {Promise<RequestSupportApiResponse>}
    */
   public requestSupport(model: RequestSupportModel, appName?: string): Promise<RequestSupportApiResponse> {
-    let params = appName ? {appName: appName} : undefined;
+    let params = appName ? { appName: appName } : undefined;
     return this.userCommunicationsApi.requestSupport(model, params);
   }
-
 }

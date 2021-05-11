@@ -4,7 +4,7 @@ export enum SubscriptionType {
   OneTimePurchase = 1,
   WeeklySubscription = 2,
   MonthlySubscription = 3,
-  AnnualSubscription = 4
+  AnnualSubscription = 4,
 }
 
 export enum PaymentType {
@@ -12,7 +12,7 @@ export enum PaymentType {
   AppleInAppPurchase = 1,
   PayPal = 2,
   Braintree = 3,
-  Chargify = 4
+  Chargify = 4,
 }
 
 /**
@@ -23,7 +23,7 @@ export enum ResourceType {
   User = 0,
   Location = 1,
   Device = 4,
-  Circle = 7
+  Circle = 7,
 }
 
 export interface GetSoftwareSubscriptionsApiResponse extends ApiResponseBase {
@@ -50,7 +50,7 @@ export interface GetSoftwareSubscriptionsApiResponse extends ApiResponseBase {
     /**
      * List of service plan ID's, where this plan can be upgraded
      */
-    upgradableTo?: Array<number>,
+    upgradableTo?: Array<number>;
     services?: Array<{
       name: string;
       amount: number;

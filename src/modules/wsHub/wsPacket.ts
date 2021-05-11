@@ -4,7 +4,6 @@ import { Deferred } from '../../common/deferred';
 import { WsPacketGoal } from './wsPacketGoal';
 
 export class WsPacket {
-
   public response: WsResponseBase;
 
   public readonly created: Date = new Date();
@@ -18,11 +17,8 @@ export class WsPacket {
   public readonly id: string;
   public readonly goal: WsPacketGoal;
 
-  constructor(public readonly request: WsRequestBase,
-              public readonly needAuth: boolean = true) {
+  constructor(public readonly request: WsRequestBase, public readonly needAuth: boolean = true) {
     this.id = request.id;
     this.goal = request.goal;
   }
-
-
 }

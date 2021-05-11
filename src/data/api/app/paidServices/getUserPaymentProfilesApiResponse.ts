@@ -4,7 +4,7 @@ export enum PaymentProfileType {
   Manual = 0,
   AppleInAppPurchase = 1,
   Braintree = 3,
-  Chargify = 4
+  Chargify = 4,
 }
 
 export interface GetUserPaymentProfilesApiResponse extends ApiResponseBase {

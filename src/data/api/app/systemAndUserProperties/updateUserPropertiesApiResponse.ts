@@ -1,8 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface UpdateUserPropertiesApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateUserPropertiesApiResponse extends ApiResponseBase {}
 
 export interface UpdateUserPropertiesModel {
   property: Array<{

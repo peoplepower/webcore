@@ -1,9 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { MeasurementsHistoryUpdateBehavior, ParamDisplayType, ParamValueType, UnitMultipliers } from './getDeviceParametersApiResponse';
 
-export interface CreateOrUpdateDeviceParameterApiResponse extends ApiResponseBase {
-
-}
+export interface CreateOrUpdateDeviceParameterApiResponse extends ApiResponseBase {}
 
 export interface DeviceParameterModel {
   deviceParam: {

@@ -11,7 +11,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('OAuthClientApi')
 export class OAuthClientApi {
-
   @inject('AppApiOAuthDal') protected readonly dal: AppApiOAuthDal;
   @inject('AuthService') protected readonly authService: AuthService;
 
@@ -35,11 +34,13 @@ export class OAuthClientApi {
    * @param {number} params.locationId Location ID.
    * @returns {Promise<ApiResponseBase>}
    */
-  revokeAccessToThirdPartyApps(applicationId: number,
-                               params: {
-                                 locationId: number
-                               }): Promise<ApiResponseBase> {
-    return this.dal.delete(`cloud/json/authorize/${encodeURIComponent(applicationId.toString())}`, {params: params});
+  revokeAccessToThirdPartyApps(
+    applicationId: number,
+    params: {
+      locationId: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.delete(`cloud/json/authorize/${encodeURIComponent(applicationId.toString())}`, { params: params });
   }
 
   /**
@@ -54,14 +55,15 @@ export class OAuthClientApi {
    * @param {string} [params.brand] Force forwarding user to a specific branded page. If not set, the current user brand will be used.
    * @returns {Promise<string>}
    */
-  getUrlToAccessThirdPartyApp(appId: number,
-                              params: {
-                                locationId: number,
-                                API_KEY?: string,
-                                scope?: string,
-                                brand?: string
-                              }): Promise<string> {
-    return this.dal.get(`auth/authorize/${encodeURIComponent(appId.toString())}`, {params: params});
+  getUrlToAccessThirdPartyApp(
+    appId: number,
+    params: {
+      locationId: number;
+      API_KEY?: string;
+      scope?: string;
+      brand?: string;
+    },
+  ): Promise<string> {
+    return this.dal.get(`auth/authorize/${encodeURIComponent(appId.toString())}`, { params: params });
   }
-
 }

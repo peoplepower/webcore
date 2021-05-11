@@ -3,27 +3,24 @@ import Axios, { AxiosInstance } from 'axios';
 import { Interceptor } from './interceptors/interceptor';
 
 export abstract class Dal {
-
   protected readonly axios: AxiosInstance;
 
   protected constructor(defaultConfig?: DalRequestConfig, protected interceptors?: Interceptor[]) {
     this.axios = Axios.create(defaultConfig);
 
-    interceptors?.forEach(i => {
-
+    interceptors?.forEach((i) => {
       // NOTE: request interceptors will be executed in reversed order,
       //  but response interceptors will be executed in normal order.
 
       this.axios.interceptors.request.use(
-        i.request ? (config => i.request!(config)) : undefined,
-        i.requestError ? (error => i.requestError!(error)) : undefined,
+        i.request ? (config) => i.request!(config) : undefined,
+        i.requestError ? (error) => i.requestError!(error) : undefined,
       );
 
       this.axios.interceptors.response.use(
-        i.response ? (config => i.response!(config)) : undefined,
-        i.responseError ? (error => i.responseError!(error)) : undefined,
+        i.response ? (config) => i.response!(config) : undefined,
+        i.responseError ? (error) => i.responseError!(error) : undefined,
       );
-
     });
   }
 
@@ -38,7 +35,7 @@ export abstract class Dal {
     return this.request(config);
   }
 
-  public 'delete'(url: string, config?: DalRequestConfig): DalResponsePromise {
+  public delete(url: string, config?: DalRequestConfig): DalResponsePromise {
     config = config || {};
     config.url = url;
     config.method = 'delete';
@@ -75,5 +72,4 @@ export abstract class Dal {
     config.data = data;
     return this.request(config);
   }
-
 }

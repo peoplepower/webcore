@@ -92,5 +92,5 @@ export interface SendMessageModel {
 export enum ChallengeParticipantStatus {
   NotResponded = 1,
   OptedIn = 2,
-  OptedOut = 4
+  OptedOut = 4,
 }

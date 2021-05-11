@@ -11,7 +11,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('SystemAndUserPropertiesApi')
 export class SystemAndUserPropertiesApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -23,7 +22,7 @@ export class SystemAndUserPropertiesApi {
    * @returns {Promise<string>}
    */
   getUserOrSystemProperty(propertyName: string): Promise<string> {
-    return this.dal.get('systemProperty/' + encodeURIComponent(propertyName), {responseType: 'text'});
+    return this.dal.get('systemProperty/' + encodeURIComponent(propertyName), { responseType: 'text' });
   }
 
   /**
@@ -35,12 +34,8 @@ export class SystemAndUserPropertiesApi {
    * @param {number} [params.userId] User ID, used by an account with administrative privileges to retrieve the properties of another user.
    * @returns {Promise<GetUserPropertiesApiResponse>}
    */
-  getUserProperties(
-    params?: {
-      name?: string | string[],
-      userId?: number
-    }): Promise<GetUserPropertiesApiResponse> {
-    return this.dal.get('userProperties', {params: params});
+  getUserProperties(params?: { name?: string | string[]; userId?: number }): Promise<GetUserPropertiesApiResponse> {
+    return this.dal.get('userProperties', { params: params });
   }
 
   /**
@@ -53,11 +48,13 @@ export class SystemAndUserPropertiesApi {
    * @param {number} [params.userId] User ID, used by an account with administrative privileges to update the properties for another user.
    * @returns {Promise<UpdateUserPropertiesApiResponse>}
    */
-  updateUserProperties(model: UpdateUserPropertiesModel,
-                       params?: {
-                         userId?: number
-                       }): Promise<UpdateUserPropertiesApiResponse> {
-    return this.dal.post('userProperties', model, {params: params});
+  updateUserProperties(
+    model: UpdateUserPropertiesModel,
+    params?: {
+      userId?: number;
+    },
+  ): Promise<UpdateUserPropertiesApiResponse> {
+    return this.dal.post('userProperties', model, { params: params });
   }
 
   /**
@@ -70,12 +67,13 @@ export class SystemAndUserPropertiesApi {
    * @param {number} [params.userId] User ID, used by an account with administrative privileges to update the properties for another user.
    * @returns {Promise<ApiResponseBase>}
    */
-  updateUserProperty(name: string,
-                     params: {
-                       value: string,
-                       userId?: number
-                     }): Promise<ApiResponseBase> {
-    return this.dal.put('userProperty/' + encodeURIComponent(name), {}, {params: params});
+  updateUserProperty(
+    name: string,
+    params: {
+      value: string;
+      userId?: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.put('userProperty/' + encodeURIComponent(name), {}, { params: params });
   }
-
 }

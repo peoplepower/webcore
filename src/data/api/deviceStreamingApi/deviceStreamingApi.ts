@@ -10,7 +10,5 @@ import { StreamingApi } from './streaming/streamingApi';
  */
 @injectable('DeviceStreamingApi')
 export class DeviceStreamingApi {
-
   @inject('StreamingApi') public readonly streamingApi: StreamingApi;
-
 }

@@ -17,7 +17,6 @@ import { UpdateBillingInformationApiResponse, UpdateBillingInformationModel } fr
  */
 @injectable('EnergyManagementApi')
 export class EnergyManagementApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -32,16 +31,20 @@ export class EnergyManagementApi {
    * @param {LocationEnergyUsageDataSourceType} [params.external] Define the preference for internal vs. external data sources.
    * @returns {Promise<GetEnergyUsageForLocationApiResponse>}
    */
-  getEnergyUsageForLocation(locationId: number, aggregation: EnergyUsageDataAggregation, startDate: string,
-                            params?: {
-                              endDate?: string,
-                              external?: LocationEnergyUsageDataSourceType
-                            }): Promise<GetEnergyUsageForLocationApiResponse> {
+  getEnergyUsageForLocation(
+    locationId: number,
+    aggregation: EnergyUsageDataAggregation,
+    startDate: string,
+    params?: {
+      endDate?: string;
+      external?: LocationEnergyUsageDataSourceType;
+    },
+  ): Promise<GetEnergyUsageForLocationApiResponse> {
     const locationIdEncoded = encodeURIComponent(locationId.toString());
     const aggregationEncoded = encodeURIComponent(aggregation.toString());
     const startDateEncoded = encodeURIComponent(startDate.toString());
 
-    return this.dal.get(`locations/${locationIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, {params: params});
+    return this.dal.get(`locations/${locationIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, { params: params });
   }
 
   /**
@@ -58,13 +61,15 @@ export class EnergyManagementApi {
    * @param {string} [params.index] Optional index number to obtain energy-related data from a part of a device (assuming the device supports index numbers).
    * @returns {Promise<GetDeviceEnergyUsageApiResponse>}
    */
-  getDeviceEnergyUsage(deviceId: string,
-                       params?: {
-                         locationId: number,
-                         index?: string,
-                         userId?: number
-                       }): Promise<GetDeviceEnergyUsageApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId.toString())}/currentEnergyUsage`, {params: params});
+  getDeviceEnergyUsage(
+    deviceId: string,
+    params?: {
+      locationId: number;
+      index?: string;
+      userId?: number;
+    },
+  ): Promise<GetDeviceEnergyUsageApiResponse> {
+    return this.dal.get(`devices/${encodeURIComponent(deviceId.toString())}/currentEnergyUsage`, { params: params });
   }
 
   /**
@@ -82,17 +87,21 @@ export class EnergyManagementApi {
    * @param {boolean} [params.reduceNoise] Return tiny energy values less than defined threshold as zero
    * @returns {Promise<GetDeviceEnergyUsageAggregatedApiResponse>}
    */
-  getDeviceEnergyUsageAggregated(deviceId: string, aggregation: EnergyUsageDataAggregation, startDate: string,
-                                 params: {
-                                   locationId: number,
-                                   endDate?: string,
-                                   reduceNoise?: boolean
-                                 }): Promise<GetDeviceEnergyUsageAggregatedApiResponse> {
+  getDeviceEnergyUsageAggregated(
+    deviceId: string,
+    aggregation: EnergyUsageDataAggregation,
+    startDate: string,
+    params: {
+      locationId: number;
+      endDate?: string;
+      reduceNoise?: boolean;
+    },
+  ): Promise<GetDeviceEnergyUsageAggregatedApiResponse> {
     let deviceIdEncoded = encodeURIComponent(deviceId.toString());
     let aggregationEncoded = encodeURIComponent(aggregation.toString());
     let startDateEncoded = encodeURIComponent(startDate.toString());
 
-    return this.dal.get(`devices/${deviceIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, {params: params});
+    return this.dal.get(`devices/${deviceIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, { params: params });
   }
 
   /**

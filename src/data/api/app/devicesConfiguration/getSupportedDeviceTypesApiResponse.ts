@@ -27,7 +27,7 @@ export interface GetSupportedDeviceTypesApiResponse extends ApiResponseBase {
         email: string;
         verified: boolean;
         status: EmailVerificationStatus;
-      }
+      };
     };
     /**
      * The creation date

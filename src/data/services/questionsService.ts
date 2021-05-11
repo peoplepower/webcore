@@ -20,19 +20,19 @@ export class QuestionsService extends BaseService {
     }
 
     let parameters: {
-      locationId: number,
-      answerStatus?: QuestionStatus | QuestionStatus[],
-      editable?: boolean,
-      collectionName?: string,
-      questionId?: number,
-      appInstanceId?: number,
-      lang?: string,
-      limit?: number,
-      sortCollection?: string,
-      sortBy?: string,
-      sortOrder?: string,
-      firstRow?: number,
-      rowCount?: number
+      locationId: number;
+      answerStatus?: QuestionStatus | QuestionStatus[];
+      editable?: boolean;
+      collectionName?: string;
+      questionId?: number;
+      appInstanceId?: number;
+      lang?: string;
+      limit?: number;
+      sortCollection?: string;
+      sortBy?: string;
+      sortOrder?: string;
+      firstRow?: number;
+      rowCount?: number;
     } = params || {};
 
     parameters.locationId = locationId;
@@ -59,5 +59,4 @@ export class QuestionsService extends BaseService {
 
     return this.userCommunicationsApi.answerQuestions(locationId, model);
   }
-
 }

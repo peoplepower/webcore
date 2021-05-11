@@ -14,7 +14,6 @@ import { UpdateUserApiResponse, UpdateUserModel } from './updateUserApiResponse'
  */
 @injectable('UserAccountsApi')
 export class UserAccountsApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   // #region -------------------- User and location --------------------
@@ -40,7 +39,7 @@ export class UserAccountsApi {
     noApiKey: boolean = false,
   ): Promise<CreateUserAndLocationApiResponse> {
     // Make sure the headers collection initialized as empty to avoid chances the code using it will crash
-    let headers = operationToken ? {'PPCAuthorization': 'op token=' + operationToken} : {};
+    let headers = operationToken ? { PPCAuthorization: 'op token=' + operationToken } : {};
 
     return this.dal.post('user', userModel, {
       noAuth: noApiKey,
@@ -57,7 +56,7 @@ export class UserAccountsApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteUser(userId?: number): Promise<ApiResponseBase> {
-    return this.dal.delete('user', {params: {userId: userId}});
+    return this.dal.delete('user', { params: { userId: userId } });
   }
 
   /**
@@ -90,12 +89,12 @@ export class UserAccountsApi {
    */
   getUserInformation(
     params?: {
-      userId?: number | string,
-      organizationId?: number | string,
+      userId?: number | string;
+      organizationId?: number | string;
     },
     noApiKey: boolean = false,
   ): Promise<GetUserInformationApiResponse> {
-    return this.dal.get('user', {params: params, noAuth: noApiKey});
+    return this.dal.get('user', { params: params, noAuth: noApiKey });
   }
 
   /**
@@ -107,7 +106,7 @@ export class UserAccountsApi {
    * @returns {Promise<UpdateUserApiResponse>}
    */
   updateUser(user: UpdateUserModel, userId?: number): Promise<UpdateUserApiResponse> {
-    return this.dal.put('user', user, {params: {userId: userId}});
+    return this.dal.put('user', user, { params: { userId: userId } });
   }
 
   // #endregion
@@ -192,21 +191,26 @@ export class UserAccountsApi {
     newPassword: string,
     tempApiKey: string,
     params?: {
-      brand?: string,
-      appName?: string,
-      passcode?: string
-    }): Promise<ApiResponseBase> {
-    let {passcode, ...urlParams} = params || {};
-    return this.dal.put('newPassword', {
-      newPassword: newPassword,
-      passcode: passcode,
-    }, {
-      params: urlParams,
-      headers: {
-        'API_KEY': tempApiKey,
+      brand?: string;
+      appName?: string;
+      passcode?: string;
+    },
+  ): Promise<ApiResponseBase> {
+    let { passcode, ...urlParams } = params || {};
+    return this.dal.put(
+      'newPassword',
+      {
+        newPassword: newPassword,
+        passcode: passcode,
       },
-      noAuth: true,
-    });
+      {
+        params: urlParams,
+        headers: {
+          API_KEY: tempApiKey,
+        },
+        noAuth: true,
+      },
+    );
   }
 
   /**
@@ -229,16 +233,21 @@ export class UserAccountsApi {
     oldPassword: string,
     passcode?: string,
     params?: {
-      brand?: string,
-      appName?: string
-    }): Promise<ApiResponseBase> {
-    return this.dal.put('newPassword', {
-      newPassword: newPassword,
-      oldPassword: oldPassword,
-      passcode: passcode,
-    }, {
-      params: params,
-    });
+      brand?: string;
+      appName?: string;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.put(
+      'newPassword',
+      {
+        newPassword: newPassword,
+        oldPassword: oldPassword,
+        passcode: passcode,
+      },
+      {
+        params: params,
+      },
+    );
   }
 
   /**
@@ -254,7 +263,7 @@ export class UserAccountsApi {
    * @param {string} [params.appName] App name to identify the brand.
    * @returns {Promise<ApiResponseBase>}
    */
-  recoverPassword(params: { username: string, brand?: string, appName?: string }): Promise<ApiResponseBase> {
+  recoverPassword(params: { username: string; brand?: string; appName?: string }): Promise<ApiResponseBase> {
     return this.dal.get('newPassword', {
       params: params,
     });
@@ -269,8 +278,8 @@ export class UserAccountsApi {
    * @param {VerificationType} params.type Code type.
    * @returns {Promise<ApiResponseBase>}
    */
-  provideVerificationCode(params: { code: string, type: VerificationType }): Promise<ApiResponseBase> {
-    return this.dal.put('emailVerificationMessage', {}, {params: params});
+  provideVerificationCode(params: { code: string; type: VerificationType }): Promise<ApiResponseBase> {
+    return this.dal.put('emailVerificationMessage', {}, { params: params });
   }
 
   /**
@@ -284,13 +293,12 @@ export class UserAccountsApi {
    * @param {VerificationType} [params.type] Message type.
    * @returns {Promise<SendVerificationMessageApiResponse>}
    */
-  sendVerificationMessage(
-    params: {
-      brand?: string,
-      appName?: string,
-      type?: VerificationType
-    }): Promise<SendVerificationMessageApiResponse> {
-    return this.dal.get('emailVerificationMessage', {params: params});
+  sendVerificationMessage(params: {
+    brand?: string;
+    appName?: string;
+    type?: VerificationType;
+  }): Promise<SendVerificationMessageApiResponse> {
+    return this.dal.get('emailVerificationMessage', { params: params });
   }
 
   // #endregion
@@ -306,7 +314,6 @@ export class UserAccountsApi {
    * @returns {Promise<ResetBadgesApiResponse>}
    */
   resetBadges(params?: { type?: BadgeType }): Promise<ResetBadgesApiResponse> {
-    return this.dal.put('badges', {}, {params: params});
+    return this.dal.put('badges', {}, { params: params });
   }
-
 }

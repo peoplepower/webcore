@@ -15,7 +15,6 @@ import { DataStreamMessage, DataStreamScope } from './dataStreamMessageApiRespon
  */
 @injectable('BotShopApi')
 export class BotShopApi {
-
   @inject('BotApiDal') protected readonly dal: BotApiDal;
 
   /**
@@ -33,15 +32,15 @@ export class BotShopApi {
    * @returns {Promise<SearchBotsApiResponse>}
    */
   searchBots(params?: {
-    searchBy?: string,
-    category?: string,
-    compatible?: boolean,
-    lang?: string,
-    type?: BotType,
-    locationId?: number,
-    organizationId?: number
+    searchBy?: string;
+    category?: string;
+    compatible?: boolean;
+    lang?: string;
+    type?: BotType;
+    locationId?: number;
+    organizationId?: number;
   }): Promise<SearchBotsApiResponse> {
-    return this.dal.get('cloud/appstore/search', {params: params});
+    return this.dal.get('cloud/appstore/search', { params: params });
   }
 
   /**
@@ -55,13 +54,8 @@ export class BotShopApi {
    * @param {number} [params.organizationId] Check compatibility for this organization.
    * @returns {Promise<GetBotInfoApiResponse>}
    */
-  getBotInfo(params: {
-    bundle: string,
-    lang?: string,
-    locationId?: number,
-    organizationId?: number,
-  }): Promise<GetBotInfoApiResponse> {
-    return this.dal.get('cloud/appstore/appInfo', {params: params});
+  getBotInfo(params: { bundle: string; lang?: string; locationId?: number; organizationId?: number }): Promise<GetBotInfoApiResponse> {
+    return this.dal.get('cloud/appstore/appInfo', { params: params });
   }
 
   /**
@@ -76,12 +70,12 @@ export class BotShopApi {
    * @returns {Promise<PurchaseBotApiResponse>}
    */
   purchaseBot(params: {
-    bundle: string,
-    locationId?: number,
-    organizationId?: number,
-    circleId?: number,
+    bundle: string;
+    locationId?: number;
+    organizationId?: number;
+    circleId?: number;
   }): Promise<PurchaseBotApiResponse> {
-    return this.dal.post('cloud/appstore/appInstance', {}, {params: params});
+    return this.dal.post('cloud/appstore/appInstance', {}, { params: params });
   }
 
   /**
@@ -94,8 +88,11 @@ export class BotShopApi {
    * @param {BotInstanceStatus} [params.status] New bot instance status. Optional parameter.
    * @returns {Promise<ConfigureBotApiResponse>}
    */
-  configureBot(objectBotInstance: ConfigureBotBody, params: { appInstanceId: number, status?: BotInstanceStatus }): Promise<ConfigureBotApiResponse> {
-    return this.dal.put('cloud/appstore/appInstance', objectBotInstance, {params: params});
+  configureBot(
+    objectBotInstance: ConfigureBotBody,
+    params: { appInstanceId: number; status?: BotInstanceStatus },
+  ): Promise<ConfigureBotApiResponse> {
+    return this.dal.put('cloud/appstore/appInstance', objectBotInstance, { params: params });
   }
 
   /**
@@ -116,14 +113,14 @@ export class BotShopApi {
    * @returns {Promise<GetListOfBotsApiResponse>}
    */
   getListOfBots(params?: {
-    appInstanceId?: number,
-    bundle?: string,
-    locationId?: number,
-    organizationId?: number,
-    circleId?: number,
-    userId?: number
+    appInstanceId?: number;
+    bundle?: string;
+    locationId?: number;
+    organizationId?: number;
+    circleId?: number;
+    userId?: number;
   }): Promise<GetListOfBotsApiResponse> {
-    return this.dal.get('cloud/appstore/appInstance', {params: params});
+    return this.dal.get('cloud/appstore/appInstance', { params: params });
   }
 
   /**
@@ -135,7 +132,7 @@ export class BotShopApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteBot(params: { appInstanceId: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('cloud/appstore/appInstance', {params: params});
+    return this.dal.delete('cloud/appstore/appInstance', { params: params });
   }
 
   /**
@@ -152,13 +149,16 @@ export class BotShopApi {
    * @param {number} [params.organizationId] Send data to bots of this organization, used by an administrators.
    * @returns {Promise<ApiResponseBase>}
    */
-  sendDataStreamMessage(message: DataStreamMessage, params: {
-    scope: DataStreamScope,
-    address: string,
-    locationId?: number,
-    organizationId?: number
-  }): Promise<ApiResponseBase> {
-    return this.dal.post('cloud/appstore/stream', message, {params: params});
+  sendDataStreamMessage(
+    message: DataStreamMessage,
+    params: {
+      scope: DataStreamScope;
+      address: string;
+      locationId?: number;
+      organizationId?: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.post('cloud/appstore/stream', message, { params: params });
   }
 
   /**
@@ -172,10 +172,7 @@ export class BotShopApi {
    * @param {number} [params.organizationId] Organization ID.
    * @returns {Promise<GetBotSummaryApiResponse>}
    */
-  getBotSummary(params?: {
-    locationId?: number,
-    organizationId?: number
-  }): Promise<GetBotSummaryApiResponse> {
-    return this.dal.get('cloud/appstore/summary', {params: params});
+  getBotSummary(params?: { locationId?: number; organizationId?: number }): Promise<GetBotSummaryApiResponse> {
+    return this.dal.get('cloud/appstore/summary', { params: params });
   }
 }

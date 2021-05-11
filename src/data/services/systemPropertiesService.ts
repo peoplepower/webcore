@@ -4,7 +4,6 @@ import { BaseService } from './baseService';
 
 @injectable('SystemPropertiesService')
 export class SystemPropertiesService extends BaseService {
-
   @inject('SystemAndUserPropertiesApi') protected readonly systemAndUserPropertiesApi: SystemAndUserPropertiesApi;
 
   constructor() {
@@ -19,5 +18,4 @@ export class SystemPropertiesService extends BaseService {
     const PASSWORD_REGEX_STR = 'web-password_regex';
     return this.systemAndUserPropertiesApi.getUserOrSystemProperty(PASSWORD_REGEX_STR);
   }
-
 }

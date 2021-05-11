@@ -8,7 +8,6 @@ import { GetTotalDeviceAlertsApiResponse } from './getTotalDeviceAlertsApiRespon
  */
 @injectable('ReportsApi')
 export class ReportsApi {
-
   @inject('AppApiReportsDal') protected readonly dal: AppApiReportsDal;
 
   /**
@@ -18,8 +17,7 @@ export class ReportsApi {
    * @param {string} [params.alertType] Return only number of this alert type (i.e.: motion, alert or reset, etc.).
    * @returns {Promise<GetTotalDeviceAlertsApiResponse>}
    */
-  getTotalDeviceAlerts(params?: { alertType?: string; }): Promise<GetTotalDeviceAlertsApiResponse> {
-    return this.dal.get('totalDeviceAlerts', {params: params});
+  getTotalDeviceAlerts(params?: { alertType?: string }): Promise<GetTotalDeviceAlertsApiResponse> {
+    return this.dal.get('totalDeviceAlerts', { params: params });
   }
-
 }

@@ -5,7 +5,7 @@ export enum BillingInformationType {
   DataForBillingDay = 1,
   DataForBudget = 2,
   AllRateInformation = 4,
-  CurrentBillingRate = 8
+  CurrentBillingRate = 8,
 }
 
 export enum BillingRateType {
@@ -13,7 +13,7 @@ export enum BillingRateType {
   Unknown = -1,
   Both = 0,
   Residential = 1,
-  Commercial = 2
+  Commercial = 2,
 }
 
 export interface GetBillingInformationApiResponse extends ApiResponseBase {

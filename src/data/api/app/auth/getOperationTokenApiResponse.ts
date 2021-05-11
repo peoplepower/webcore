@@ -1,7 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
 export enum OperationTokenType {
-  UserRegistration = 1
+  UserRegistration = 1,
 }
 
 export interface GetOperationTokenApiResponse extends ApiResponseBase {

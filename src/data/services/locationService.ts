@@ -22,7 +22,6 @@ import { WsHub } from '../../modules/wsHub/wsHub';
 
 @injectable('LocationService')
 export class LocationService extends BaseService {
-
   @inject('AuthService') protected readonly authService: AuthService;
   @inject('LocationsApi') protected readonly locationsApi: LocationsApi;
   @inject('UserService') protected readonly userService: UserService;
@@ -45,10 +44,9 @@ export class LocationService extends BaseService {
    * @returns {Promise<SceneUpdateInfo>}
    */
   public setLocationScene(locationId: number, scene: string): Promise<SceneUpdateInfo> {
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.setLocationScene(locationId, scene);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.setLocationScene(locationId, scene);
+    });
   }
 
   /**
@@ -58,15 +56,10 @@ export class LocationService extends BaseService {
    * @param {string} [endDate] Optional. End date to stop receiving data. Default is the current date.
    * @returns {Promise<GetLocationScenesHistoryApiResponse>}
    */
-  public getLocationScenesHistory(
-    locationId: number,
-    startDate?: string,
-    endDate?: string,
-  ): Promise<GetLocationScenesHistoryApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getLocationScenesHistory(locationId, startDate, endDate);
-      });
+  public getLocationScenesHistory(locationId: number, startDate?: string, endDate?: string): Promise<GetLocationScenesHistoryApiResponse> {
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getLocationScenesHistory(locationId, startDate, endDate);
+    });
   }
 
   /**
@@ -75,7 +68,7 @@ export class LocationService extends BaseService {
    * @returns {Promise<CountriesList>}
    */
   public getCountries(countryCode?: string | string[]): Promise<CountriesList> {
-    return this.locationsApi.getCountries({sortCollection: 'countries', sortBy: 'name', countryCode});
+    return this.locationsApi.getCountries({ sortCollection: 'countries', sortBy: 'name', countryCode });
   }
 
   /**
@@ -85,8 +78,7 @@ export class LocationService extends BaseService {
    * @returns {Promise<ApiResponseBase>}
    */
   public updateLocation(locationId: number, location: LocationModel): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.locationsApi.editLocation({location: location}, locationId));
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.editLocation({ location: location }, locationId));
   }
 
   /**
@@ -99,10 +91,9 @@ export class LocationService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.deleteLocation(locationId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.deleteLocation(locationId);
+    });
   }
 
   /**
@@ -115,10 +106,9 @@ export class LocationService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getLocationUsers(locationId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getLocationUsers(locationId);
+    });
   }
 
   /**
@@ -132,10 +122,9 @@ export class LocationService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.addLocationUsers(locationId, users);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.addLocationUsers(locationId, users);
+    });
   }
 
   /**
@@ -152,10 +141,9 @@ export class LocationService extends BaseService {
       return this.reject(`User ID is incorrect [${userId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.deleteLocationUser(locationId, userId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.deleteLocationUser(locationId, userId);
+    });
   }
 
   /**
@@ -171,10 +159,9 @@ export class LocationService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getLocationState(locationId, name);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getLocationState(locationId, name);
+    });
   }
 
   /**
@@ -184,13 +171,10 @@ export class LocationService extends BaseService {
    * @returns {WsSubscription}
    */
   public subscribeForLocationStates(locationId: number, locationStateName: string): WsSubscription {
-    return this.wsHub.subscribe(
-      WsSubscriptionType.LOCATION_STATES,
-      WsSubscriptionOperation.CREATE_OR_UPDATE_OR_DELETE,
-      {
-        locationId: locationId,
-        name: locationStateName,
-      });
+    return this.wsHub.subscribe(WsSubscriptionType.LOCATION_STATES, WsSubscriptionOperation.CREATE_OR_UPDATE_OR_DELETE, {
+      locationId: locationId,
+      name: locationStateName,
+    });
   }
 
   /**
@@ -208,10 +192,15 @@ export class LocationService extends BaseService {
    * @param {boolean} [overwrite] Overwrite the entire state with completely new content.
    * @returns {Promise<SetLocationStateApiResponse>}
    */
-  public setLocationState(locationId: number, name: string, value: SetLocationStateModel, overwrite?: boolean): Promise<SetLocationStateApiResponse> {
+  public setLocationState(
+    locationId: number,
+    name: string,
+    value: SetLocationStateModel,
+    overwrite?: boolean,
+  ): Promise<SetLocationStateApiResponse> {
     const params: {
-      name: string,
-      overwrite?: boolean
+      name: string;
+      overwrite?: boolean;
     } = {
       name: name,
     };
@@ -220,10 +209,9 @@ export class LocationService extends BaseService {
       params.overwrite = true;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.setLocationState(locationId, params, value);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.setLocationState(locationId, params, value);
+    });
   }
 
   /**
@@ -237,18 +225,20 @@ export class LocationService extends BaseService {
    *   If not set, only states with dates exactly equal to startDate will be returned.
    * @returns {Promise<GetLocationTimeStateApiResponse>}
    */
-  public getLocationTimeState(locationId: number,
-                              name: string,
-                              startDate: string | number,
-                              endDate?: string | number): Promise<GetLocationTimeStateApiResponse> {
+  public getLocationTimeState(
+    locationId: number,
+    name: string,
+    startDate: string | number,
+    endDate?: string | number,
+  ): Promise<GetLocationTimeStateApiResponse> {
     if (!startDate) {
       return this.reject(`Start date not specified [${startDate}].`);
     }
 
     const params: {
-      name: string,
-      startDate: string | number,
-      endDate?: string | number
+      name: string;
+      startDate: string | number;
+      endDate?: string | number;
     } = {
       name: name,
       startDate: startDate,
@@ -257,10 +247,9 @@ export class LocationService extends BaseService {
       params.endDate = endDate;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getLocationTimeState(locationId, params);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getLocationTimeState(locationId, params);
+    });
   }
 
   /**
@@ -279,19 +268,20 @@ export class LocationService extends BaseService {
    * @param {LocationTimeStateAggregation} [params.aggregation] Aggregate field values by 1 = hour, 2 = day, 3 = month, 4 = week
    * @returns {Promise<GetLocationTimeStateApiResponse>}
    */
-  public getLocationTimeStatesHistory(locationId: number,
-                                      params: {
-                                        startDate: string | number,
-                                        endDate: string | number,
-                                        name: string | string[],
-                                        field?: string | string[],
-                                        keepParent?: boolean,
-                                        aggregation?: LocationTimeStateAggregation
-                                      }): Promise<GetLocationTimeStateApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getLocationTimeState(locationId, params);
-      });
+  public getLocationTimeStatesHistory(
+    locationId: number,
+    params: {
+      startDate: string | number;
+      endDate: string | number;
+      name: string | string[];
+      field?: string | string[];
+      keepParent?: boolean;
+      aggregation?: LocationTimeStateAggregation;
+    },
+  ): Promise<GetLocationTimeStateApiResponse> {
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getLocationTimeState(locationId, params);
+    });
   }
 
   /**
@@ -304,10 +294,9 @@ export class LocationService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getSpaces(locationId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getSpaces(locationId);
+    });
   }
 
   /**
@@ -321,10 +310,9 @@ export class LocationService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.updateSpace(locationId, spaceModel);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.updateSpace(locationId, spaceModel);
+    });
   }
 
   /**
@@ -334,7 +322,11 @@ export class LocationService extends BaseService {
    * @param {UpdateLocationSpaceModel} spaceModel
    * @returns {Promise<UpdateLocationSpaceApiResponse>}
    */
-  public updateLocationSpace(locationId: number, spaceId: number, spaceModel: UpdateLocationSpaceModel): Promise<UpdateLocationSpaceApiResponse> {
+  public updateLocationSpace(
+    locationId: number,
+    spaceId: number,
+    spaceModel: UpdateLocationSpaceModel,
+  ): Promise<UpdateLocationSpaceApiResponse> {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
@@ -342,10 +334,9 @@ export class LocationService extends BaseService {
       return this.reject(`Space ID is incorrect [${spaceId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.updateSpace(locationId, spaceModel, spaceId);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.updateSpace(locationId, spaceModel, spaceId);
+    });
   }
 
   /**
@@ -358,12 +349,15 @@ export class LocationService extends BaseService {
    * @param {number} [params.rowCount] Maximum number of results.
    * @returns {Promise<GetLocationPrioritiesApiResponse>}
    */
-  public getLocationPriorityHistory(locationId: number, params: {
-    startDate: string | number,
-    endDate?: string | number,
-    priority?: number,
-    rowCount?: number
-  }): Promise<GetLocationPrioritiesApiResponse> {
+  public getLocationPriorityHistory(
+    locationId: number,
+    params: {
+      startDate: string | number;
+      endDate?: string | number;
+      priority?: number;
+      rowCount?: number;
+    },
+  ): Promise<GetLocationPrioritiesApiResponse> {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
@@ -371,18 +365,14 @@ export class LocationService extends BaseService {
       return this.reject(`Start date not specified [${params.startDate}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => {
-        return this.locationsApi.getLocationPriorityHistory(locationId, params);
-      });
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.getLocationPriorityHistory(locationId, params);
+    });
   }
 }
 
-export interface CountriesList extends GetCountriesApiResponse {
-}
+export interface CountriesList extends GetCountriesApiResponse {}
 
-export interface SceneUpdateInfo extends ApiResponseBase {
-}
+export interface SceneUpdateInfo extends ApiResponseBase {}
 
-export interface LocationUsers extends GetLocationUsersApiResponse {
-}
+export interface LocationUsers extends GetLocationUsersApiResponse {}

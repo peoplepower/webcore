@@ -12,60 +12,73 @@ export class DeviceStreamingService extends BaseService {
   }
 
   getCameraStreamingInfo(deviceId: string): Promise<DeviceStreamingServerInfo> {
-    return this.streamingApi.getDeviceStreamingServer(deviceId)
-      .then((serverData: GetDeviceStreamingServerApiResponse) => {
-        if (!serverData || !serverData.server || !serverData.server.host) {
+    return this.streamingApi.getDeviceStreamingServer(deviceId).then((serverData: GetDeviceStreamingServerApiResponse) => {
+      if (!serverData || !serverData.server || !serverData.server.host) {
+        // disconnected
+        return Promise.resolve({
+          connected: false,
+        });
+      }
+
+      let host = serverData.server.host + (serverData.server.port ? ':' + serverData.server.port : '');
+      let streamingServerUrl = (serverData.server.ssl ? 'https://' : 'http://') + host;
+      let websocketUrl = (serverData.server.ssl ? 'wss://' : 'ws://') + host;
+
+      return this.streamingApi.getStreamingSession(streamingServerUrl, deviceId).then((streamingSessionInfo) => {
+        if (!streamingSessionInfo || !streamingSessionInfo.videoServer || !streamingSessionInfo.sessionId) {
           // disconnected
-          return Promise.resolve({
+          let result: DeviceStreamingServerInfo = {
             connected: false,
-          });
+          };
+          return Promise.resolve(result);
         }
 
-        let host = serverData.server.host + (serverData.server.port ? (':' + serverData.server.port) : '');
-        let streamingServerUrl = (serverData.server.ssl ? 'https://' : 'http://') + host;
-        let websocketUrl = (serverData.server.ssl ? 'wss://' : 'ws://') + host;
+        let streamingRtmpUrl =
+          (streamingSessionInfo.videoServerSsl ? 'rtmps' : 'rtmp') +
+          '://' +
+          streamingSessionInfo.videoServer +
+          '/ppcvideoserver' +
+          '?sessionId=' +
+          streamingSessionInfo.sessionId +
+          '&deviceId=' +
+          deviceId +
+          '/' +
+          streamingSessionInfo.sessionId;
 
-        return this.streamingApi.getStreamingSession(streamingServerUrl, deviceId)
-          .then((streamingSessionInfo) => {
-            if (!streamingSessionInfo || !streamingSessionInfo.videoServer || !streamingSessionInfo.sessionId) {
-              // disconnected
-              let result: DeviceStreamingServerInfo = {
-                connected: false,
-              };
-              return Promise.resolve(result);
-            }
+        let streamingHLSUrl =
+          (streamingSessionInfo.videoServerSsl ? 'https' : 'http') +
+          '://' +
+          streamingSessionInfo.videoServer +
+          '/ppcvideoserver/' +
+          streamingSessionInfo.sessionId +
+          '/playlist.m3u8?sessionId=' +
+          streamingSessionInfo.sessionId +
+          '&deviceId=' +
+          deviceId;
 
-            let streamingRtmpUrl = (streamingSessionInfo.videoServerSsl ? 'rtmps' : 'rtmp') + '://' +
-              streamingSessionInfo.videoServer + '/ppcvideoserver' +
-              '?sessionId=' + streamingSessionInfo.sessionId + '&deviceId=' + deviceId + '/' + streamingSessionInfo.sessionId;
+        let result: DeviceStreamingServerInfo = {
+          connected: true,
+          rtmpUrl: streamingRtmpUrl,
+          hlsUrl: streamingHLSUrl,
+          streamingServerUrl: streamingServerUrl,
+          websocketUrl: websocketUrl,
+          sessionId: streamingSessionInfo.sessionId,
 
-            let streamingHLSUrl = (streamingSessionInfo.videoServerSsl ? 'https' : 'http') + '://' +
-              streamingSessionInfo.videoServer + '/ppcvideoserver/' +
-              streamingSessionInfo.sessionId + '/playlist.m3u8?sessionId=' + streamingSessionInfo.sessionId + '&deviceId=' + deviceId;
+          streamingServer: {
+            host: serverData.server!.host,
+            port: serverData.server!.port,
+            ssl: serverData.server!.ssl,
+          },
 
-            let result: DeviceStreamingServerInfo = {
-              connected: true,
-              rtmpUrl: streamingRtmpUrl,
-              hlsUrl: streamingHLSUrl,
-              streamingServerUrl: streamingServerUrl,
-              websocketUrl: websocketUrl,
-              sessionId: streamingSessionInfo.sessionId,
+          videoServer: {
+            host: streamingSessionInfo.videoServer,
+            ssl: !!streamingSessionInfo.videoServerSsl,
+          },
+        };
 
-              streamingServer: {
-                host: serverData.server!.host,
-                port: serverData.server!.port,
-                ssl: serverData.server!.ssl,
-              },
-
-              videoServer: {
-                host: streamingSessionInfo.videoServer,
-                ssl: !!streamingSessionInfo.videoServerSsl,
-              },
-            };
-
-            return result;
-          });
+        return result;
       });
+    });
   }
 }
 

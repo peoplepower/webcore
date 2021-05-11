@@ -10,7 +10,7 @@ export enum EnergyUsageDataAggregation {
   SplitByMonth = 3,
   SplitBySundayToSaturday = 4,
   SplitByMondayToFridayThenWeekend = 5,
-  SplitByUserUtilityBillingPeriod = 7
+  SplitByUserUtilityBillingPeriod = 7,
 }
 
 /**
@@ -21,7 +21,7 @@ export enum LocationEnergyUsageDataSourceType {
   PreferInternallyGenerated = 1,
   ReturnOnlyExternallyUploaded = 2,
   ReturnOnlyInternallyGenerated = 3,
-  ReturnBothInternalAndExternal = 4
+  ReturnBothInternalAndExternal = 4,
 }
 
 export interface GetEnergyUsageForLocationApiResponse extends ApiResponseBase {

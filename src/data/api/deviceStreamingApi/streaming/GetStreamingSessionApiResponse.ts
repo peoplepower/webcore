@@ -1,7 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
 export interface GetStreamingSessionApiResponse extends ApiResponseBase {
-
   /**
    * Video streaming server host and port. Empty if device is disconnected from streaming server.
    */

@@ -10,7 +10,7 @@ export interface GetLocationStateApiResponse extends ApiResponseBase {
    * If multiple states requested
    */
   states?: Array<{
-    name: string,
-    value: Object
+    name: string;
+    value: Object;
   }>;
 }

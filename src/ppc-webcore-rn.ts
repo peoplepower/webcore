@@ -1,40 +1,42 @@
 import { WebCore } from './ppc-webcore';
 import { LocalStorageProvider } from './modules/localStorage/localStorage';
+import { Environment } from './modules/envir/environment';
+import { WebCoreConfig } from './modules/tuner/config';
 import { AsyncStorage } from 'react-native';
+import { decode, encode } from 'base-64';
 
-/**
- * You also will need btoa polyfill
- *
- * import {decode, encode} from 'base-64'
- *
- * if (!global.btoa) {
- *   global.btoa = encode;
- * }
- *
- * if (!global.atob) {
- *   global.atob = decode;
- * }
- */
+// You also will need btoa polyfill
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
 
 const ASYNC_STORAGE_KEY = 'PPC_WEBCORE_DATA';
 
+/**
+ * Fake sync local storage. You could use any realization that fit your needs.
+ */
 class LocalStorageMimic implements LocalStorageProvider {
-
   private storageObject: { [key: string]: any } = {};
 
   load(): Promise<void> {
-    return AsyncStorage.getItem(ASYNC_STORAGE_KEY)
-      .then((data: string) => {
+    return AsyncStorage.getItem(ASYNC_STORAGE_KEY).then(
+      (data: string) => {
         try {
           const obj = JSON.parse(data || '');
           this.storageObject = obj || {};
         } catch (e) {
           this.storageObject = {};
         }
-      }, (err: any) => {
+      },
+      (err: any) => {
         console.warn(err);
         this.storageObject = {};
-      });
+      },
+    );
   }
 
   private save() {
@@ -62,14 +64,26 @@ class LocalStorageMimic implements LocalStorageProvider {
   }
 }
 
-let ls = new LocalStorageMimic();
+const ls = new LocalStorageMimic();
 
-const wsPromise = ls.load()
-  .then(() => {
-    let webCore = new WebCore('dev', {localStorage: ls});
-    // webCore.services.auth.loginByKey(apiKey);
-    // TODO it you need to use API_KEY from external - we could add it here somehow
-    return webCore;
-  });
+const env: Environment = 'dev';
+
+const config: WebCoreConfig = {
+  logger: {
+    localStorage: {
+      enabled: false,
+    },
+    xhr: {
+      enabled: false,
+    },
+  },
+  localStorage: ls,
+};
+
+const wsPromise = ls.load().then(() => {
+  let webCore = new WebCore(env, config);
+  // webCore.services.auth.loginByKey(apiKey);
+  return webCore;
+});
 
 export default wsPromise;

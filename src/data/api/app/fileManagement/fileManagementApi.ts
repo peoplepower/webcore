@@ -21,7 +21,6 @@ import { GetDownloadUrlApiResponse } from './getDownloadUrlApiResponse';
  */
 @injectable('FileManagementApi')
 export class FileManagementApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -43,17 +42,17 @@ export class FileManagementApi {
    * @returns {Promise<GetFilesApiResponse>}
    */
   getFiles(params: {
-    locationId: number,
-    type?: FileType,
-    owners?: FileOwningType,
-    ownerId?: number,
-    deviceId?: string,
-    deviceDescription?: string,
-    startDate?: string,
-    endDate?: string,
-    searchTag?: string
+    locationId: number;
+    type?: FileType;
+    owners?: FileOwningType;
+    ownerId?: number;
+    deviceId?: string;
+    deviceDescription?: string;
+    startDate?: string;
+    endDate?: string;
+    searchTag?: string;
   }): Promise<GetFilesApiResponse> {
-    return this.dal.get('files', {params: params});
+    return this.dal.get('files', { params: params });
   }
 
   /**
@@ -79,13 +78,14 @@ export class FileManagementApi {
   getLastNFiles(
     count: number,
     params?: {
-      startDate?: string,
-      endDate?: string,
-      type?: FileType,
-      deviceId?: string,
-      deviceDescription?: string
-    }): Promise<GetFilesApiResponse> {
-    return this.dal.get(`filesByCount/${count}`, {params: params});
+      startDate?: string;
+      endDate?: string;
+      type?: FileType;
+      deviceId?: string;
+      deviceDescription?: string;
+    },
+  ): Promise<GetFilesApiResponse> {
+    return this.dal.get(`filesByCount/${count}`, { params: params });
   }
 
   /**
@@ -98,7 +98,7 @@ export class FileManagementApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteAllFiles(locationId: number): Promise<ApiResponseBase> {
-    return this.dal.delete('files', {params: {locationId: locationId}});
+    return this.dal.delete('files', { params: { locationId: locationId } });
   }
 
   /**
@@ -112,7 +112,7 @@ export class FileManagementApi {
    * @returns {Promise<DeleteFileApiResponse>}
    */
   deleteFile(fileId: number, locationId: number): Promise<ApiResponseBase> {
-    return this.dal.delete(`files/${encodeURIComponent(fileId.toString())}`, {params: {locationId: locationId}});
+    return this.dal.delete(`files/${encodeURIComponent(fileId.toString())}`, { params: { locationId: locationId } });
   }
 
   /**
@@ -138,13 +138,14 @@ export class FileManagementApi {
     fileId: number,
     fileAttributes: FileAttributesModel,
     params: {
-      locationId: number,
-      proxyId?: string,
-      incomplete?: boolean,
-      recover?: boolean,
-      pure?: boolean
-    }): Promise<UpdateFileAttributesApiResponse> {
-    return this.dal.put(`files/${encodeURIComponent(fileId.toString())}`, fileAttributes, {params: params});
+      locationId: number;
+      proxyId?: string;
+      incomplete?: boolean;
+      recover?: boolean;
+      pure?: boolean;
+    },
+  ): Promise<UpdateFileAttributesApiResponse> {
+    return this.dal.put(`files/${encodeURIComponent(fileId.toString())}`, fileAttributes, { params: params });
   }
 
   /**
@@ -181,30 +182,28 @@ export class FileManagementApi {
   uploadNewFile(
     file: ArrayBuffer,
     params: {
-      ext: string,
-      proxyId: string,
-      fileId?: number,
-      deviceId?: string,
-      expectedSize?: number,
-      duration?: number,
-      rotate?: number,
-      thumbnail?: boolean,
-      type?: FileType,
-      incomplete?: boolean,
-      uploadUrl?: boolean
+      ext: string;
+      proxyId: string;
+      fileId?: number;
+      deviceId?: string;
+      expectedSize?: number;
+      duration?: number;
+      rotate?: number;
+      thumbnail?: boolean;
+      type?: FileType;
+      incomplete?: boolean;
+      uploadUrl?: boolean;
     },
     contentType: string = 'application/octet-stream',
-    onUploadProgress?: (progressEvent: any) => void): Promise<UploadFileApiResponse> {
+    onUploadProgress?: (progressEvent: any) => void,
+  ): Promise<UploadFileApiResponse> {
     // TODO: In order to actually conveniently use this method we need to introduce the service around it with public
     // access which uses the html5 FileReader component
-    return this.dal.post(
-      'files',
-      file,
-      {
-        params: params,
-        onUploadProgress: onUploadProgress,
-        headers: {'Content-Type': contentType},
-      });
+    return this.dal.post('files', file, {
+      params: params,
+      onUploadProgress: onUploadProgress,
+      headers: { 'Content-Type': contentType },
+    });
   }
 
   /**
@@ -236,21 +235,21 @@ export class FileManagementApi {
     fileId: number,
     fileFragment: ArrayBuffer,
     params: {
-      proxyId: string,
-      thumbnail?: boolean,
-      incomplete?: boolean,
-      index?: number
+      proxyId: string;
+      thumbnail?: boolean;
+      incomplete?: boolean;
+      index?: number;
     },
     contentType: string = 'application/octet-stream',
-    onUploadProgress?: (progressEvent: any) => void): Promise<UploadFileApiResponse> {
+    onUploadProgress?: (progressEvent: any) => void,
+  ): Promise<UploadFileApiResponse> {
     // TODO: In order to actually conveniently use this method we need to introduce the service around it with public
     //  access which uses the html5 FileReader component
-    return this.dal.post(`files/${encodeURIComponent(fileId.toString())}`, fileFragment,
-      {
-        params: params,
-        onUploadProgress: onUploadProgress,
-        headers: {'Content-Type': contentType},
-      });
+    return this.dal.post(`files/${encodeURIComponent(fileId.toString())}`, fileFragment, {
+      params: params,
+      onUploadProgress: onUploadProgress,
+      headers: { 'Content-Type': contentType },
+    });
   }
 
   /**
@@ -296,13 +295,14 @@ export class FileManagementApi {
   downloadFile(
     fileId: number,
     params?: {
-      API_KEY?: string,
-      thumbnail?: boolean
-    }): Promise<ArrayBuffer> {
+      API_KEY?: string;
+      thumbnail?: boolean;
+    },
+  ): Promise<ArrayBuffer> {
     // TODO: In order to actually conveniently use this method we need to introduce the service around it with public
     //  access The response stream with file content actually can be used as: .then(function(response) {
     //  response.data.pipe(fs.createWriteStream('ada_lovelace.jpg')) })
-    return this.dal.get(`files/${encodeURIComponent(fileId.toString())}`, {params: params, responseType: 'stream'});
+    return this.dal.get(`files/${encodeURIComponent(fileId.toString())}`, { params: params, responseType: 'stream' });
   }
 
   /**
@@ -321,12 +321,13 @@ export class FileManagementApi {
   getDownloadUrl(
     fileId: number,
     params: {
-      locationId: number,
-      content?: boolean,
-      thumbnail?: boolean,
-      expiration?: boolean
-    }): Promise<GetDownloadUrlApiResponse> {
-    return this.dal.get(`files/${encodeURIComponent(fileId.toString())}/url`, {params: params});
+      locationId: number;
+      content?: boolean;
+      thumbnail?: boolean;
+      expiration?: boolean;
+    },
+  ): Promise<GetDownloadUrlApiResponse> {
+    return this.dal.get(`files/${encodeURIComponent(fileId.toString())}/url`, { params: params });
   }
 
   /**
@@ -361,14 +362,15 @@ export class FileManagementApi {
   getAggregatedFileList(
     aggregation: FilesAggregation,
     params: {
-      locationId: number,
-      timeZone?: string,
-      type?: FileType,
-      startDate?: string,
-      endDate?: string,
-      details?: boolean
-    }): Promise<GetAggregatedFileListApiResponse> {
-    return this.dal.get(`filesSummary/${encodeURIComponent(aggregation.toString())}`, {params: params});
+      locationId: number;
+      timeZone?: string;
+      type?: FileType;
+      startDate?: string;
+      endDate?: string;
+      details?: boolean;
+    },
+  ): Promise<GetAggregatedFileListApiResponse> {
+    return this.dal.get(`filesSummary/${encodeURIComponent(aggregation.toString())}`, { params: params });
   }
 
   /**
@@ -379,7 +381,7 @@ export class FileManagementApi {
    * @returns {Promise<GetListOfFileDevicesApiResponse>}
    */
   getListOfFileDevices(locationId: number): Promise<GetListOfFileDevicesApiResponse> {
-    return this.dal.get('fileDevices', {params: {locationId: locationId}});
+    return this.dal.get('fileDevices', { params: { locationId: locationId } });
   }
 
   /**
@@ -393,7 +395,7 @@ export class FileManagementApi {
    * @returns {Promise<GetFileInformationApiResponse>}
    */
   getFileInformation(fileId: number, locationId: number): Promise<GetFileInformationApiResponse> {
-    return this.dal.get(`filesInfo/${encodeURIComponent(fileId.toString())}`, {params: {locationId: locationId}});
+    return this.dal.get(`filesInfo/${encodeURIComponent(fileId.toString())}`, { params: { locationId: locationId } });
   }
 
   /**
@@ -407,12 +409,10 @@ export class FileManagementApi {
    * @param {number} locationId Location ID.
    * @returns {Promise<ApplyFileTagApiResponse>}
    */
-  applyFileTag(
-    fileId: number,
-    tag: string,
-    locationId: number,
-  ): Promise<ApiResponseBase> {
-    return this.dal.put(`files/${encodeURIComponent(fileId.toString())}/tags/${encodeURIComponent(tag)}`, {params: {locationId: locationId}});
+  applyFileTag(fileId: number, tag: string, locationId: number): Promise<ApiResponseBase> {
+    return this.dal.put(`files/${encodeURIComponent(fileId.toString())}/tags/${encodeURIComponent(tag)}`, {
+      params: { locationId: locationId },
+    });
   }
 
   /**
@@ -426,12 +426,10 @@ export class FileManagementApi {
    * @param {number} locationId Location ID.
    * @returns {Promise<DeleteFileTagApiResponse>}
    */
-  deleteFileTag(
-    fileId: number,
-    tag: string,
-    locationId: number,
-  ): Promise<ApiResponseBase> {
-    return this.dal.delete(`files/${encodeURIComponent(fileId.toString())}/tags/${encodeURIComponent(tag)}`, {params: {locationId: locationId}});
+  deleteFileTag(fileId: number, tag: string, locationId: number): Promise<ApiResponseBase> {
+    return this.dal.delete(`files/${encodeURIComponent(fileId.toString())}/tags/${encodeURIComponent(tag)}`, {
+      params: { locationId: locationId },
+    });
   }
 
   /**
@@ -444,11 +442,7 @@ export class FileManagementApi {
    * @param {string} reportType Type of report. This is typically 'abuse', but may be changed to trigger a different type of email template to support.
    * @returns {Promise<ReportAbuseApiResponse>}
    */
-  reportAbuse(
-    fileId: number,
-    reportType: string,
-  ): Promise<ApiResponseBase> {
+  reportAbuse(fileId: number, reportType: string): Promise<ApiResponseBase> {
     return this.dal.put(`files/${encodeURIComponent(fileId.toString())}/report/${encodeURIComponent(reportType)}`);
   }
-
 }

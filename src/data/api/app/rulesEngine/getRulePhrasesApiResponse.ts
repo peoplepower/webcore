@@ -14,7 +14,7 @@ export interface GetRulePhrasesApiResponse extends ApiResponseBase {
     functionGroup?: string;
     parameters?: Array<{
       name: string;
-      category: RuleParameterCategory,
+      category: RuleParameterCategory;
       optional: boolean;
       desc: string;
       values?: Array<{
@@ -39,7 +39,7 @@ export interface GetRulePhrasesApiResponse extends ApiResponseBase {
     functionGroup?: string;
     parameters?: Array<{
       name: string;
-      category: RuleParameterCategory,
+      category: RuleParameterCategory;
       optional: boolean;
       desc: string;
       values?: Array<{

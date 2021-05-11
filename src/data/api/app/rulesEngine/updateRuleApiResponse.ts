@@ -5,6 +5,4 @@ export interface UpdateRuleModel {
   rule: RuleModel;
 }
 
-export interface UpdateRuleApiResponse extends ApiResponseBase {
-
-}
+export interface UpdateRuleApiResponse extends ApiResponseBase {}

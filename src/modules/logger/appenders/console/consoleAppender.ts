@@ -6,7 +6,6 @@ import { LogLevel } from '../../logLevel';
  * Console logger appender
  */
 export class ConsoleAppender extends Appender {
-
   protected config: ConsoleAppenderConfig;
 
   private readonly consoleStyle: { [logLevel: string]: string };
@@ -33,7 +32,8 @@ export class ConsoleAppender extends Appender {
 
   log(level: LogLevel, ...args: any[]): void {
     if (this.config.maxLevel <= level && level <= this.config.minLevel && args.length > 0) {
-      if (this.consoleStyle[level]) { // todo check if colors are supported
+      if (this.consoleStyle[level]) {
+        // todo check if colors are supported
         if (args[0] && (typeof args[0] === 'string' || args[0] instanceof String)) {
           args.splice(1, 0, this.consoleStyle[level]);
           args[0] = '%c' + args[0];
@@ -42,5 +42,4 @@ export class ConsoleAppender extends Appender {
       console.log(...args);
     }
   }
-
 }

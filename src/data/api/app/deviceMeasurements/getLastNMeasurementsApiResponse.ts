@@ -5,6 +5,6 @@ export interface GetLastNMeasurementsApiResponse extends ApiResponseBase {
     deviceId: string;
     timeStamp: string;
     timeStampMs: number;
-    params: Array<{ name: string; value: string; }>;
+    params: Array<{ name: string; value: string }>;
   }>;
 }

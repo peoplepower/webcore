@@ -2,7 +2,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 
 export enum FilesAction {
   OldFileDeletedToStoreThisOne = 1,
-  ThereIsNoSpaceForThisFile = 2
+  ThereIsNoSpaceForThisFile = 2,
 }
 
 export interface UploadFileApiResponse extends ApiResponseBase {

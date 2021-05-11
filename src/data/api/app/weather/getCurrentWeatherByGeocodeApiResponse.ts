@@ -11,7 +11,7 @@ export interface GetCurrentWeatherApiResponse extends ApiResponseBase {
       units: string;
       expire_time_gmt: number;
       status_code: number;
-    },
+    };
     observation: {
       class: string;
       expire_time_gmt: number;
@@ -41,7 +41,7 @@ export interface GetCurrentWeatherApiResponse extends ApiResponseBase {
       vocal_key: string;
       metric: {
         wspd: number;
-        gust: any,
+        gust: any;
         vis: number;
         mslp: number;
         altimeter: number;
@@ -76,11 +76,9 @@ export interface GetCurrentWeatherApiResponse extends ApiResponseBase {
         obs_qualifier_100char: any;
         obs_qualifier_50char: any;
         obs_qualifier_32char: any;
-      }
-    }
-  }
+      };
+    };
+  };
 }
 
-export interface GetCurrentWeatherByGeocodeApiResponse extends GetCurrentWeatherApiResponse {
-
-}
+export interface GetCurrentWeatherByGeocodeApiResponse extends GetCurrentWeatherApiResponse {}

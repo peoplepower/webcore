@@ -41,6 +41,4 @@ export class StreamingApi {
       baseURL: streamingUrl,
     });
   }
-
-
 }

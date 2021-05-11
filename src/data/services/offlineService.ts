@@ -13,7 +13,6 @@ const AFTER_PING_TIMEOUT = 100;
 
 @injectable('OfflineService')
 export class OfflineService extends BaseService {
-
   @inject('CloudConfigService') private readonly cloudConfigService: CloudConfigService;
   @inject('Tuner') private readonly tuner: Tuner;
 
@@ -65,19 +64,19 @@ export class OfflineService extends BaseService {
       return this.whenConnectedPromise;
     }
     this._offline = true;
-    this.whenConnectedPromise = this.pingRecursive(this.tuner.config?.ping?.initialPingInterval || INITIAL_PING_INTERVAL)
-      .then(() => {
-        this._offline = false;
-        delete this.whenConnectedPromise;
-        this.setState(OnlineState.Online);
-      });
+    this.whenConnectedPromise = this.pingRecursive(this.tuner.config?.ping?.initialPingInterval || INITIAL_PING_INTERVAL).then(() => {
+      this._offline = false;
+      delete this.whenConnectedPromise;
+      this.setState(OnlineState.Online);
+    });
 
     return this.whenConnectedPromise;
   }
 
   private pingRecursive(nextPingTimeout: number): Promise<void> {
     let me = this;
-    return me.ping()
+    return me
+      .ping()
       .then(() => {
         return new Promise<void>((resolve) => {
           setTimeout(() => {
@@ -111,9 +110,10 @@ export class OfflineService extends BaseService {
       return this.pingPromise;
     }
 
-    this.pingPromise = this.cloudConfigService.getBaseUrl()
-      .then(url => {
-        return Axios.get('espapi/watch', {baseURL: url});
+    this.pingPromise = this.cloudConfigService
+      .getBaseUrl()
+      .then((url) => {
+        return Axios.get('espapi/watch', { baseURL: url });
       })
 
       .then((resp) => {
@@ -138,5 +138,5 @@ export class OfflineService extends BaseService {
 
 export enum OnlineState {
   Online = 'ONLINE',
-  Offline = 'OFFLINE'
+  Offline = 'OFFLINE',
 }

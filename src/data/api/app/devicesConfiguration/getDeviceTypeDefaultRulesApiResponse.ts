@@ -10,7 +10,7 @@ import { RuleParameterCategory } from './createRulePhraseApiResponse';
 export enum RuleStatus {
   Incomplete = 0,
   Active = 1,
-  Inactive = 2
+  Inactive = 2,
 }
 
 /**
@@ -33,7 +33,7 @@ export enum RuleTriggerType {
   /**
    * Measurements
    */
-  NewDeviceData = 14
+  NewDeviceData = 14,
 }
 
 /**
@@ -52,7 +52,7 @@ export enum RuleStateType {
    * This phrase is to specify a state for a device parameter, such as "temperature is greater than 73 degrees
    * Fahrenheit" for example.
    */
-  DeviceParameterState = 23
+  DeviceParameterState = 23,
 }
 
 /**
@@ -70,7 +70,7 @@ export enum RuleActionType {
   /**
    * Send a command to a device
    */
-  SendCommand = 33
+  SendCommand = 33,
 }
 
 export interface Rule {
@@ -107,7 +107,7 @@ export interface Rule {
     past: string;
     parameters: Array<{
       name: string;
-      category: RuleParameterCategory
+      category: RuleParameterCategory;
       value: string;
     }>;
   };
@@ -126,7 +126,7 @@ export interface Rule {
         value: string;
       }>;
     }>;
-  },
+  };
   /**
    * An action is what takes place if the trigger executes while all the state conditions are met. A valid rule must
    * have at least one action. For example, "make the light turn on" / "make the light turn off".

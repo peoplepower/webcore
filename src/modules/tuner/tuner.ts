@@ -12,13 +12,12 @@ const DEFAULT_CONFIG_NAME = 'default';
  */
 @injectable('Tuner')
 export class Tuner {
-
   @inject('Envir') private readonly envir: Envir;
 
   private configs: {
     // actually it's `[env: Environment]: WebCoreConfig`, but typescript doesn't support this.
     // Environment is actually string, so
-    [env: string]: WebCoreConfig[]
+    [env: string]: WebCoreConfig[];
   };
 
   private currentConfig: WebCoreConfig;
@@ -107,8 +106,7 @@ export class Tuner {
     // Nested objects
     if (typeof x === 'object') {
       let keys = Object.keys(x);
-      return Object.keys(y).every(i => keys.indexOf(i) !== -1)
-        && keys.every(i => me.checkJsonEquality(x[i], y[i]));
+      return Object.keys(y).every((i) => keys.indexOf(i) !== -1) && keys.every((i) => me.checkJsonEquality(x[i], y[i]));
     }
 
     // All other cases

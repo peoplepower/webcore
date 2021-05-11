@@ -16,7 +16,6 @@ export interface SetDevicePropertiesModel {
   }>;
 }
 
-
 export interface RegisterDeviceParams {
   /**
    * Device ID's are globally unique, and must not contain '/' or '\' characters. See the documentation for examples of

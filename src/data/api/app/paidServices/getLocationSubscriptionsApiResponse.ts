@@ -5,7 +5,7 @@ export enum SubscriptionStatus {
   DefaultOrActive = 0,
   ExpiredOrCancelled = 1,
   Paused = 2,
-  Initial = -1
+  Initial = -1,
 }
 
 export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {

@@ -11,27 +11,29 @@ import { OfflineInterceptor } from '../../dal/interceptors/offlineInterceptor';
 
 @injectable('AppApiOAuthDal')
 export class AppApiOAuthDal extends Dal {
-
   @inject('CloudConfigService') protected readonly cloudConfigService: CloudConfigService;
 
   constructor() {
     const offlineInterceptor = new OfflineInterceptor();
 
-    super({
-      // custom params serializer
-      paramsSerializer: (params) => {
-        return qs.stringify(params, {
-          arrayFormat: 'repeat', // this will make {a: ['b', 'c']} compiles to 'a=b&a=c' not 'a[]=b&a[]=c'
-          //indices: false
-        });
+    super(
+      {
+        // custom params serializer
+        paramsSerializer: (params) => {
+          return qs.stringify(params, {
+            arrayFormat: 'repeat', // this will make {a: ['b', 'c']} compiles to 'a=b&a=c' not 'a[]=b&a[]=c'
+            //indices: false
+          });
+        },
       },
-    }, [
-      new BaseUrlInterceptor(), // no need in any 'oauth' specific baseUrl segment, as every api method will use own url
-      offlineInterceptor,
-      new AuthInterceptor(),
-      new ApiResponseInterceptor(),
-      new JsonContentTypeInterceptor(),
-    ]);
+      [
+        new BaseUrlInterceptor(), // no need in any 'oauth' specific baseUrl segment, as every api method will use own url
+        offlineInterceptor,
+        new AuthInterceptor(),
+        new ApiResponseInterceptor(),
+        new JsonContentTypeInterceptor(),
+      ],
+    );
 
     offlineInterceptor.dal = this;
   }
@@ -42,9 +44,8 @@ export class AppApiOAuthDal extends Dal {
    * @returns {Promise<string>}
    */
   public GetFullUrl(relativeUrl: string): Promise<string> {
-    return this.cloudConfigService.getBaseUrl()
-      .then(baseUrl => {
-        return Path.Combine(baseUrl, relativeUrl);
-      });
+    return this.cloudConfigService.getBaseUrl().then((baseUrl) => {
+      return Path.Combine(baseUrl, relativeUrl);
+    });
   }
 }

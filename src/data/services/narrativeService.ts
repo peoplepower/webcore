@@ -24,18 +24,10 @@ export class NarrativeService extends BaseService {
    * @param {CreateOrUpdateNarrativeModel} narrative
    * @returns {Promise<NarrativeInfo>}
    */
-  public createNarrative(
-    locationId: number,
-    scope: NarrativeScope,
-    narrative: CreateOrUpdateNarrativeModel,
-  ): Promise<NarrativeInfo> {
-    return this.locationsApi.createOrUpdateNarrative(
-      locationId,
-      narrative,
-      {
-        scope: scope,
-      },
-    );
+  public createNarrative(locationId: number, scope: NarrativeScope, narrative: CreateOrUpdateNarrativeModel): Promise<NarrativeInfo> {
+    return this.locationsApi.createOrUpdateNarrative(locationId, narrative, {
+      scope: scope,
+    });
   }
 
   /**
@@ -55,14 +47,11 @@ export class NarrativeService extends BaseService {
     narrativeId: number,
     narrativeTime: number,
   ): Promise<NarrativeInfo> {
-    return this.locationsApi.createOrUpdateNarrative(
-      locationId,
-      narrative,
-      {
-        scope: scope,
-        narrativeId: narrativeId,
-        narrativeTime: narrativeTime,
-      });
+    return this.locationsApi.createOrUpdateNarrative(locationId, narrative, {
+      scope: scope,
+      narrativeId: narrativeId,
+      narrativeTime: narrativeTime,
+    });
   }
 
   /**
@@ -73,19 +62,12 @@ export class NarrativeService extends BaseService {
    * @param {number} narrativeTime Narrative time in milliseconds
    * @returns {Promise<ApiResponseBase>}
    */
-  public deleteNarrative(
-    locationId: number,
-    scope: NarrativeScope,
-    narrativeId: number,
-    narrativeTime: number,
-  ): Promise<ApiResponseBase> {
-    return this.locationsApi.deleteNarrative(
-      locationId,
-      {
-        scope: scope,
-        narrativeId: narrativeId,
-        narrativeTime: narrativeTime,
-      });
+  public deleteNarrative(locationId: number, scope: NarrativeScope, narrativeId: number, narrativeTime: number): Promise<ApiResponseBase> {
+    return this.locationsApi.deleteNarrative(locationId, {
+      scope: scope,
+      narrativeId: narrativeId,
+      narrativeTime: narrativeTime,
+    });
   }
 
   /**
@@ -113,27 +95,24 @@ export class NarrativeService extends BaseService {
    * @param {string} [params.pageMarker] Marker to the next page
    * @returns {Promise<GetNarrativesApiResponse>}
    */
-  public getNarratives(locationId: number,
-                       params: {
-                         rowCount: number,
-                         narrativeId?: number,
-                         priority?: NarrativePriority,
-                         toPriority?: NarrativePriority,
-                         narrativeType?: NarrativeType | Array<NarrativeType>
-                         searchBy?: string,
-                         startDate?: string,
-                         endDate?: string,
-                         pageMarker?: string
-                       }): Promise<NarrativesSearchResult> {
+  public getNarratives(
+    locationId: number,
+    params: {
+      rowCount: number;
+      narrativeId?: number;
+      priority?: NarrativePriority;
+      toPriority?: NarrativePriority;
+      narrativeType?: NarrativeType | Array<NarrativeType>;
+      searchBy?: string;
+      startDate?: string;
+      endDate?: string;
+      pageMarker?: string;
+    },
+  ): Promise<NarrativesSearchResult> {
     return this.locationsApi.getNarratives(locationId, params);
   }
-
 }
 
-export interface NarrativeInfo extends CreateOrUpdateNarrativeApiResponse {
-}
+export interface NarrativeInfo extends CreateOrUpdateNarrativeApiResponse {}
 
-export interface NarrativesSearchResult extends GetNarrativesApiResponse {
-}
-
-
+export interface NarrativesSearchResult extends GetNarrativesApiResponse {}

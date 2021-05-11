@@ -4,12 +4,9 @@ import { LocalStorageAppenderConfig } from './appenders/localStorage/localStorag
 import { XhrAppenderConfig } from './appenders/xhr/xhrAppenderConfig';
 
 export class LoggerConfig extends LogLevelAwareConfig {
-
   console?: ConsoleAppenderConfig;
 
   localStorage?: LocalStorageAppenderConfig;
 
   xhr?: XhrAppenderConfig;
-
 }
-

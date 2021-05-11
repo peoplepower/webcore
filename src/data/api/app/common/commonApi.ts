@@ -10,7 +10,6 @@ import { GetServerApiResponse } from './getServerApiResponse';
  */
 @injectable('CommonApi')
 export class CommonApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   // TODO: Cover this API with integration tests just like the other APIs covered
@@ -49,12 +48,13 @@ export class CommonApi {
    * @param {string} baseUrl Base URL for the server (with protocol, hostname and port).
    * @returns {Promise<GetApiSettingsApiResponse>}
    */
-  getApiSettings(params?: {
-                   deviceId?: string,
-                   version?: number,
-                   connected?: boolean
-                 },
-                 baseUrl?: string,
+  getApiSettings(
+    params?: {
+      deviceId?: string;
+      version?: number;
+      connected?: boolean;
+    },
+    baseUrl?: string,
   ): Promise<GetApiSettingsApiResponse> {
     return this.dal.get('settings', {
       params: params,
@@ -85,13 +85,13 @@ export class CommonApi {
    * @returns {Promise<GetServerApiResponse>}
    */
   getServer(params: {
-    type: ServerType,
-    deviceId?: string,
-    connected?: boolean,
-    brand?: string,
-    appName?: string
+    type: ServerType;
+    deviceId?: string;
+    connected?: boolean;
+    brand?: string;
+    appName?: string;
   }): Promise<GetServerApiResponse> {
-    let {type, ...reqParams} = params;
+    let { type, ...reqParams } = params;
     return this.dal.get('settingsServer/' + encodeURIComponent(type), {
       params: reqParams,
     });
@@ -120,17 +120,16 @@ export class CommonApi {
    * @returns {Promise<string>}
    */
   getServerUrl(params: {
-    type: ServerType,
-    ssl: boolean,
-    deviceId?: string,
-    connected?: boolean,
-    brand?: string,
-    appName?: string
+    type: ServerType;
+    ssl: boolean;
+    deviceId?: string;
+    connected?: boolean;
+    brand?: string;
+    appName?: string;
   }): Promise<string> {
     return this.dal.get('settingsServer', {
       params: params,
       responseType: 'text',
     });
   }
-
 }

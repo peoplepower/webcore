@@ -11,7 +11,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('CirclesApi')
 export class CirclesApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -32,11 +31,15 @@ export class CirclesApi {
    * @returns {Promise<CreateCircleApiResponse>}
    */
   createCircle(circleName: string, params?: { userId: number }): Promise<CreateCircleApiResponse> {
-    return this.dal.post('circles', {
-      circle: {
-        name: circleName,
+    return this.dal.post(
+      'circles',
+      {
+        circle: {
+          name: circleName,
+        },
       },
-    }, {params: params});
+      { params: params },
+    );
   }
 
   /**
@@ -52,8 +55,8 @@ export class CirclesApi {
    * @param {string} [circleKey] Circle key for not registered circle members.
    * @returns {Promise<GetCirclesApiResponse>}
    */
-  getCircles(params?: { circleId?: number, userId?: number }, circleKey?: string): Promise<GetCirclesApiResponse> {
-    return this.dal.get('circles', {params: params, headers: circleKey ? {CIRCLE_KEY: circleKey} : undefined});
+  getCircles(params?: { circleId?: number; userId?: number }, circleKey?: string): Promise<GetCirclesApiResponse> {
+    return this.dal.get('circles', { params: params, headers: circleKey ? { CIRCLE_KEY: circleKey } : undefined });
   }
 
   /**
@@ -66,12 +69,16 @@ export class CirclesApi {
    * @param {number} [params.userId] User ID to access by administrator. Optional parameter.
    * @returns {Promise<ApiResponseBase>}
    */
-  modifyCircle(circleName: string, params: { circleId: number, userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.put('circles', {
-      circle: {
-        name: circleName,
+  modifyCircle(circleName: string, params: { circleId: number; userId?: number }): Promise<ApiResponseBase> {
+    return this.dal.put(
+      'circles',
+      {
+        circle: {
+          name: circleName,
+        },
       },
-    }, {params: params});
+      { params: params },
+    );
   }
 
   /**
@@ -83,8 +90,8 @@ export class CirclesApi {
    * @param {number} [params.userId] User ID to access by administrator. Optional parameter.
    * @returns {Promise<ApiResponseBase>}
    */
-  deleteCircle(params: { circleId: number, userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('circles', {params: params});
+  deleteCircle(params: { circleId: number; userId?: number }): Promise<ApiResponseBase> {
+    return this.dal.delete('circles', { params: params });
   }
 
   /**
@@ -131,14 +138,18 @@ export class CirclesApi {
     params?: { userId?: number },
     circleKey?: string,
   ): Promise<ApiResponseBase> {
-    return this.dal.put(`circles/${encodeURIComponent(circleId.toString())}/members`, {
-      member: {
-        status: status,
-        nickname: nickname,
-        admin: admin,
-        circleUserId: circleUserId,
+    return this.dal.put(
+      `circles/${encodeURIComponent(circleId.toString())}/members`,
+      {
+        member: {
+          status: status,
+          nickname: nickname,
+          admin: admin,
+          circleUserId: circleUserId,
+        },
       },
-    }, {params: params, headers: circleKey ? {CIRCLE_KEY: circleKey} : undefined});
+      { params: params, headers: circleKey ? { CIRCLE_KEY: circleKey } : undefined },
+    );
   }
 
   /**
@@ -152,8 +163,7 @@ export class CirclesApi {
    * @param {number} [params.userId] User ID to access by administrator. Optional parameter.
    * @returns {Promise<ApiResponseBase>}
    */
-  removeMembers(circleId: number, params: { circleUserId: number, userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete(`circles/${encodeURIComponent(circleId.toString())}/members`, {params: params});
+  removeMembers(circleId: number, params: { circleUserId: number; userId?: number }): Promise<ApiResponseBase> {
+    return this.dal.delete(`circles/${encodeURIComponent(circleId.toString())}/members`, { params: params });
   }
-
 }

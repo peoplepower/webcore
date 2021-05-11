@@ -34,7 +34,7 @@
  * }
  */
 export class LiteEvent<T> {
-  private handlers: { (data?: T): void; }[] = [];
+  private handlers: { (data?: T): void }[] = [];
 
   /**
    * Subscribe for event
@@ -53,7 +53,7 @@ export class LiteEvent<T> {
    * @param handler handler function used in `on` function
    */
   public off(handler: { (data?: T): void }): void {
-    this.handlers = this.handlers.filter(h => h !== handler);
+    this.handlers = this.handlers.filter((h) => h !== handler);
   }
 
   /**
@@ -61,7 +61,7 @@ export class LiteEvent<T> {
    * @param data event data
    */
   public trigger(data?: T): void {
-    this.handlers.slice(0).forEach(h => {
+    this.handlers.slice(0).forEach((h) => {
       setTimeout(() => {
         try {
           h(data);

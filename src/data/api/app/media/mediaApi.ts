@@ -11,7 +11,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('MediaApi')
 export class MediaApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -22,8 +21,8 @@ export class MediaApi {
    * @param {string} [params.mediaId] Gets media by it's ID.
    * @returns {Promise<GetMediaApiResponse>}
    */
-  getMedia(params?: { mediaId?: string; }): Promise<GetMediaApiResponse> {
-    return this.dal.get('media', {params: params});
+  getMedia(params?: { mediaId?: string }): Promise<GetMediaApiResponse> {
+    return this.dal.get('media', { params: params });
   }
 
   /**
@@ -44,7 +43,7 @@ export class MediaApi {
    * @param {{mediaId?: string}} params.mediaId Media ID to delete. Multiple values are supported.
    * @returns {Promise<ApiResponseBase>}
    */
-  deleteMedia(params?: { mediaId?: string | string[]; }): Promise<ApiResponseBase> {
-    return this.dal.delete('media', {params: params});
+  deleteMedia(params?: { mediaId?: string | string[] }): Promise<ApiResponseBase> {
+    return this.dal.delete('media', { params: params });
   }
 }

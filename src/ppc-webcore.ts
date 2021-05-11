@@ -94,3 +94,6 @@ export class WebCore {
     this.envir.environment = environment;
   }
 }
+
+// Additional exports for webcore
+export { inject, injectable } from './modules/common/di';

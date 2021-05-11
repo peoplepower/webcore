@@ -16,14 +16,14 @@ export interface GetNotificationsApiResponse extends ApiResponseBase {
     sourceType?: NotificationSourceType;
     sourceId?: number;
     messageText?: string;
-  }>
+  }>;
 }
 
 export enum NotificationDeliveryType {
   Push = 1,
   Email = 2,
   OutgoingSMS = 3,
-  IncomingSMS = 4
+  IncomingSMS = 4,
 }
 
 export enum NotificationSourceType {
@@ -33,5 +33,5 @@ export enum NotificationSourceType {
   DeviceFirmwareUpdate = 4,
   InternalSystem = 5,
   CloudBusinessLogic = 6,
-  ExternalIncomingMessage = 7
+  ExternalIncomingMessage = 7,
 }

@@ -27,7 +27,7 @@ export interface GetCirclesApiResponse extends ApiResponseBase {
         email: string;
         verified: boolean;
         status: EmailVerificationStatus;
-      }
+      };
       phone?: number;
       phoneType?: PhoneType;
       phoneStatus?: PhoneVerificationStatus;

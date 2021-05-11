@@ -33,5 +33,5 @@ export interface GetLocationPrioritiesApiResponse extends ApiResponseBase {
      * User ID who changed priority
      */
     userId?: number;
-  }>
+  }>;
 }

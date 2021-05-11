@@ -8,7 +8,7 @@ export enum PhoneVerificationStatus {
   Unknown = 0,
   Verified = 1,
   NotVerified = 2,
-  Invalid = 3
+  Invalid = 3,
 }
 
 export enum EmailVerificationStatus {
@@ -16,7 +16,7 @@ export enum EmailVerificationStatus {
   HardBounce = 1,
   SpamComplaint = 2,
   BadAddress = 3,
-  SpamNotification = 4
+  SpamNotification = 4,
 }
 
 export enum UserPermission {
@@ -28,7 +28,7 @@ export enum UserPermission {
   PaidServices = 5, // paid services administrator
   BotStoreAdmin = 6, // bot store administrator
   SystemAdmin = 7, // system administrator
-  CustomerServicesAdmin = 8 // manage customer services
+  CustomerServicesAdmin = 8, // manage customer services
 }
 
 export enum LocationPriorityCategory {
@@ -38,7 +38,7 @@ export enum LocationPriorityCategory {
   Incomplete = 3, // Incomplete installation (devices, people, etc.)
   Problem = 4, // Problems with the system (offline devices, low battery, abnormal device behaviors)
   Warning = 5, // Subjective warning (abnormal trends, sleeping too much, bathroom usage)
-  Critical = 6 // Critical alert (falls, didn't wake up, water leak)
+  Critical = 6, // Critical alert (falls, didn't wake up, water leak)
 }
 
 export interface LocationInfo {
@@ -60,7 +60,7 @@ export interface LocationInfo {
     features: string;
     groupId?: number;
     groupName?: string;
-  }
+  };
 
   /**
    * App name used to create this location.

@@ -43,7 +43,7 @@ export interface RuleTrigger {
   past: string;
   parameters: Array<{
     name: string;
-    category: RuleParameterCategory
+    category: RuleParameterCategory;
     value: string;
   }>;
 }
@@ -60,7 +60,7 @@ export interface Rule {
     state: Array<RuleState>;
     and: {
       state: Array<RuleState>;
-    }
+    };
   };
   actions: Array<RuleAction>;
 }

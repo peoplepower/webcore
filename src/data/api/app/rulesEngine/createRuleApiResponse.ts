@@ -33,7 +33,7 @@ export interface RuleModel {
         parameter: Array<{
           name: string;
           value: string;
-        }>
+        }>;
       }>;
     }>;
   };

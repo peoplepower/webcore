@@ -7,7 +7,6 @@ import { LogLevel } from '../../logLevel';
  * XHR logger appender
  */
 export class XhrAppender extends Appender {
-
   protected config: XhrAppenderConfig;
   protected messages: LogMessage[];
 
@@ -22,14 +21,17 @@ export class XhrAppender extends Appender {
   }
 
   log(level: LogLevel, ...args: any[]): void {
-    if (this.config.maxLevel <= level && level <= this.config.minLevel) {
+    if (!this.config.enabled) {
+      return;
+    }
+    if (this.config.maxLevel! <= level && level <= this.config.minLevel!) {
       // store messages
       this.messages.push(new LogMessage(level, args));
-      if (this.messages.length > this.config.size) {
+      if (this.messages.length > this.config.size!) {
         this.messages.shift();
       }
 
-      if (level <= this.config.triggerLevel) {
+      if (level <= this.config.triggerLevel!) {
         // send it async
         this.send();
       }
@@ -42,7 +44,7 @@ export class XhrAppender extends Appender {
     this.messages = [];
     setTimeout(function () {
       let xhr = new XMLHttpRequest();
-      xhr.open(me.config.method, me.config.path, true);
+      xhr.open(me.config.method!, me.config.path!, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       if (me.config.headers) {
         for (let headerName in me.config.headers) {
@@ -100,7 +102,6 @@ export class XhrLogMessagePackage {
         vendor: navigator.vendor,
         vendorSub: navigator.vendorSub,
       };
-
     }
   }
 }

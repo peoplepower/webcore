@@ -1,5 +1,3 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface VoteForCrowdFeedbackApiResponse extends ApiResponseBase {
-
-}
+export interface VoteForCrowdFeedbackApiResponse extends ApiResponseBase {}

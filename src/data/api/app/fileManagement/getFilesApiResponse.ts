@@ -6,20 +6,20 @@ export enum FileType {
   Image = 2,
   Audio = 3,
   BitmapMask = 4,
-  TextLog = 5
+  TextLog = 5,
 }
 
 export enum FileOwningType {
   OwnFilesOnly = 1,
   SharedFilesOnly = 2,
   OwnAndShared = 3,
-  DeletedFilesOnly = 4
+  DeletedFilesOnly = 4,
 }
 
 export enum FileSharingType {
   NotShared = 0,
   SharedNonRemovable = 1,
-  SharedRemovable = 2
+  SharedRemovable = 2,
 }
 
 export interface GetFilesApiResponse extends ApiResponseBase {
@@ -30,10 +30,10 @@ export interface GetFilesApiResponse extends ApiResponseBase {
   tempKeyExpire: string;
   filesCount?: number;
   files: Array<{
-    id: number,
+    id: number;
     creationDate: string;
     creationTime: number;
-    type: FileType,
+    type: FileType;
     size: number;
     duration?: number;
     thumbnail: boolean;
@@ -61,7 +61,7 @@ export interface GetFilesApiResponse extends ApiResponseBase {
       lastName?: string;
       email?: {
         email?: string;
-      }
-    }
+      };
+    };
   }>;
 }

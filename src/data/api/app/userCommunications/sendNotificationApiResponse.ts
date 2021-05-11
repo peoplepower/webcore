@@ -1,8 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface SendNotificationApiResponse extends ApiResponseBase {
-
-}
+export interface SendNotificationApiResponse extends ApiResponseBase {}
 
 export interface SendNotificationModel {
   brand: string;

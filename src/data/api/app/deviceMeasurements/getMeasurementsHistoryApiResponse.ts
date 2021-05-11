@@ -5,7 +5,7 @@ export interface GetMeasurementsHistoryApiResponse extends ApiResponseBase {
     deviceId: string;
     timeStamp: string;
     timeStampMs: number;
-    params: Array<{ name: string; value: string; }>;
+    params: Array<{ name: string; value: string }>;
   }>;
 }
 
@@ -15,5 +15,5 @@ export enum IntervalAggregationAlgorithm {
   MaximumValue = 2,
   MedianValue = 3,
   TimeDistributedAverageValue = 4,
-  AverageValue = 5
+  AverageValue = 5,
 }

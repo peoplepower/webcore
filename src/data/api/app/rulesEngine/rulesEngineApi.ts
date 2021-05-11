@@ -15,7 +15,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('RulesEngineApi')
 export class RulesEngineApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -27,8 +26,8 @@ export class RulesEngineApi {
    * @param {number} [params.version] Rules implementation version. Optional parameter.
    * @returns {Promise<GetRulePhrasesApiResponse>}
    */
-  getRulePhrases(params: { locationId: number, version?: number }): Promise<GetRulePhrasesApiResponse> {
-    return this.dal.get('ruleConditions', {params: params});
+  getRulePhrases(params: { locationId: number; version?: number }): Promise<GetRulePhrasesApiResponse> {
+    return this.dal.get('ruleConditions', { params: params });
   }
 
   /**
@@ -44,7 +43,7 @@ export class RulesEngineApi {
    * @returns {Promise<CreateRuleApiResponse>}
    */
   createRule(model: CreateRuleModel, params: { locationId: number }): Promise<CreateRuleApiResponse> {
-    return this.dal.post('rules', model, {params: params});
+    return this.dal.post('rules', model, { params: params });
   }
 
   /**
@@ -58,7 +57,7 @@ export class RulesEngineApi {
    * @returns {Promise<UpdateRuleApiResponse>}
    */
   updateRule(ruleId: number, model: UpdateRuleModel, params: { locationId: number }): Promise<UpdateRuleApiResponse> {
-    return this.dal.put(`rules/${encodeURIComponent(ruleId.toString())}`, model, {params: params});
+    return this.dal.put(`rules/${encodeURIComponent(ruleId.toString())}`, model, { params: params });
   }
 
   /**
@@ -71,9 +70,12 @@ export class RulesEngineApi {
    * @param {number} params.locationId Location ID.
    * @returns {Promise<UpdateRuleAttributeApiResponse>}
    */
-  updateRuleAttribute(ruleId: number, model: UpdateRuleAttributeModel, params: { locationId: number })
-    : Promise<UpdateRuleAttributeApiResponse> {
-    return this.dal.put(`rules/${encodeURIComponent(ruleId.toString())}/attrs`, model, {params: params});
+  updateRuleAttribute(
+    ruleId: number,
+    model: UpdateRuleAttributeModel,
+    params: { locationId: number },
+  ): Promise<UpdateRuleAttributeApiResponse> {
+    return this.dal.put(`rules/${encodeURIComponent(ruleId.toString())}/attrs`, model, { params: params });
   }
 
   /**
@@ -90,8 +92,8 @@ export class RulesEngineApi {
    *   whether the rule is a default rule, and whether the rule is hidden and not editable, default.
    * @returns {Promise<GetRulesApiResponse>}
    */
-  getRules(params: { locationId: number, deviceId?: string, details?: boolean }): Promise<GetRulesApiResponse> {
-    return this.dal.get('rules', {params: params});
+  getRules(params: { locationId: number; deviceId?: string; details?: boolean }): Promise<GetRulesApiResponse> {
+    return this.dal.get('rules', { params: params });
   }
 
   /**
@@ -107,8 +109,8 @@ export class RulesEngineApi {
    *   whether the rule is a default rule, and whether the rule is hidden and not editable, default.
    * @returns {Promise<GetRuleApiResponse>}
    */
-  getRule(ruleId: number, params: { locationId: number, details?: boolean }): Promise<GetRuleApiResponse> {
-    return this.dal.get(`rules/${encodeURIComponent(ruleId.toString())}`, {params: params});
+  getRule(ruleId: number, params: { locationId: number; details?: boolean }): Promise<GetRuleApiResponse> {
+    return this.dal.get(`rules/${encodeURIComponent(ruleId.toString())}`, { params: params });
   }
 
   /**
@@ -121,7 +123,7 @@ export class RulesEngineApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteRule(ruleId: number, params: { locationId: number }): Promise<ApiResponseBase> {
-    return this.dal.delete(`rules/${encodeURIComponent(ruleId.toString())}`, {params: params});
+    return this.dal.delete(`rules/${encodeURIComponent(ruleId.toString())}`, { params: params });
   }
 
   /**
@@ -133,8 +135,7 @@ export class RulesEngineApi {
    * @param {number} [params.deviceId] Specific device ID to create default rules for. Optional parameter.
    * @returns {Promise<CreateDefaultRulesForDeviceApiResponse>}
    */
-  createDefaultRulesForDevice(params: { locationId: number, deviceId?: string }): Promise<CreateDefaultRulesForDeviceApiResponse> {
-    return this.dal.post('rulesCreateDefault', {}, {params: params});
+  createDefaultRulesForDevice(params: { locationId: number; deviceId?: string }): Promise<CreateDefaultRulesForDeviceApiResponse> {
+    return this.dal.post('rulesCreateDefault', {}, { params: params });
   }
-
 }

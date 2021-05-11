@@ -5,7 +5,7 @@ export enum CallCenterAlertSourceType {
   Unknown = 0,
   RaisedByRule = 1,
   RaisedByComposerApp = 2,
-  RaisedByAppApi = 3
+  RaisedByAppApi = 3,
 }
 
 export interface GetCallCenterAlertsApiResponse extends ApiResponseBase {
@@ -22,6 +22,6 @@ export interface GetCallCenterAlertsApiResponse extends ApiResponseBase {
       goalId: number;
       typeCategory: number;
       desc: string;
-    }
+    };
   }>;
 }

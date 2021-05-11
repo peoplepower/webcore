@@ -29,7 +29,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('DevicesApi')
 export class DevicesApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   /**
@@ -45,9 +44,13 @@ export class DevicesApi {
    * @param {string} [deviceActivationKey] Activation key that allows to register device (no API_KEY).
    * @returns {Promise<RegisterDeviceApiResponse>}
    */
-  registerDevice(properties: DevicePropertiesModel, params?: RegisterDeviceParams, deviceActivationKey?: string): Promise<RegisterDeviceApiResponse> {
-    let headers = deviceActivationKey ? {ACTIVATION_KEY: deviceActivationKey, noAuth: true} : {};
-    return this.dal.post('devices', properties, {params: params, headers: headers});
+  registerDevice(
+    properties: DevicePropertiesModel,
+    params?: RegisterDeviceParams,
+    deviceActivationKey?: string,
+  ): Promise<RegisterDeviceApiResponse> {
+    let headers = deviceActivationKey ? { ACTIVATION_KEY: deviceActivationKey, noAuth: true } : {};
+    return this.dal.post('devices', properties, { params: params, headers: headers });
   }
 
   // #region ------------------ Manage Single Device -------------------
@@ -69,10 +72,11 @@ export class DevicesApi {
   getDeviceById(
     deviceId: string,
     params: {
-      locationId: number,
-      checkConnected?: boolean
-    }): Promise<GetDeviceByIdApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}`, {params: params});
+      locationId: number;
+      checkConnected?: boolean;
+    },
+  ): Promise<GetDeviceByIdApiResponse> {
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}`, { params: params });
   }
 
   /**
@@ -88,10 +92,7 @@ export class DevicesApi {
    * @param {UpdateDeviceModel} model Model containing device and its location info.
    * @returns {Promise<UpdateDeviceApiResponse>}
    */
-  updateDeviceAtLocation(
-    deviceId: string,
-    locationId: number,
-    model: UpdateDeviceModel): Promise<UpdateDeviceApiResponse> {
+  updateDeviceAtLocation(deviceId: string, locationId: number, model: UpdateDeviceModel): Promise<UpdateDeviceApiResponse> {
     return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}`, model);
   }
 
@@ -115,14 +116,15 @@ export class DevicesApi {
     deviceId: string,
     locationId: number,
     params?: {
-      keepOnAccount?: boolean,
-      keepSlave?: boolean,
-      keepSlaveOnGateway?: boolean,
-      clear?: boolean
-    }): Promise<ApiResponseBase> {
-    return this.dal.delete(
-      `locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}`,
-      {params: params});
+      keepOnAccount?: boolean;
+      keepSlave?: boolean;
+      keepSlaveOnGateway?: boolean;
+      clear?: boolean;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.delete(`locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}`, {
+      params: params,
+    });
   }
 
   // #endregion
@@ -145,16 +147,16 @@ export class DevicesApi {
    * @returns {Promise<GetDevicesListApiResponse>}
    */
   getDevicesList(params: {
-    locationId: number,
-    userId?: number,
-    checkPersistent?: boolean,
-    spaceId?: number,
-    spaceType?: number,
-    sortCollection?: string,
-    sortBy?: string,
-    getTags?: boolean
+    locationId: number;
+    userId?: number;
+    checkPersistent?: boolean;
+    spaceId?: number;
+    spaceType?: number;
+    sortCollection?: string;
+    sortBy?: string;
+    getTags?: boolean;
   }): Promise<GetDevicesListApiResponse> {
-    return this.dal.get('devices', {params: params});
+    return this.dal.get('devices', { params: params });
   }
 
   /**
@@ -175,14 +177,14 @@ export class DevicesApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteDevices(params: {
-    deviceId: string | string[],
-    locationId: number,
-    keepOnAccount?: boolean,
-    keepSlave?: boolean,
-    keepSlaveOnGateway?: boolean,
-    clear?: boolean
+    deviceId: string | string[];
+    locationId: number;
+    keepOnAccount?: boolean;
+    keepSlave?: boolean;
+    keepSlaveOnGateway?: boolean;
+    clear?: boolean;
   }): Promise<ApiResponseBase> {
-    return this.dal.delete('devices', {params: params});
+    return this.dal.delete('devices', { params: params });
   }
 
   // #endregion
@@ -201,7 +203,10 @@ export class DevicesApi {
    */
   linkSpace(deviceId: string, locationId: number, spaceId: number): Promise<ApiResponseBase> {
     return this.dal.put(
-      `locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}/spaces/${encodeURIComponent(spaceId.toString())}`);
+      `locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}/spaces/${encodeURIComponent(
+        spaceId.toString(),
+      )}`,
+    );
   }
 
   /**
@@ -216,7 +221,10 @@ export class DevicesApi {
    */
   unlinkSpace(deviceId: string, locationId: number, spaceId: number): Promise<ApiResponseBase> {
     return this.dal.delete(
-      `locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}/spaces/${encodeURIComponent(spaceId.toString())}`);
+      `locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}/spaces/${encodeURIComponent(
+        spaceId.toString(),
+      )}`,
+    );
   }
 
   // #endregion
@@ -234,7 +242,7 @@ export class DevicesApi {
    * @returns {Promise<GetDeviceActivationInfoApiResponse>}
    */
   getDeviceActivationInfo(deviceType: number, params?: { sendEmail?: boolean }): Promise<GetDeviceActivationInfoApiResponse> {
-    return this.dal.get(`deviceActivation/${encodeURIComponent(deviceType.toString())}`, {params: params});
+    return this.dal.get(`deviceActivation/${encodeURIComponent(deviceType.toString())}`, { params: params });
   }
 
   /**
@@ -254,11 +262,12 @@ export class DevicesApi {
     deviceType: number,
     locationId: number,
     params?: {
-      sendEmail?: boolean
-    }): Promise<GetDeviceActivationInfoAtLocationApiResponse> {
+      sendEmail?: boolean;
+    },
+  ): Promise<GetDeviceActivationInfoAtLocationApiResponse> {
     return this.dal.get(
       `locations/${encodeURIComponent(locationId.toString())}/deviceActivation/${encodeURIComponent(deviceType.toString())}`,
-      {params: params},
+      { params: params },
     );
   }
 
@@ -282,11 +291,12 @@ export class DevicesApi {
   getDeviceProperties(
     deviceId: string,
     params: {
-      locationId: number,
-      name?: string,
-      index?: number
-    }): Promise<GetDevicePropertiesApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/properties`, {params: params});
+      locationId: number;
+      name?: string;
+      index?: number;
+    },
+  ): Promise<GetDevicePropertiesApiResponse> {
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/properties`, { params: params });
   }
 
   /**
@@ -304,12 +314,13 @@ export class DevicesApi {
   deleteDeviceProperty(
     deviceId: string,
     params: {
-      locationId: number,
-      name: string,
-      index?: string,
-      userId?: number
-    }): Promise<ApiResponseBase> {
-    return this.dal.delete(`devices/${encodeURIComponent(deviceId)}/properties`, {params: params});
+      locationId: number;
+      name: string;
+      index?: string;
+      userId?: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.delete(`devices/${encodeURIComponent(deviceId)}/properties`, { params: params });
   }
 
   /**
@@ -321,16 +332,12 @@ export class DevicesApi {
    * @param {DevicePropertiesModel} model Device properties.
    * @returns {Promise<ApiResponseBase>}
    */
-  setDeviceProperties(
-    deviceId: string,
-    locationId: number,
-    model: SetDevicePropertiesModel,
-  ): Promise<ApiResponseBase> {
+  setDeviceProperties(deviceId: string, locationId: number, model: SetDevicePropertiesModel): Promise<ApiResponseBase> {
     if (!model || !model.property || model.property.length === 0) {
       return Promise.reject(new CoreApiError('No properties specified to be updated'));
     }
 
-    return this.dal.post(`devices/${encodeURIComponent(deviceId)}/properties`, model, {params: {locationId: locationId}});
+    return this.dal.post(`devices/${encodeURIComponent(deviceId)}/properties`, model, { params: { locationId: locationId } });
   }
 
   // #endregion
@@ -354,8 +361,8 @@ export class DevicesApi {
    * @param {number} [params.userId] Device owner ID for access by an administrator.
    * @returns {Promise<GetFirmwareJobsApiResponse>}
    */
-  getFirmwareJobs(params?: { deviceId?: string, index?: string, userId?: number }): Promise<GetFirmwareJobsApiResponse> {
-    return this.dal.get('fwupdate', {params: params});
+  getFirmwareJobs(params?: { deviceId?: string; index?: string; userId?: number }): Promise<GetFirmwareJobsApiResponse> {
+    return this.dal.get('fwupdate', { params: params });
   }
 
   /**
@@ -374,15 +381,14 @@ export class DevicesApi {
    * @returns {Promise<SetFirmwareUpdateStatusApiResponse>}
    */
   setFirmwareUpdateStatus(params: {
-    deviceId: string,
-    status: FirmwareUpdateStatus,
-    index?: string,
-    startDate?: string,
-    userId?: number
+    deviceId: string;
+    status: FirmwareUpdateStatus;
+    index?: string;
+    startDate?: string;
+    userId?: number;
   }): Promise<SetFirmwareUpdateStatusApiResponse> {
-    return this.dal.put('fwupdate', {}, {params: params});
+    return this.dal.put('fwupdate', {}, { params: params });
   }
 
   // #endregion
-
 }

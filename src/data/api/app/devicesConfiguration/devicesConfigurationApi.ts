@@ -20,7 +20,6 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('DevicesConfigurationApi')
 export class DevicesConfigurationApi {
-
   @inject('AppApiDal') protected readonly dal: AppApiDal;
 
   // #region --------------- Device Types & Attributes -----------------
@@ -43,16 +42,16 @@ export class DevicesConfigurationApi {
    * @returns {Promise<GetSupportedDeviceTypesApiResponse>}
    */
   getSupportedDeviceTypes(params?: {
-    deviceType?: number,
-    attrName?: string,
-    attrValue?: string,
-    own?: boolean,
-    simple?: boolean,
-    organizationId?: number,
-    sortCollection?: string,
-    sortBy?: string
+    deviceType?: number;
+    attrName?: string;
+    attrValue?: string;
+    own?: boolean;
+    simple?: boolean;
+    organizationId?: number;
+    sortCollection?: string;
+    sortBy?: string;
   }): Promise<GetSupportedDeviceTypesApiResponse> {
-    return this.dal.get('deviceTypes', {params: params});
+    return this.dal.get('deviceTypes', { params: params });
   }
 
   /**
@@ -120,7 +119,7 @@ export class DevicesConfigurationApi {
    * @returns {Promise<GetDeviceParametersApiResponse>}
    */
   getDeviceParameters(params?: { paramName?: string | string[] }): Promise<GetDeviceParametersApiResponse> {
-    return this.dal.get('deviceParameters', {params: params});
+    return this.dal.get('deviceParameters', { params: params });
   }
 
   /**
@@ -167,11 +166,13 @@ export class DevicesConfigurationApi {
    *
    * @returns {Promise<GetDeviceTypeDefaultRulesApiResponse>}
    */
-  getDeviceTypeDefaultRules(deviceTypeId: number,
-                            params?: {
-                              details?: boolean
-                            }): Promise<GetDeviceTypeDefaultRulesApiResponse> {
-    return this.dal.get(`deviceType/${encodeURIComponent(deviceTypeId.toString())}/rules`, {params: params});
+  getDeviceTypeDefaultRules(
+    deviceTypeId: number,
+    params?: {
+      details?: boolean;
+    },
+  ): Promise<GetDeviceTypeDefaultRulesApiResponse> {
+    return this.dal.get(`deviceType/${encodeURIComponent(deviceTypeId.toString())}/rules`, { params: params });
   }
 
   /**
@@ -189,14 +190,16 @@ export class DevicesConfigurationApi {
    *  'false' - A user will see this rule in the list, default.
    * @returns {Promise<ApiResponseBase>}
    */
-  addDeviceTypeDefaultRule(deviceTypeId: number, ruleId: number,
-                           params?: {
-                             hidden?: boolean
-                           }): Promise<ApiResponseBase> {
-    return this.dal.post(
-      `deviceType/${encodeURIComponent(deviceTypeId.toString())}/rules/${encodeURIComponent(ruleId.toString())}`,
-      null,
-      {params: params});
+  addDeviceTypeDefaultRule(
+    deviceTypeId: number,
+    ruleId: number,
+    params?: {
+      hidden?: boolean;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.post(`deviceType/${encodeURIComponent(deviceTypeId.toString())}/rules/${encodeURIComponent(ruleId.toString())}`, null, {
+      params: params,
+    });
   }
 
   /**
@@ -227,7 +230,7 @@ export class DevicesConfigurationApi {
    * @returns {Promise<GetDeviceGoalsByDeviceTypeApiResponse>}
    */
   getDeviceGoalsByDeviceType(deviceTypeId: number, params?: { appName?: string }): Promise<GetDeviceGoalsByDeviceTypeApiResponse> {
-    return this.dal.get(`deviceType/${encodeURIComponent(deviceTypeId.toString())}/goals`, {params: params});
+    return this.dal.get(`deviceType/${encodeURIComponent(deviceTypeId.toString())}/goals`, { params: params });
   }
 
   /**
@@ -242,5 +245,4 @@ export class DevicesConfigurationApi {
   }
 
   // #endregion
-
 }

@@ -74,5 +74,5 @@ export enum DeferredState {
   /**
    * Deferred is rejected
    */
-  REJECTED
+  REJECTED,
 }

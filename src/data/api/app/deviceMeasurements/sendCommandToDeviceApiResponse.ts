@@ -9,10 +9,10 @@ export interface SendCommandToDeviceApiResponse extends ApiResponseBase {
 
 export interface CommandParametersModel {
   params: Array<{
-    name: string,
-    index?: number,
-    value: string
-    unit?: string
+    name: string;
+    index?: number;
+    value: string;
+    unit?: string;
   }>;
   commandTimeout?: number;
   comment?: string;

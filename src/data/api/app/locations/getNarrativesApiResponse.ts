@@ -12,7 +12,7 @@ export enum NarrativeType {
   Default = 0,
   UserDeleted = 1,
   LocationDeleted = 2,
-  LocationRemoved = 3
+  LocationRemoved = 3,
 }
 
 export interface Narrative {
@@ -42,24 +42,24 @@ export interface Narrative {
    * Returned for removal narrative types.
    */
   user?: {
-    id: number,
-    creationDate: string,
-    creationDateMs: number,
-    deleteDate: string,
-    deleteDateMs: number,
-    userName?: string,
-    altUsername?: string,
-    passwordSet: boolean,
-    firstName?: string,
-    lastName?: string,
+    id: number;
+    creationDate: string;
+    creationDateMs: number;
+    deleteDate: string;
+    deleteDateMs: number;
+    userName?: string;
+    altUsername?: string;
+    passwordSet: boolean;
+    firstName?: string;
+    lastName?: string;
     email?: {
-      email?: string,
-      verified: boolean,
-      status: EmailVerificationStatus
-    },
-    phone?: string,
-    phoneType?: PhoneType,
-    smsStatus?: PhoneVerificationStatus,
-    language?: string
-  }
+      email?: string;
+      verified: boolean;
+      status: EmailVerificationStatus;
+    };
+    phone?: string;
+    phoneType?: PhoneType;
+    smsStatus?: PhoneVerificationStatus;
+    language?: string;
+  };
 }

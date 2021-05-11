@@ -2,7 +2,7 @@ import { WebCoreConfig } from './modules/tuner/config';
 import { LogLevel } from './modules/logger/logLevel';
 
 let configs: { [env: string]: WebCoreConfig[] } = {
-  'default': [
+  default: [
     {
       localStoragePrefix: 'ppc.',
       ping: {
@@ -13,7 +13,7 @@ let configs: { [env: string]: WebCoreConfig[] } = {
       },
     },
   ],
-  'dev': [
+  dev: [
     {
       logger: {
         minLevel: LogLevel.Debug,
@@ -23,24 +23,14 @@ let configs: { [env: string]: WebCoreConfig[] } = {
           maxLevel: LogLevel.Emergency,
         },
         localStorage: {
+          enabled: true,
           minLevel: LogLevel.Debug,
           maxLevel: LogLevel.Emergency,
           localStorageKey: 'Logger',
           size: 500,
         },
-      },
-    },
-  ],
-  'prod': [
-    {
-      logger: {
-        minLevel: LogLevel.Info,
-        maxLevel: LogLevel.Emergency,
-        console: {
-          minLevel: LogLevel.Info,
-          maxLevel: LogLevel.Emergency,
-        },
         xhr: {
+          enabled: false,
           minLevel: LogLevel.Debug,
           maxLevel: LogLevel.Emergency,
           triggerLevel: LogLevel.Critical,
@@ -51,7 +41,7 @@ let configs: { [env: string]: WebCoreConfig[] } = {
       },
     },
   ],
-  'test': [
+  prod: [
     {
       logger: {
         minLevel: LogLevel.Info,
@@ -59,6 +49,40 @@ let configs: { [env: string]: WebCoreConfig[] } = {
         console: {
           minLevel: LogLevel.Info,
           maxLevel: LogLevel.Emergency,
+        },
+        localStorage: {
+          enabled: false,
+          minLevel: LogLevel.Info,
+          maxLevel: LogLevel.Emergency,
+          localStorageKey: 'Logger',
+          size: 500,
+        },
+        xhr: {
+          enabled: false,
+          minLevel: LogLevel.Info,
+          maxLevel: LogLevel.Emergency,
+          triggerLevel: LogLevel.Critical,
+          size: 10,
+          method: 'POST',
+          path: '/logs',
+        },
+      },
+    },
+  ],
+  test: [
+    {
+      logger: {
+        minLevel: LogLevel.Info,
+        maxLevel: LogLevel.Emergency,
+        console: {
+          minLevel: LogLevel.Info,
+          maxLevel: LogLevel.Emergency,
+        },
+        localStorage: {
+          enabled: false,
+        },
+        xhr: {
+          enabled: false,
         },
       },
     },

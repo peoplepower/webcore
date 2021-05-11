@@ -11,7 +11,6 @@ import { ApiResponseBase } from '../models/apiResponseBase';
 
 @injectable('RulesService')
 export class RulesService extends BaseService {
-
   @inject('AuthService') private readonly authService: AuthService;
   @inject('UserService') private readonly userService: UserService;
   @inject('RulesEngineApi') private readonly rulesEngineApi: RulesEngineApi;
@@ -46,7 +45,7 @@ export class RulesService extends BaseService {
    * Internal method to actually return result.
    */
   protected getRulesInternal(locationId: number, deviceId?: string, details?: boolean): Promise<Rules> {
-    const params: { locationId: number, deviceId?: string, details?: boolean, userId?: number } = {
+    const params: { locationId: number; deviceId?: string; details?: boolean; userId?: number } = {
       locationId: locationId,
     };
 
@@ -60,8 +59,7 @@ export class RulesService extends BaseService {
       params.details = true;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.getRules(params));
+    return this.authService.ensureAuthenticated().then(() => this.rulesEngineApi.getRules(params));
   }
 
   /**
@@ -73,8 +71,7 @@ export class RulesService extends BaseService {
    * @returns {Promise<UpdateRuleApiResponse>}
    */
   public updateRule(ruleId: number, updateRuleModel: UpdateRuleModel, params: { locationId: number }): Promise<UpdateRuleApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.updateRule(ruleId, updateRuleModel, params));
+    return this.authService.ensureAuthenticated().then(() => this.rulesEngineApi.updateRule(ruleId, updateRuleModel, params));
   }
 
   /**
@@ -88,9 +85,8 @@ export class RulesService extends BaseService {
    *   whether the rule is a default rule, and whether the rule is hidden and not editable, default.
    * @returns {Promise<GetRuleApiResponse>}
    */
-  public getRule(ruleId: number, params: { locationId: number, details?: boolean }): Promise<GetRuleApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.getRule(ruleId, params));
+  public getRule(ruleId: number, params: { locationId: number; details?: boolean }): Promise<GetRuleApiResponse> {
+    return this.authService.ensureAuthenticated().then(() => this.rulesEngineApi.getRule(ruleId, params));
   }
 
   /**
@@ -100,9 +96,8 @@ export class RulesService extends BaseService {
    * @param {number} [params.version] Rules implementation version. Optional parameter.
    * @returns {Promise<GetRulePhrasesApiResponse>}
    */
-  getRulePhrases(params: { locationId: number, version?: number }): Promise<GetRulePhrasesApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.getRulePhrases(params));
+  getRulePhrases(params: { locationId: number; version?: number }): Promise<GetRulePhrasesApiResponse> {
+    return this.authService.ensureAuthenticated().then(() => this.rulesEngineApi.getRulePhrases(params));
   }
 
   /**
@@ -120,8 +115,7 @@ export class RulesService extends BaseService {
       locationId: locationId,
     };
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.deleteRule(ruleId, params));
+    return this.authService.ensureAuthenticated().then(() => this.rulesEngineApi.deleteRule(ruleId, params));
   }
 
   /**
@@ -135,11 +129,12 @@ export class RulesService extends BaseService {
       return this.reject(`Device ID is incorrect [${deviceId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.createDefaultRulesForDevice({
+    return this.authService.ensureAuthenticated().then(() =>
+      this.rulesEngineApi.createDefaultRulesForDevice({
         deviceId: deviceId,
         locationId: locationId,
-      }));
+      }),
+    );
   }
 
   /**
@@ -152,13 +147,12 @@ export class RulesService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.rulesEngineApi.createDefaultRulesForDevice({
+    return this.authService.ensureAuthenticated().then(() =>
+      this.rulesEngineApi.createDefaultRulesForDevice({
         locationId: locationId,
-      }));
+      }),
+    );
   }
-
 }
 
-export interface Rules extends GetRulesApiResponse {
-}
+export interface Rules extends GetRulesApiResponse {}

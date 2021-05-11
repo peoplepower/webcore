@@ -12,11 +12,9 @@ import { GetAnalyticKeyApiResponse } from './getAnalyticKeyApiResponse';
  */
 @injectable('BotServerApi')
 export class BotServerApi {
-
   @inject('BotApiDal') protected readonly dal: BotApiDal;
 
   getAnalyticKey(params: { appInstanceId: number }): Promise<GetAnalyticKeyApiResponse> {
-    return this.dal.get('analytic/appkey', {params: params});
+    return this.dal.get('analytic/appkey', { params: params });
   }
-
 }

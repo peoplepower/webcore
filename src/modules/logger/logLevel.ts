@@ -48,5 +48,5 @@ export enum LogLevel {
    * Debug-level messages
    * @type {number}
    */
-  Debug = 7
+  Debug = 7,
 }

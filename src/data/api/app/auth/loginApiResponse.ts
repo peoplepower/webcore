@@ -3,7 +3,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 export enum ApiKeyType {
   NormalApiKey = 0,
   TemporaryApiKey = 1,
-  AdminApiKey = 11
+  AdminApiKey = 11,
 }
 
 export interface LoginApiResponse extends ApiResponseBase {

@@ -9,7 +9,6 @@ const DEFAULT_ENV: Environment = 'dev'; // Default environment
  */
 @injectable('Envir')
 export class Envir {
-
   private _environment: Environment = DEFAULT_ENV;
 
   public readonly onChangeEvent = new LiteEvent<Environment>();

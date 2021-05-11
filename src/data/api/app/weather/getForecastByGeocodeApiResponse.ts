@@ -7,7 +7,7 @@ export enum Units {
   English = 'e',
   Metric = 'm',
   Hybrid = 'h', //UK
-  MetricSI = 's' //Not available for all APIs
+  MetricSI = 's', //Not available for all APIs
 }
 
 /**
@@ -19,7 +19,7 @@ export enum ForecastDepth {
   TwoDays = 48, //In hours
   OneDay = 24,
   HalfDay = 12,
-  QuarterDay = 6
+  QuarterDay = 6,
 }
 
 export interface GetForecastApiResponse extends ApiResponseBase {
@@ -33,7 +33,7 @@ export interface GetForecastApiResponse extends ApiResponseBase {
       units: string;
       expire_time_gmt: number;
       status_code: number;
-    },
+    };
     forecasts: Array<{
       class: string;
       expire_time_gmt: number;
@@ -76,9 +76,7 @@ export interface GetForecastApiResponse extends ApiResponseBase {
       golf_category: string;
       severity: number;
     }>;
-  }
+  };
 }
 
-export interface GetForecastByGeocodeApiResponse extends GetForecastApiResponse {
-
-}
+export interface GetForecastByGeocodeApiResponse extends GetForecastApiResponse {}

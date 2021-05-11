@@ -18,7 +18,6 @@ import { GetUserPaymentProfilesApiResponse, PaymentProfileType } from '../api/ap
 
 @injectable('SubscriptionsService')
 export class SubscriptionsService extends BaseService {
-
   @inject('AuthService') private readonly authService: AuthService;
   @inject('UserService') private readonly userService: UserService;
   @inject('PaidServicesApi') protected readonly paidServicesApi: PaidServicesApi;
@@ -37,9 +36,22 @@ export class SubscriptionsService extends BaseService {
    * @param {boolean} [plansOnly] Return plans metadata without checking current availability.
    * @returns {Promise<ServicePlans>}
    */
-  public getAvailableServicePlans(locationId?: number, userId?: number, organizationId?: number, appName?: string, hiddenPrices?: boolean, plansOnly?: boolean)
-    : Promise<ServicePlans> {
-    const params: { locationId?: number, appName?: string, userId?: number, organizationId?: number, hiddenPrices?: boolean, plansOnly?: boolean } = {};
+  public getAvailableServicePlans(
+    locationId?: number,
+    userId?: number,
+    organizationId?: number,
+    appName?: string,
+    hiddenPrices?: boolean,
+    plansOnly?: boolean,
+  ): Promise<ServicePlans> {
+    const params: {
+      locationId?: number;
+      appName?: string;
+      userId?: number;
+      organizationId?: number;
+      hiddenPrices?: boolean;
+      plansOnly?: boolean;
+    } = {};
 
     if (locationId && !isNaN(locationId)) {
       if (locationId < 1) {
@@ -69,8 +81,7 @@ export class SubscriptionsService extends BaseService {
       params.plansOnly = true;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.getSoftwareSubscriptions(params));
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.getSoftwareSubscriptions(params));
   }
 
   /**
@@ -80,9 +91,10 @@ export class SubscriptionsService extends BaseService {
    * @returns {Promise<Subscriptions>}
    */
   public getCurrentUserSubscriptions(status?: SubscriptionStatus, getCard?: boolean): Promise<Subscriptions> {
-    return this.authService.ensureAuthenticated()
+    return this.authService
+      .ensureAuthenticated()
       .then(() => this.userService.getCurrentUserInfo())
-      .then(data => this.getLocationSubscriptions(undefined, data.user.id, undefined, status, getCard));
+      .then((data) => this.getLocationSubscriptions(undefined, data.user.id, undefined, status, getCard));
   }
 
   /**
@@ -96,8 +108,7 @@ export class SubscriptionsService extends BaseService {
     if (!userId || isNaN(userId) || userId < 1) {
       return this.reject(`User ID is incorrect [${userId}].`);
     }
-    return this.authService.ensureAuthenticated()
-      .then(() => this.getLocationSubscriptions(undefined, userId, undefined, status, getCard));
+    return this.authService.ensureAuthenticated().then(() => this.getLocationSubscriptions(undefined, userId, undefined, status, getCard));
   }
 
   /**
@@ -112,23 +123,24 @@ export class SubscriptionsService extends BaseService {
    * @param {string} sortBy
    * @returns {Promise<Subscriptions>}
    */
-  public getLocationSubscriptions(locationId?: number,
-                                  userId?: number,
-                                  userPlanId?: number,
-                                  status?: SubscriptionStatus,
-                                  getCard?: boolean,
-                                  sortOrder: string = 'desc',
-                                  sortBy: string = 'endDateMs',
+  public getLocationSubscriptions(
+    locationId?: number,
+    userId?: number,
+    userPlanId?: number,
+    status?: SubscriptionStatus,
+    getCard?: boolean,
+    sortOrder: string = 'desc',
+    sortBy: string = 'endDateMs',
   ): Promise<Subscriptions> {
     const params: {
-      sortCollection: string
+      sortCollection: string;
       locationId?: number;
-      userId?: number,
-      userPlanId?: number,
-      status?: SubscriptionStatus,
-      sortOrder?: string,
-      sortBy?: string,
-      getCard?: boolean
+      userId?: number;
+      userPlanId?: number;
+      status?: SubscriptionStatus;
+      sortOrder?: string;
+      sortBy?: string;
+      getCard?: boolean;
     } = {
       sortCollection: 'subscriptions',
     };
@@ -164,8 +176,7 @@ export class SubscriptionsService extends BaseService {
       params.sortBy = sortBy;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.getLocationSubscriptions(params));
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.getLocationSubscriptions(params));
   }
 
   /**
@@ -175,7 +186,11 @@ export class SubscriptionsService extends BaseService {
    * @param {number} [organizationId] Organization ID. Required if called by an organization administrator.
    * @param {string} [endDate] The end date of the subscription.
    */
-  public grantSubscriptionToLocations(servicePlanId: number, services: AssignServicesToLocationsModel, organizationId?: number, endDate?: string,
+  public grantSubscriptionToLocations(
+    servicePlanId: number,
+    services: AssignServicesToLocationsModel,
+    organizationId?: number,
+    endDate?: string,
   ): Promise<AssignServicesToLocationsApiResponse> {
     if (!servicePlanId && !isNaN(servicePlanId)) {
       if (servicePlanId < 1) {
@@ -184,8 +199,8 @@ export class SubscriptionsService extends BaseService {
     }
 
     const params: {
-      organizationId?: number,
-      endDate?: string
+      organizationId?: number;
+      endDate?: string;
     } = {};
 
     if (organizationId && !isNaN(organizationId)) {
@@ -198,7 +213,8 @@ export class SubscriptionsService extends BaseService {
       params.endDate = endDate;
     }
 
-    return this.authService.ensureAuthenticated()
+    return this.authService
+      .ensureAuthenticated()
       .then(() => this.paidServicesApi.assignServicesToLocations(servicePlanId, services, params));
   }
 
@@ -210,10 +226,11 @@ export class SubscriptionsService extends BaseService {
    * @param {string} [endDate] The end date of the subscription.
    * @returns {Promise<AssignServicesToLocationsApiResponse>}
    */
-  public grantSubscriptionToSingleLocation(servicePlanId: number,
-                                           locationId: number,
-                                           organizationId?: number,
-                                           endDate?: string,
+  public grantSubscriptionToSingleLocation(
+    servicePlanId: number,
+    locationId: number,
+    organizationId?: number,
+    endDate?: string,
   ): Promise<AssignServicesToLocationsApiResponse> {
     if (!servicePlanId && !isNaN(servicePlanId)) {
       if (servicePlanId < 1) {
@@ -225,9 +242,9 @@ export class SubscriptionsService extends BaseService {
     }
 
     const params: {
-      locationId: number,
-      organizationId?: number,
-      endDate?: string
+      locationId: number;
+      organizationId?: number;
+      endDate?: string;
     } = {
       locationId: locationId,
     };
@@ -242,7 +259,8 @@ export class SubscriptionsService extends BaseService {
       params.endDate = endDate;
     }
 
-    return this.authService.ensureAuthenticated()
+    return this.authService
+      .ensureAuthenticated()
       .then(() => this.paidServicesApi.assignServicesToLocations(servicePlanId, undefined, params));
   }
 
@@ -254,11 +272,12 @@ export class SubscriptionsService extends BaseService {
    * @param {UpgradeSubscriptionInfo} [upgradeModel] Additional service and bots to assign. Optional.
    * @returns {Promise<ApiResponseBase>}
    */
-  public upgradeSubscription(userPlanId: number,
-                             targetPlanId: number,
-                             userId?: number,
-                             upgradeModel?: UpgradeSubscriptionInfo)
-    : Promise<ApiResponseBase> {
+  public upgradeSubscription(
+    userPlanId: number,
+    targetPlanId: number,
+    userId?: number,
+    upgradeModel?: UpgradeSubscriptionInfo,
+  ): Promise<ApiResponseBase> {
     if (userPlanId && !isNaN(userPlanId)) {
       if (userPlanId < 1) {
         return this.reject(`User plan ID is incorrect [${userPlanId}].`);
@@ -275,13 +294,16 @@ export class SubscriptionsService extends BaseService {
       }
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi
-        .upgradeSubscription({
+    return this.authService.ensureAuthenticated().then(() =>
+      this.paidServicesApi.upgradeSubscription(
+        {
           userPlanId: userPlanId,
           targetPlanId: targetPlanId,
           userId: userId,
-        }, upgradeModel || {}));
+        },
+        upgradeModel || {},
+      ),
+    );
   }
 
   /**
@@ -293,8 +315,8 @@ export class SubscriptionsService extends BaseService {
    */
   public cancelSubscription(servicePlanId: number, locationId?: number, organizationId?: number): Promise<ApiResponseBase> {
     const params: {
-      locationId?: number,
-      organizationId?: number,
+      locationId?: number;
+      organizationId?: number;
     } = {};
 
     if (!servicePlanId || isNaN(servicePlanId) || servicePlanId < 1) {
@@ -313,8 +335,7 @@ export class SubscriptionsService extends BaseService {
       params.organizationId = organizationId;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.cancelSubscription(servicePlanId, params));
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.cancelSubscription(servicePlanId, params));
   }
 
   /**
@@ -324,11 +345,14 @@ export class SubscriptionsService extends BaseService {
    * @param {boolean} [upgradeDowngradeEventsOnly] Flag indicating we want to get only uprade/downgrade events history.
    * @returns {Promise<UserSubscriptionTransactions>}
    */
-  public getSubscriptionTransactions(servicePlanId: number, locationId?: number, upgradeDowngradeEventsOnly?: boolean)
-    : Promise<UserSubscriptionTransactions> {
+  public getSubscriptionTransactions(
+    servicePlanId: number,
+    locationId?: number,
+    upgradeDowngradeEventsOnly?: boolean,
+  ): Promise<UserSubscriptionTransactions> {
     const params: {
-      locationId?: number,
-      upgrade?: boolean
+      locationId?: number;
+      upgrade?: boolean;
     } = {};
 
     if (!servicePlanId || isNaN(servicePlanId) || servicePlanId < 1) {
@@ -344,8 +368,7 @@ export class SubscriptionsService extends BaseService {
       params.upgrade = true;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.getSubscriptionTransactions(servicePlanId, params));
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.getSubscriptionTransactions(servicePlanId, params));
   }
 
   /**
@@ -375,12 +398,13 @@ export class SubscriptionsService extends BaseService {
    * @param {boolean} [sandbox] Set to true, if need to test the process on sandbox payment provider service
    * @returns {Promise<ApiResponseBase>}
    */
-  public provideNewPurchaseInfo(purchaseInfo: NewPurchaseInfo,
-                                priceId: number,
-                                locationId: number,
-                                userId?: number,
-                                sandbox?: boolean)
-    : Promise<ApiResponseBase> {
+  public provideNewPurchaseInfo(
+    purchaseInfo: NewPurchaseInfo,
+    priceId: number,
+    locationId: number,
+    userId?: number,
+    sandbox?: boolean,
+  ): Promise<ApiResponseBase> {
     if (!priceId || isNaN(priceId) || priceId < 1) {
       return this.reject(`Service plan price ID is incorrect [${priceId}].`);
     }
@@ -389,10 +413,10 @@ export class SubscriptionsService extends BaseService {
     }
 
     const params: {
-      priceId: number,
-      locationId: number,
-      userId?: number,
-      sandbox?: boolean
+      priceId: number;
+      locationId: number;
+      userId?: number;
+      sandbox?: boolean;
     } = {
       priceId: priceId,
       locationId: locationId,
@@ -407,8 +431,7 @@ export class SubscriptionsService extends BaseService {
     if (sandbox) {
       params.sandbox = true;
     }
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.provideNewPurchaseInfo(purchaseInfo, params));
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.provideNewPurchaseInfo(purchaseInfo, params));
   }
 
   /**
@@ -420,8 +443,12 @@ export class SubscriptionsService extends BaseService {
    * @param {number} [userId] Act as specific user.
    * @returns {Promise<ApiResponseBase>}
    */
-  public updatePurchaseInfo(updatePurchaseInfo: UpdatePurchaseInfo, userPlanId: number, locationId: number, userId?: number)
-    : Promise<ApiResponseBase> {
+  public updatePurchaseInfo(
+    updatePurchaseInfo: UpdatePurchaseInfo,
+    userPlanId: number,
+    locationId: number,
+    userId?: number,
+  ): Promise<ApiResponseBase> {
     if (!userPlanId || isNaN(userPlanId) || userPlanId < 1) {
       return this.reject(`Service plan price ID is incorrect [${userPlanId}].`);
     }
@@ -430,9 +457,9 @@ export class SubscriptionsService extends BaseService {
     }
 
     const params: {
-      userPlanId: number,
-      locationId: number,
-      userId?: number
+      userPlanId: number;
+      locationId: number;
+      userId?: number;
     } = {
       userPlanId: userPlanId,
       locationId: locationId,
@@ -445,8 +472,7 @@ export class SubscriptionsService extends BaseService {
       params.userId = userId;
     }
 
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.updatePurchaseInfo(updatePurchaseInfo, params));
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.updatePurchaseInfo(updatePurchaseInfo, params));
   }
 
   /**
@@ -461,35 +487,26 @@ export class SubscriptionsService extends BaseService {
    * @param {boolean} [params.appName] PPC cloud related appName (brand). Required if paymentType=4
    */
   getUserPaymentProfiles(params: {
-    paymentType: PaymentProfileType,
-    userId?: number,
-    customerId?: string,
-    includeDisabled?: boolean,
-    appName?: string
-  })
-    : Promise<GetUserPaymentProfilesApiResponse> {
-    return this.authService.ensureAuthenticated()
-      .then(() => this.paidServicesApi.getUserPaymentProfiles(params));
+    paymentType: PaymentProfileType;
+    userId?: number;
+    customerId?: string;
+    includeDisabled?: boolean;
+    appName?: string;
+  }): Promise<GetUserPaymentProfilesApiResponse> {
+    return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.getUserPaymentProfiles(params));
   }
 }
 
-export interface NewPurchaseInfo extends NewPurchaseInfoModel {
-}
+export interface NewPurchaseInfo extends NewPurchaseInfoModel {}
 
-export interface UpdatePurchaseInfo extends UpdatePurchaseInfoModel {
-}
+export interface UpdatePurchaseInfo extends UpdatePurchaseInfoModel {}
 
-export interface UpgradeSubscriptionInfo extends UpgradeSubscriptionInfoModel {
-}
+export interface UpgradeSubscriptionInfo extends UpgradeSubscriptionInfoModel {}
 
-export interface UserSubscriptionTransactions extends GetSubscriptionTransactionsApiResponse {
-}
+export interface UserSubscriptionTransactions extends GetSubscriptionTransactionsApiResponse {}
 
-export interface ServicePlans extends GetSoftwareSubscriptionsApiResponse {
-}
+export interface ServicePlans extends GetSoftwareSubscriptionsApiResponse {}
 
-export interface Subscriptions extends GetLocationSubscriptionsApiResponse {
-}
+export interface Subscriptions extends GetLocationSubscriptionsApiResponse {}
 
-export interface UserPaymentProfiles extends GetUserPaymentProfilesApiResponse {
-}
+export interface UserPaymentProfiles extends GetUserPaymentProfilesApiResponse {}
