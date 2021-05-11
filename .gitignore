@@ -1,10 +1,12 @@
 node_modules/
 .vscode/
 .idea/
+
+# Build folder
 dist/
+
 .DS_Store
 yarn.lock
-package-lock.json
 
 # Optional npm cache directory
 .npm
