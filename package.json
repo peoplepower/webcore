@@ -11,7 +11,9 @@
   "module": "dist/ppc-webcore.esm.js",
   "typings": "dist/types/ppc-webcore.d.ts",
   "files": [
-    "dist"
+    "dist/",
+    "README.md",
+    "LICENSE"
   ],
   "author": "Aleksei Tolkachev <aleksei@peoplepowerco.com>",
   "contributors": [
