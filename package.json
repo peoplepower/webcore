@@ -29,8 +29,7 @@
   },
   "scripts": {
     "build": "rollup -c rollup.config.js & tsc --project tsconfig.json",
-    "prebuild": "rimraf ./dist",
-    "pretest": "npm run build"
+    "prebuild": "rimraf ./dist"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "18.0.0",
