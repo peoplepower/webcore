@@ -95,5 +95,5 @@ export class WebCore {
   }
 }
 
-// Additional exports for webcore
-export { inject, injectable } from './modules/common/di';
+// Additional exports for admin webcore
+export * from './modules/common/di';
