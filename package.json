@@ -1,9 +1,9 @@
 {
   "name": "@peoplepower/webcore",
-  "version": "0.0.1",
-  "description": "JS/TS SDK for PeoplePower IoT API",
+  "version": "1.0.0",
+  "description": "Client JS/TS SDK for People Power IoT Platform",
   "keywords": [
-    "Webcore",
+    "WebCore",
     "People Power",
     "IoT API SDK"
   ],
@@ -11,21 +11,25 @@
   "module": "dist/ppc-webcore.esm.js",
   "typings": "dist/types/ppc-webcore.d.ts",
   "files": [
-    "dist"
+    "dist/",
+    "README.md",
+    "LICENSE"
   ],
   "author": "Aleksei Tolkachev <aleksei@peoplepowerco.com>",
+  "contributors": [
+    "Max Filatov <max@peoplepowerco.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/peoplepower/webcore.git"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=14.16.1"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js & tsc --project tsconfig.json",
     "prebuild": "rimraf ./dist",
-    "test": "TODO",
     "pretest": "npm run build"
   },
   "devDependencies": {

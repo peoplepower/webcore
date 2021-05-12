@@ -1,18 +1,23 @@
-## WebCore - SDK for People Power IoT Suite public API
+# WebCore Client SDK
 
-### Installation
+JavaScript/TypeScript SDK for People Power IoT Suite public API - <https://iotapps.docs.apiary.io>
 
-Install npm package to your destination
+## Installation
 
-`npm install git+ssh://git@github.com/peoplepower/webcore.git`
+People Power packages provided by GitHub package registry, so add destination of the organisation-based packages into *~/.npmrc*
 
-### Import
+`@peoplepower:registry=https://npm.pkg.github.com`
+
+Then, install package using `npm` (you can use `yarn` as well)
+
+`npm install @peoplepower/webcore --save`
+
+## Import
 
 WebCore is bundled to CommonJS module (for Node) and ES module (for bundlers) formats.
-Bundles are compiled to ES5 format, so it should work almost in every environment. 
-We could enable browser-friendly UMD build (for injecting right into the web page) by request.
+Bundles are compiled to ES5 format, so it should work almost in every environment. We could enable browser-friendly UMD build (for injecting right into the web page) by request.
 
-### Typescript import
+### Typescript Import
 
 ``` typescript
 import { WebCore } from '@peoplepower/webcore';
@@ -20,7 +25,6 @@ import { Environment } from "@peoplepower/webcore/dist/types/modules/envir/envir
 import { WebCoreConfig } from "@peoplepower/webcore/dist/types/modules/tuner/config";
 
 const env: Environment = 'dev'; // or `'prod'`, or `process.env.NODE_ENV`
-
 const config: WebCoreConfig = {
   localStoragePrefix: 'LOCAL_STORAGE_PREFIX'
   // ...
@@ -32,13 +36,12 @@ const webCoreInstance = new WebCore(env, config);
 export default webCoreInstance;
 ```
 
-### Bundler (webpack) import with javascript
+### Bundler (webpack) Import with JavaScript
 
 ``` javascript
 import { WebCore } from '@peoplepower/webcore';
 
 const env = 'prod';
-
 const config = {
   localStoragePrefix: 'LOCAL_STORAGE_PREFIX'
 };
@@ -48,20 +51,20 @@ const webCoreInstance = new WebCore(env, config);
 export default webCoreInstance;
 ```
 
-### Environment object
+## Configuration
 
-You can set up [Environment option](src/modules/envir/environment.ts) to set up [default configuration options](/src/config.ts).
+You can use [environment option](src/modules/envir/environment.ts) to set up [default configuration options](/src/config.ts).
 
-### Configuration object
+### Configuration Object
 
-Webcore is designed to work as-is without additional configuration. But you could customise default config.
+WebCore is designed to work as-is without additional configuration. But you could customise default config.
 Check out [configuration interface](src/modules/tuner/config.ts) to see available options.
 
-### Usage
+## Usage
 
-#### Auth and current user info
+### Auth and Current User Info
 
-Webcore automatically store last used API_KEY in local storage and re-authenticate on startup. It also stores current user information in cache
+WebCore automatically store last used API_KEY in local storage and re-authenticate on startup. It also stores current user information in cache
 
 ``` typescript
 import { WebCore } from '/webcoreInstanceModule'; // file described above.
@@ -129,12 +132,12 @@ public getUserAvatarUrl(): Promise<string | undefined> {
 }
 ```
 
-#### React Native usage
+### React Native Example
 
-This library was originally designed to work in browser or Node.js environment, but you could also use it in React Native.
+This library was originally designed to work in browser or NodeJS environment, but you could also use it in React Native.
 The problem is React Native has no `localStorage` and `btoa`.
 
-This realization is just example. You should adapt it for your environment by yourself. The same code is located [here](src/ppc-webcore-rn.ts)
+This realization is just example. You should adapt it for your environment. The same code is located [here](src/ppc-webcore-rn.ts).
 
 ``` typescript
 import { WebCore } from './ppc-webcore';
@@ -204,9 +207,7 @@ class LocalStorageMimic implements LocalStorageProvider {
 }
 
 const ls = new LocalStorageMimic();
-
 const env: Environment = 'dev';
-
 const config: WebCoreConfig = {
   logger: {
     localStorage: {
@@ -225,11 +226,10 @@ const wsPromise = ls.load()
     // webCore.services.auth.loginByKey(apiKey);
     return webCore;
   });
-
 ```
 
-### More
+## Support
 
 For more usage options or examples you could refer to the source code. Almost every method is covered by comments.
 
-If you need some additional feature, something is not working properly, or you can't understand something - feel free to create GitHub Issue.
+If you need some additional feature, something is not working properly, or you don't understand something - feel free to look into [GitHub Issues](https://github.com/peoplepower/webcore/issues).
