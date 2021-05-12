@@ -14,15 +14,23 @@ Then, install package using `npm` (you can use `yarn` as well)
 
 ## Import
 
-WebCore is bundled to CommonJS module (for Node) and ES module (for bundlers) formats.
-Bundles are compiled to ES5 format, so it should work almost in every environment. We could enable browser-friendly UMD build (for injecting right into the web page) by request.
+WebCore is bundled to several formats:
+
+ * `dist/ppc-webcore.cjs.js` - CommonJS module (for Node)
+ * `dist/ppc-webcore.esm.js` - ES module (for bundlers)
+ * `dist/types/` - folder for type definitions and compiled sources per-file (not bundled). This folder contains project in ES module format. So you could use sources from there directly if you want to import interfaces, enums or separate classes (e.g. in another Typescript project).
+   
+Please, avoid importing two modules at the same time. This will lead to the appearance of hard-to-diagnose errors.
+
+Bundles are compiled to ES5 format, so it should work almost in every environment.
+We could enable browser-friendly UMD build (for injecting right into the web page) by request.
 
 ### Typescript Import
 
 ``` typescript
-import { WebCore } from '@peoplepower/webcore';
-import { Environment } from "@peoplepower/webcore/dist/types/modules/envir/environment";
-import { WebCoreConfig } from "@peoplepower/webcore/dist/types/modules/tuner/config";
+import { WebCore } from '@peoplepower/webcore/dist/types/ppc-webcore';
+import type { Environment } from "@peoplepower/webcore/dist/types/modules/envir/environment";
+import type { WebCoreConfig } from "@peoplepower/webcore/dist/types/modules/tuner/config";
 
 const env: Environment = 'dev'; // or `'prod'`, or `process.env.NODE_ENV`
 const config: WebCoreConfig = {
@@ -140,7 +148,7 @@ The problem is React Native has no `localStorage` and `btoa`.
 This realization is just example. You should adapt it for your environment. The same code is located [here](src/ppc-webcore-rn.ts).
 
 ``` typescript
-import { WebCore } from './ppc-webcore';
+import { WebCore } from '@peoplepower/webcore';
 import { LocalStorageProvider } from './modules/localStorage/localStorage';
 import { Environment } from "./modules/envir/environment";
 import { WebCoreConfig } from "./modules/tuner/config";
