@@ -19,10 +19,11 @@ export class LocalStorageAppender extends Appender {
     this.config = config;
     this.messages = [];
 
+    if (!this.config.enabled) {
+      return;
+    }
+
     if (globalThis && 'localStorage' in globalThis && globalThis['localStorage'] !== null) {
-      if (!this.config.enabled) {
-        return;
-      }
       let me = this;
       if (globalThis.addEventListener) {
         globalThis.addEventListener('unload', function () {
@@ -46,10 +47,10 @@ export class LocalStorageAppender extends Appender {
     if (!this.config.enabled) {
       return;
     }
-    if (this.config.maxLevel <= level && level <= this.config.minLevel) {
+    if (this.config.maxLevel! <= level && level <= this.config.minLevel!) {
       // store messages
       this.messages.push(new LogMessage(level, args));
-      if (this.messages.length > this.config.size) {
+      if (this.messages.length > this.config.size!) {
         this.messages.shift();
       }
     }
@@ -59,13 +60,13 @@ export class LocalStorageAppender extends Appender {
     let messages = this.messages;
     this.messages = [];
     try {
-      let lsValue = localStorage.getItem(this.config.localStorageKey);
+      let lsValue = localStorage.getItem(this.config.localStorageKey!);
       let oldMessages: LogMessage[] = lsValue ? JSON.parse(lsValue) || [] : [];
       oldMessages.concat(messages);
-      if (oldMessages.length > this.config.size) {
-        oldMessages = oldMessages.slice(oldMessages.length - this.config.size - 1, oldMessages.length - 1);
+      if (oldMessages.length > this.config.size!) {
+        oldMessages = oldMessages.slice(oldMessages.length - this.config.size! - 1, oldMessages.length - 1);
       }
-      localStorage.setItem(this.config.localStorageKey, JSON.stringify(oldMessages));
+      localStorage.setItem(this.config.localStorageKey!, JSON.stringify(oldMessages));
     } catch (ex) {
       console.warn('Unable to save logs to localStorage');
       console.warn(ex);
