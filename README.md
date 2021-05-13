@@ -4,9 +4,14 @@ JavaScript/TypeScript SDK for People Power IoT Suite public API - <https://iotap
 
 ## Installation
 
-People Power packages provided by GitHub package registry, so add destination of the organisation-based packages into *~/.npmrc*
+People Power packages provided by GitHub package registry. To install such packages you need to be authorised. Read more about [Authenticating to GitHub Packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
-`@peoplepower:registry=https://npm.pkg.github.com`
+Modify global NPM config at *~/.npmrc* with *GITHUB_TOKEN* value and registry association.
+
+``` bash
+@peoplepower:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=
+```
 
 Then, install package using `npm` (you can use `yarn` as well)
 
