@@ -6,6 +6,7 @@ import { WcStorage } from '../../modules/localStorage/localStorage';
 import { LiteEvent } from '../../modules/common/liteEvent';
 import { Logger } from '../../modules/logger/logger';
 import { CommonApi } from '../api/app/common/commonApi';
+import { Tuner } from "../../modules/tuner/tuner";
 
 const localhostSynonyms: string[] = ['localhost', '127.0.0.1', '0.0.0.0', '::'];
 const sboxServerUrl = 'https://sboxall.peoplepowerco.com';
@@ -18,6 +19,7 @@ export class CloudConfigService extends BaseService {
   @inject('CommonApi') public readonly commonApi: CommonApi;
   @inject('WcStorage') protected readonly wcStorage: WcStorage;
   @inject('Logger') protected readonly logger: Logger;
+  @inject('Tuner') private readonly tuner: Tuner;
 
   /**
    * Cloud changed event
@@ -61,11 +63,13 @@ export class CloudConfigService extends BaseService {
     }
 
     let getSettingsBaseUrl: string;
-    if (!window.location.hostname || ~localhostSynonyms.indexOf(window.location.hostname)) {
-      // if in developer's environment
+    if (this.tuner?.config?.serverUrl) {
+      getSettingsBaseUrl = this.tuner.config.serverUrl;
+    } else if (!globalThis?.location?.hostname || ~localhostSynonyms.indexOf(globalThis?.location?.hostname)) {
+      // if in developer's environment or non-browser environment
       getSettingsBaseUrl = sboxServerUrl;
     } else {
-      getSettingsBaseUrl = window.location.protocol + '//' + window.location.host;
+      getSettingsBaseUrl = globalThis.location.protocol + '//' + globalThis.location.host;
     }
     getSettingsBaseUrl += apiPath;
     this.getCloudPromise = this.commonApi
@@ -131,6 +135,11 @@ export class CloudConfigService extends BaseService {
         });
         if (savedCloudFromServer) {
           return this.setCurrentCloud(savedCloudFromServer);
+        }
+      } else if (this.tuner?.config?.cloudName && clouds?.length > 0) {
+        let cloud = clouds.find(c => c.name.toLowerCase() === this.tuner?.config?.cloudName?.toLowerCase());
+        if (cloud) {
+          return this.setCurrentCloud(cloud);
         }
       }
 

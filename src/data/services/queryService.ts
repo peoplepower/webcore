@@ -14,10 +14,10 @@ export class QueryService extends BaseService {
    * @return {any}
    */
   getQueryParams() {
-    if (!window?.location?.search || window?.location?.search?.length <= 1) {
+    if (!globalThis?.location?.search || globalThis?.location?.search?.length <= 1) {
       return {};
     }
-    return qs.parse(window.location.search, {
+    return qs.parse(globalThis.location.search, {
       ignoreQueryPrefix: true,
     });
   }
