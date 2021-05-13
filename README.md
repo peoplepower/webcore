@@ -10,7 +10,9 @@ People Power packages provided by GitHub package registry, so add destination of
 
 Then, install package using `npm` (you can use `yarn` as well)
 
-`npm install @peoplepower/webcore --save`
+``` bash
+npm install @peoplepower/webcore --save`
+```
 
 ## Import
 
@@ -29,8 +31,8 @@ We could enable browser-friendly UMD build (for injecting right into the web pag
 
 ``` typescript
 import { WebCore } from '@peoplepower/webcore/dist/types/ppc-webcore';
-import type { Environment } from "@peoplepower/webcore/dist/types/modules/envir/environment";
-import type { WebCoreConfig } from "@peoplepower/webcore/dist/types/modules/tuner/config";
+import type { Environment } from '@peoplepower/webcore/dist/types/modules/envir/environment';
+import type { WebCoreConfig } from '@peoplepower/webcore/dist/types/modules/tuner/config';
 
 const env: Environment = 'dev'; // or `'prod'`, or `process.env.NODE_ENV`
 const config: WebCoreConfig = {
@@ -149,11 +151,11 @@ This realization is just example. You should adapt it for your environment. The 
 
 ``` typescript
 import { WebCore } from '@peoplepower/webcore';
-import { LocalStorageProvider } from './modules/localStorage/localStorage';
-import { Environment } from "./modules/envir/environment";
-import { WebCoreConfig } from "./modules/tuner/config";
+import { LocalStorageProvider } from '@peoplepower/webcore/dist/types/modules/localStorage/localStorage';
+import { Environment } from '@peoplepower/webcore/dist/types/modules/envir/environment';
+import { WebCoreConfig } from '@peoplepower/webcore/dist/types/modules/tuner/config';
 import { AsyncStorage } from 'react-native';
-import { decode, encode } from 'base-64';
+import { decode, encode } from 'js-base64';
 
 // You also will need btoa polyfill
 if (!global.btoa) {
@@ -225,15 +227,11 @@ const config: WebCoreConfig = {
       enabled: false
     }
   },
-
   localStorage: ls,
 
-  serverUrl: "https://app.peoplepowerco.com/", // or "https://sboxall.peoplepowerco.com"
-  cloudName: "Production" // or "sbox"
-
-  // Sandbox configuration:
-  // serverUrl: "https://sboxall.peoplepowerco.com",
-  // cloudName: "sbox"
+  // Sandbox configuration
+  serverUrl: "https://sboxall.peoplepowerco.com",
+  cloudName: "sbox"
 };
 
 const wsPromise = ls.load()
