@@ -171,8 +171,12 @@ export class AuthService extends BaseService {
       .then(() => this.authApi.loginByKey({ apiKey: apiKey, keyType: keyType }))
       .then((result) => {
         me.logger.debug('Logged in by API_KEY', result);
-        me._apiKey = result.key;
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+
+        // NOTE: Dmitry said that if API_KEY is valid enough - server will not generate new API_KEY. ¯\_(ツ)_/¯
+        const key = result.key || apiKey;
+
+        me._apiKey = key;
+        me.wcStorage.set(LOCAL_STORAGE_API_KEY, key);
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
         me.wcStorage.remove(LOCAL_STORAGE_LAST_USERNAME);
