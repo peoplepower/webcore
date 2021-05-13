@@ -225,7 +225,15 @@ const config: WebCoreConfig = {
       enabled: false
     }
   },
-  localStorage: ls
+
+  localStorage: ls,
+
+  serverUrl: "https://app.peoplepowerco.com/", // or "https://sboxall.peoplepowerco.com"
+  cloudName: "Production" // or "sbox"
+
+  // Sandbox configuration:
+  // serverUrl: "https://sboxall.peoplepowerco.com",
+  // cloudName: "sbox"
 };
 
 const wsPromise = ls.load()
