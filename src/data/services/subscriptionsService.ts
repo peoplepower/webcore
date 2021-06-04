@@ -127,7 +127,7 @@ export class SubscriptionsService extends BaseService {
     locationId?: number,
     userId?: number,
     userPlanId?: number,
-    status?: SubscriptionStatus,
+    status?: SubscriptionStatus | SubscriptionStatus[],
     getCard?: boolean,
     sortOrder: string = 'desc',
     sortBy: string = 'endDateMs',
@@ -137,7 +137,7 @@ export class SubscriptionsService extends BaseService {
       locationId?: number;
       userId?: number;
       userPlanId?: number;
-      status?: SubscriptionStatus;
+      status?: SubscriptionStatus | SubscriptionStatus[];
       sortOrder?: string;
       sortBy?: string;
       getCard?: boolean;

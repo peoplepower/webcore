@@ -47,7 +47,7 @@ export interface GetSoftwareSubscriptionsApiResponse extends ApiResponseBase {
      * Whether or not this service plan is available to purchase
      */
     available: boolean;
-    /**
+    /**c
      * List of service plan ID's, where this plan can be upgraded
      */
     upgradableTo?: Array<number>;
