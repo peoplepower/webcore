@@ -23,10 +23,10 @@ npm install @peoplepower/webcore --save`
 
 WebCore is bundled to several formats:
 
- * `dist/ppc-webcore.cjs.js` - CommonJS module (for Node)
- * `dist/ppc-webcore.esm.js` - ES module (for bundlers)
- * `dist/types/` - folder for type definitions and compiled sources per-file (not bundled). This folder contains project in ES module format. So you could use sources from there directly if you want to import interfaces, enums or separate classes (e.g. in another Typescript project).
-   
+- `dist/ppc-webcore.cjs.js` - CommonJS module (for Node)
+- `dist/ppc-webcore.esm.js` - ES module (for bundlers)
+- `dist/types/` - folder for type definitions and compiled sources per-file (not bundled). This folder contains project in ES module format. So you could use sources from there directly if you want to import interfaces, enums or separate classes (e.g. in another Typescript project).
+
 Please, avoid importing two modules at the same time. This will lead to the appearance of hard-to-diagnose errors.
 
 Bundles are compiled to ES5 format, so it should work almost in every environment.
