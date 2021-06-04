@@ -37,7 +37,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
       }>;
       bots?: Array<{
         bundle: string;
-        resourceType: number;
+        resourceType: ResourceType;
       }>;
     };
     /**
