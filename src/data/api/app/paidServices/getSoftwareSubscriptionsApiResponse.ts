@@ -58,7 +58,7 @@ export interface GetSoftwareSubscriptionsApiResponse extends ApiResponseBase {
     }>;
     bots?: Array<{
       bundle: string;
-      sourceType: ResourceType;
+      resourceType: ResourceType;
     }>;
     /**
      * Set of available prices and options to purchase this service
