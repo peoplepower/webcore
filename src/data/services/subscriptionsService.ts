@@ -1,7 +1,7 @@
 import { inject, injectable } from '../../modules/common/di';
 import { BaseService } from './baseService';
 import { PaidServicesApi } from '../api/app/paidServices/paidServicesApi';
-import { GetSoftwareSubscriptionsApiResponse } from '../api/app/paidServices/getSoftwareSubscriptionsApiResponse';
+import { GetSoftwareSubscriptionsApiResponse, PaymentType } from '../api/app/paidServices/getSoftwareSubscriptionsApiResponse';
 import { AuthService } from './authService';
 import { GetLocationSubscriptionsApiResponse, SubscriptionStatus } from '../api/app/paidServices/getLocationSubscriptionsApiResponse';
 import { UserService } from './userService';
@@ -390,35 +390,34 @@ export class SubscriptionsService extends BaseService {
   }
 
   /**
-   * Provide purchase information like a subscription ID or a receipt or a nonce, which proofs that the purchase has been made.
-   * @param {NewPurchaseInfo} purchaseInfo Purchase information
-   * @param {number} priceId Service plan price ID
-   * @param {number} locationId Location ID
-   * @param {number} [userId] Purchase as specific user
-   * @param {boolean} [sandbox] Set to true, if need to test the process on sandbox payment provider service
+   * Provide purchase information like a subscription ID or a receipt or a nonce, which proofs that the purchase has been made at the given payment provider (payment type).
+   * @param {NewPurchaseInfo} purchaseInfo Purchase information.
+   * @param {number} locationId Location ID to purchase subscription for.
+   * @param {PaymentType} [paymentType] Payment type (payment provider).
+   * @param {number} [userId] Purchase as specific user. For Admin usage.
+   * @param {number} [priceId] Service plan price ID. Do not provide for paymentType = 4 (Chargify).
+   * @param {boolean} [sandbox] Set to true, if need to test the process on sandbox payment provider service. Available only for paymentType = 3 (Braintree).
    * @returns {Promise<ApiResponseBase>}
    */
   public provideNewPurchaseInfo(
     purchaseInfo: NewPurchaseInfo,
-    priceId: number,
     locationId: number,
+    paymentType?: PaymentType,
     userId?: number,
+    priceId?: number,
     sandbox?: boolean,
   ): Promise<ApiResponseBase> {
-    if (!priceId || isNaN(priceId) || priceId < 1) {
-      return this.reject(`Service plan price ID is incorrect [${priceId}].`);
-    }
     if (!locationId || isNaN(locationId) || locationId < 1) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
     const params: {
-      priceId: number;
       locationId: number;
+      priceId?: number;
       userId?: number;
       sandbox?: boolean;
+      paymentType?: PaymentType;
     } = {
-      priceId: priceId,
       locationId: locationId,
     };
 
@@ -428,8 +427,22 @@ export class SubscriptionsService extends BaseService {
       }
       params.userId = userId;
     }
-    if (sandbox) {
+    if (priceId && !isNaN(priceId)) {
+      if (priceId < 1) {
+        return this.reject(`Service plan price ID is incorrect [${priceId}].`);
+      }
+      // Do not use priceId for Chargify
+      if (paymentType !== PaymentType.Chargify) {
+        params.priceId = priceId;
+      }
+    }
+
+    // Use sandbox flag only for Braintree
+    if (!!sandbox && paymentType === PaymentType.Braintree) {
       params.sandbox = true;
+    }
+    if (paymentType && !isNaN(paymentType)) {
+      params.paymentType = paymentType;
     }
     return this.authService.ensureAuthenticated().then(() => this.paidServicesApi.provideNewPurchaseInfo(purchaseInfo, params));
   }
@@ -480,7 +493,7 @@ export class SubscriptionsService extends BaseService {
    * The customer in Chargify is uniquely identified by the user ID (specified in the parameters or identified by the API key),
    * however, you can specify the "customerId" if you know it and want to conduct additional verification.
    * @param params Request parameters.
-   * @param {number} [params.paymentType] 0 - manual, 1 - Apple in-app-purchase, 3 - Braintree, 4 - Chargify
+   * @param {PaymentType} [params.paymentType] Payment type (payment proider)
    * @param {number} [params.userId] Used by administrators to specify another user.
    * @param {string} [params.customerId] Customer ID from external payment service (if known)
    * @param {boolean} [params.includeDisabled] Include disabled profiles into the result. Default is false.

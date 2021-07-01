@@ -1,16 +1,10 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-
-export enum PaymentProfileType {
-  Manual = 0,
-  AppleInAppPurchase = 1,
-  Braintree = 3,
-  Chargify = 4,
-}
+import { PaymentType } from './getSoftwareSubscriptionsApiResponse';
 
 export interface GetUserPaymentProfilesApiResponse extends ApiResponseBase {
   customerId: string;
   paymentProfiles: Array<{
-    type: PaymentProfileType;
+    type: PaymentType;
     id: string;
     firstName: string;
     lastName: string;

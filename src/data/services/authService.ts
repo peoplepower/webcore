@@ -183,6 +183,9 @@ export class AuthService extends BaseService {
         me.setUpKeyExpireTimeout(result.keyExpire!);
         me.onLogin.trigger();
         return result;
+      })
+      .catch((err) => {
+        return err;
       });
   }
 

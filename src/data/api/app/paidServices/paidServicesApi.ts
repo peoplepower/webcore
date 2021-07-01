@@ -1,6 +1,6 @@
 import { AppApiDal } from '../appApiDal';
 import { inject, injectable } from '../../../../modules/common/di';
-import { GetSoftwareSubscriptionsApiResponse } from './getSoftwareSubscriptionsApiResponse';
+import { GetSoftwareSubscriptionsApiResponse, PaymentType } from './getSoftwareSubscriptionsApiResponse';
 import { AssignServicesToLocationsApiResponse, AssignServicesToLocationsModel } from './assignServicesToLocationsApiResponse';
 import { GetLocationSubscriptionsApiResponse, SubscriptionStatus } from './getLocationSubscriptionsApiResponse';
 import { GetSubscriptionTransactionsApiResponse } from './getSubscriptionTransactionsApiResponse';
@@ -8,7 +8,7 @@ import { NewPurchaseInfoModel, ProvideNewPurchaseInfoApiResponse } from './provi
 import { UpdatePurchaseInfoApiResponse, UpdatePurchaseInfoModel } from './updatePurchaseInfoApiResponse';
 import { UpgradeSubscriptionApiResponse, UpgradeSubscriptionInfoModel } from './upgradeSubscriptionApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { GetUserPaymentProfilesApiResponse, PaymentProfileType } from './getUserPaymentProfilesApiResponse';
+import { GetUserPaymentProfilesApiResponse } from './getUserPaymentProfilesApiResponse';
 
 /**
  * Ensemble facilitates sales of software services, and physical products. This API allows to get subscriptions,
@@ -161,17 +161,19 @@ export class PaidServicesApi {
    * If the purchased plan contains services with resource types other than "user" (0), the request must include corresponding resource ID's for these services.
    *
    * @param {NewPurchaseInfoModel} newPurchaseInfo Purchase Info
-   * @param params Request parameters
-   * @param {number} params.priceId Service plan price ID
-   * @param {number} params.locationId Location ID
-   * @param {number} [params.userId] Purchase as specific user
-   * @param {boolean} [params.sandbox] Set to true, if need to test the process on sandbox payment provider service
+   * @param params Request parameters.
+   * @param {number} params.locationId Location ID.
+   * @param {number} [params.priceId] Service plan price ID. Do not use for paymentType = 4 (Chargify).
+   * @param {PaymentType} [params.paymentType] Payment type (payment provider).
+   * @param {number} [params.userId] Purchase as specific user.
+   * @param {boolean} [params.sandbox] Set to true, if need to test on sandbox payment provider. Used only for paymentType = 3 (Braintree).
    */
   provideNewPurchaseInfo(
     newPurchaseInfo: NewPurchaseInfoModel,
     params: {
-      priceId: number;
       locationId: number;
+      priceId?: number;
+      paymentType?: PaymentType;
       userId?: number;
       sandbox?: boolean;
     },
@@ -192,7 +194,11 @@ export class PaidServicesApi {
    */
   updatePurchaseInfo(
     purchaseInfo: UpdatePurchaseInfoModel,
-    params: { userPlanId: number; locationId: number; userId?: number },
+    params: {
+      userPlanId: number;
+      locationId: number;
+      userId?: number
+    },
   ): Promise<UpdatePurchaseInfoApiResponse> {
     return this.dal.put(`purchase`, purchaseInfo, { params: params });
   }
@@ -202,14 +208,14 @@ export class PaidServicesApi {
    * The customer in Chargify is uniquely identified by the user ID (specified in the parameters or identified by the API key),
    * however, you can specify the "customerId" if you know it and want to conduct additional verification.
    * @param params Request parameters.
-   * @param {number} [params.paymentType] 0 - manual, 1 - Apple in-app-purchase, 3 - Braintree, 4 - Chargify
+   * @param {PaymentType} [params.paymentType] Payment type (payment provider).
    * @param {number} [params.userId] Used by administrators to specify another user.
-   * @param {string} [params.customerId] Customer ID from external payment service (if known)
+   * @param {string} [params.customerId] Customer ID from external payment service (if known).
    * @param {boolean} [params.includeDisabled] Include disabled profiles into the result. Default is false.
-   * @param {boolean} [params.appName] PPC cloud related appName (brand). Required if paymentType=4
+   * @param {boolean} [params.appName] PPC cloud related appName (brand). Required if paymentType = 4 (Chargify).
    */
   getUserPaymentProfiles(params: {
-    paymentType: PaymentProfileType;
+    paymentType: PaymentType;
     userId?: number;
     customerId?: string;
     includeDisabled?: boolean;
