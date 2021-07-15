@@ -1,6 +1,6 @@
 {
   "name": "@peoplepower/webcore",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Client JS/TS SDK for People Power IoT Platform",
   "keywords": [
     "WebCore",
