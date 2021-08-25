@@ -14,7 +14,7 @@ import {
   AssignServicesToLocationsApiResponse,
   AssignServicesToLocationsModel,
 } from '../api/app/paidServices/assignServicesToLocationsApiResponse';
-import { GetUserPaymentProfilesApiResponse, PaymentProfileType } from '../api/app/paidServices/getUserPaymentProfilesApiResponse';
+import { GetUserPaymentProfilesApiResponse } from '../api/app/paidServices/getUserPaymentProfilesApiResponse';
 
 @injectable('SubscriptionsService')
 export class SubscriptionsService extends BaseService {
@@ -493,14 +493,14 @@ export class SubscriptionsService extends BaseService {
    * The customer in Chargify is uniquely identified by the user ID (specified in the parameters or identified by the API key),
    * however, you can specify the "customerId" if you know it and want to conduct additional verification.
    * @param params Request parameters.
-   * @param {PaymentType} [params.paymentType] Payment type (payment proider)
+   * @param {PaymentType} [params.paymentType] Payment type (payment provider)
    * @param {number} [params.userId] Used by administrators to specify another user.
    * @param {string} [params.customerId] Customer ID from external payment service (if known)
    * @param {boolean} [params.includeDisabled] Include disabled profiles into the result. Default is false.
    * @param {boolean} [params.appName] PPC cloud related appName (brand). Required if paymentType=4
    */
   getUserPaymentProfiles(params: {
-    paymentType: PaymentProfileType;
+    paymentType: PaymentType;
     userId?: number;
     customerId?: string;
     includeDisabled?: boolean;
