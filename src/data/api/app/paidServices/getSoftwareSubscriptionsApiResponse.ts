@@ -13,6 +13,7 @@ export enum PaymentType {
   PayPal = 2,
   Braintree = 3,
   Chargify = 4,
+  Shopify = 5,
 }
 
 /**
