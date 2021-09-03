@@ -11,7 +11,7 @@ import { GetCurrentWeatherByLocationApiResponse } from './getCurrentWeatherByLoc
  */
 @injectable('WeatherApi')
 export class WeatherApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Retrieve weather forecust at certain point by latitude and longitude.
@@ -51,7 +51,7 @@ export class WeatherApi {
    * @returns {Promise<GetForecastByLocationApiResponse>}
    */
   getForecastByLocation(locationId: number, params?: { units?: Units; hours?: ForecastDepth }): Promise<GetForecastByLocationApiResponse> {
-    return this.dal.get(`weather/forecast/location/${encodeURIComponent(locationId.toString())}`, { params: params });
+    return this.dal.get(`weather/forecast/location/${encodeURIComponent(locationId.toString())}`, {params: params});
   }
 
   /**
@@ -88,6 +88,6 @@ export class WeatherApi {
    * @returns {Promise<GetCurrentWeatherByLocationApiResponse>}
    */
   getCurrentWeatherByLocation(locationId: number, params?: { units?: Units }): Promise<GetCurrentWeatherByLocationApiResponse> {
-    return this.dal.get(`weather/current/location/${encodeURIComponent(locationId.toString())}`, { params: params });
+    return this.dal.get(`weather/current/location/${encodeURIComponent(locationId.toString())}`, {params: params});
   }
 }

@@ -1,6 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface RequestSupportApiResponse extends ApiResponseBase {}
+export interface RequestSupportApiResponse extends ApiResponseBase {
+}
 
 export interface RequestSupportModel {
   /**

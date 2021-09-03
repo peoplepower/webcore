@@ -5,4 +5,5 @@ export enum VerificationType {
   SMS = 2,
 }
 
-export interface SendVerificationMessageApiResponse extends ApiResponseBase {}
+export interface SendVerificationMessageApiResponse extends ApiResponseBase {
+}

@@ -8,9 +8,10 @@ import { inject } from '../../../modules/common/di';
  * Here we trying to determine which request is successful, which is not, resolving the promise according to that
  */
 export class ApiResponseInterceptor implements Interceptor {
-  @inject('Logger') logger: Logger;
+  @inject('Logger') logger!: Logger;
 
-  constructor() {}
+  constructor() {
+  }
 
   response(response: DalResponse): any {
     if (response?.config?.ignoreApiResponseTransformation === true) {

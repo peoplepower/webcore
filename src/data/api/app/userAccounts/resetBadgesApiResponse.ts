@@ -7,4 +7,5 @@ export enum BadgeType {
   DeviceRegistration = 4,
 }
 
-export interface ResetBadgesApiResponse extends ApiResponseBase {}
+export interface ResetBadgesApiResponse extends ApiResponseBase {
+}

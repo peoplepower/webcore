@@ -9,8 +9,8 @@ import * as qs from 'qs';
 
 @injectable('FilesService')
 export class FilesService extends BaseService {
-  @inject('ApplicationFilesApi') protected readonly applicationFilesApi: ApplicationFilesApi;
-  @inject('CloudConfigService') protected readonly cloudConfigService: CloudConfigService;
+  @inject('ApplicationFilesApi') protected readonly applicationFilesApi!: ApplicationFilesApi;
+  @inject('CloudConfigService') protected readonly cloudConfigService!: CloudConfigService;
 
   /**
    * Returns a list of application files filtered by query parameters.

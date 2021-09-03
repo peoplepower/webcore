@@ -14,7 +14,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('ApplicationFilesApi')
 export class ApplicationFilesApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Allows to upload a particular file content to the server.
@@ -55,7 +55,7 @@ export class ApplicationFilesApi {
     return this.dal.post('appfiles', file, {
       params: params,
       onUploadProgress: onUploadProgress,
-      headers: { 'Content-Type': contentType },
+      headers: {'Content-Type': contentType},
     });
   }
 
@@ -82,7 +82,7 @@ export class ApplicationFilesApi {
     deviceId?: string;
     name?: string;
   }): Promise<GetApplicationFilesApiResponse> {
-    return this.dal.get('appfiles', { params: params });
+    return this.dal.get('appfiles', {params: params});
   }
 
   /**
@@ -105,7 +105,7 @@ export class ApplicationFilesApi {
       expiration?: string;
     },
   ): Promise<GetApplicationFileUrlApiResponse> {
-    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}/url`, { params: params });
+    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}/url`, {params: params});
   }
 
   /**
@@ -163,7 +163,7 @@ export class ApplicationFilesApi {
     // TODO: In order to actually conveniently use this method we need to introduce the service around it with public
     //  access The response stream with file content actually can be used as: .then(function(response) {
     //  response.data.pipe(fs.createWriteStream('ada_lovelace.jpg')) })
-    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}`, { params: params, responseType: 'stream' });
+    return this.dal.get(`appfiles/${encodeURIComponent(fileId.toString())}`, {params: params, responseType: 'stream'});
   }
 
   /**
@@ -183,6 +183,6 @@ export class ApplicationFilesApi {
       locationId?: number;
     },
   ): Promise<ApiResponseBase> {
-    return this.dal.delete(`appfiles/${encodeURIComponent(fileId.toString())}`, { params: params });
+    return this.dal.delete(`appfiles/${encodeURIComponent(fileId.toString())}`, {params: params});
   }
 }

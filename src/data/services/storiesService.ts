@@ -5,7 +5,7 @@ import { GetStoriesApiResponse } from '../api/app/entityStories/getStoriesApiRes
 
 @injectable('StoriesService')
 export class StoriesService extends BaseService {
-  @inject('EntityStoriesApi') protected readonly entityStoriesApi: EntityStoriesApi;
+  @inject('EntityStoriesApi') protected readonly entityStoriesApi!: EntityStoriesApi;
 
   /**
    * Gets entity stories.

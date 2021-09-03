@@ -18,8 +18,8 @@ export class Deferred<T> {
   }
 
   private _state: DeferredState = DeferredState.PENDING;
-  private _resolve: Function;
-  private _reject: Function;
+  private _resolve!: Function;
+  private _reject!: Function;
 
   constructor() {
     this.promise = new Promise((resolve, reject) => {

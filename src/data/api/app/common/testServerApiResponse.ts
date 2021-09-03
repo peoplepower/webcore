@@ -1,1 +1,2 @@
-export interface TestServerApiResponse {}
+export interface TestServerApiResponse {
+}

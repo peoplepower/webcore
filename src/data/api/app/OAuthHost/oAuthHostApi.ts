@@ -12,9 +12,9 @@ import { QueryService } from '../../../services/queryService';
  */
 @injectable('OAuthHostApi')
 export class OAuthHostApi {
-  @inject('AppApiOAuthDal') protected readonly dal: AppApiOAuthDal;
-  @inject('AuthService') protected readonly authService: AuthService;
-  @inject('QueryService') protected readonly queryService: QueryService;
+  @inject('AppApiOAuthDal') protected readonly dal!: AppApiOAuthDal;
+  @inject('AuthService') protected readonly authService!: AuthService;
+  @inject('QueryService') protected readonly queryService!: QueryService;
 
   /**
    * Begin the process of authorizing a third-party application (the client) to access the user's data.
@@ -44,7 +44,7 @@ export class OAuthHostApi {
         response_type: params.responseType,
         state: params.state,
       },
-      { addQueryPrefix: true },
+      {addQueryPrefix: true},
     );
 
     return this.dal.GetFullUrl(`oauth/authorize/${encodeURIComponent(brand)}${paramsStr}`);
@@ -85,7 +85,7 @@ export class OAuthHostApi {
         brand: params.brand,
         API_KEY: params.apiKey,
       },
-      { addQueryPrefix: true },
+      {addQueryPrefix: true},
     );
 
     return this.dal.GetFullUrl(`oauth/approve/${encodeURIComponent(approved.toString())}${paramsStr}`);
@@ -141,6 +141,6 @@ export class OAuthHostApi {
    * @returns {Promise<ApiResponseBase>}
    */
   revokeOAuthClients(params: { client_id: string; userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('cloud/json/authClient', { params: params });
+    return this.dal.delete('cloud/json/authClient', {params: params});
   }
 }

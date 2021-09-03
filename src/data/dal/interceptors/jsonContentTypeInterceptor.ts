@@ -9,7 +9,8 @@ export class JsonContentTypeInterceptor implements Interceptor {
   private readonly JSON_CONTENT_TYPE = 'application/json; charset=utf-8';
   private readonly CONTENT_TYPE_HEADER = 'Content-Type';
 
-  constructor() {}
+  constructor() {
+  }
 
   request(config: DalRequestConfig): any {
     let method = config.method!.toUpperCase();

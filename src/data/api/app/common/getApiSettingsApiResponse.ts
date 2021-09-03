@@ -4,7 +4,7 @@ export interface GetApiSettingsApiResponse extends ApiResponseBase {
   clouds: Array<CloudConfig>;
 }
 
-export class CloudConfig {
+export interface CloudConfig {
   /**
    * Cloud name
    */
@@ -22,7 +22,7 @@ export class CloudConfig {
   servers: CloudServerConfig[];
 }
 
-export class CloudServerConfig {
+export interface CloudServerConfig {
   /**
    * Server Type
    *   appapi - restful API

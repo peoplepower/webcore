@@ -17,7 +17,7 @@ import { UpdateBillingInformationApiResponse, UpdateBillingInformationModel } fr
  */
 @injectable('EnergyManagementApi')
 export class EnergyManagementApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Retrieves energy usage at the specific location.
@@ -44,7 +44,7 @@ export class EnergyManagementApi {
     const aggregationEncoded = encodeURIComponent(aggregation.toString());
     const startDateEncoded = encodeURIComponent(startDate.toString());
 
-    return this.dal.get(`locations/${locationIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, { params: params });
+    return this.dal.get(`locations/${locationIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, {params: params});
   }
 
   /**
@@ -69,7 +69,7 @@ export class EnergyManagementApi {
       userId?: number;
     },
   ): Promise<GetDeviceEnergyUsageApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId.toString())}/currentEnergyUsage`, { params: params });
+    return this.dal.get(`devices/${encodeURIComponent(deviceId.toString())}/currentEnergyUsage`, {params: params});
   }
 
   /**
@@ -101,7 +101,7 @@ export class EnergyManagementApi {
     let aggregationEncoded = encodeURIComponent(aggregation.toString());
     let startDateEncoded = encodeURIComponent(startDate.toString());
 
-    return this.dal.get(`devices/${deviceIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, { params: params });
+    return this.dal.get(`devices/${deviceIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, {params: params});
   }
 
   /**

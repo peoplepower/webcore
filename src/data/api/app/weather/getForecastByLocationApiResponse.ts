@@ -1,3 +1,4 @@
 import { GetForecastApiResponse } from './getForecastByGeocodeApiResponse';
 
-export interface GetForecastByLocationApiResponse extends GetForecastApiResponse {}
+export interface GetForecastByLocationApiResponse extends GetForecastApiResponse {
+}

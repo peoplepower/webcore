@@ -1,6 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface PostCrowdFeedbackApiResponse extends ApiResponseBase {}
+export interface PostCrowdFeedbackApiResponse extends ApiResponseBase {
+}
 
 export interface PostCrowdFeedbackModel {
   feedback: {

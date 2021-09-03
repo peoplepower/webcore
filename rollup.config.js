@@ -2,7 +2,7 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from 'rollup-plugin-typescript2';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import { terser } from 'rollup-plugin-terser';
+import {terser} from 'rollup-plugin-terser';
 import pkg from './package.json';
 
 const tsConfig = {
@@ -68,20 +68,20 @@ export default command => {
   // ES module for React Native
   const rn = {
     input: 'src/ppc-webcore-rn.ts',
-    external: ['axios', 'qs', 'react-native'], // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
+    external: ['axios', 'qs', 'react-native', 'base-64'], // Indicate here external modules you don't wanna include in your bundle (i.e.: 'lodash')
     plugins: [
       typescript(tsConfig), // so Rollup can convert TypeScript to JavaScript
       sourcemaps() // Resolve source maps to the original source
     ],
     output: {
       sourcemap: true,
-      file: pkg.reactNative,
+      file: pkg.reactNative, // NOTE insert `"reactNative": "dist/ppc-webcore.react-native.js",` to `package.json`
       format: 'es'
     }
   };
 
   return [
-    cjs, 
+    cjs,
     esm,
     // umd,
     // rn,

@@ -1,7 +1,8 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { CrowdFeedbackType } from './postCrowdFeedbackApiResponse';
 
-export interface UpdateCrowdFeedbackApiResponse extends ApiResponseBase {}
+export interface UpdateCrowdFeedbackApiResponse extends ApiResponseBase {
+}
 
 export interface UpdateCrowdFeedbackModel {
   feedback: {

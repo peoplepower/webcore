@@ -20,7 +20,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('DeviceModelsApi')
 export class DeviceModelsApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Gets the device categories and models for specific brand.
@@ -45,7 +45,7 @@ export class DeviceModelsApi {
     includePairingType?: DevicePairingType;
     excludePairingType?: DevicePairingType;
   }): Promise<GetDeviceModelsApiResponse> {
-    return this.dal.get('devicemodels', { params: params });
+    return this.dal.get('devicemodels', {params: params});
   }
 
   /**
@@ -72,6 +72,6 @@ export class DeviceModelsApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteDeviceModels(params?: { brand?: string; modelId?: string; categoryId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('devicemodels', { params: params });
+    return this.dal.delete('devicemodels', {params: params});
   }
 }

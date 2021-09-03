@@ -5,9 +5,9 @@ import { Logger } from '../logger/logger';
 
 @injectable('UserLocalStorage')
 export class UserLocalStorage {
-  @inject('UserService') protected readonly userService: UserService;
-  @inject('Logger') protected readonly logger: Logger;
-  @inject('WcStorage') protected readonly wcStorage: WcStorage;
+  @inject('UserService') protected readonly userService!: UserService;
+  @inject('Logger') protected readonly logger!: Logger;
+  @inject('WcStorage') protected readonly wcStorage!: WcStorage;
 
   public set(path: string, data: string | number | boolean | object): Promise<void> {
     let me = this;

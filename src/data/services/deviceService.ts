@@ -19,11 +19,11 @@ import { GetLastNMeasurementsApiResponse } from '../api/app/deviceMeasurements/g
 
 @injectable('DeviceService')
 export class DeviceService extends BaseService {
-  @inject('AuthService') protected readonly authService: AuthService;
-  @inject('DevicesApi') protected readonly devicesApi: DevicesApi;
-  @inject('DevicesConfigurationApi') protected readonly devicesConfigurationApi: DevicesConfigurationApi;
-  @inject('DeviceMeasurementsApi') protected readonly deviceMeasurementsApi: DeviceMeasurementsApi;
-  @inject('DeviceModelsApi') protected readonly deviceModelsApi: DeviceModelsApi;
+  @inject('AuthService') protected readonly authService!: AuthService;
+  @inject('DevicesApi') protected readonly devicesApi!: DevicesApi;
+  @inject('DevicesConfigurationApi') protected readonly devicesConfigurationApi!: DevicesConfigurationApi;
+  @inject('DeviceMeasurementsApi') protected readonly deviceMeasurementsApi!: DeviceMeasurementsApi;
+  @inject('DeviceModelsApi') protected readonly deviceModelsApi!: DeviceModelsApi;
 
   constructor() {
     super();
@@ -179,7 +179,7 @@ export class DeviceService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
     return this.authService.ensureAuthenticated().then(() => {
-      return this.devicesApi.getDeviceById(deviceId, { locationId: locationId, checkConnected: checkConnected });
+      return this.devicesApi.getDeviceById(deviceId, {locationId: locationId, checkConnected: checkConnected});
     });
   }
 
@@ -281,7 +281,7 @@ export class DeviceService extends BaseService {
       device.goalId = goalId;
     }
 
-    return this.devicesApi.updateDeviceAtLocation(deviceId, locationId, { device: device });
+    return this.devicesApi.updateDeviceAtLocation(deviceId, locationId, {device: device});
   }
 
   // #endregion
@@ -410,7 +410,7 @@ export class DeviceService extends BaseService {
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.deviceMeasurementsApi.sendCommandToDevice(deviceId, command, { locationId: locationId });
+      return this.deviceMeasurementsApi.sendCommandToDevice(deviceId, command, {locationId: locationId});
     });
   }
 
@@ -460,7 +460,7 @@ export class DeviceService extends BaseService {
    */
   getDeviceParameters(paramName: string | string[]): Promise<GetDeviceParametersApiResponse> {
     return this.authService.ensureAuthenticated().then(() => {
-      return this.devicesConfigurationApi.getDeviceParameters({ paramName: paramName });
+      return this.devicesConfigurationApi.getDeviceParameters({paramName: paramName});
     });
   }
 
@@ -519,16 +519,23 @@ export class DeviceService extends BaseService {
   // #endregion
 }
 
-export interface DeviceCommandResult extends SendCommandToDeviceApiResponse {}
+export interface DeviceCommandResult extends SendCommandToDeviceApiResponse {
+}
 
-export interface Device extends GetDeviceByIdApiResponse {}
+export interface Device extends GetDeviceByIdApiResponse {
+}
 
-export interface DeviceMeasurements extends GetCurrentDeviceMeasurementsApiResponse {}
+export interface DeviceMeasurements extends GetCurrentDeviceMeasurementsApiResponse {
+}
 
-export interface DeviceGoals extends GetDeviceGoalsByDeviceTypeApiResponse {}
+export interface DeviceGoals extends GetDeviceGoalsByDeviceTypeApiResponse {
+}
 
-export interface LocationDevicesList extends GetDevicesListApiResponse {}
+export interface LocationDevicesList extends GetDevicesListApiResponse {
+}
 
-export interface DeviceInformation extends GetDeviceByIdApiResponse {}
+export interface DeviceInformation extends GetDeviceByIdApiResponse {
+}
 
-export interface DeviceTypes extends GetSupportedDeviceTypesApiResponse {}
+export interface DeviceTypes extends GetSupportedDeviceTypesApiResponse {
+}

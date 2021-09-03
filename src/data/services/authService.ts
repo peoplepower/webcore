@@ -21,10 +21,10 @@ const API_KEY_EXPIRE_ADDITIONAL_DELAY = 2 * 60 * 1000; // 2 minutes
 
 @injectable('AuthService')
 export class AuthService extends BaseService {
-  @inject('AuthApi') protected readonly authApi: AuthApi;
-  @inject('OAuthHostApi') protected readonly oAuthHostApi: OAuthHostApi;
-  @inject('UserAccountsApi') protected readonly userAccountsApi: UserAccountsApi;
-  @inject('WcStorage') protected readonly wcStorage: WcStorage;
+  @inject('AuthApi') protected readonly authApi!: AuthApi;
+  @inject('OAuthHostApi') protected readonly oAuthHostApi!: OAuthHostApi;
+  @inject('UserAccountsApi') protected readonly userAccountsApi!: UserAccountsApi;
+  @inject('WcStorage') protected readonly wcStorage!: WcStorage;
 
   /**
    * Event that triggered when for some reason token is no more valid we need to re-login.
@@ -114,7 +114,7 @@ export class AuthService extends BaseService {
    */
   public login(username: string, pwd: string, admin?: boolean): Promise<LoginInfo> {
     let me = this;
-    let params = admin ? { keyType: 11 } : undefined;
+    let params = admin ? {keyType: 11} : undefined;
     return this.logoutFromThisBrowser()
       .then(() => this.authApi.login(username, pwd, params))
       .then((result) => {
@@ -141,7 +141,7 @@ export class AuthService extends BaseService {
     let me = this;
     let keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
-      .then(() => this.authApi.login(username, undefined, { passcode: passcode, keyType: keyType }))
+      .then(() => this.authApi.login(username, undefined, {passcode: passcode, keyType: keyType}))
       .then((result) => {
         me.logger.debug('Logged in as: ' + username, result);
         me._apiKey = result.key;
@@ -168,7 +168,7 @@ export class AuthService extends BaseService {
     let me = this;
     let keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
-      .then(() => this.authApi.loginByKey({ apiKey: apiKey, keyType: keyType }))
+      .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType}))
       .then((result) => {
         me.logger.debug('Logged in by API_KEY', result);
 
@@ -195,7 +195,7 @@ export class AuthService extends BaseService {
    */
   public refreshToken(): Promise<LoginInfo> {
     let me = this;
-    return me.authApi.loginByKey({ apiKey: me._apiKey }).then((result) => {
+    return me.authApi.loginByKey({apiKey: me._apiKey}).then((result) => {
       me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
       me._apiKey = result.key;
       me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
@@ -236,7 +236,7 @@ export class AuthService extends BaseService {
    * @returns {Promise<LoginInfo>}
    */
   public getTempToken(): Promise<LoginInfo> {
-    return this.authApi.loginByKey({ keyType: 1 }).then((result) => {
+    return this.authApi.loginByKey({keyType: 1}).then((result) => {
       this.logger.debug('Temporary API key has been requested.', result);
       return result;
     });
@@ -406,6 +406,8 @@ export class AuthService extends BaseService {
   }
 }
 
-export interface LoginInfo extends LoginApiResponse {}
+export interface LoginInfo extends LoginApiResponse {
+}
 
-export interface LogoutApiResponse extends ApiResponseBase {}
+export interface LogoutApiResponse extends ApiResponseBase {
+}

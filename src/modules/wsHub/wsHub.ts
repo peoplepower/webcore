@@ -37,10 +37,10 @@ const WS_REQUEST_TIMEOUT = 30 * 1000; // 30 sec
  */
 @injectable('WsHub')
 export class WsHub {
-  @inject('Logger') private readonly logger: Logger;
-  @inject('Tuner') private readonly tuner: Tuner;
-  @inject('CloudConfigService') private readonly cloudConfigService: CloudConfigService;
-  @inject('AuthService') private readonly authService: AuthService;
+  @inject('Logger') private readonly logger!: Logger;
+  @inject('Tuner') private readonly tuner!: Tuner;
+  @inject('CloudConfigService') private readonly cloudConfigService!: CloudConfigService;
+  @inject('AuthService') private readonly authService!: AuthService;
 
   //region Private fields
 

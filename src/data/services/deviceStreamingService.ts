@@ -5,7 +5,7 @@ import { BaseService } from './baseService';
 
 @injectable('DeviceStreamingService')
 export class DeviceStreamingService extends BaseService {
-  @inject('StreamingApi') protected readonly streamingApi: StreamingApi;
+  @inject('StreamingApi') protected readonly streamingApi!: StreamingApi;
 
   constructor() {
     super();

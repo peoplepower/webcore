@@ -11,7 +11,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('SystemAndUserPropertiesApi')
 export class SystemAndUserPropertiesApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * This API will first attempt to return a user-specific property value in plain text.
@@ -22,7 +22,7 @@ export class SystemAndUserPropertiesApi {
    * @returns {Promise<string>}
    */
   getUserOrSystemProperty(propertyName: string): Promise<string> {
-    return this.dal.get('systemProperty/' + encodeURIComponent(propertyName), { responseType: 'text' });
+    return this.dal.get('systemProperty/' + encodeURIComponent(propertyName), {responseType: 'text'});
   }
 
   /**
@@ -35,7 +35,7 @@ export class SystemAndUserPropertiesApi {
    * @returns {Promise<GetUserPropertiesApiResponse>}
    */
   getUserProperties(params?: { name?: string | string[]; userId?: number }): Promise<GetUserPropertiesApiResponse> {
-    return this.dal.get('userProperties', { params: params });
+    return this.dal.get('userProperties', {params: params});
   }
 
   /**
@@ -54,7 +54,7 @@ export class SystemAndUserPropertiesApi {
       userId?: number;
     },
   ): Promise<UpdateUserPropertiesApiResponse> {
-    return this.dal.post('userProperties', model, { params: params });
+    return this.dal.post('userProperties', model, {params: params});
   }
 
   /**
@@ -74,6 +74,6 @@ export class SystemAndUserPropertiesApi {
       userId?: number;
     },
   ): Promise<ApiResponseBase> {
-    return this.dal.put('userProperty/' + encodeURIComponent(name), {}, { params: params });
+    return this.dal.put('userProperty/' + encodeURIComponent(name), {}, {params: params});
   }
 }

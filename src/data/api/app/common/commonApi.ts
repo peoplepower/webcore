@@ -10,7 +10,7 @@ import { GetServerApiResponse } from './getServerApiResponse';
  */
 @injectable('CommonApi')
 export class CommonApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   // TODO: Cover this API with integration tests just like the other APIs covered
 
@@ -91,7 +91,7 @@ export class CommonApi {
     brand?: string;
     appName?: string;
   }): Promise<GetServerApiResponse> {
-    let { type, ...reqParams } = params;
+    let {type, ...reqParams} = params;
     return this.dal.get('settingsServer/' + encodeURIComponent(type), {
       params: reqParams,
     });

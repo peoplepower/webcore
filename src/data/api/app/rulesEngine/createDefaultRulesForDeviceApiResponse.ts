@@ -1,3 +1,4 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface CreateDefaultRulesForDeviceApiResponse extends ApiResponseBase {}
+export interface CreateDefaultRulesForDeviceApiResponse extends ApiResponseBase {
+}

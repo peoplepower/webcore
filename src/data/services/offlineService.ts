@@ -13,8 +13,8 @@ const AFTER_PING_TIMEOUT = 100;
 
 @injectable('OfflineService')
 export class OfflineService extends BaseService {
-  @inject('CloudConfigService') private readonly cloudConfigService: CloudConfigService;
-  @inject('Tuner') private readonly tuner: Tuner;
+  @inject('CloudConfigService') private readonly cloudConfigService!: CloudConfigService;
+  @inject('Tuner') private readonly tuner!: Tuner;
 
   public readonly onDisconnected: LiteEvent<string> = new LiteEvent<string>();
   public readonly onConnected: LiteEvent<string> = new LiteEvent<string>();
@@ -113,7 +113,7 @@ export class OfflineService extends BaseService {
     this.pingPromise = this.cloudConfigService
       .getBaseUrl()
       .then((url) => {
-        return Axios.get('espapi/watch', { baseURL: url });
+        return Axios.get('espapi/watch', {baseURL: url});
       })
 
       .then((resp) => {

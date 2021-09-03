@@ -39,7 +39,8 @@ export class WsSubscription {
     public readonly type: WsSubscriptionType,
     public readonly operation: WsSubscriptionOperation,
     public readonly params: WsSubscriptionParams,
-  ) {}
+  ) {
+  }
 
   onCreate(callback: (data?: DataWsMessage['data']) => void): () => void {
     this.createEvent.on(callback);

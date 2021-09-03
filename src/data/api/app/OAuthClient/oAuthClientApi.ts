@@ -11,8 +11,8 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('OAuthClientApi')
 export class OAuthClientApi {
-  @inject('AppApiOAuthDal') protected readonly dal: AppApiOAuthDal;
-  @inject('AuthService') protected readonly authService: AuthService;
+  @inject('AppApiOAuthDal') protected readonly dal!: AppApiOAuthDal;
+  @inject('AuthService') protected readonly authService!: AuthService;
 
   /**
    * This API returns a list of supported third-party applications, where a user may obtain authorization.
@@ -40,7 +40,7 @@ export class OAuthClientApi {
       locationId: number;
     },
   ): Promise<ApiResponseBase> {
-    return this.dal.delete(`cloud/json/authorize/${encodeURIComponent(applicationId.toString())}`, { params: params });
+    return this.dal.delete(`cloud/json/authorize/${encodeURIComponent(applicationId.toString())}`, {params: params});
   }
 
   /**
@@ -64,6 +64,6 @@ export class OAuthClientApi {
       brand?: string;
     },
   ): Promise<string> {
-    return this.dal.get(`auth/authorize/${encodeURIComponent(appId.toString())}`, { params: params });
+    return this.dal.get(`auth/authorize/${encodeURIComponent(appId.toString())}`, {params: params});
   }
 }

@@ -22,10 +22,10 @@ import { WsHub } from '../../modules/wsHub/wsHub';
 
 @injectable('LocationService')
 export class LocationService extends BaseService {
-  @inject('AuthService') protected readonly authService: AuthService;
-  @inject('LocationsApi') protected readonly locationsApi: LocationsApi;
-  @inject('UserService') protected readonly userService: UserService;
-  @inject('WsHub') protected readonly wsHub: WsHub;
+  @inject('AuthService') protected readonly authService!: AuthService;
+  @inject('LocationsApi') protected readonly locationsApi!: LocationsApi;
+  @inject('UserService') protected readonly userService!: UserService;
+  @inject('WsHub') protected readonly wsHub!: WsHub;
 
   constructor() {
     super();
@@ -68,7 +68,7 @@ export class LocationService extends BaseService {
    * @returns {Promise<CountriesList>}
    */
   public getCountries(countryCode?: string | string[]): Promise<CountriesList> {
-    return this.locationsApi.getCountries({ sortCollection: 'countries', sortBy: 'name', countryCode });
+    return this.locationsApi.getCountries({sortCollection: 'countries', sortBy: 'name', countryCode});
   }
 
   /**
@@ -78,7 +78,7 @@ export class LocationService extends BaseService {
    * @returns {Promise<ApiResponseBase>}
    */
   public updateLocation(locationId: number, location: LocationModel): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated().then(() => this.locationsApi.editLocation({ location: location }, locationId));
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.editLocation({location: location}, locationId));
   }
 
   /**
@@ -371,8 +371,11 @@ export class LocationService extends BaseService {
   }
 }
 
-export interface CountriesList extends GetCountriesApiResponse {}
+export interface CountriesList extends GetCountriesApiResponse {
+}
 
-export interface SceneUpdateInfo extends ApiResponseBase {}
+export interface SceneUpdateInfo extends ApiResponseBase {
+}
 
-export interface LocationUsers extends GetLocationUsersApiResponse {}
+export interface LocationUsers extends GetLocationUsersApiResponse {
+}

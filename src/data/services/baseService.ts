@@ -2,9 +2,10 @@ import { inject } from '../../modules/common/di';
 import { Logger } from '../../modules/logger/logger';
 
 export class BaseService {
-  @inject('Logger') protected readonly logger: Logger;
+  @inject('Logger') protected readonly logger!: Logger;
 
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * Handles error and returns rejection promise

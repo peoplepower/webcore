@@ -32,45 +32,45 @@ import { QuestionsService } from './data/services/questionsService';
 
 @injectable('WebCoreApis')
 export class WebCoreApis {
-  @inject('AppApi') app: AppApi;
-  @inject('DeviceStreamingApi') devices: DeviceStreamingApi;
-  @inject('BotApi') bot: BotApi;
+  @inject('AppApi') app!: AppApi;
+  @inject('DeviceStreamingApi') devices!: DeviceStreamingApi;
+  @inject('BotApi') bot!: BotApi;
 }
 
 @injectable('WebCoreServices')
 export class WebCoreServices {
-  @inject('AuthService') auth: AuthService;
-  @inject('OperationTokenService') operationToken: OperationTokenService;
-  @inject('CloudConfigService') cloudConfig: CloudConfigService;
-  @inject('OfflineService') offline: OfflineService;
-  @inject('WeatherService') weather: WeatherService;
-  @inject('UserService') user: UserService;
-  @inject('DeviceService') device: DeviceService;
-  @inject('LocationService') location: LocationService;
-  @inject('Logger') logger: Logger;
-  @inject('UserLocalStorage') userLocalStorage: UserLocalStorage;
-  @inject('WcStorage') localStorage: WcStorage;
-  @inject('SystemPropertiesService') systemProperties: SystemPropertiesService;
-  @inject('DeviceStreamingService') deviceStreaming: DeviceStreamingService;
-  @inject('MessagingService') messaging: MessagingService;
-  @inject('NarrativeService') narrative: NarrativeService;
-  @inject('ProfessionalMonitoringService') professionalMonitoring: ProfessionalMonitoringService;
-  @inject('RulesService') rules: RulesService;
-  @inject('SubscriptionsService') subscriptions: SubscriptionsService;
-  @inject('BotService') bots: BotService;
-  @inject('StoriesService') stories: StoriesService;
-  @inject('FilesService') files: FilesService;
-  @inject('QueryService') query: QueryService;
-  @inject('QuestionsService') questions: QuestionsService;
+  @inject('AuthService') auth!: AuthService;
+  @inject('OperationTokenService') operationToken!: OperationTokenService;
+  @inject('CloudConfigService') cloudConfig!: CloudConfigService;
+  @inject('OfflineService') offline!: OfflineService;
+  @inject('WeatherService') weather!: WeatherService;
+  @inject('UserService') user!: UserService;
+  @inject('DeviceService') device!: DeviceService;
+  @inject('LocationService') location!: LocationService;
+  @inject('Logger') logger!: Logger;
+  @inject('UserLocalStorage') userLocalStorage!: UserLocalStorage;
+  @inject('WcStorage') localStorage!: WcStorage;
+  @inject('SystemPropertiesService') systemProperties!: SystemPropertiesService;
+  @inject('DeviceStreamingService') deviceStreaming!: DeviceStreamingService;
+  @inject('MessagingService') messaging!: MessagingService;
+  @inject('NarrativeService') narrative!: NarrativeService;
+  @inject('ProfessionalMonitoringService') professionalMonitoring!: ProfessionalMonitoringService;
+  @inject('RulesService') rules!: RulesService;
+  @inject('SubscriptionsService') subscriptions!: SubscriptionsService;
+  @inject('BotService') bots!: BotService;
+  @inject('StoriesService') stories!: StoriesService;
+  @inject('FilesService') files!: FilesService;
+  @inject('QueryService') query!: QueryService;
+  @inject('QuestionsService') questions!: QuestionsService;
 }
 
 @injectable('WebCore')
 export class WebCore {
-  @inject('WebCoreApis') public api: WebCoreApis;
-  @inject('WebCoreServices') public services: WebCoreServices;
+  @inject('WebCoreApis') public api!: WebCoreApis;
+  @inject('WebCoreServices') public services!: WebCoreServices;
 
-  @inject('Tuner') private tuner: Tuner;
-  @inject('Envir') private envir: Envir;
+  @inject('Tuner') private tuner!: Tuner;
+  @inject('Envir') private envir!: Envir;
 
   constructor(environment?: Environment, config?: WebCoreConfig) {
     if (environment && config) {

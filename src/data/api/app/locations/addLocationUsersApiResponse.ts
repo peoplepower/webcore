@@ -1,7 +1,8 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { LocationAccessLevel, LocationNotificationsCategory } from './getLocationUsersApiResponse';
 
-export interface AddLocationUsersApiResponse extends ApiResponseBase {}
+export interface AddLocationUsersApiResponse extends ApiResponseBase {
+}
 
 export interface LocationUsersModel {
   users: Array<{

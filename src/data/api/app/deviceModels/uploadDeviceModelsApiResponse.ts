@@ -1,6 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface UploadDeviceModelsApiResponse extends ApiResponseBase {}
+export interface UploadDeviceModelsApiResponse extends ApiResponseBase {
+}
 
 export interface DeviceModelsModel {
   categories: Array<{

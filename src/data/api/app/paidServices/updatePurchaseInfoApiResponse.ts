@@ -1,6 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface UpdatePurchaseInfoApiResponse extends ApiResponseBase {}
+export interface UpdatePurchaseInfoApiResponse extends ApiResponseBase {
+}
 
 export interface UpdatePurchaseInfoModel {
   subscriptionId?: string;

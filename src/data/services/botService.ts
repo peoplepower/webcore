@@ -13,8 +13,8 @@ import { DataStreamMessage, DataStreamScope } from '../api/bot/endUserBotShop/da
 
 @injectable('BotService')
 export class BotService extends BaseService {
-  @inject('AuthService') protected readonly authService: AuthService;
-  @inject('BotShopApi') protected readonly botShopApi: BotShopApi;
+  @inject('AuthService') protected readonly authService!: AuthService;
+  @inject('BotShopApi') protected readonly botShopApi!: BotShopApi;
 
   constructor() {
     super();
@@ -265,6 +265,8 @@ export class BotService extends BaseService {
   }
 }
 
-export interface BotsList extends SearchBotsApiResponse {}
+export interface BotsList extends SearchBotsApiResponse {
+}
 
-export interface BotInformation extends GetBotInfoApiResponse {}
+export interface BotInformation extends GetBotInfoApiResponse {
+}

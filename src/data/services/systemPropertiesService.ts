@@ -4,7 +4,7 @@ import { BaseService } from './baseService';
 
 @injectable('SystemPropertiesService')
 export class SystemPropertiesService extends BaseService {
-  @inject('SystemAndUserPropertiesApi') protected readonly systemAndUserPropertiesApi: SystemAndUserPropertiesApi;
+  @inject('SystemAndUserPropertiesApi') protected readonly systemAndUserPropertiesApi!: SystemAndUserPropertiesApi;
 
   constructor() {
     super();

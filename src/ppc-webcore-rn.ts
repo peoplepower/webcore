@@ -2,7 +2,9 @@ import { WebCore } from './ppc-webcore';
 import { LocalStorageProvider } from './modules/localStorage/localStorage';
 import { Environment } from './modules/envir/environment';
 import { WebCoreConfig } from './modules/tuner/config';
+// @ts-ignore
 import { AsyncStorage } from 'react-native';
+// @ts-ignore
 import { decode, encode } from 'base-64';
 
 // You also will need btoa polyfill

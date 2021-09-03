@@ -13,7 +13,7 @@ const DEFAULT_MAX_LEVEL = LogLevel.Emergency;
 
 @injectable('Logger')
 export class Logger {
-  @inject('Tuner') private readonly tuner: Tuner;
+  @inject('Tuner') private readonly tuner!: Tuner;
 
   /**
    * Array of Appenders
@@ -21,7 +21,7 @@ export class Logger {
    */
   protected appenders: Appender[] = [];
 
-  protected config: LoggerConfig;
+  protected config!: LoggerConfig;
 
   constructor() {
     if (this.tuner.config && this.tuner.config.logger) {
@@ -76,7 +76,7 @@ export class Logger {
   }
 
   private log(level: LogLevel, ...args: any[]) {
-    if (this.config.maxLevel <= level && level <= this.config.minLevel && this.appenders) {
+    if (this.config.maxLevel! <= level && level <= this.config.minLevel! && this.appenders) {
       for (let i = 0; i < this.appenders.length; i++) {
         this.appenders[i].log(level, ...args);
       }

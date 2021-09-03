@@ -11,7 +11,7 @@ import { OfflineInterceptor } from '../../dal/interceptors/offlineInterceptor';
 
 @injectable('AppApiOAuthDal')
 export class AppApiOAuthDal extends Dal {
-  @inject('CloudConfigService') protected readonly cloudConfigService: CloudConfigService;
+  @inject('CloudConfigService') protected readonly cloudConfigService!: CloudConfigService;
 
   constructor() {
     const offlineInterceptor = new OfflineInterceptor();

@@ -12,7 +12,7 @@ const DEFAULT_CONFIG_NAME = 'default';
  */
 @injectable('Tuner')
 export class Tuner {
-  @inject('Envir') private readonly envir: Envir;
+  @inject('Envir') private readonly envir!: Envir;
 
   private configs: {
     // actually it's `[env: Environment]: WebCoreConfig`, but typescript doesn't support this.
@@ -20,7 +20,7 @@ export class Tuner {
     [env: string]: WebCoreConfig[];
   };
 
-  private currentConfig: WebCoreConfig;
+  private currentConfig!: WebCoreConfig;
 
   get config(): WebCoreConfig {
     return this.currentConfig;
@@ -42,7 +42,7 @@ export class Tuner {
   private loadConfig() {
     let defaultConfigs = this.configs[DEFAULT_CONFIG_NAME] || [];
     let envConfigs = this.configs[this.envir.environment] || [];
-    let configs = [].concat(defaultConfigs, envConfigs);
+    let configs = [...defaultConfigs, ...envConfigs];
     let newCfg = <WebCoreConfig>Object.assign({}, ...configs);
     if (!this.checkJsonEquality(newCfg, this.currentConfig)) {
       this.currentConfig = newCfg;

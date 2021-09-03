@@ -13,8 +13,8 @@ import { GetNarrativesApiResponse, NarrativeType } from '../api/app/locations/ge
 
 @injectable('NarrativeService')
 export class NarrativeService extends BaseService {
-  @inject('AuthService') protected readonly authService: AuthService;
-  @inject('LocationsApi') protected readonly locationsApi: LocationsApi;
+  @inject('AuthService') protected readonly authService!: AuthService;
+  @inject('LocationsApi') protected readonly locationsApi!: LocationsApi;
 
   /**
    * Create narrative. When a new narrative is created, the API returns the new record ID and narrativeTime in milliseconds.
@@ -113,6 +113,8 @@ export class NarrativeService extends BaseService {
   }
 }
 
-export interface NarrativeInfo extends CreateOrUpdateNarrativeApiResponse {}
+export interface NarrativeInfo extends CreateOrUpdateNarrativeApiResponse {
+}
 
-export interface NarrativesSearchResult extends GetNarrativesApiResponse {}
+export interface NarrativesSearchResult extends GetNarrativesApiResponse {
+}

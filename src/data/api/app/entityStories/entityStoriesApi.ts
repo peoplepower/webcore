@@ -11,7 +11,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('EntityStoriesApi')
 export class EntityStoriesApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Gets entity stories.
@@ -36,7 +36,7 @@ export class EntityStoriesApi {
     hidden?: boolean;
     searchBy?: string;
   }): Promise<GetStoriesApiResponse> {
-    return this.dal.get('stories', { params: params });
+    return this.dal.get('stories', {params: params});
   }
 
   /**
@@ -58,6 +58,6 @@ export class EntityStoriesApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteStory(storyId: string): Promise<ApiResponseBase> {
-    return this.dal.delete('stories', { params: { storyId: storyId } });
+    return this.dal.delete('stories', {params: {storyId: storyId}});
   }
 }

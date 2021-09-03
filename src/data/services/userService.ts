@@ -15,9 +15,9 @@ import { GetSignaturesApiResponse } from '../api/app/userAccounts/getSignaturesA
 export class UserService extends BaseService {
   public readonly onCurrentUserInfoUpdated: LiteEvent<UserInformation> = new LiteEvent<UserInformation>();
 
-  @inject('AuthService') protected readonly authService: AuthService;
-  @inject('UserAccountsApi') protected readonly userAccountsApi: UserAccountsApi;
-  @inject('SystemAndUserPropertiesApi') protected readonly systemAndUserPropertiesApi: SystemAndUserPropertiesApi;
+  @inject('AuthService') protected readonly authService!: AuthService;
+  @inject('UserAccountsApi') protected readonly userAccountsApi!: UserAccountsApi;
+  @inject('SystemAndUserPropertiesApi') protected readonly systemAndUserPropertiesApi!: SystemAndUserPropertiesApi;
 
   private currentUserInfo: UserInformation | undefined;
   private initCurrentUserInfoPromise: Promise<UserInformation> | undefined;
@@ -84,7 +84,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UpdateUserResponse>}
    */
   public updateUserInfo(user: UserModel, userId?: number): Promise<UpdateUserResponse> {
-    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.updateUser({ user: user }, userId));
+    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.updateUser({user: user}, userId));
   }
 
   /**
@@ -145,7 +145,7 @@ export class UserService extends BaseService {
    */
   public getCurrentUserProperties(): Promise<UserProperties> {
     return this.getCurrentUserInfo().then((userInfo) => {
-      return this.systemAndUserPropertiesApi.getUserProperties({ userId: userInfo.user.id });
+      return this.systemAndUserPropertiesApi.getUserProperties({userId: userInfo.user.id});
     });
   }
 
@@ -156,7 +156,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UserProperties>}
    */
   public getUserProperties(userId?: number, propertyName?: string | string[]): Promise<UserProperties> {
-    return this.systemAndUserPropertiesApi.getUserProperties({ name: propertyName, userId: userId });
+    return this.systemAndUserPropertiesApi.getUserProperties({name: propertyName, userId: userId});
   }
 
   /**
@@ -175,7 +175,7 @@ export class UserService extends BaseService {
    * @returns {Promise<ApiResponseBase>}
    */
   public updateUserProperties(properties: Array<{ name: string; content: any }>, userId?: number): Promise<ApiResponseBase> {
-    return this.systemAndUserPropertiesApi.updateUserProperties({ property: properties }, { userId: userId });
+    return this.systemAndUserPropertiesApi.updateUserProperties({property: properties}, {userId: userId});
   }
 
   // #region -------------------- Terms Of Service --------------------
@@ -243,14 +243,20 @@ export class UserService extends BaseService {
   }
 }
 
-export interface UserProperties extends GetUserPropertiesApiResponse {}
+export interface UserProperties extends GetUserPropertiesApiResponse {
+}
 
-export interface UpdateUserResponse extends UpdateUserApiResponse {}
+export interface UpdateUserResponse extends UpdateUserApiResponse {
+}
 
-export interface UserInformation extends GetUserInformationApiResponse {}
+export interface UserInformation extends GetUserInformationApiResponse {
+}
 
-export interface RecoverPasswordInfo extends ApiResponseBase {}
+export interface RecoverPasswordInfo extends ApiResponseBase {
+}
 
-export interface UserCreationResult extends CreateUserAndLocationApiResponse {}
+export interface UserCreationResult extends CreateUserAndLocationApiResponse {
+}
 
-export interface UserProperties extends GetUserPropertiesApiResponse {}
+export interface UserProperties extends GetUserPropertiesApiResponse {
+}

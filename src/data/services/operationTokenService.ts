@@ -4,7 +4,8 @@ import { inject, injectable } from '../../modules/common/di';
 
 @injectable('OperationTokenService')
 export class OperationTokenService {
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * Get new OperationTokenProvider. After creation it will refresh Operation Token when expired, until getToken()
@@ -24,7 +25,7 @@ export class OperationTokenService {
  * tokens.
  */
 export class OperationTokenProvider {
-  @inject('AuthApi') protected readonly authApi: AuthApi;
+  @inject('AuthApi') protected readonly authApi!: AuthApi;
 
   private getTokenFromApiPromise: Promise<GetOperationTokenApiResponse> | undefined;
   private isStopped: boolean;

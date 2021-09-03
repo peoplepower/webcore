@@ -6,7 +6,7 @@ import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from '../api/app/use
 
 @injectable('QuestionsService')
 export class QuestionsService extends BaseService {
-  @inject('UserCommunicationsApi') protected readonly userCommunicationsApi: UserCommunicationsApi;
+  @inject('UserCommunicationsApi') protected readonly userCommunicationsApi!: UserCommunicationsApi;
 
   /**
    * Retrieve questions for specific location.

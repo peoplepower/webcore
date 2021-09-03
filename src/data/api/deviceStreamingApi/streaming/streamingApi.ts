@@ -8,7 +8,7 @@ import { GetStreamingSessionApiResponse } from './GetStreamingSessionApiResponse
  */
 @injectable('StreamingApi')
 export class StreamingApi {
-  @inject('DeviceStreamingApiDal') protected readonly dal: DeviceStreamingApiDal;
+  @inject('DeviceStreamingApiDal') protected readonly dal!: DeviceStreamingApiDal;
 
   /**
    * Get device streaming server info.

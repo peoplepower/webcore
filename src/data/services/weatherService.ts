@@ -6,11 +6,12 @@ import { Logger } from '../../modules/logger/logger';
 
 @injectable('WeatherService')
 export class WeatherService {
-  @inject('WeatherApi') protected readonly weatherApi: WeatherApi;
-  @inject('UserService') protected readonly userService: UserService;
-  @inject('Logger') private readonly logger: Logger;
+  @inject('WeatherApi') protected readonly weatherApi!: WeatherApi;
+  @inject('UserService') protected readonly userService!: UserService;
+  @inject('Logger') private readonly logger!: Logger;
 
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * Get weather info for current user location
@@ -34,4 +35,5 @@ export class WeatherService {
   }
 }
 
-export interface WeatherResponse extends GetCurrentWeatherApiResponse {}
+export interface WeatherResponse extends GetCurrentWeatherApiResponse {
+}

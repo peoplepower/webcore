@@ -20,20 +20,20 @@ export interface ProvideNewPurchaseInfoApiResponse extends ApiResponseBase {
      */
     userId?: number;
     /**
-    * Type of subscription
-    */
+     * Type of subscription
+     */
     type: SubscriptionType;
     /**
-    * Type of payment
-    */
+     * Type of payment
+     */
     paymentType: PaymentType;
     /**
      * Subscription status
      */
     status: SubscriptionStatus;
     /**
-    * Issue date of the subscription
-    */
+     * Issue date of the subscription
+     */
     issueDate: string;
     /**
      * Issue date of the subscription as milliseconds
@@ -68,8 +68,8 @@ export interface ProvideNewPurchaseInfoApiResponse extends ApiResponseBase {
      */
     subscriptionId: string;
     /**
-    * Indicates whether it is paymeny gateway sandbox or not
-    */
+     * Indicates whether it is paymeny gateway sandbox or not
+     */
     sandbox?: boolean;
     /**
      * Name of the application (brand) in terms of which subscription was purchased

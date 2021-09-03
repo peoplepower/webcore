@@ -4,7 +4,7 @@ import { Deferred } from '../../common/deferred';
 import { WsPacketGoal } from './wsPacketGoal';
 
 export class WsPacket {
-  public response: WsResponseBase;
+  public response?: WsResponseBase;
 
   public readonly created: Date = new Date();
   public sent?: Date;

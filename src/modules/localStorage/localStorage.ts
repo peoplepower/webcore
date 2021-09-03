@@ -4,8 +4,8 @@ import { Tuner } from '../tuner/tuner';
 
 @injectable('WcStorage')
 export class WcStorage {
-  @inject('Logger') private readonly logger: Logger;
-  @inject('Tuner') private readonly tuner: Tuner;
+  @inject('Logger') private readonly logger!: Logger;
+  @inject('Tuner') private readonly tuner!: Tuner;
 
   private ls: LocalStorageProvider = this.tuner?.config?.localStorage || localStorage;
 

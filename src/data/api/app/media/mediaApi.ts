@@ -11,7 +11,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('MediaApi')
 export class MediaApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Gets media.
@@ -22,7 +22,7 @@ export class MediaApi {
    * @returns {Promise<GetMediaApiResponse>}
    */
   getMedia(params?: { mediaId?: string }): Promise<GetMediaApiResponse> {
-    return this.dal.get('media', { params: params });
+    return this.dal.get('media', {params: params});
   }
 
   /**
@@ -44,6 +44,6 @@ export class MediaApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteMedia(params?: { mediaId?: string | string[] }): Promise<ApiResponseBase> {
-    return this.dal.delete('media', { params: params });
+    return this.dal.delete('media', {params: params});
   }
 }

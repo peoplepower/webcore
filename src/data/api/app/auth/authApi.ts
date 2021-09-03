@@ -11,7 +11,7 @@ import { PasscodeMessagePrefix, PasscodeNotificationType, SendPasscodeApiRespons
  */
 @injectable('AuthApi')
 export class AuthApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Generate a new operation token, which can be used in other API calls instead of optional API key.

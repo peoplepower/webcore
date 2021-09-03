@@ -11,9 +11,9 @@ import { ApiResponseBase } from '../models/apiResponseBase';
 
 @injectable('RulesService')
 export class RulesService extends BaseService {
-  @inject('AuthService') private readonly authService: AuthService;
-  @inject('UserService') private readonly userService: UserService;
-  @inject('RulesEngineApi') private readonly rulesEngineApi: RulesEngineApi;
+  @inject('AuthService') private readonly authService!: AuthService;
+  @inject('UserService') private readonly userService!: UserService;
+  @inject('RulesEngineApi') private readonly rulesEngineApi!: RulesEngineApi;
 
   constructor() {
     super();
@@ -155,4 +155,5 @@ export class RulesService extends BaseService {
   }
 }
 
-export interface Rules extends GetRulesApiResponse {}
+export interface Rules extends GetRulesApiResponse {
+}

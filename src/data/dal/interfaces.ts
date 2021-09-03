@@ -1,6 +1,7 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export interface DalResponsePromise extends Promise<any> {}
+export interface DalResponsePromise extends Promise<any> {
+}
 
 export interface DalRequestConfig extends AxiosRequestConfig {
   /**

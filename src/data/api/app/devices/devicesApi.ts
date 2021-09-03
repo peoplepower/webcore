@@ -29,7 +29,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('DevicesApi')
 export class DevicesApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Registers a device.
@@ -49,8 +49,8 @@ export class DevicesApi {
     params?: RegisterDeviceParams,
     deviceActivationKey?: string,
   ): Promise<RegisterDeviceApiResponse> {
-    let headers = deviceActivationKey ? { ACTIVATION_KEY: deviceActivationKey, noAuth: true } : {};
-    return this.dal.post('devices', properties, { params: params, headers: headers });
+    let headers = deviceActivationKey ? {ACTIVATION_KEY: deviceActivationKey, noAuth: true} : {};
+    return this.dal.post('devices', properties, {params: params, headers: headers});
   }
 
   // #region ------------------ Manage Single Device -------------------
@@ -76,7 +76,7 @@ export class DevicesApi {
       checkConnected?: boolean;
     },
   ): Promise<GetDeviceByIdApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}`, { params: params });
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}`, {params: params});
   }
 
   /**
@@ -156,7 +156,7 @@ export class DevicesApi {
     sortBy?: string;
     getTags?: boolean;
   }): Promise<GetDevicesListApiResponse> {
-    return this.dal.get('devices', { params: params });
+    return this.dal.get('devices', {params: params});
   }
 
   /**
@@ -184,7 +184,7 @@ export class DevicesApi {
     keepSlaveOnGateway?: boolean;
     clear?: boolean;
   }): Promise<ApiResponseBase> {
-    return this.dal.delete('devices', { params: params });
+    return this.dal.delete('devices', {params: params});
   }
 
   // #endregion
@@ -242,7 +242,7 @@ export class DevicesApi {
    * @returns {Promise<GetDeviceActivationInfoApiResponse>}
    */
   getDeviceActivationInfo(deviceType: number, params?: { sendEmail?: boolean }): Promise<GetDeviceActivationInfoApiResponse> {
-    return this.dal.get(`deviceActivation/${encodeURIComponent(deviceType.toString())}`, { params: params });
+    return this.dal.get(`deviceActivation/${encodeURIComponent(deviceType.toString())}`, {params: params});
   }
 
   /**
@@ -267,7 +267,7 @@ export class DevicesApi {
   ): Promise<GetDeviceActivationInfoAtLocationApiResponse> {
     return this.dal.get(
       `locations/${encodeURIComponent(locationId.toString())}/deviceActivation/${encodeURIComponent(deviceType.toString())}`,
-      { params: params },
+      {params: params},
     );
   }
 
@@ -296,7 +296,7 @@ export class DevicesApi {
       index?: number;
     },
   ): Promise<GetDevicePropertiesApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/properties`, { params: params });
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/properties`, {params: params});
   }
 
   /**
@@ -320,7 +320,7 @@ export class DevicesApi {
       userId?: number;
     },
   ): Promise<ApiResponseBase> {
-    return this.dal.delete(`devices/${encodeURIComponent(deviceId)}/properties`, { params: params });
+    return this.dal.delete(`devices/${encodeURIComponent(deviceId)}/properties`, {params: params});
   }
 
   /**
@@ -337,7 +337,7 @@ export class DevicesApi {
       return Promise.reject(new CoreApiError('No properties specified to be updated'));
     }
 
-    return this.dal.post(`devices/${encodeURIComponent(deviceId)}/properties`, model, { params: { locationId: locationId } });
+    return this.dal.post(`devices/${encodeURIComponent(deviceId)}/properties`, model, {params: {locationId: locationId}});
   }
 
   // #endregion
@@ -362,7 +362,7 @@ export class DevicesApi {
    * @returns {Promise<GetFirmwareJobsApiResponse>}
    */
   getFirmwareJobs(params?: { deviceId?: string; index?: string; userId?: number }): Promise<GetFirmwareJobsApiResponse> {
-    return this.dal.get('fwupdate', { params: params });
+    return this.dal.get('fwupdate', {params: params});
   }
 
   /**
@@ -387,7 +387,7 @@ export class DevicesApi {
     startDate?: string;
     userId?: number;
   }): Promise<SetFirmwareUpdateStatusApiResponse> {
-    return this.dal.put('fwupdate', {}, { params: params });
+    return this.dal.put('fwupdate', {}, {params: params});
   }
 
   // #endregion

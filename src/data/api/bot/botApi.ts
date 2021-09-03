@@ -4,6 +4,6 @@ import { BotShopApi } from './endUserBotShop/endUserBotShopApi';
 
 @injectable('BotApi')
 export class BotApi {
-  @inject('BotServerApi') public readonly botServerApi: BotServerApi;
-  @inject('BotShopApi') public readonly botShopApi: BotShopApi;
+  @inject('BotServerApi') public readonly botServerApi!: BotServerApi;
+  @inject('BotShopApi') public readonly botShopApi!: BotShopApi;
 }

@@ -10,7 +10,8 @@ export enum LocationType {
   Office = 25,
 }
 
-export interface EditLocationApiResponse extends ApiResponseBase {}
+export interface EditLocationApiResponse extends ApiResponseBase {
+}
 
 export interface LocationModel {
   name?: string;

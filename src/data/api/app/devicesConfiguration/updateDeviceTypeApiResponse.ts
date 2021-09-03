@@ -1,3 +1,4 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface UpdateDeviceTypeApiResponse extends ApiResponseBase {}
+export interface UpdateDeviceTypeApiResponse extends ApiResponseBase {
+}

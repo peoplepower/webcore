@@ -8,8 +8,8 @@ import { UpdateCallCenterApiResponse, UpdateCallCenterModel } from '../api/app/p
 
 @injectable('ProfessionalMonitoringService')
 export class ProfessionalMonitoringService extends BaseService {
-  @inject('AuthService') private readonly authService: AuthService;
-  @inject('ProfessionalMonitoringApi') protected readonly professionalMonitoringApi: ProfessionalMonitoringApi;
+  @inject('AuthService') private readonly authService!: AuthService;
+  @inject('ProfessionalMonitoringApi') protected readonly professionalMonitoringApi!: ProfessionalMonitoringApi;
 
   constructor() {
     super();
@@ -76,10 +76,14 @@ export class ProfessionalMonitoringService extends BaseService {
   }
 }
 
-export interface CallCenter extends GetCallCenterApiResponse {}
+export interface CallCenter extends GetCallCenterApiResponse {
+}
 
-export interface UpdateCallCenter extends UpdateCallCenterModel {}
+export interface UpdateCallCenter extends UpdateCallCenterModel {
+}
 
-export interface CallCenterAlerts extends GetCallCenterAlertsApiResponse {}
+export interface CallCenterAlerts extends GetCallCenterAlertsApiResponse {
+}
 
-export interface UpdateCallCenterResponse extends UpdateCallCenterApiResponse {}
+export interface UpdateCallCenterResponse extends UpdateCallCenterApiResponse {
+}

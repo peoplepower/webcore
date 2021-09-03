@@ -14,7 +14,7 @@ import { UpdateMessageModel } from '../api/app/userCommunications/updateMessageA
  */
 @injectable('MessagingService')
 export class MessagingService extends BaseService {
-  @inject('UserCommunicationsApi') protected readonly userCommunicationsApi: UserCommunicationsApi;
+  @inject('UserCommunicationsApi') protected readonly userCommunicationsApi!: UserCommunicationsApi;
 
   constructor() {
     super();
@@ -133,7 +133,7 @@ export class MessagingService extends BaseService {
       return this.reject('Message to be sent can not be null.');
     }
 
-    return this.userCommunicationsApi.sendMessage({ message: message });
+    return this.userCommunicationsApi.sendMessage({message: message});
   }
 
   /**
@@ -154,7 +154,7 @@ export class MessagingService extends BaseService {
       return this.reject('Reply message to be sent can not be null.');
     }
 
-    return this.userCommunicationsApi.replyToMessage(replyToMessageId, { message: reply });
+    return this.userCommunicationsApi.replyToMessage(replyToMessageId, {message: reply});
   }
 
   /**
@@ -179,8 +179,8 @@ export class MessagingService extends BaseService {
       return this.reject(`messageId parameter value is incorrect: ${messageId}`);
     }
 
-    const messageModel: UpdateMessageModel | undefined = messageProperties ? { message: messageProperties } : undefined;
-    return this.userCommunicationsApi.updateMessage(messageId, messageModel, { read: markAsRead });
+    const messageModel: UpdateMessageModel | undefined = messageProperties ? {message: messageProperties} : undefined;
+    return this.userCommunicationsApi.updateMessage(messageId, messageModel, {read: markAsRead});
   }
 
   /**
@@ -205,7 +205,7 @@ export class MessagingService extends BaseService {
     if (userId && (isNaN(userId) || userId < 1)) {
       return this.reject(`userId parameter value is incorrect: ${userId}`);
     }
-    let params = userId ? { userId: userId } : undefined;
+    let params = userId ? {userId: userId} : undefined;
     return this.userCommunicationsApi.getNotificationSubscriptions(params);
   }
 
@@ -274,7 +274,7 @@ export class MessagingService extends BaseService {
    * @returns {Promise<RequestSupportApiResponse>}
    */
   public requestSupport(model: RequestSupportModel, appName?: string): Promise<RequestSupportApiResponse> {
-    let params = appName ? { appName: appName } : undefined;
+    let params = appName ? {appName: appName} : undefined;
     return this.userCommunicationsApi.requestSupport(model, params);
   }
 }

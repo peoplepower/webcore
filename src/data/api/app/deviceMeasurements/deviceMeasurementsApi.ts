@@ -15,7 +15,7 @@ import { CommandParametersModel, SendCommandToDeviceApiResponse } from './sendCo
  */
 @injectable('DeviceMeasurementsApi')
 export class DeviceMeasurementsApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Gets the history of the alerts either for particular device and dates or for all of them.
@@ -38,7 +38,7 @@ export class DeviceMeasurementsApi {
     deviceId?: string;
     userId?: number;
   }): Promise<GetAlertsHistoryApiResponse> {
-    return this.dal.get('alerts', { params: params });
+    return this.dal.get('alerts', {params: params});
   }
 
   /**
@@ -98,7 +98,7 @@ export class DeviceMeasurementsApi {
       shared?: boolean;
     },
   ): Promise<GetCurrentDeviceMeasurementsApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parameters`, { params: params });
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parameters`, {params: params});
   }
 
   /**
@@ -124,7 +124,7 @@ export class DeviceMeasurementsApi {
       shared?: boolean;
     },
   ): Promise<SendCommandToDeviceApiResponse> {
-    return this.dal.put(`devices/${encodeURIComponent(deviceId)}/parameters`, commandParameters, { params: params });
+    return this.dal.put(`devices/${encodeURIComponent(deviceId)}/parameters`, commandParameters, {params: params});
   }
 
   /**
@@ -166,6 +166,6 @@ export class DeviceMeasurementsApi {
       rangeOnly?: boolean;
     },
   ): Promise<GetMeasurementsHistoryApiResponse> {
-    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parametersByDate/${encodeURIComponent(startDate)}`, { params: params });
+    return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parametersByDate/${encodeURIComponent(startDate)}`, {params: params});
   }
 }

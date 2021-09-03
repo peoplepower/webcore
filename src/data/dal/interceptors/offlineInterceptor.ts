@@ -45,11 +45,12 @@ const RETRY_COUNT_LIMIT = 3;
  * Interceptor that will cache requests when we are offline or server is down
  */
 export class OfflineInterceptor implements Interceptor {
-  @inject('OfflineService') protected readonly offlineService: OfflineService;
+  @inject('OfflineService') protected readonly offlineService!: OfflineService;
 
   public dal: Dal | undefined;
 
-  constructor() {}
+  constructor() {
+  }
 
   request(config: DalRequestConfig): any {
     if (this.offlineService.offline) {

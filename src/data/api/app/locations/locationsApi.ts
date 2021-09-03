@@ -29,7 +29,7 @@ import { GetLocationPrioritiesApiResponse } from './getLocationPrioritiesApiResp
  */
 @injectable('LocationsApi')
 export class LocationsApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Add a new Location to an existing User.
@@ -40,7 +40,7 @@ export class LocationsApi {
    * @returns {Promise<AddNewLocationToUserApiResponse>}
    */
   addNewLocationToUser(location: AddNewLocationToUserModel, userId?: number): Promise<AddNewLocationToUserApiResponse> {
-    return this.dal.post('location', location, { params: { userId: userId } });
+    return this.dal.post('location', location, {params: {userId: userId}});
   }
 
   /**
@@ -118,7 +118,7 @@ export class LocationsApi {
     sortCollection?: string;
     sortBy?: string;
   }): Promise<GetCountriesApiResponse> {
-    return this.dal.get('countries', { params: params });
+    return this.dal.get('countries', {params: params});
   }
 
   // #region --------------------- Location Users -----------------------
@@ -136,7 +136,7 @@ export class LocationsApi {
    */
   getLocationUsers(locationId: number, analyticKey?: string): Promise<GetLocationUsersApiResponse> {
     return this.dal.get(`location/${encodeURIComponent(locationId.toString())}/users`, {
-      headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
+      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
     });
   }
 
@@ -247,10 +247,10 @@ export class LocationsApi {
   ): Promise<CreateOrUpdateNarrativeApiResponse> {
     return this.dal.put(
       `locations/${encodeURIComponent(locationId.toString())}/narratives`,
-      { narrative: narrative },
+      {narrative: narrative},
       {
         params: params,
-        headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
+        headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
       },
     );
   }
@@ -274,7 +274,7 @@ export class LocationsApi {
   ): Promise<ApiResponseBase> {
     return this.dal.delete(`locations/${encodeURIComponent(locationId.toString())}/narratives`, {
       params: params,
-      headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
+      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
     });
   }
 
@@ -318,7 +318,7 @@ export class LocationsApi {
   ): Promise<GetNarrativesApiResponse> {
     return this.dal.get(`locations/${encodeURIComponent(locationId.toString())}/narratives`, {
       params: params,
-      headers: analyticKey ? { ANALYTIC_API_KEY: analyticKey } : {},
+      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
     });
   }
 
@@ -455,7 +455,7 @@ export class LocationsApi {
     files?: boolean;
     rules?: boolean;
   }): Promise<GetLocationTotalsApiResponse> {
-    return this.dal.get('locationTotals', { params: params });
+    return this.dal.get('locationTotals', {params: params});
   }
 
   /**

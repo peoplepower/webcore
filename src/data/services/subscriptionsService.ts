@@ -18,9 +18,9 @@ import { GetUserPaymentProfilesApiResponse } from '../api/app/paidServices/getUs
 
 @injectable('SubscriptionsService')
 export class SubscriptionsService extends BaseService {
-  @inject('AuthService') private readonly authService: AuthService;
-  @inject('UserService') private readonly userService: UserService;
-  @inject('PaidServicesApi') protected readonly paidServicesApi: PaidServicesApi;
+  @inject('AuthService') private readonly authService!: AuthService;
+  @inject('UserService') private readonly userService!: UserService;
+  @inject('PaidServicesApi') protected readonly paidServicesApi!: PaidServicesApi;
 
   constructor() {
     super();
@@ -510,16 +510,23 @@ export class SubscriptionsService extends BaseService {
   }
 }
 
-export interface NewPurchaseInfo extends NewPurchaseInfoModel {}
+export interface NewPurchaseInfo extends NewPurchaseInfoModel {
+}
 
-export interface UpdatePurchaseInfo extends UpdatePurchaseInfoModel {}
+export interface UpdatePurchaseInfo extends UpdatePurchaseInfoModel {
+}
 
-export interface UpgradeSubscriptionInfo extends UpgradeSubscriptionInfoModel {}
+export interface UpgradeSubscriptionInfo extends UpgradeSubscriptionInfoModel {
+}
 
-export interface UserSubscriptionTransactions extends GetSubscriptionTransactionsApiResponse {}
+export interface UserSubscriptionTransactions extends GetSubscriptionTransactionsApiResponse {
+}
 
-export interface ServicePlans extends GetSoftwareSubscriptionsApiResponse {}
+export interface ServicePlans extends GetSoftwareSubscriptionsApiResponse {
+}
 
-export interface Subscriptions extends GetLocationSubscriptionsApiResponse {}
+export interface Subscriptions extends GetLocationSubscriptionsApiResponse {
+}
 
-export interface UserPaymentProfiles extends GetUserPaymentProfilesApiResponse {}
+export interface UserPaymentProfiles extends GetUserPaymentProfilesApiResponse {
+}

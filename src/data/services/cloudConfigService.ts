@@ -16,10 +16,10 @@ const localStorageCurrentCloudKey = 'Main-Cloud';
 
 @injectable('CloudConfigService')
 export class CloudConfigService extends BaseService {
-  @inject('CommonApi') public readonly commonApi: CommonApi;
-  @inject('WcStorage') protected readonly wcStorage: WcStorage;
-  @inject('Logger') protected readonly logger: Logger;
-  @inject('Tuner') private readonly tuner: Tuner;
+  @inject('CommonApi') public readonly commonApi!: CommonApi;
+  @inject('WcStorage') protected readonly wcStorage!: WcStorage;
+  @inject('Logger') protected readonly logger!: Logger;
+  @inject('Tuner') private readonly tuner!: Tuner;
 
   /**
    * Cloud changed event

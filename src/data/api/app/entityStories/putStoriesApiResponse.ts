@@ -1,6 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
-export interface PutStoriesApiResponse extends ApiResponseBase {}
+export interface PutStoriesApiResponse extends ApiResponseBase {
+}
 
 export interface StoriesModel {
   stories: Array<{

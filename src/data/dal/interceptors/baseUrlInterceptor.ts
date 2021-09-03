@@ -11,7 +11,7 @@ import { Path } from '../../../modules/common/path';
 export class BaseUrlInterceptor implements Interceptor {
   private readonly apiBase: string;
 
-  @inject('CloudConfigService') protected readonly cloudConfigService: CloudConfigService;
+  @inject('CloudConfigService') protected readonly cloudConfigService!: CloudConfigService;
 
   /**
    * Creates instance of the BaseUrlInterceptor

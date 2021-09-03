@@ -48,21 +48,19 @@ export interface UnsubscribeWsResponse extends WsResponseBase {
 
 export interface StatusWsResponse extends WsResponseBase {
   goal: 5;
-  subscriptions: Array<
-    {
-      /**
-       * Request ID, which made this subscription
-       */
-      requestId: string;
+  subscriptions: Array<{
+    /**
+     * Request ID, which made this subscription
+     */
+    requestId: string;
 
-      /**
-       * Subscription type
-       */
-      type: WsSubscriptionType;
+    /**
+     * Subscription type
+     */
+    type: WsSubscriptionType;
 
-      // Other fields here (subscription params)
-    } & WsSubscriptionParams
-  >;
+    // Other fields here (subscription params)
+  } & WsSubscriptionParams>;
 }
 
 /**

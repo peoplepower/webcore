@@ -79,4 +79,5 @@ export interface GetForecastApiResponse extends ApiResponseBase {
   };
 }
 
-export interface GetForecastByGeocodeApiResponse extends GetForecastApiResponse {}
+export interface GetForecastByGeocodeApiResponse extends GetForecastApiResponse {
+}

@@ -81,4 +81,5 @@ export interface GetCurrentWeatherApiResponse extends ApiResponseBase {
   };
 }
 
-export interface GetCurrentWeatherByGeocodeApiResponse extends GetCurrentWeatherApiResponse {}
+export interface GetCurrentWeatherByGeocodeApiResponse extends GetCurrentWeatherApiResponse {
+}

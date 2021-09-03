@@ -7,13 +7,14 @@ import { inject } from '../../../modules/common/di';
  * Interceptor automatically adding the "API_KEY" authorisation header
  */
 export class AuthInterceptor implements Interceptor {
-  @inject('AuthService') protected readonly authService: AuthService;
+  @inject('AuthService') protected readonly authService!: AuthService;
 
   // http://docs.iotapps.apiary.io/reference/login-and-logout/login/login-by-username-and-password
   // http://docs.iotapps.apiary.io/reference/login-and-logout/login-with-an-existing-api-key
   // http://docs.iotapps.apiary.io/reference/login-and-logout/operation-token/get-operation-token
 
-  constructor() {}
+  constructor() {
+  }
 
   request(config: DalRequestConfig): any {
     if (!config.noAuth && (!config.headers || !config.headers['API_KEY']) && this.authService) {

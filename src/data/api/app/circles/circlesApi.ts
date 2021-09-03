@@ -11,7 +11,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  */
 @injectable('CirclesApi')
 export class CirclesApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * The person who creates a Circle is the Administrator, until someone upgrades the Circle into a Premium Circle (or higher).
@@ -38,7 +38,7 @@ export class CirclesApi {
           name: circleName,
         },
       },
-      { params: params },
+      {params: params},
     );
   }
 
@@ -56,7 +56,7 @@ export class CirclesApi {
    * @returns {Promise<GetCirclesApiResponse>}
    */
   getCircles(params?: { circleId?: number; userId?: number }, circleKey?: string): Promise<GetCirclesApiResponse> {
-    return this.dal.get('circles', { params: params, headers: circleKey ? { CIRCLE_KEY: circleKey } : undefined });
+    return this.dal.get('circles', {params: params, headers: circleKey ? {CIRCLE_KEY: circleKey} : undefined});
   }
 
   /**
@@ -77,7 +77,7 @@ export class CirclesApi {
           name: circleName,
         },
       },
-      { params: params },
+      {params: params},
     );
   }
 
@@ -91,7 +91,7 @@ export class CirclesApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteCircle(params: { circleId: number; userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('circles', { params: params });
+    return this.dal.delete('circles', {params: params});
   }
 
   /**
@@ -148,7 +148,7 @@ export class CirclesApi {
           circleUserId: circleUserId,
         },
       },
-      { params: params, headers: circleKey ? { CIRCLE_KEY: circleKey } : undefined },
+      {params: params, headers: circleKey ? {CIRCLE_KEY: circleKey} : undefined},
     );
   }
 
@@ -164,6 +164,6 @@ export class CirclesApi {
    * @returns {Promise<ApiResponseBase>}
    */
   removeMembers(circleId: number, params: { circleUserId: number; userId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete(`circles/${encodeURIComponent(circleId.toString())}/members`, { params: params });
+    return this.dal.delete(`circles/${encodeURIComponent(circleId.toString())}/members`, {params: params});
   }
 }

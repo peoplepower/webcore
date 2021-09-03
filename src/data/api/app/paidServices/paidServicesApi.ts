@@ -17,7 +17,7 @@ import { GetUserPaymentProfilesApiResponse } from './getUserPaymentProfilesApiRe
  */
 @injectable('PaidServicesApi')
 export class PaidServicesApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Return a list of paid service plans for sale.
@@ -45,7 +45,7 @@ export class PaidServicesApi {
     hiddenPrices?: boolean;
     plansOnly?: boolean;
   }): Promise<GetSoftwareSubscriptionsApiResponse> {
-    return this.dal.get('servicePlans', { params: params });
+    return this.dal.get('servicePlans', {params: params});
   }
 
   /**
@@ -71,7 +71,7 @@ export class PaidServicesApi {
       locationId?: number;
     },
   ): Promise<AssignServicesToLocationsApiResponse> {
-    return this.dal.post('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), services || {}, { params: params });
+    return this.dal.post('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), services || {}, {params: params});
   }
 
   /**
@@ -98,7 +98,7 @@ export class PaidServicesApi {
     sortOrder?: string;
     sortCollection?: string;
   }): Promise<GetLocationSubscriptionsApiResponse> {
-    return this.dal.get('userServicePlans', { params: params });
+    return this.dal.get('userServicePlans', {params: params});
   }
 
   /**
@@ -120,7 +120,7 @@ export class PaidServicesApi {
     },
     upgradeModel?: UpgradeSubscriptionInfoModel,
   ): Promise<UpgradeSubscriptionApiResponse> {
-    return this.dal.post('purchase/upgrade', upgradeModel, { params: params });
+    return this.dal.post('purchase/upgrade', upgradeModel, {params: params});
   }
 
   /**
@@ -134,7 +134,7 @@ export class PaidServicesApi {
    * @returns {Promise<ApiResponseBase>}
    */
   cancelSubscription(servicePlanId: number, params?: { locationId?: number; organizationId?: number }): Promise<ApiResponseBase> {
-    return this.dal.delete('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), { params: params });
+    return this.dal.delete('userServicePlans/' + encodeURIComponent(servicePlanId.toString()), {params: params});
   }
 
   /**
@@ -151,7 +151,7 @@ export class PaidServicesApi {
     servicePlanId: number,
     params?: { locationId?: number; upgrade?: boolean },
   ): Promise<GetSubscriptionTransactionsApiResponse> {
-    return this.dal.get(`userServicePlanTransactions/${encodeURIComponent(servicePlanId.toString())}`, { params: params });
+    return this.dal.get(`userServicePlanTransactions/${encodeURIComponent(servicePlanId.toString())}`, {params: params});
   }
 
   /**
@@ -178,7 +178,7 @@ export class PaidServicesApi {
       sandbox?: boolean;
     },
   ): Promise<ProvideNewPurchaseInfoApiResponse> {
-    return this.dal.post(`purchase`, newPurchaseInfo, { params: params });
+    return this.dal.post(`purchase`, newPurchaseInfo, {params: params});
   }
 
   /**
@@ -200,7 +200,7 @@ export class PaidServicesApi {
       userId?: number
     },
   ): Promise<UpdatePurchaseInfoApiResponse> {
-    return this.dal.put(`purchase`, purchaseInfo, { params: params });
+    return this.dal.put(`purchase`, purchaseInfo, {params: params});
   }
 
   /**
@@ -221,6 +221,6 @@ export class PaidServicesApi {
     includeDisabled?: boolean;
     appName?: string;
   }): Promise<GetUserPaymentProfilesApiResponse> {
-    return this.dal.get(`userPaymentProfiles`, { params: params });
+    return this.dal.get(`userPaymentProfiles`, {params: params});
   }
 }

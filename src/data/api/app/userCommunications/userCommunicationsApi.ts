@@ -35,7 +35,7 @@ import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from './answerQuesti
  */
 @injectable('UserCommunicationsApi')
 export class UserCommunicationsApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
    * Allows to delete previously submitted message.
@@ -50,7 +50,7 @@ export class UserCommunicationsApi {
   /**
    * Gets crowd feedback entry by its Id.
    * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/post-crowd-feedback/get-specific-crowd-feedback}
+    * http://docs.iotapps.apiary.io/#reference/user-communications/post-crowd-feedback/get-specific-crowd-feedback}
    *
    * @returns {Promise<GetCrowdFeedbackByIdApiResponse>}
    */
@@ -86,7 +86,7 @@ export class UserCommunicationsApi {
     sortCollection?: string;
     rowCount?: number;
   }): Promise<GetMessagesApiResponse> {
-    return this.dal.get('messages', { params: params });
+    return this.dal.get('messages', {params: params});
   }
 
   /**
@@ -106,14 +106,14 @@ export class UserCommunicationsApi {
    * 8 - External notification by API call - true
    *
    * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
+    * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
    *
    * @param [params] Request parameters.
    * @param {number} [params.userId] User ID for administrators.
    * @returns {Promise<GetNotificationSubscriptionsApiResponse>}
    */
   getNotificationSubscriptions(params?: { userId?: number }): Promise<GetNotificationSubscriptionsApiResponse> {
-    return this.dal.get('notificationSubscriptions', { params: params });
+    return this.dal.get('notificationSubscriptions', {params: params});
   }
 
   /**
@@ -154,13 +154,13 @@ export class UserCommunicationsApi {
    * @returns {Promise<RequestSupportApiResponse>}
    */
   requestSupport(model: RequestSupportModel, params?: { appName?: string }): Promise<RequestSupportApiResponse> {
-    return this.dal.post('support', model, { params: params });
+    return this.dal.post('support', model, {params: params});
   }
 
   /**
    * Search crowd feedback entries according to supplied parameters.
    * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-crowd-feedback-by-searching/get-crowd-feedback-by-searching}
+    * http://docs.iotapps.apiary.io/#reference/user-communications/get-crowd-feedback-by-searching/get-crowd-feedback-by-searching}
    *
    * @param {string} appName Unique name / identifier of the app or product, selected by the developer
    * @param {CrowdFeedbackType} type Type of the feedback entry (1 - New feature request, 2 - Problem report)
@@ -185,7 +185,7 @@ export class UserCommunicationsApi {
       disabled?: boolean;
     },
   ): Promise<SearchCrowdFeedbackApiResponse> {
-    return this.dal.get(`feedback/${encodeURIComponent(appName)}/${encodeURIComponent(type.toString())}`, { params: params });
+    return this.dal.get(`feedback/${encodeURIComponent(appName)}/${encodeURIComponent(type.toString())}`, {params: params});
   }
 
   /**
@@ -224,7 +224,7 @@ export class UserCommunicationsApi {
       organizationId?: number;
     },
   ): Promise<SendNotificationApiResponse> {
-    return this.dal.post('notifications', model, { params: params });
+    return this.dal.post('notifications', model, {params: params});
   }
 
   /**
@@ -244,7 +244,7 @@ export class UserCommunicationsApi {
     endDate?: string;
     locationId?: number;
   }): Promise<GetNotificationsApiResponse> {
-    return this.dal.get('notifications', { params: params });
+    return this.dal.get('notifications', {params: params});
   }
 
   /**
@@ -252,7 +252,7 @@ export class UserCommunicationsApi {
    * receive within a specified amount of time. This method allows to set the current user subscriptions.
    *
    * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
+    * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
    *
    * @param {NotificationType} type Type of notification, as defined by Ensemble during the request to Get Subscription Notifications.
    * @param params Request parameters
@@ -279,13 +279,13 @@ export class UserCommunicationsApi {
       smsPeriod?: number;
     },
   ): Promise<ApiResponseBase> {
-    return this.dal.put(`notificationSubscriptions/${encodeURIComponent(type.toString())}`, {}, { params: params });
+    return this.dal.put(`notificationSubscriptions/${encodeURIComponent(type.toString())}`, {}, {params: params});
   }
 
   /**
    * Updates particular crowd feedback entry.
    * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
+    * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
    *
    * @param {number} feedbackId Feedback ID to update
    * @param {UpdateCrowdFeedbackModel} model Feedback Crowd Feedback Model
@@ -314,7 +314,7 @@ export class UserCommunicationsApi {
   ): Promise<UpdateMessageApiResponse> {
     const parameters = {
       params: params,
-      headers: { 'Content-Type': 'application/json' }, //to explicitly tell the content type even if model is null
+      headers: {'Content-Type': 'application/json'}, //to explicitly tell the content type even if model is null
     };
     return this.dal.put('messages/' + encodeURIComponent(messageId.toString()), model, parameters);
   }
@@ -322,7 +322,7 @@ export class UserCommunicationsApi {
   /**
    * Updates particular crowd feedback entry.
    * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
+    * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
    *
    * @param {number} feedbackId Feedback ID to vote on
    * @param {number} rank 1 to cast a vote, 0 to remove a vote.
@@ -361,7 +361,7 @@ export class UserCommunicationsApi {
     lang?: string;
     limit?: number;
   }): Promise<GetQuestionsApiResponse> {
-    return this.dal.get('questions', { params: params });
+    return this.dal.get('questions', {params: params});
   }
 
   /**
@@ -376,7 +376,7 @@ export class UserCommunicationsApi {
       params: {
         locationId: locationId,
       },
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
     };
     return this.dal.put('questions', model, parameters);
   }

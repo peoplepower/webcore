@@ -14,7 +14,7 @@ import { UpdateUserApiResponse, UpdateUserModel } from './updateUserApiResponse'
  */
 @injectable('UserAccountsApi')
 export class UserAccountsApi {
-  @inject('AppApiDal') protected readonly dal: AppApiDal;
+  @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   // #region -------------------- User and location --------------------
 
@@ -38,11 +38,11 @@ export class UserAccountsApi {
     userModel: CreateUserAndLocationModel,
     operationToken?: string,
     noApiKey: boolean = false,
-    strongPassword: boolean = false 
+    strongPassword: boolean = false
   ): Promise<CreateUserAndLocationApiResponse> {
     // Make sure the headers collection initialized as empty to avoid chances the code using it will crash
-    let headers = operationToken ? { PPCAuthorization: 'op token=' + operationToken } : {};
-    let params = strongPassword ? { strongPassword: true } : {};
+    let headers = operationToken ? {PPCAuthorization: 'op token=' + operationToken} : {};
+    let params = strongPassword ? {strongPassword: true} : {};
 
     return this.dal.post('user', userModel, {
       noAuth: noApiKey,
@@ -60,7 +60,7 @@ export class UserAccountsApi {
    * @returns {Promise<ApiResponseBase>}
    */
   deleteUser(userId?: number): Promise<ApiResponseBase> {
-    return this.dal.delete('user', { params: { userId: userId } });
+    return this.dal.delete('user', {params: {userId: userId}});
   }
 
   /**
@@ -98,7 +98,7 @@ export class UserAccountsApi {
     },
     noApiKey: boolean = false,
   ): Promise<GetUserInformationApiResponse> {
-    return this.dal.get('user', { params: params, noAuth: noApiKey });
+    return this.dal.get('user', {params: params, noAuth: noApiKey});
   }
 
   /**
@@ -110,7 +110,7 @@ export class UserAccountsApi {
    * @returns {Promise<UpdateUserApiResponse>}
    */
   updateUser(user: UpdateUserModel, userId?: number): Promise<UpdateUserApiResponse> {
-    return this.dal.put('user', user, { params: { userId: userId } });
+    return this.dal.put('user', user, {params: {userId: userId}});
   }
 
   // #endregion
@@ -200,7 +200,7 @@ export class UserAccountsApi {
       passcode?: string;
     },
   ): Promise<ApiResponseBase> {
-    let { passcode, ...urlParams } = params || {};
+    let {passcode, ...urlParams} = params || {};
     return this.dal.put(
       'newPassword',
       {
@@ -283,7 +283,7 @@ export class UserAccountsApi {
    * @returns {Promise<ApiResponseBase>}
    */
   provideVerificationCode(params: { code: string; type: VerificationType }): Promise<ApiResponseBase> {
-    return this.dal.put('emailVerificationMessage', {}, { params: params });
+    return this.dal.put('emailVerificationMessage', {}, {params: params});
   }
 
   /**
@@ -302,7 +302,7 @@ export class UserAccountsApi {
     appName?: string;
     type?: VerificationType;
   }): Promise<SendVerificationMessageApiResponse> {
-    return this.dal.get('emailVerificationMessage', { params: params });
+    return this.dal.get('emailVerificationMessage', {params: params});
   }
 
   // #endregion
@@ -318,6 +318,6 @@ export class UserAccountsApi {
    * @returns {Promise<ResetBadgesApiResponse>}
    */
   resetBadges(params?: { type?: BadgeType }): Promise<ResetBadgesApiResponse> {
-    return this.dal.put('badges', {}, { params: params });
+    return this.dal.put('badges', {}, {params: params});
   }
 }
