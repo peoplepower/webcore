@@ -59,6 +59,10 @@ export class AuthService extends BaseService {
     return this._apiKey;
   }
 
+  public get lastUsername(): string | undefined {
+    return this.wcStorage.get(LOCAL_STORAGE_LAST_USERNAME) || undefined;
+  }
+
   public get apiKeyExpire() {
     let expireDateStr = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
     return expireDateStr ? new Date(expireDateStr) : undefined;
