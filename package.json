@@ -1,11 +1,12 @@
 {
   "name": "@peoplepower/webcore",
-  "version": "1.0.5",
-  "description": "Client JS/TS SDK for People Power IoT Platform",
+  "version": "1.0.6",
+  "description": "Client JS/TS SDK for People Power App API",
   "keywords": [
     "WebCore",
     "People Power",
-    "App API SDK"
+    "Client SDK",
+    "App API"
   ],
   "main": "dist/ppc-webcore.cjs.js",
   "module": "dist/ppc-webcore.esm.js",
