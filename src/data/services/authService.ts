@@ -194,6 +194,52 @@ export class AuthService extends BaseService {
   }
 
   /**
+   * Login by signature
+   * @param {string} username The username.
+   * @param {string} password Actual user password.
+   * @param {string} privateKey Private key stored on server.
+   * @param {string} appName Application name that was used to generate privateKey.
+   * @param {boolean} [admin] Use if need to get admin API_KEY type.
+   */
+  public async loginBySignature(
+    username: string,
+    password: string,
+    privateKey: string,
+    appName: string,
+    admin?: boolean,
+  ): Promise<LoginInfo> {
+    await this.logoutFromThisBrowser();
+
+    let params: any = {
+      keyType: admin ? 11 : 0, // Admin or User key type
+      appName: appName,
+      sign: true
+    };
+    const getTempKeyResult = await this.authApi.login(username, password, params)
+
+    const signature = await this.sign(privateKey, getTempKeyResult.key)
+
+    params = {
+      keyType: admin ? 11 : 0,
+      appName: appName,
+      sign: true,
+      signAlgorithm: 'SHA512withRSA',
+      passcode: signature
+    };
+    const result = await this.authApi.login(username, undefined, params)
+
+    this.logger.debug('Logged in as: ' + username, result);
+    this._apiKey = result.key;
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
+    this.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
+    this.setUpKeyExpireTimeout(result.keyExpire!);
+    this.onLogin.trigger();
+    return result;
+  }
+
+  /**
    * Requests a new API_KEY and reset it's expiration to default.
    * @returns {Promise<LoginInfo>}
    */
@@ -407,6 +453,52 @@ export class AuthService extends BaseService {
     },
   ): Promise<string> {
     return this.oAuthHostApi.getUrlToApproveOrDenyAuthorization(approved, params);
+  }
+
+  /**
+   * Sign tempKey with privateKey
+   * @param privateKey private key that we get from server (or previously uploaded public key)
+   * @param tempKey temporary user key
+   */
+  private async sign(privateKey: string, tempKey: string): Promise<string> {
+    // base64 decode the string to get the binary data (hex string)
+    const binaryPrivateKeyString = globalThis.atob(privateKey);
+    // convert from a hex string to an ArrayBuffer
+    const binaryPrivateKey = this.hexStringToArrayBuffer(binaryPrivateKeyString);
+    const binaryTempKey = this.hexStringToArrayBuffer(tempKey);
+
+    const encodedPrivateKey = await globalThis.crypto.subtle.importKey(
+      "pkcs8",
+      binaryPrivateKey,
+      {
+        name: "RSASSA-PKCS1-v1_5",
+        hash: "SHA-512"
+      },
+      false,
+      ["sign"]
+    )
+
+    let signature = await globalThis.crypto.subtle.sign(
+      "RSASSA-PKCS1-v1_5",
+      encodedPrivateKey,
+      binaryTempKey
+    );
+
+    // Converting ArrayBuffer to base64 string
+    // @ts-ignore
+    return btoa(String.fromCharCode(...(new Uint8Array(signature))));
+  }
+
+  /**
+   * Convert a hex string into an ArrayBuffer
+   */
+  private hexStringToArrayBuffer(str: string): ArrayBuffer {
+    const buf = new ArrayBuffer(str.length);
+    const bufView = new Uint8Array(buf);
+    for (let i = 0, strLen = str.length; i < strLen; i++) {
+      bufView[i] = str.charCodeAt(i);
+    }
+    return buf;
   }
 }
 

@@ -45,6 +45,12 @@ export class AuthApi {
    * @param {string} [params.clientId] Short application client ID to generate a specific user API key.
    * @param {string} [params.passcode] Temporary pass code for one-time login.
    * @param {ApiKeyType} [params.keyType] Key type, 0 - User (default), 11 - Admin.
+   * @param {string} [params.appName] Short application name.
+   * @param {number} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>.
+   * @param {string} [params.appHash] 11-character app hash.
+   * @param {boolean} [params.sign] Set it to true, if an encrypted signature authentication is used.
+   * @param {string} [params.signAlgorithm] Signature algorithm.
+   *   (SHA512withRSA (recommended), SHA1withRSA, SHA224withRSA, SHA256withRSA, SHA384withRSA, MD2withRSA, MD5withRSA, NONEwithRSA)
    * @returns {Promise<LoginApiResponse>}
    */
   login(
@@ -55,6 +61,11 @@ export class AuthApi {
       expiry?: number;
       clientId?: string;
       keyType?: ApiKeyType;
+      appName?: string;
+      smsPrefix?: number;
+      appHash?: string;
+      sign?: boolean;
+      signAlgorithm?: string;
     },
   ): Promise<LoginApiResponse> {
     params = params || {};
@@ -77,6 +88,11 @@ export class AuthApi {
         expiry: params.expiry,
         clientId: params.clientId,
         keyType: params.keyType,
+        appName: params.appName,
+        smsPrefix: params.smsPrefix,
+        appHash: params.appHash,
+        sign: params.sign,
+        signAlgorithm: params.signAlgorithm
       },
       headers: headers,
     });
