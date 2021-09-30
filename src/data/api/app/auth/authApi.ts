@@ -79,7 +79,7 @@ export class AuthApi {
       headers['PASSWORD'] = encodeURIComponent(pwd);
     }
     if (params.passcode) {
-      headers['passcode'] = encodeURIComponent(params.passcode);
+      headers['passcode'] = params.passcode;
     }
 
     return this.dal.get('login', {
