@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { PaymentType, ResourceType, SubscriptionType } from './getSoftwareSubscriptionsApiResponse';
+import { FreemiumType, PaymentType, ResourceType, SubscriptionType } from './getSoftwareSubscriptionsApiResponse';
 
 export enum SubscriptionStatus {
   DefaultOrActive = 0,
@@ -26,9 +26,9 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
       desc: string;
       appName?: string;
       /**
-       * 'true' if it's a freemium subscription
+       * Freemium plan type
        */
-      freemium?: boolean;
+      freemium?: FreemiumType;
       services?: Array<{
         name: string;
         amount: number;
