@@ -24,6 +24,8 @@ export class ApiResponseInterceptor implements Interceptor {
       this.logger.error('[ApiResponseInterceptor] Response is empty!', JSON.stringify(response, null, 2));
       return Promise.reject(response);
     }
+
+    // TODO(max): Fix typing
     // tslint:disable-next-line:triple-equals
     if (response.data && response.data.resultCode == null) {
       this.logger.debug('[ApiResponseInterceptor] Wrong server response format! No resultCode field!', JSON.stringify(response, null, 2));

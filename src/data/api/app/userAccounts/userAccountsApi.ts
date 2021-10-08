@@ -44,6 +44,7 @@ export class UserAccountsApi {
     let headers = operationToken ? {PPCAuthorization: 'op token=' + operationToken} : {};
     let params = strongPassword ? {strongPassword: true} : {};
 
+    // TODO(max): Fix typing
     return this.dal.post('user', userModel, {
       noAuth: noApiKey,
       headers: headers,

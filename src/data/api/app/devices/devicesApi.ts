@@ -50,6 +50,8 @@ export class DevicesApi {
     deviceActivationKey?: string,
   ): Promise<RegisterDeviceApiResponse> {
     let headers = deviceActivationKey ? {ACTIVATION_KEY: deviceActivationKey, noAuth: true} : {};
+
+    // TODO(max): Fix typing
     return this.dal.post('devices', properties, {params: params, headers: headers});
   }
 
