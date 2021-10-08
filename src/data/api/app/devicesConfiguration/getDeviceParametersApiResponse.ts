@@ -1,23 +1,21 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
 /**
- * Unit multipliers are used to normalize data before storing the data to the database. For example: if a parameter
- * ppc.power was created with a unit multiplier of "1" and units of "W", then incoming measurement of 1.0 kW for the
- * parameter ppc.power will automatically be converted to 1000 W before storing the value to the IoT Software Suite.
+ * Unit multipliers are used to normalize data before storing the data to the database.
  */
 export enum UnitMultipliers {
-  Nano = 'n', //0.000000001,
-  Micro = 'u', //0.000001,
-  Milli = 'm', //0.001,
-  Centi = 'c', //0.01,
-  Percent = '%', //0.01,
-  Deci = 'd', //0.1,
-  Empty = '', //1,
-  Deca = 'Da', //10,
-  Hecto = 'h', //100,
-  Kilo = 'k', //1000,
-  Mega = 'M', //1000000,
-  Giga = 'G', //1000000000
+  Nano = 'n', // 0.000000001,
+  Micro = 'u', // 0.000001,
+  Milli = 'm', // 0.001,
+  Centi = 'c', // 0.01,
+  Percent = '%', // 0.01,
+  Deci = 'd', // 0.1,
+  Empty = '', // 1,
+  Deca = 'Da', // 10,
+  Hecto = 'h', // 100,
+  Kilo = 'k', // 1000,
+  Mega = 'M', // 1000000,
+  Giga = 'G', // 1000000000
 }
 
 /**
@@ -33,30 +31,6 @@ export enum MeasurementsHistoryUpdateBehavior {
 
 /**
  * Display types is a UI element at frontend level.
- * 1 - Boolean (for parameters with 0/1 values only)
- 0 - on/off switch (default)
- 1 - yes/no checkbox
- 2 - single "yes" button only as a button
- * 2 - Select
- 0 - radio buttons (default)
- 1 - dropdown with options
- * 4 - Select with multiple choices
- 0 - checkboxes or multiple-able radio buttons (default)
- 1 - dropdown with multiple selection enabled
- * 5 - Textbox (text input)
- * 6 - Day of the week
- 0 - choose multiple days simultaneously (default)
- 1 - pick a single day only
- * 7 - Slider (range)
- 0 - integer selection between min and max (default is 0 to 100, default)
- 1 - floating point selector (e.g. in a range from 0 to 1)
- 2 - as a minutes:seconds format between a min and max (e.g. from 0 to 5 minutes)
- * 8 - Time (in seconds)
- 0 - as hours:minutes:seconds (am/pm, default)
- 1 - as hours:minutes (am/pm)
- * 9 - Datetime
- 0 - date and time picker (default)
- 1 - date only
  */
 export enum ParamDisplayType {
   Boolean = 1,
@@ -87,14 +61,6 @@ export enum ParamDisplayType {
 
 /**
  * Value types to set as a value for parameters.
- * 1 - Any
- * 2 - Number
- * 3 - Boolean
- * 4 - String
- * 5 - Array of any, e.g. [1, "string", 45, true ]
- * 6 - Array of numbers, e.g. [1, 3, 77]
- * 7 - Array of strings, e.g. ["horn", "bull", "rose"]
- * 8 - Object
  */
 export enum ParamValueType {
   Any = 1,
@@ -107,33 +73,41 @@ export enum ParamValueType {
   Object = 8,
 }
 
+export enum DeviceParamValueType {
+  String = 0,
+  Decimal = 1,
+  Integer = 2,
+  Boolean = 3,
+}
+
 export interface GetDeviceParametersApiResponse extends ApiResponseBase {
   deviceParams: Array<{
+
     /**
-     * true - You may edit this parameter
-     * false - You do not have rights to edit this parameter
+     * Set to 'true' if you may edit this parameter.
      */
     editable: boolean;
+
     /**
-     * true - This parameter may be used as a command to the device
-     * false - This parameter will never be sent as a command to the device, don't allocate space for it.
+     * Set to 'true' if parameter may be used as a command to the device.
      */
     configured: boolean;
+
     /**
-     * Default system unit if this is a numeric parameter to store measurements, how its values will be stored
+     * Default system unit if this is a numeric parameter to store measurements.
      */
     systemUnit: string;
+
     /**
-     * 0 - Do not save a history of measurements, keep the current state only (least expensive).
-     * 1 - Update the history either every 15 minutes, or when the value changes significantly (more than 25% for
-     * numeric parameters).
-     * 2 - Update the measurement history with every value change (most expensive).
+     * Historical measurements behaviour configuration.
      */
     historical: MeasurementsHistoryUpdateBehavior;
+
     /**
      * For numeric values, how many digits after the decimal point should we store.
      */
     scale?: number;
+
     /**
      * A product may define an attribute that describes a supported algorithm that will filter, adjust, and correct
      * data. By turning this flag on, this parameter will apply the type of data correction algorithm defined by the
@@ -141,37 +115,64 @@ export interface GetDeviceParametersApiResponse extends ApiResponseBase {
      * defined attributes false - No data correction or filtering needed
      */
     adjustment: boolean;
-    description?: string;
+
     /**
-     * true - Accept this parameter as a measurement from the device
-     * false - This parameter will never be accepted as a measurement from the device, don't allocate space for it.
+     * Set to 'true' if parameter accepted as a measurement from the device
      */
     profiled: boolean;
+
     /**
-     * Parameter name (no spaces)
+     * Parameter name (no spaces).
      */
     name: string;
+
     /**
-     * true - This parameter represents a number
-     * false - This parameter is a string
+     * Parameter description.
+     */
+    description?: string;
+
+    /**
+     * Set to 'true' if represents a number, otherwise it's string.
      */
     numeric: boolean;
+
     /**
-     * Default multiplier if this is a numeric parameter to store measurements. Other specified measurement multipliers
-     * will be converted to this multiplier before storing. Example multipliers include 'n', 'u', 'm', 'c', '%', 'd',
-     * '1', 'Da', 'h', 'k', 'M', 'G', etc. See the device API for more details.
+     * Type of the device parameter value from Server perspective.
+     * Should not be used by UI (use 'valueType' from displayInfo instead).
+     */
+    valueType: DeviceParamValueType;
+
+    /**
+     * Default multiplier if this is a numeric parameter to store measurements.
      */
     systemMultiplier?: UnitMultipliers;
+
     /**
-     * Special parameter attributes for UI logic
+     * Special parameter attributes for UI logic.
      */
     displayInfo?: {
       displayType: ParamDisplayType;
       valueType: ParamValueType;
       defaultOption?: number;
+
+      /**
+       * Icon font for the model. Default: 'far'.
+       * Options: 'far', 'fal', 'fas', 'iotr', 'iotl'.
+       */
+      iconFont?: string;
+
+      /**
+       * Icon name within iconfont namespace.
+       */
+      icon?: string;
+
       mlName: {
         [key: string]: string;
       };
+
+      /**
+       * Available options.
+       */
       options?: Array<{
         id: number;
         value: string;
@@ -179,10 +180,17 @@ export interface GetDeviceParametersApiResponse extends ApiResponseBase {
           [key: string]: string;
         };
       }>;
+
+      /**
+       * Parameters which should be passed along with current one.
+       * Used in commands sent to device.
+       */
       linkedParams?: string[];
+
       minValue?: number;
       maxValue?: number;
       step?: number;
+      ranged?: boolean;
     };
   }>;
 }

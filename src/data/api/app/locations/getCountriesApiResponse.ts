@@ -1,4 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { TimezoneModel } from '../common/getApiSettingsApiResponse';
 
 export interface GetCountriesApiResponse extends ApiResponseBase {
   /**
@@ -6,74 +7,54 @@ export interface GetCountriesApiResponse extends ApiResponseBase {
    */
   countries: Array<{
     /**
-     * Country ID, for referencing this country elsewhere in Ensemble
+     * Country ID, for referencing this country elsewhere in Ensemble.
      */
     id: number;
 
     /**
-     * Name of the country
+     * Name of the country.
      */
     name: string;
 
     /**
-     * ISO 3166-1 alpha-2 country code
+     * ISO 3166-1 alpha-2 country code.
      */
     countryCode: string;
 
     /**
-     * ISO 4217 currency code
+     * ISO 4217 currency code.
      */
     currencyCode: string;
 
     /**
-     * Currency symbol
+     * Currency symbol.
      */
     currencySymbol: string;
 
     /**
-     * Regular expression describing the acceptable format for the zip / postal code. For example: ^\\d{5}$
+     * Regular expression describing the acceptable format for the zip / postal code. For example: ^\\d{5}$.
      */
     zipFormat: string;
 
     /**
-     * State name
+     * State name.
      */
     stateName: string;
 
     /**
-     * Zip / Postal code
+     * Zip / Postal code.
      */
     zipName: string;
 
     /**
-     * True for the country or state correlated with the current user IP address
+     * True for the country or state correlated with the current user IP address.
      */
     preferred: boolean;
 
     /**
-     * This is an array of timezone objects.
+     * Array of timezone objects.
      */
-    timezones: Array<{
-      /**
-       * Timezone ID ("US/Eastern")
-       */
-      id: string;
-
-      /**
-       * Timezone offset in minutes
-       */
-      offset: number;
-
-      /**
-       * Daylight saving time
-       */
-      dst: boolean;
-
-      /**
-       * Timezone name
-       */
-      name: string;
-    }>;
+    timezones: TimezoneModel[];
 
     /**
      * This is an array of state objects, which include the state ID to reference this state in other API calls, the
@@ -81,32 +62,32 @@ export interface GetCountriesApiResponse extends ApiResponseBase {
      */
     states: Array<{
       /**
-       * State ID to reference this state in other API calls
+       * State ID to reference this state in other API calls.
        */
       id: number;
 
       /**
-       * Name of the state
+       * Name of the state.
        */
       name: string;
 
       /**
-       * Default timezone ID of state
+       * Default timezone ID of state.
        */
       timezoneId: string;
 
       /**
-       * True for the country or state correlated with the current user IP address
+       * True for the country or state correlated with the current user IP address.
        */
       preferred: boolean;
 
       /**
-       * Abbreviation
+       * Abbreviation.
        */
       abbr: string;
 
       /**
-       * State ANSI code
+       * State ANSI code.
        */
       code: string;
     }>;

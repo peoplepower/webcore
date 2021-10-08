@@ -152,6 +152,9 @@ export class LocationsApi {
     return this.dal.post(`location/${encodeURIComponent(locationId.toString())}/users`, users);
   }
 
+  // TODO(max): Add update location user API, see Apiary.
+  // https://iotapps.docs.apiary.io/#reference/locations/location-users/update-location-user
+
   /**
    * Removes user(s) access from specified location.
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/location-users/delete-location-user}

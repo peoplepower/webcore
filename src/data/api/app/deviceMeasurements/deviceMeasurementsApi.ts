@@ -86,7 +86,6 @@ export class DeviceMeasurementsApi {
    * @param {number} params.locationId Request information on a specific location.
    * @param {number} [params.userId] Optional user ID search field for an administrator to retrieve parameters of the device owned by this user.
    * @param {string} [params.paramName] Optional parameter to extract. You may specify multiple paramName URL parameters to gather multiple specific parameters.
-   * @param {number} [params.shared] Send command to a device shared in circle. If 'true', the location ID is not required.
    * @returns {Promise<GetCurrentDeviceMeasurementsApiResponse>}
    */
   getCurrentMeasurements(
@@ -95,7 +94,6 @@ export class DeviceMeasurementsApi {
       locationId: number;
       userId?: number;
       paramName?: string;
-      shared?: boolean;
     },
   ): Promise<GetCurrentDeviceMeasurementsApiResponse> {
     return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parameters`, {params: params});
@@ -113,7 +111,6 @@ export class DeviceMeasurementsApi {
    * @param {CommandParametersModel} commandParameters Command parameters to send to device
    * @param params Request parameters.
    * @param {number} params.locationId Device location ID.
-   * @param {number} [params.shared] Send command to a device shared in circle. If 'true', the location ID is not required.
    * @returns {Promise<SendCommandToDeviceApiResponse>}
    */
   sendCommandToDevice(
@@ -121,7 +118,6 @@ export class DeviceMeasurementsApi {
     commandParameters: CommandParametersModel,
     params: {
       locationId: number;
-      shared?: boolean;
     },
   ): Promise<SendCommandToDeviceApiResponse> {
     return this.dal.put(`devices/${encodeURIComponent(deviceId)}/parameters`, commandParameters, {params: params});

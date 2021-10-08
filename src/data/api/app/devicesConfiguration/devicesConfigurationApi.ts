@@ -1,7 +1,6 @@
 import { AppApiDal } from '../appApiDal';
 import { inject, injectable } from '../../../../modules/common/di';
 import { GetSupportedDeviceTypesApiResponse } from './getSupportedDeviceTypesApiResponse';
-import { GetSupportedDeviceTypeAttributesApiResponse } from './getSupportedDeviceTypeAttributesApiResponse';
 import { CreateDeviceTypeApiResponse, DeviceTypeModel } from './createDeviceTypeApiResponse';
 import { GetDeviceParametersApiResponse } from './getDeviceParametersApiResponse';
 import { CreateOrUpdateDeviceParameterApiResponse, DeviceParameterModel } from './createOrUpdateDeviceParameterApiResponse';
@@ -55,21 +54,9 @@ export class DevicesConfigurationApi {
   }
 
   /**
-   * Each product can have a set of attributes associated with it, to optimize its performance.
-   * See {@link http://docs.iotapps.apiary.io/#reference/creating-products/supported-products/get-supported-products}
-   *
-   * This API will provide access to every supported attribute and attribute values.
-   *
-   * @returns {Promise<GetSupportedDeviceTypeAttributesApiResponse>}
-   */
-  getSupportedDeviceTypeAttributes(): Promise<GetSupportedDeviceTypeAttributesApiResponse> {
-    return this.dal.get('deviceTypeAttrs');
-  }
-
-  /**
-   * ==================================================================================
-   *  WARNING: DO NOT COVER WITH INTEGRATION TEST UNLESS CONFIRMED BY DMITRY SHIRKALIN
-   *  =================================================================================
+   *  =============================================================================
+   *  WARNING: DO NOT COVER WITH INTEGRATION TEST UNLESS CONFIRMED BY SERVER POLICE
+   *  =============================================================================
    */
 
   /**

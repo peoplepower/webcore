@@ -1,5 +1,12 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 
+export enum FirmwareStatus {
+  Available = 1,
+  Approved = 2,
+  Decline = 3,
+  Started = 4,
+}
+
 export interface GetFirmwareJobsApiResponse extends ApiResponseBase {
   jobs: Array<{
     id: number;
@@ -22,11 +29,4 @@ export interface GetFirmwareJobsApiResponse extends ApiResponseBase {
       lastDataReceivedDateMs: number;
     };
   }>;
-}
-
-export enum FirmwareStatus {
-  Available = 1,
-  Approved = 2,
-  Decline = 3,
-  Started = 4,
 }
