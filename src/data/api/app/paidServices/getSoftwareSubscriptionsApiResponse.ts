@@ -18,7 +18,7 @@ export enum PaymentType {
 
 /**
  * Service and bot resource types
- * Some resources binded to Location, but some User-specific
+ * Some resources bound to Location, but some User-specific
  */
 export enum ResourceType {
   User = 0,

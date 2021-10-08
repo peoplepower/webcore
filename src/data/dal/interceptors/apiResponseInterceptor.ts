@@ -13,7 +13,7 @@ export class ApiResponseInterceptor implements Interceptor {
   constructor() {
   }
 
-  response(response: DalResponse): any {
+  response(response: DalResponse<any>): any {
     if (response?.config?.ignoreApiResponseTransformation === true) {
       return response;
     }
@@ -25,7 +25,6 @@ export class ApiResponseInterceptor implements Interceptor {
       return Promise.reject(response);
     }
 
-    // TODO(max): Fix typing
     // tslint:disable-next-line:triple-equals
     if (response.data && response.data.resultCode == null) {
       this.logger.debug('[ApiResponseInterceptor] Wrong server response format! No resultCode field!', JSON.stringify(response, null, 2));

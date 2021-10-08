@@ -68,7 +68,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
       name: string;
       amount: string;
       resourceType: ResourceType;
-      resurceId?: string;
+      resourceId?: string;
     }>;
     /**
      * Location ID subscription belongs to
@@ -123,7 +123,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
      */
     gatewayId?: string;
     /**
-     * ID of subscription at payment gateway (for paid subscripitons)
+     * ID of subscription at payment gateway (for paid subscriptions)
      */
     subscriptionId: string;
     /**
@@ -131,7 +131,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
      */
     transactionId?: string;
     /**
-     * Indicates whether it is paymeny gateway sandbox or not
+     * Indicates whether it is payment gateway sandbox or not
      */
     sandbox?: boolean;
     /**

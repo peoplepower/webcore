@@ -117,7 +117,7 @@ export class ApplicationFilesApi {
    *
    * API_KEY: Required for private files and optional for public files or when the key provided in the query parameter.
    * ANALYTIC_API_KEY: Bot API key should be used by apps instead of user keys.
-   * Range: Optional request of a part of the file content. <ultiple of 10240 bytes (i.e. Range:bytes=10240-20479).
+   * Range: Optional request of a part of the file content. <Multiple of 10240 bytes (i.e. Range:bytes=10240-20479).
    *
    * Instead of Range you can pass attach query parameter to force response with attachment.
    *
@@ -174,7 +174,7 @@ export class ApplicationFilesApi {
    * @param [params] Request parameters.
    * @param {number} [params.userId] User ID to delete the file as an administrator.
    * @param {number} [params.locationId] Location ID to delete the file as an administrator.
-   * @returns {Promise<DeleteApplicationFileApiResponse>}
+   * @returns {Promise<ApiResponseBase>}
    */
   deleteFile(
     fileId: number,

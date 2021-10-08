@@ -336,7 +336,7 @@ export class UserCommunicationsApi {
    * Retrieve requested questions for specific location.
    * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/questions/get-questions}
    *
-   * @param params Reuested parameters.
+   * @param params Requested parameters.
    * @param {number} params.locationId Location ID to get questions.
    * @param {number | number[]} [params.answerStatus] Return questions with requested answer statuses. By default questions with statuses 2 and 3 are returned.
    *   Multiple values are supported.

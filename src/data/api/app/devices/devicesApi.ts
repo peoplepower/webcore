@@ -49,10 +49,11 @@ export class DevicesApi {
     params?: RegisterDeviceParams,
     deviceActivationKey?: string,
   ): Promise<RegisterDeviceApiResponse> {
-    let headers = deviceActivationKey ? {ACTIVATION_KEY: deviceActivationKey, noAuth: true} : {};
-
-    // TODO(max): Fix typing
-    return this.dal.post('devices', properties, {params: params, headers: headers});
+    return this.dal.post('devices', properties, {
+      params: params,
+      headers: deviceActivationKey ? {ACTIVATION_KEY: deviceActivationKey} : {},
+      noAuth: !!deviceActivationKey
+    });
   }
 
   // #region ------------------ Manage Single Device -------------------
@@ -351,7 +352,7 @@ export class DevicesApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/devices/firmware-update/get-firmware-jobs}
    *
    * A user can approve or decline an update of his devices with new firmware.
-   * Frimware update job statuses:
+   * Firmware update job statuses:
    *   1 - Available
    *   2 - Approved
    *   3 - Decline

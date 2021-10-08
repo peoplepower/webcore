@@ -101,7 +101,7 @@ export class RulesService extends BaseService {
   }
 
   /**
-   * Deletes specified rule. UserId may be specified to perform the operaton by admin user, otherwise the ruleId of the
+   * Deletes specified rule. UserId may be specified to perform the operation by admin user, otherwise the ruleId of the
    * currently logged in user will be tried to be deleted.
    * @param {number} ruleId
    * @param {number} locationId

@@ -22,7 +22,7 @@ export class BaseUrlInterceptor implements Interceptor {
     this.apiBase = apiBase || '/';
   }
 
-  request(config: DalRequestConfig): any {
+  request(config: DalRequestConfig<any>): any {
     if (!config.baseURL) {
       if (this.cloudConfigService.baseUrl) {
         config.baseURL = Path.Combine(this.cloudConfigService.baseUrl, this.apiBase);

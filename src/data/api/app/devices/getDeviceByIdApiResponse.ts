@@ -175,12 +175,12 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     status: SimStatus;
 
     /**
-     * Current ballance in bytes.
+     * Current balance in bytes.
      */
     dataBalance: number;
 
     /**
-     * Date of the last update of the ballance and usage.
+     * Date of the last update of the balance and usage.
      */
     balanceDate: number;
 

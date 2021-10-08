@@ -146,7 +146,7 @@ export class DevicesConfigurationApi {
    *
    * @param {number} deviceTypeId The product / "device type" ID.
    * @param [params] Request parameters.
-   * @param {boolean} [params.details] Level of details to return for the reqeusted rules.
+   * @param {boolean} [params.details] Level of details to return for the requested rules.
    *  'true' - Return details for these rules, including all the triggers, states, and actions that compose the rule.
    *  'false' - Only return the high level information about the rule, including the id, description text, on/off status,
    *  whether the rule is a default rule, and whether the rule is hidden and not editable, default.

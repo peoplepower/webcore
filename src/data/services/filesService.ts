@@ -21,7 +21,7 @@ export class FilesService extends BaseService {
    * @param params Request parameters.
    * @param {number} [params.fileId] File ID to filter by.
    * @param {AppFileType} [params.type] Type of the file to filter by.
-   * @param {number} [params.userId] User ID associated with this file. It can be used by adminis to access other user accounts.
+   * @param {number} [params.userId] User ID associated with this file. It can be used by admins to access other user accounts.
    * @param {number} [params.locationId] ID of the location associated with the file to filter by.
    * @param {string} [params.deviceId] ID of the device associated with the file to filter by.
    * @param {string} [params.name] Name of the file to filter by.

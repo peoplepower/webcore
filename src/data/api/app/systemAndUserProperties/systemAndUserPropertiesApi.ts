@@ -62,7 +62,7 @@ export class SystemAndUserPropertiesApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/system-and-user-properties/manage-a-single-user-property/update-a-single-user-property}
    *
    * @param {string} name Name of the property to set a value for. Maximum of 250 characters.
-   * @param params Requst parameters.
+   * @param params Request parameters.
    * @param {string} params.value Value to set for this property. Maximum of 250 characters.
    * @param {number} [params.userId] User ID, used by an account with administrative privileges to update the properties for another user.
    * @returns {Promise<ApiResponseBase>}

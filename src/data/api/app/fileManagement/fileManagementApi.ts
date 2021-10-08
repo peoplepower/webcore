@@ -109,7 +109,7 @@ export class FileManagementApi {
    *
    * @param {number} fileId File ID to update.
    * @param {number} locationId Location ID.
-   * @returns {Promise<DeleteFileApiResponse>}
+   * @returns {Promise<ApiResponseBase>}
    */
   deleteFile(fileId: number, locationId: number): Promise<ApiResponseBase> {
     return this.dal.delete(`files/${encodeURIComponent(fileId.toString())}`, {params: {locationId: locationId}});
@@ -268,7 +268,7 @@ export class FileManagementApi {
    *
    * @param [params] Request parameters.
    * @param {string} [params.API_KEY] Temporary API key to download file.
-   * @param {boolean} [params.thumbnail] If 'true' - Request thumbnail for downloading, if 'falce' - download actual file.
+   * @param {boolean} [params.thumbnail] If 'true' - Request thumbnail for downloading, if 'false' - download actual file.
    *
    * The response will include:
    * - The file content
@@ -407,7 +407,7 @@ export class FileManagementApi {
    * @param {number} fileId File to add tag to.
    * @param {string} tag Tag to add to the file.
    * @param {number} locationId Location ID.
-   * @returns {Promise<ApplyFileTagApiResponse>}
+   * @returns {Promise<ApiResponseBase>}
    */
   applyFileTag(fileId: number, tag: string, locationId: number): Promise<ApiResponseBase> {
     return this.dal.put(`files/${encodeURIComponent(fileId.toString())}/tags/${encodeURIComponent(tag)}`, {
@@ -424,7 +424,7 @@ export class FileManagementApi {
    * @param {number} fileId File to delete tag from.
    * @param {string} tag Tag to delete.
    * @param {number} locationId Location ID.
-   * @returns {Promise<DeleteFileTagApiResponse>}
+   * @returns {Promise<ApiResponseBase>}
    */
   deleteFileTag(fileId: number, tag: string, locationId: number): Promise<ApiResponseBase> {
     return this.dal.delete(`files/${encodeURIComponent(fileId.toString())}/tags/${encodeURIComponent(tag)}`, {
@@ -440,7 +440,7 @@ export class FileManagementApi {
    *
    * @param {number} fileId File to report.
    * @param {string} reportType Type of report. This is typically 'abuse', but may be changed to trigger a different type of email template to support.
-   * @returns {Promise<ReportAbuseApiResponse>}
+   * @returns {Promise<ApiResponseBase>}
    */
   reportAbuse(fileId: number, reportType: string): Promise<ApiResponseBase> {
     return this.dal.put(`files/${encodeURIComponent(fileId.toString())}/report/${encodeURIComponent(reportType)}`);

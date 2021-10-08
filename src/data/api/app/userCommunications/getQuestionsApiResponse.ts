@@ -22,7 +22,7 @@ export enum QuestionResponseTypes {
 
 export interface QuestionCollection {
   name: string;
-  descrption?: string;
+  description?: string;
   icon?: string;
   weight?: number;
   media?: string;
@@ -122,7 +122,7 @@ export interface GetQuestionsApiResponse extends ApiResponseBase {
      */
     deviceId?: string;
     /**
-     * For responceType 7 only
+     * For responseType 7 only
      */
     slider?: QuestionSlider;
     /**

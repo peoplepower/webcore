@@ -5,7 +5,7 @@ import { Interceptor } from './interceptors/interceptor';
 export abstract class Dal {
   protected readonly axios: AxiosInstance;
 
-  protected constructor(defaultConfig?: DalRequestConfig, protected interceptors?: Interceptor[]) {
+  protected constructor(defaultConfig?: DalRequestConfig<any>, protected interceptors?: Interceptor[]) {
     this.axios = Axios.create(defaultConfig);
 
     interceptors?.forEach((i) => {
@@ -24,32 +24,32 @@ export abstract class Dal {
     });
   }
 
-  public request(config: DalRequestConfig): DalResponsePromise {
+  public request<T>(config: DalRequestConfig<T>): DalResponsePromise<T> {
     return this.axios.request(config);
   }
 
-  public get(url: string, config?: DalRequestConfig): DalResponsePromise {
+  public get<T>(url: string, config?: DalRequestConfig<T>): DalResponsePromise<T> {
     config = config || {};
     config.url = url;
     config.method = 'get';
     return this.request(config);
   }
 
-  public delete(url: string, config?: DalRequestConfig): DalResponsePromise {
+  public delete<T>(url: string, config?: DalRequestConfig<T>): DalResponsePromise<T> {
     config = config || {};
     config.url = url;
     config.method = 'delete';
     return this.request(config);
   }
 
-  public head(url: string, config?: DalRequestConfig): DalResponsePromise {
+  public head<T>(url: string, config?: DalRequestConfig<T>): DalResponsePromise<T> {
     config = config || {};
     config.url = url;
     config.method = 'head';
     return this.request(config);
   }
 
-  public post(url: string, data?: any, config?: DalRequestConfig): DalResponsePromise {
+  public post<T>(url: string, data?: any, config?: DalRequestConfig<T>): DalResponsePromise<T> {
     config = config || {};
     config.url = url;
     config.method = 'post';
@@ -57,7 +57,7 @@ export abstract class Dal {
     return this.request(config);
   }
 
-  public put(url: string, data?: any, config?: DalRequestConfig): DalResponsePromise {
+  public put<T>(url: string, data?: any, config?: DalRequestConfig<T>): DalResponsePromise<T> {
     config = config || {};
     config.url = url;
     config.method = 'put';
@@ -65,7 +65,7 @@ export abstract class Dal {
     return this.request(config);
   }
 
-  public patch(url: string, data?: any, config?: DalRequestConfig): DalResponsePromise {
+  public patch<T>(url: string, data?: any, config?: DalRequestConfig<T>): DalResponsePromise<T> {
     config = config || {};
     config.url = url;
     config.method = 'patch';
