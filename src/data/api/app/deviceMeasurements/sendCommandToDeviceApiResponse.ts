@@ -4,6 +4,7 @@ export interface SendCommandToDeviceApiResponse extends ApiResponseBase {
   commands?: Array<{
     id: string;
     deviceId: string;
+    resultCode: string;
   }>;
 }
 
