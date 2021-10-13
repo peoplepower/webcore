@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { LocationAccessLevel, LocationNotificationsCategory } from './getLocationUsersApiResponse';
+import { LocationAccessLevel, LocationNotificationsCategory, UserRole } from './getLocationUsersApiResponse';
 
 export interface AddLocationUsersApiResponse extends ApiResponseBase {
 }
@@ -16,5 +16,10 @@ export interface LocationUsersModel {
       startTime?: number;
       endTime?: number;
     }>;
+
+    /**
+     * User role.
+     */
+    role?: UserRole;
   }>;
 }

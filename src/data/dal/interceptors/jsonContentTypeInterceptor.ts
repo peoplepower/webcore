@@ -12,7 +12,7 @@ export class JsonContentTypeInterceptor implements Interceptor {
   constructor() {
   }
 
-  request(config: DalRequestConfig): any {
+  request(config: DalRequestConfig<any>): any {
     let method = config.method!.toUpperCase();
     if (this.METHODS.some((m) => m === method) && (!config.headers || !config.headers[this.CONTENT_TYPE_HEADER])) {
       if (!config.headers) {

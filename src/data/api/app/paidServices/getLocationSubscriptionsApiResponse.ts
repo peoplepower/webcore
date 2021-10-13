@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { PaymentType, ResourceType, SubscriptionType } from './getSoftwareSubscriptionsApiResponse';
+import { FreemiumType, PaymentType, ResourceType, SubscriptionType } from './getSoftwareSubscriptionsApiResponse';
 
 export enum SubscriptionStatus {
   DefaultOrActive = 0,
@@ -26,9 +26,9 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
       desc: string;
       appName?: string;
       /**
-       * 'true' if it's a freemium subscription
+       * Freemium plan type
        */
-      freemium?: boolean;
+      freemium?: FreemiumType;
       services?: Array<{
         name: string;
         amount: number;
@@ -68,7 +68,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
       name: string;
       amount: string;
       resourceType: ResourceType;
-      resurceId?: string;
+      resourceId?: string;
     }>;
     /**
      * Location ID subscription belongs to
@@ -123,7 +123,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
      */
     gatewayId?: string;
     /**
-     * ID of subscription at payment gateway (for paid subscripitons)
+     * ID of subscription at payment gateway (for paid subscriptions)
      */
     subscriptionId: string;
     /**
@@ -131,7 +131,7 @@ export interface GetLocationSubscriptionsApiResponse extends ApiResponseBase {
      */
     transactionId?: string;
     /**
-     * Indicates whether it is paymeny gateway sandbox or not
+     * Indicates whether it is payment gateway sandbox or not
      */
     sandbox?: boolean;
     /**

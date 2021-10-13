@@ -18,13 +18,22 @@ export enum PaymentType {
 
 /**
  * Service and bot resource types
- * Some resources binded to Location, but some User-specific
+ * Some resources bound to Location, but some User-specific
  */
 export enum ResourceType {
   User = 0,
   Location = 1,
   Device = 4,
   Circle = 7,
+}
+
+/**
+ * Freemium subscription types
+ * Fallback plan type also can be re-assigned automatically on cancelling other plans
+ */
+export enum FreemiumType {
+  Freemium = 1,
+  Fallback = 2,
 }
 
 export interface GetSoftwareSubscriptionsApiResponse extends ApiResponseBase {
@@ -82,9 +91,9 @@ export interface GetSoftwareSubscriptionsApiResponse extends ApiResponseBase {
        */
       free?: boolean;
       /**
-       * 'true' if it's a freemium subscription
+       * Freemium plan type
        */
-      freemium?: boolean;
+      freemium?: FreemiumType;
       /**
        * Duration of the subscription in days, if this is a Non-Renewable subscription that requires Ensemble to expire the subscription
        */

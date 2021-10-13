@@ -64,11 +64,11 @@ export interface ProvideNewPurchaseInfoApiResponse extends ApiResponseBase {
      */
     gatewayId?: string;
     /**
-     * ID of subscription at payment gateway (for paid subscripitons)
+     * ID of subscription at payment gateway (for paid subscriptions)
      */
     subscriptionId: string;
     /**
-     * Indicates whether it is paymeny gateway sandbox or not
+     * Indicates whether it is payment gateway sandbox or not
      */
     sandbox?: boolean;
     /**
@@ -80,13 +80,13 @@ export interface ProvideNewPurchaseInfoApiResponse extends ApiResponseBase {
 
 export interface NewPurchaseInfoModel {
   /**
-   * Billing provider unique identificator of the instance.
+   * Billing provider unique identification of the instance.
    * Only for certain providers like Chargify.
    */
   site?: string;
 
   /**
-   * Existing subscripiton ID from recurring billing provider.
+   * Existing subscription ID from recurring billing provider.
    */
   subscriptionId?: string;
 
@@ -103,7 +103,7 @@ export interface NewPurchaseInfoModel {
   paymentProfileId?: string;
 
   /**
-   * Cusomer ID in 3rd party billing service or payment provider service
+   * Customer ID in 3rd party billing service or payment provider service
    */
   customerId?: string;
 

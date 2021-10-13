@@ -83,7 +83,7 @@ export class LocationService extends BaseService {
 
   /**
    * Delete location completely.
-   * @param {number} locationId Locaiton ID to delete.
+   * @param {number} locationId Location ID to delete.
    * @returns {Promise<ApiResponseBase>}
    */
   public deleteLocation(locationId: number): Promise<ApiResponseBase> {
@@ -129,7 +129,7 @@ export class LocationService extends BaseService {
 
   /**
    * Removes user from location.
-   * @param {number} locationId Locatin ID to delete user from
+   * @param {number} locationId Location ID to delete user from
    * @param {number} userId User ID to delete from location
    * @returns {Promise<ApiResponseBase>}
    */
@@ -316,7 +316,7 @@ export class LocationService extends BaseService {
   }
 
   /**
-   * Update existing space at specificed location.
+   * Update existing space at specified location.
    * @param {number} locationId Location ID.
    * @param {number} spaceId Space ID.
    * @param {UpdateLocationSpaceModel} spaceModel

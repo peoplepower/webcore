@@ -4,6 +4,28 @@ export interface GetApiSettingsApiResponse extends ApiResponseBase {
   clouds: Array<CloudConfig>;
 }
 
+export interface TimezoneModel {
+  /**
+   * Timezone ID ("US/Eastern")
+   */
+  id: string;
+
+  /**
+   * Timezone name
+   */
+  name: string;
+
+  /**
+   * Timezone offset in minutes
+   */
+  offset: number;
+
+  /**
+   * Daylight saving time
+   */
+  dst: boolean;
+}
+
 export interface CloudConfig {
   /**
    * Cloud name
@@ -12,13 +34,7 @@ export interface CloudConfig {
 
   currentTime: string;
   currentTimeMs: number;
-  defaultTimezone: {
-    id: string;
-    offset: number;
-    dst: boolean;
-    name: string;
-  };
-
+  defaultTimezone: TimezoneModel;
   servers: CloudServerConfig[];
 }
 

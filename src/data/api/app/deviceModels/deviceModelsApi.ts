@@ -16,7 +16,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
  * See {@link https://iotapps.docs.apiary.io/#reference/creating-products/device-models}
  *
  * Supported device models and categories. Data is returned for one brand only. If the brand parameter is not set, data for the default brand is returned.
- * Categories can be organizaed in hierarchies without specific schema.
+ * Categories can be organized in hierarchies without specific schema.
  */
 @injectable('DeviceModelsApi')
 export class DeviceModelsApi {

@@ -12,8 +12,6 @@ import { GetServerApiResponse } from './getServerApiResponse';
 export class CommonApi {
   @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
-  // TODO: Cover this API with integration tests just like the other APIs covered
-
   /**
    * Check availability of specific Server.
    * See {@link https://iotapps.docs.apiary.io/#reference/cloud-connectivity/how-to-ping/check-availability}

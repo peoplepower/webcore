@@ -25,7 +25,7 @@ export class BotService extends BaseService {
    * @param [params] Options to search bots according to.
    * @param {number} [params.organizationId] Organization ID.
    * @param {number} [params.locationId] Location ID.
-   * @param {string} [params.searchBy] Search by name, aurthor, keywords.
+   * @param {string} [params.searchBy] Search by name, author, keywords.
    * @param {string} [params.category] Bots category, multiple allowed.
    * @param {boolean} [params.compatible] Filter by compatibility with user account.
    * @param {string} [params.lang] Language filter.
@@ -167,7 +167,7 @@ export class BotService extends BaseService {
   /**
    * Configure Bot Instance
    * @param {number} appInstanceId Bot instance ID.
-   * @param {BotInstanceStatus} [status] New status, 1 - active, 2 - inavtive.
+   * @param {BotInstanceStatus} [status] New status, 1 - active, 2 - inactive.
    * @param {ConfigureBotBody} [objectBotInstance] Bot properties.
    * @returns {Promise<ApiResponseBase>}
    */

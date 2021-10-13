@@ -120,13 +120,19 @@ export class AuthApi {
    * @param {string} [params.cloudName] The third party cloud name, where the API key must be validated.
    * @returns {Promise<LoginApiResponse>}
    */
-  loginByKey(params: {
+  loginByKey(params?: {
     apiKey?: string;
     keyType?: ApiKeyType;
     expiry?: number;
     clientId?: string;
     cloudName?: string;
   }): Promise<LoginApiResponse> {
+    params = params || {};
+    let headers: { [headerName: string]: string } = {};
+    if (params?.apiKey) {
+      headers['API_KEY'] = params.apiKey;
+    }
+
     return this.dal.get('loginByKey', {
       params: {
         keyType: params.keyType,
@@ -134,9 +140,7 @@ export class AuthApi {
         clientId: params.clientId,
         cloudName: params.cloudName,
       },
-      headers: {
-        API_KEY: params.apiKey,
-      },
+      headers: headers,
     });
   }
 

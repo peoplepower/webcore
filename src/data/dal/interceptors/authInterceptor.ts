@@ -16,7 +16,7 @@ export class AuthInterceptor implements Interceptor {
   constructor() {
   }
 
-  request(config: DalRequestConfig): any {
+  request(config: DalRequestConfig<any>): any {
     if (!config.noAuth && (!config.headers || !config.headers['API_KEY']) && this.authService) {
       if (!config.headers) {
         config.headers = {}; //Just to make sure it is initialized in case its undefined
@@ -30,7 +30,7 @@ export class AuthInterceptor implements Interceptor {
     return config;
   }
 
-  response(response: DalResponse): any {
+  response(response: DalResponse<any>): any {
     if (response && response.data && response.data.resultCode === 2) {
       // unauthorised
       this.authService.logoutFromThisBrowser();
@@ -41,7 +41,7 @@ export class AuthInterceptor implements Interceptor {
     return response;
   }
 
-  responseError(error: DalError): any {
+  responseError(error: DalError<any>): any {
     if (error && error.response && error.response.data && error.response.data.resultCode === 2) {
       // unauthorised
       this.authService.onNeedRelogin.trigger();

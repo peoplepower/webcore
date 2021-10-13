@@ -1,6 +1,9 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { ParamDisplayType } from '../devicesConfiguration/getDeviceParametersApiResponse';
 
+/**
+ * How device paired with the system.
+ */
 export enum DevicePairingType {
   QRCodeScan = 1,
   Native = 2,
@@ -12,9 +15,6 @@ export enum DevicePairingType {
 
 /**
  * Position types for device list UI at frontend level.
- * 0 - Right aligned position at the device list item
- * 1 - Second part of right aligned position divided by some symbol (depends of design) at the device list item
- * 2 - Subtitle (or description) below the device list item title
  */
 export enum ParamPositionType {
   RightAlignedFirst = 0,
@@ -33,14 +33,23 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
     name?: {
       [key: string]: string;
     };
-    models: Array<{
+
+    /**
+     * Device models within specific category.
+     */
+    models?: Array<{
       id: string;
       manufacturer?: {
         [key: string]: string;
       };
-      pairingType: number;
+      pairingType: DevicePairingType;
       oauthAppId?: number;
+
+      /**
+       * Set to 'true' if model should be hidden at UI level.
+       */
       hidden: boolean;
+
       sortId: number;
       name?: {
         [key: string]: string;

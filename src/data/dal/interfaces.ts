@@ -1,9 +1,9 @@
 import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export interface DalResponsePromise extends Promise<any> {
+export interface DalResponsePromise<T> extends Promise<T> {
 }
 
-export interface DalRequestConfig extends AxiosRequestConfig {
+export interface DalRequestConfig<T> extends AxiosRequestConfig<T> {
   /**
    * Set this flag if you want to skip API_KEY header automatic add
    */
@@ -20,11 +20,11 @@ export interface DalRequestConfig extends AxiosRequestConfig {
   retryCount?: number;
 }
 
-export interface DalResponse extends AxiosResponse {
-  config: DalRequestConfig;
+export interface DalResponse<T> extends AxiosResponse<T> {
+  config: DalRequestConfig<T>;
 }
 
-export interface DalError extends AxiosError {
-  config: DalRequestConfig;
-  response?: DalResponse;
+export interface DalError<T> extends AxiosError<T> {
+  config: DalRequestConfig<T>;
+  response?: DalResponse<T>;
 }

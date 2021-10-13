@@ -1,11 +1,11 @@
 import { DalError, DalRequestConfig, DalResponse } from '../interfaces';
 
 export interface Interceptor {
-  request?(config: DalRequestConfig): DalRequestConfig | Promise<DalRequestConfig>;
+  request?<T>(config: DalRequestConfig<T>): DalRequestConfig<T> | Promise<DalRequestConfig<T>>;
 
-  requestError?(error: DalError): DalError | DalRequestConfig | Promise<DalRequestConfig>;
+  requestError?<T>(error: DalError<T>): DalError<T> | DalRequestConfig<T> | Promise<DalRequestConfig<T>>;
 
-  response?(response: DalResponse): DalResponse | Promise<DalResponse>;
+  response?<T>(response: DalResponse<T>): DalResponse<T> | Promise<DalResponse<T>>;
 
-  responseError?(error: DalError): DalResponse | Promise<DalResponse> | Promise<DalError>;
+  responseError?<T>(error: DalError<T>): DalResponse<T> | Promise<DalResponse<T>> | Promise<DalError<T>>;
 }

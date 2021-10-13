@@ -20,15 +20,15 @@ export enum EmailVerificationStatus {
 }
 
 export enum UserPermission {
-  AccessAll = 0, // access any data
-  GrantRoles = 1, // grant roles
-  ReportsAccess = 2, // access to any data in reports
-  OrganizationAdmin = 3, // access to users, locations, devices in specific organization (administrator)
-  SuperAdmin = 4, // create/update/delete organizations, groups, administrators
-  PaidServices = 5, // paid services administrator
-  BotStoreAdmin = 6, // bot store administrator
-  SystemAdmin = 7, // system administrator
-  CustomerServicesAdmin = 8, // manage customer services
+  AccessAll = 0, // Access any data
+  GrantRoles = 1, // Grant roles
+  ReportsAccess = 2, // Access to any data in reports
+  OrganizationAdmin = 3, // Access to users, locations, devices in specific organization (administrator)
+  SuperAdmin = 4, // Create/update/delete organizations, groups, administrators
+  PaidServices = 5, // Paid services administrator
+  BotStoreAdmin = 6, // Bot store administrator
+  SystemAdmin = 7, // System administrator
+  CustomerServicesAdmin = 8, // Manage customer services
 }
 
 export enum LocationPriorityCategory {
@@ -39,6 +39,15 @@ export enum LocationPriorityCategory {
   Problem = 4, // Problems with the system (offline devices, low battery, abnormal device behaviors)
   Warning = 5, // Subjective warning (abnormal trends, sleeping too much, bathroom usage)
   Critical = 6, // Critical alert (falls, didn't wake up, water leak)
+}
+
+/**
+ * By default, system automatically delete old files once location file storage is full.
+ * N > 1 - automatically delete files created earlier than N days ago.
+ */
+ export enum FileUploadPolicy {
+  KeepOldFiles = 0,
+  DeleteOldFiles = 1,
 }
 
 export interface LocationInfo {
@@ -380,12 +389,9 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     anonymous?: boolean;
 
     /**
-     * 0 - Keep old files
-     * 1 - Automatically delete old files
-     * By default, Ensemble will automatically delete old files (i.e. videos and images) once a user's account is full,
-     * such as videos and images.
+     * Location file storage policy.
      */
-    fileUploadPolicy: number;
+    fileUploadPolicy: FileUploadPolicy | number;
 
     /**
      * Existence of user account password.

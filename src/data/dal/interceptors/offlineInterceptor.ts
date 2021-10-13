@@ -52,18 +52,18 @@ export class OfflineInterceptor implements Interceptor {
   constructor() {
   }
 
-  request(config: DalRequestConfig): any {
+  request(config: DalRequestConfig<any>): any {
     if (this.offlineService.offline) {
       return this.offlineService.waitOnline().then(() => config);
     }
     return config;
   }
 
-  requestError(error: DalError): any {
+  requestError(error: DalError<any>): any {
     return Promise.reject(error);
   }
 
-  response(response: DalResponse): any {
+  response(response: DalResponse<any>): any {
     if (
       response &&
       SERVER_UNAVAILABLE_CODES.some((el) => el === response.status) &&
@@ -80,7 +80,7 @@ export class OfflineInterceptor implements Interceptor {
     return response;
   }
 
-  responseError(error: DalError): any {
+  responseError(error: DalError<any>): any {
     if (!error || !error.request) {
       return Promise.reject(error);
     }
@@ -98,7 +98,7 @@ export class OfflineInterceptor implements Interceptor {
     return Promise.reject(error);
   }
 
-  private repeatRequest(config: DalRequestConfig) {
+  private repeatRequest(config: DalRequestConfig<any>) {
     return this.offlineService.goOfflineAndWaitOnline().then(() => {
       config.retryCount = config.retryCount ? config.retryCount + 1 : 1;
       config.ignoreApiResponseTransformation = true;

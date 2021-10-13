@@ -14,7 +14,7 @@ const DEFAULT_CONFIG_NAME = 'default';
 export class Tuner {
   @inject('Envir') private readonly envir!: Envir;
 
-  private configs: {
+  private readonly configs: {
     // actually it's `[env: Environment]: WebCoreConfig`, but typescript doesn't support this.
     // Environment is actually string, so
     [env: string]: WebCoreConfig[];

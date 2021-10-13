@@ -393,14 +393,12 @@ export class DeviceService extends BaseService {
    * @param {string} deviceId Device ID for which to send a command
    * @param {number} locationId Device location ID
    * @param {CommandParametersModel} command Command to send to device
-   * @param {boolean} shared Send command to a device shared in circle. If true, the location ID is not required.
    * @returns {Promise<DeviceCommandResult>}
    */
   public sendCommandToDevice(
     deviceId: string,
     locationId: number,
     command: CommandParametersModel,
-    shared?: boolean,
   ): Promise<DeviceCommandResult> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);

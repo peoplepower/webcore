@@ -176,7 +176,7 @@ export class AuthService extends BaseService {
       .then((result) => {
         me.logger.debug('Logged in by API_KEY', result);
 
-        // NOTE: Dmitry said that if API_KEY is valid enough - server will not generate new API_KEY. ¯\_(ツ)_/¯
+        // NOTE: Dmitriy said that if API_KEY is valid enough - server will not generate new API_KEY. ¯\_(ツ)_/¯
         const key = result.key || apiKey;
 
         me._apiKey = key;

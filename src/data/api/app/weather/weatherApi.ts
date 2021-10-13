@@ -6,7 +6,7 @@ import { GetCurrentWeatherByGeocodeApiResponse } from './getCurrentWeatherByGeoc
 import { GetCurrentWeatherByLocationApiResponse } from './getCurrentWeatherByLocationApiResponse';
 
 /**
- * These API's are avaialabe for certain organizations only.
+ * These API's are available for certain organizations only.
  * See {@link http://docs.iotapps.apiary.io/#reference/weather}
  */
 @injectable('WeatherApi')
@@ -14,7 +14,7 @@ export class WeatherApi {
   @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
-   * Retrieve weather forecust at certain point by latitude and longitude.
+   * Retrieve weather forecast at certain point by latitude and longitude.
    * See {@link http://docs.iotapps.apiary.io/#reference/weather/forecast-by-geocode/get-forecast-by-geocode}
    *
    * @param {number} latitude Latitude.

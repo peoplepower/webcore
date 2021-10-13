@@ -342,7 +342,7 @@ export class SubscriptionsService extends BaseService {
    * Gets payment transactions history for the specified subscription (service plan).
    * @param {number} servicePlanId Subscription ID to get information for.
    * @param {number} [locationId] ID of the particular location to get information for.
-   * @param {boolean} [upgradeDowngradeEventsOnly] Flag indicating we want to get only uprade/downgrade events history.
+   * @param {boolean} [upgradeDowngradeEventsOnly] Flag indicating we want to get only upgrade/downgrade events history.
    * @returns {Promise<UserSubscriptionTransactions>}
    */
   public getSubscriptionTransactions(

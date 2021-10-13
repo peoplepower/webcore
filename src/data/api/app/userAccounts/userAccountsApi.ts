@@ -41,13 +41,10 @@ export class UserAccountsApi {
     strongPassword: boolean = false
   ): Promise<CreateUserAndLocationApiResponse> {
     // Make sure the headers collection initialized as empty to avoid chances the code using it will crash
-    let headers = operationToken ? {PPCAuthorization: 'op token=' + operationToken} : {};
-    let params = strongPassword ? {strongPassword: true} : {};
-
     return this.dal.post('user', userModel, {
       noAuth: noApiKey,
-      headers: headers,
-      params: params
+      headers: operationToken ? {PPCAuthorization: 'op token=' + operationToken} : {},
+      params: strongPassword ? {strongPassword: true} : {}
     });
   }
 

@@ -15,6 +15,16 @@ export enum LocationNotificationsCategory {
   Supporter = 2,
 }
 
+/**
+ * Location user role.
+ * Used by Bots and UI to determine who is who.
+ */
+export enum UserRole {
+  CareRecipient = 1,
+  PrimaryCaregiver = 2,
+  SecondaryCaregiver = 3,
+}
+
 export interface GetLocationUsersApiResponse extends ApiResponseBase {
   users: Array<{
     id: number;
@@ -23,6 +33,12 @@ export interface GetLocationUsersApiResponse extends ApiResponseBase {
     firstName?: string;
     lastName?: string;
     nickname?: string;
+
+    /**
+     * User role.
+     */
+    role?: UserRole;
+
     email?: {
       email: string;
       verified: boolean;

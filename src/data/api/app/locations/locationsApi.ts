@@ -124,7 +124,7 @@ export class LocationsApi {
   // #region --------------------- Location Users -----------------------
 
   /**
-   * Returs users who have access to specific location.
+   * Returns users who have access to specific location.
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/location-users/get-location-users}
    *
    * An administrator of a location can assign other existing users to access to the location and devices on it.
@@ -151,6 +151,9 @@ export class LocationsApi {
   addLocationUsers(locationId: number, users: LocationUsersModel): Promise<AddLocationUsersApiResponse> {
     return this.dal.post(`location/${encodeURIComponent(locationId.toString())}/users`, users);
   }
+
+  // TODO(max): Add update location user API, see Apiary.
+  // https://iotapps.docs.apiary.io/#reference/locations/location-users/update-location-user
 
   /**
    * Removes user(s) access from specified location.

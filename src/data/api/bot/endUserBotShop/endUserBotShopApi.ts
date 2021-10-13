@@ -105,7 +105,7 @@ export class BotShopApi {
    *
    * @param [params] Request parameters.
    * @param {number} [params.appInstanceId] Get specific bot instance by ID.
-   * @param {string} [params.bundle] Filter by the bot's bundle ID.
+   * @param {string} [params.bundle] Filter by the bots' bundle ID.
    * @param {number} [params.locationId] Filtering bot instances by location, locationId=0 means the bot instances accessing to all locations.
    * @param {number} [params.organizationId] Return bots purchased by this organization.
    * @param {number} [params.circleId] Return bots purchased by this circle.
