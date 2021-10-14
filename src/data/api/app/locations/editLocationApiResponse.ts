@@ -2,12 +2,26 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 
 export enum LocationType {
   Residence = 10,
+  RentalUnit = 11,
   GeneralBusinessOrOther = 20,
-  MunicipalGovernment = 21,
-  HotelLodging = 22,
+  MunicipalOrGovernment = 21,
+  HotelOrLodging = 22,
   Restaurant = 23,
   Retail = 24,
   Office = 25,
+  CommonArea = 30,
+  Elevator = 31,
+  Hall = 32,
+  Stairway = 33,
+  Entrance = 34,
+  Laundry = 35,
+  ParkingOrGarage = 36,
+  AmenityArea = 40,
+  Gym = 41,
+  PoolOrSpa = 42,
+  UtilityArea = 50,
+  StaffRoom = 51,
+  Entertainment = 52,
 }
 
 export interface EditLocationApiResponse extends ApiResponseBase {
