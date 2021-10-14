@@ -26,7 +26,7 @@
   },
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">=14.18.1"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js & tsc --project tsconfig.json",
