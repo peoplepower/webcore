@@ -7,6 +7,7 @@ import { GetUserInformationApiResponse } from './getUserInformationApiResponse';
 import { SendVerificationMessageApiResponse, VerificationType } from './sendVerificationMessageApiResponse';
 import { BadgeType, ResetBadgesApiResponse } from './resetBadgesApiResponse';
 import { UpdateUserApiResponse, UpdateUserModel } from './updateUserApiResponse';
+import { GetPronounsApiResponse } from './getPronounsApiResponse';
 
 /**
  * User Accounts API.
@@ -115,7 +116,8 @@ export class UserAccountsApi {
   // #region ------------------ User Tags -------------------
 
   /**
-   * Apply tag to mark the user.
+   * Apply tag to the current user (current user = API_KEY owner).
+   * Tags will not be applied to admins
    * See {@link https://iotapps.docs.apiary.io/#reference/user-accounts/user-tags/apply-tag}
    *
    * @param {string} tag Tag value.
@@ -126,7 +128,7 @@ export class UserAccountsApi {
   }
 
   /**
-   * Delete tag from list of user tags.
+   * Delete tag from list of current user tags.
    * See {@link https://iotapps.docs.apiary.io/#reference/user-accounts/user-tags/delete-tag}
    *
    * @param {string} tag Tag value.
@@ -317,4 +319,24 @@ export class UserAccountsApi {
   resetBadges(params?: { type?: BadgeType }): Promise<ResetBadgesApiResponse> {
     return this.dal.put('badges', {}, {params: params});
   }
+
+  // #region -------------------- Pronouns --------------------
+
+  /**
+   * User pronouns are used to create a sentence like "{She} went to bed at 9:00 PM. {She} took {her} medicine at 10:00 AM."
+   * See {@link https://iotapps.docs.apiary.io/#reference/user-accounts/pronoun/get-pronouns}
+   *
+   * @param params Request parameters
+   * @param {string} [params.language] language filter
+   * @returns {Promise<GetPronounsApiResponse>}
+   */
+  getPronouns(params: {
+    brand?: string;
+    appName?: string;
+    type?: VerificationType;
+  }): Promise<GetPronounsApiResponse> {
+    return this.dal.get('pronouns', { params: params });
+  }
+
+  // #endregion
 }

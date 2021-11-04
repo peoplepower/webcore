@@ -45,7 +45,7 @@ export enum LocationPriorityCategory {
  * By default, system automatically delete old files once location file storage is full.
  * N > 1 - automatically delete files created earlier than N days ago.
  */
- export enum FileUploadPolicy {
+export enum FileUploadPolicy {
   KeepOldFiles = 0,
   DeleteOldFiles = 1,
 }
@@ -449,6 +449,11 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
       autoRefresh: boolean;
     }>;
 
+    /**
+     * The administrator can only see device, location and user tags, but not file tags.
+     * Users can only see file tags but not other tags.
+     * File tags would be used to help them as they search for one of their private files.
+     */
     tags?: Array<{
       tag: string;
       organizationId?: number;

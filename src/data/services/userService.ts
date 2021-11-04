@@ -64,11 +64,11 @@ export class UserService extends BaseService {
 
   /**
    * Gets user information.
-   * @param {number} userId
-   * @param {number} organizationId
+   * @param {number} [userId]
+   * @param {number} [organizationId]
    * @returns {Promise<UserInformation>}
    */
-  public getUserInfo(userId: number, organizationId?: number): Promise<UserInformation> {
+  public getUserInfo(userId?: number, organizationId?: number): Promise<UserInformation> {
     return this.authService.ensureAuthenticated().then(() =>
       this.userAccountsApi.getUserInformation({
         userId: userId,
