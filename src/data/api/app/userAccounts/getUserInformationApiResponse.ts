@@ -433,6 +433,12 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      */
     language: string;
 
+    /**
+     * User's pronoun ID. See get pronouns API.
+     * @type {number}
+     */
+    pronounId: number;
+
     auths?: Array<{
       appId: number;
       appName: string;
