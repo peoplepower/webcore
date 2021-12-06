@@ -25,7 +25,7 @@ export class DevicesConfigurationApi {
 
   /**
    * Retrieve supported device types descriptions.
-   * See {@link http://docs.iotapps.apiary.io/#reference/creating-products/supported-products/get-supported-products}
+   * See {@link https://iotapps.docs.apiary.io/#reference/creating-products/supported-device-types/get-device-types}
    *
    * Device types attributes are documented in the Supported Product Attributes API.
    * See
