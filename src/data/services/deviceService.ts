@@ -16,6 +16,7 @@ import { DevicePairingType, GetDeviceModelsApiResponse } from '../api/app/device
 import { DeviceModelsApi } from '../api/app/deviceModels/deviceModelsApi';
 import { GetDeviceParametersApiResponse } from '../api/app/devicesConfiguration/getDeviceParametersApiResponse';
 import { GetLastNMeasurementsApiResponse } from '../api/app/deviceMeasurements/getLastNMeasurementsApiResponse';
+import { UpdateDeviceModel } from '../api/app/devices/updateDeviceApiResponse';
 
 @injectable('DeviceService')
 export class DeviceService extends BaseService {
@@ -251,17 +252,13 @@ export class DeviceService extends BaseService {
    * Updates device at specific location.
    * @param {string} deviceId ID of the device to update
    * @param {number} locationId Location ID where device is located
-   * @param {string|undefined} deviceDescription New Device description
-   * @param {string|undefined} deviceModelId New Device description
-   * @param {number} goalId Goal ID
+   * @param {UpdateDeviceModel} model Device and location properties
    * @returns {Promise<ApiResponseBase>}
    */
   public updateDeviceAtLocation(
     deviceId: string,
     locationId: number,
-    deviceDescription?: string,
-    deviceModelId?: string,
-    goalId?: number,
+    model: UpdateDeviceModel,
   ): Promise<ApiResponseBase> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
@@ -269,19 +266,11 @@ export class DeviceService extends BaseService {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
-
-    const device: { desc?: string; modelId?: string; goalId?: number } = {};
-    if (deviceDescription && deviceDescription.length > 0) {
-      device.desc = deviceDescription;
-    }
-    if (deviceModelId && deviceModelId.length > 0) {
-      device.modelId = deviceModelId;
-    }
-    if (goalId != null && !isNaN(goalId)) {
-      device.goalId = goalId;
+    if (!model) {
+      return this.reject('No device update data provided.');
     }
 
-    return this.devicesApi.updateDeviceAtLocation(deviceId, locationId, {device: device});
+    return this.devicesApi.updateDeviceAtLocation(deviceId, locationId, model);
   }
 
   // #endregion

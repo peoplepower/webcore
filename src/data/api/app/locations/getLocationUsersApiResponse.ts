@@ -26,39 +26,41 @@ export enum UserRole {
 }
 
 export interface GetLocationUsersApiResponse extends ApiResponseBase {
-  users: Array<{
-    id: number;
-    userName: string;
-    altUsername?: string;
-    firstName?: string;
-    lastName?: string;
-    nickname?: string;
+  users: LocationUser[];
+}
 
-    /**
-     * User role.
-     */
-    role?: UserRole;
+export interface LocationUser {
+  id: number;
+  userName: string;
+  altUsername?: string;
+  firstName?: string;
+  lastName?: string;
+  nickname?: string;
 
-    email?: {
-      email: string;
-      verified: boolean;
-      status: EmailVerificationStatus;
-    };
-    phone?: string;
-    phoneType?: PhoneType;
-    smsStatus?: PhoneVerificationStatus;
-    locationAccess: LocationAccessLevel;
-    temporary: boolean;
-    accessEndDate?: string;
-    accessEndDateMs?: number;
-    category: LocationNotificationsCategory;
-    smsPhone?: string;
-    language: string;
-    avatarFileId?: number;
-    schedules?: Array<{
-      daysOfWeek: number;
-      startTime: number;
-      endTime: number;
-    }>;
+  /**
+   * User role.
+   */
+  role?: UserRole;
+
+  email?: {
+    email: string;
+    verified: boolean;
+    status: EmailVerificationStatus;
+  };
+  phone?: string;
+  phoneType?: PhoneType;
+  smsStatus?: PhoneVerificationStatus;
+  locationAccess: LocationAccessLevel;
+  temporary: boolean;
+  accessEndDate?: string;
+  accessEndDateMs?: number;
+  category: LocationNotificationsCategory;
+  smsPhone?: string;
+  language: string;
+  avatarFileId?: number;
+  schedules?: Array<{
+    daysOfWeek: number;
+    startTime: number;
+    endTime: number;
   }>;
 }
