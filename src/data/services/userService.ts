@@ -73,7 +73,7 @@ export class UserService extends BaseService {
       this.userAccountsApi.getUserInformation({
         userId: userId,
         organizationId: organizationId,
-      }),
+      })
     );
   }
 
@@ -112,10 +112,10 @@ export class UserService extends BaseService {
    */
   public recoverPassword(username: string, brand?: string, appName?: string): Promise<RecoverPasswordInfo> {
     return this.userAccountsApi.recoverPassword({
-      username: username,
-      brand: brand,
-      appName: appName,
-    });
+                                                  username: username,
+                                                  brand: brand,
+                                                  appName: appName,
+                                                });
   }
 
   /**
@@ -136,7 +136,8 @@ export class UserService extends BaseService {
    * @returns {Promise<UserCreationResult>}
    */
   public createNewUser(user: CreateUserAndLocationModel, strongPassword?: boolean): Promise<UserCreationResult> {
-    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, strongPassword));
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, strongPassword));
   }
 
   /**
@@ -184,7 +185,8 @@ export class UserService extends BaseService {
    * Adds a unique signature identifier to the list of agreements the user has signed.
    * See {@link http://docs.iotapps.apiary.io/#reference/user-accounts/sign-terms-of-service/sign-terms-of-service}
    *
-   * We recommend selecting agreement signature strings of the format {appName}_{agreement version number} or {appName}_{feature}_{agreement version number}.
+   * We recommend selecting agreement signature strings of the format {appName}_{agreement version number} or
+   * {appName}_{feature}_{agreement version number}.
    *
    * @param {string} signatureId Terms of Service ID.
    * @returns {Promise<ApiResponseBase>}

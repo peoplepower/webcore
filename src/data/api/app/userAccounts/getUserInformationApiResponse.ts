@@ -439,6 +439,11 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      */
     pronounId: number;
 
+    /**
+     * Organization ID used the user's creation.
+     */
+    organizationId: number;
+
     auths?: Array<{
       appId: number;
       appName: string;
@@ -451,6 +456,7 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     authClients?: Array<{
       appId: string;
       appName: string;
+      locationId?: number;
       expiry: string;
       autoRefresh: boolean;
     }>;
