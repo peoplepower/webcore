@@ -154,7 +154,7 @@ export class LocationService extends BaseService {
    * @param {string|string[]} name State name, multiple values supported.
    * @returns {Promise<GetLocationStateApiResponse>}
    */
-  public getLocationState(locationId: number, name: string): Promise<GetLocationStateApiResponse> {
+  public getLocationState(locationId: number, name: string | string[]): Promise<GetLocationStateApiResponse> {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
