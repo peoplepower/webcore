@@ -362,6 +362,7 @@ export class LocationsApi {
    * @param {string} params.name State name.
    * @param {boolean} [params.overwrite] Overwrite the entire state with completely new content.
    * @param {SetLocationStateModel} value any valid JSON node - string, integer, boolean, array, object, etc.
+   * @param {string} [analyticKey] Optional Bot Api key.
    * @returns {Promise<SetLocationStateApiResponse>}
    */
   setLocationState(
@@ -371,9 +372,11 @@ export class LocationsApi {
       overwrite?: boolean;
     },
     value: SetLocationStateModel,
+    analyticKey?: string,
   ): Promise<SetLocationStateApiResponse> {
     return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/state`, value || {}, {
       params: params,
+      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
     });
   }
 
@@ -422,6 +425,7 @@ export class LocationsApi {
    * @param {string|number} params.date State date or time value.
    * @param {boolean} [params.overwrite] Overwrite the entire state with completely new content.
    * @param {SetLocationStateModel} value any valid JSON node - string, integer, boolean, array, object, etc.
+   * @param {string} [analyticKey] Optional Bot Api key.
    * @returns {Promise<SetLocationStateApiResponse>}
    */
   setLocationTimeState(
@@ -432,9 +436,11 @@ export class LocationsApi {
       overwrite?: boolean;
     },
     value: SetLocationStateModel,
+    analyticKey?: string,
   ): Promise<SetLocationStateApiResponse> {
     return this.dal.put(`locations/${encodeURIComponent(locationId.toString())}/timeStates`, value || {}, {
       params: params,
+      headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
     });
   }
 

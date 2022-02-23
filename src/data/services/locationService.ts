@@ -190,6 +190,7 @@ export class LocationService extends BaseService {
    * @param {string} name State name.
    * @param {SetLocationStateModel} value any valid JSON node - string, integer, boolean, array, object, etc.
    * @param {boolean} [overwrite] Overwrite the entire state with completely new content.
+   * @param {string} [analyticKey] Analytic Bot Key.
    * @returns {Promise<SetLocationStateApiResponse>}
    */
   public setLocationState(
@@ -197,6 +198,7 @@ export class LocationService extends BaseService {
     name: string,
     value: SetLocationStateModel,
     overwrite?: boolean,
+    analyticKey?: string,
   ): Promise<SetLocationStateApiResponse> {
     const params: {
       name: string;
@@ -207,6 +209,10 @@ export class LocationService extends BaseService {
 
     if (overwrite) {
       params.overwrite = true;
+    }
+
+    if (analyticKey) {
+      return this.locationsApi.setLocationState(locationId, params, value, analyticKey);
     }
 
     return this.authService.ensureAuthenticated().then(() => {
@@ -281,6 +287,40 @@ export class LocationService extends BaseService {
   ): Promise<GetLocationTimeStateApiResponse> {
     return this.authService.ensureAuthenticated().then(() => {
       return this.locationsApi.getLocationTimeState(locationId, params);
+    });
+  }
+
+  /**
+   * Set location time state.
+   * See {@link https://iotapps.docs.apiary.io/#reference/locations/location-time-states/set-state}
+   *
+   * A way for bots and users to set time based location states with flexible JSON object structure. To delete a field from the current value set it to null.
+   *
+   * @param {number} locationId Location ID.
+   * @param params Requested parameters.
+   * @param {string} params.name State name.
+   * @param {string|number} params.date State date or time value.
+   * @param {boolean} [params.overwrite] Overwrite the entire state with completely new content.
+   * @param {SetLocationStateModel} value any valid JSON node - string, integer, boolean, array, object, etc.
+   * @param {string} [analyticKey] Optional Bot Api key.
+   * @returns {Promise<SetLocationStateApiResponse>}
+   */
+  setLocationTimeState(
+    locationId: number,
+    params: {
+      name: string;
+      date: string | number;
+      overwrite?: boolean;
+    },
+    value: SetLocationStateModel,
+    analyticKey?: string,
+  ): Promise<SetLocationStateApiResponse> {
+    if (analyticKey) {
+      return this.locationsApi.setLocationState(locationId, params, value, analyticKey);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.setLocationState(locationId, params, value);
     });
   }
 
