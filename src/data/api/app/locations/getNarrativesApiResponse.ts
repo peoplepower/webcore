@@ -12,7 +12,7 @@ export enum NarrativeType {
   Default = 0,
   UserDeleted = 1,
   LocationDeleted = 2,
-  LocationRemoved = 3,
+  LocationMoved = 3,
 }
 
 export interface Narrative {

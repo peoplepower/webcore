@@ -6,6 +6,7 @@ export enum NarrativeScope {
 }
 
 export enum NarrativePriority {
+  Analytics = -1,
   Details = 0,
   Info = 1,
   Warning = 2,
