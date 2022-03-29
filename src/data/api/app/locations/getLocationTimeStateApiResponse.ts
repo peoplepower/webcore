@@ -3,8 +3,8 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 export interface GetLocationTimeStateApiResponse extends ApiResponseBase {
   states?: Array<{
     name: string;
-    startDate: string;
-    startDateMs: number;
+    stateDate: string;
+    stateDateMs: number;
     value?: Object;
     avg?: Object;
   }>;

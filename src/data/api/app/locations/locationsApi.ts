@@ -16,7 +16,7 @@ import {
   NarrativeStatus,
 } from './createOrUpdateNarrativeApiResponse';
 import { GetNarrativesApiResponse } from './getNarrativesApiResponse';
-import { GetLocationStateApiResponse } from './getLocationStateApiResponse';
+import { GetLocationStateApiResponse, LocationStateName } from './getLocationStateApiResponse';
 import { GetLocationTotalsApiResponse } from './getLocationTotalsApiResponse';
 import { SetLocationStateApiResponse, SetLocationStateModel } from './setLocationStateApiResponse';
 import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from './getLocationTimeStateApiResponse';
@@ -336,10 +336,10 @@ export class LocationsApi {
    * A way to read specified location state(s) by name.
    *
    * @param {number} locationId Location ID.
-   * @param {string|string[]} name State name, multiple values supported.
+   * @param {LocationStateName|LocationStateName[]} name State name, multiple values supported.
    * @returns {Promise<GetLocationStateApiResponse>}
    */
-  getLocationState(locationId: number, name: string | string[]): Promise<GetLocationStateApiResponse> {
+  getLocationState(locationId: number, name: LocationStateName | LocationStateName[]): Promise<GetLocationStateApiResponse> {
     return this.dal.get(`locations/${encodeURIComponent(locationId.toString())}/state`, {
       params: {
         name: name,

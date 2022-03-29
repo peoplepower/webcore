@@ -8,7 +8,7 @@ import { LocationModel } from '../api/app/locations/editLocationApiResponse';
 import { AuthService } from './authService';
 import { GetLocationUsersApiResponse } from '../api/app/locations/getLocationUsersApiResponse';
 import { LocationUsersModel } from '../api/app/locations/addLocationUsersApiResponse';
-import { GetLocationStateApiResponse } from '../api/app/locations/getLocationStateApiResponse';
+import { GetLocationStateApiResponse, LocationStateName } from '../api/app/locations/getLocationStateApiResponse';
 import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from '../api/app/locations/getLocationTimeStateApiResponse';
 import { SetLocationStateApiResponse, SetLocationStateModel } from '../api/app/locations/setLocationStateApiResponse';
 import { GetLocationScenesHistoryApiResponse } from '../api/app/locations/getLocationScenesHistoryApiResponse';
@@ -151,10 +151,10 @@ export class LocationService extends BaseService {
    * A way for bots and users to read a current location state(s) by name.
    *
    * @param {number} locationId Location ID.
-   * @param {string|string[]} name State name, multiple values supported.
+   * @param {LocationStateName|LocationStateName[]} name State name, multiple values supported.
    * @returns {Promise<GetLocationStateApiResponse>}
    */
-  public getLocationState(locationId: number, name: string | string[]): Promise<GetLocationStateApiResponse> {
+  public getLocationState(locationId: number, name: LocationStateName | LocationStateName[]): Promise<GetLocationStateApiResponse> {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
