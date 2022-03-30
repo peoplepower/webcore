@@ -4,14 +4,7 @@ export type TrendsCategoryLocationState = {
   [trendName in TrendCategoryName]?: TrendCategory;
 };
 
-export type TrendCategoryName =
-  'category.summary' |
-  'category.sleep' |
-  'category.activity' |
-  'category.bathroom' |
-  'category.social' |
-  'category.stability' |
-  'category.ambient';
+export type TrendCategoryName = string;
 
 export interface TrendCategory {
   /**

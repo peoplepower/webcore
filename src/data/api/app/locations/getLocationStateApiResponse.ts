@@ -29,7 +29,6 @@ export type LocationStateName = 'dashboard_header'
   | 'behaviors'
   | 'services'
   | 'now'
-  | 'location_properties'
   | 'trends_metadata'
   | 'trends_category'
   | string;
