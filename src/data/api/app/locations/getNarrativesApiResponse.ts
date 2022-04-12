@@ -9,10 +9,30 @@ export interface GetNarrativesApiResponse extends ApiResponseBase {
 }
 
 export enum NarrativeType {
+  /**
+   * High-frequency time-series "observations", default
+   */
   Default = 0,
+
+  /**
+   * Deleted user (organization)
+   */
   UserDeleted = 1,
+
+  /**
+   * Deleted location (organization)
+   */
   LocationDeleted = 2,
+
+  /**
+   * Moved location (organization)
+   */
   LocationMoved = 3,
+
+  /**
+   * Low-frequency time-series "journal" (Insights)
+   */
+  Journal = 4,
 }
 
 export interface Narrative {
