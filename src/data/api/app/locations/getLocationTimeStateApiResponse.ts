@@ -5,8 +5,8 @@ export interface GetLocationTimeStateApiResponse extends ApiResponseBase {
     name: string;
     stateDate: string;
     stateDateMs: number;
-    value?: Object;
-    avg?: Object;
+    value?: any;
+    avg?: any;
   }>;
 }
 
