@@ -1,7 +1,7 @@
 import { TrendName } from "./trendsMetadataLocationState";
 
 export type TrendsCategoryLocationState = {
-  [trendName in TrendCategoryName]?: TrendCategory;
+  [trendCategoryName in TrendCategoryName]?: TrendCategory;
 };
 
 export type TrendCategoryName = string;

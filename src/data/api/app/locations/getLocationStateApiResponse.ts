@@ -6,6 +6,7 @@ import { ServicesLocationState } from "./states/servicesLocationState";
 import { NowLocationState } from "./states/nowLocationState";
 import { TrendsMetadataLocationState } from "./states/trendsMetadataLocationState";
 import { TrendsCategoryLocationState } from "./states/trendsCategoryLocationState";
+import { TrendsHighlightsLocationState } from "./states/trendsHighlightsLocationState";
 
 export interface GetLocationStateApiResponse extends ApiResponseBase {
   /**
@@ -31,6 +32,7 @@ export type LocationStateName = 'dashboard_header'
   | 'now'
   | 'trends_metadata'
   | 'trends_category'
+  | 'trends_highlights'
   | string;
 
 export type LocationStateValue<T extends LocationStateName> =
@@ -41,4 +43,5 @@ export type LocationStateValue<T extends LocationStateName> =
     | T extends 'now' ? NowLocationState : never
     | T extends 'trends_metadata' ? TrendsMetadataLocationState : never
     | T extends 'trends_category' ? TrendsCategoryLocationState : never
+    | T extends 'trends_highlights' ? TrendsHighlightsLocationState : never
     | Object;
