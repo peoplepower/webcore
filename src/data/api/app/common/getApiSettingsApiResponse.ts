@@ -36,6 +36,7 @@ export interface CloudConfig {
   currentTimeMs: number;
   defaultTimezone: TimezoneModel;
   servers: CloudServerConfig[];
+  type: CloudType;
 }
 
 export interface CloudServerConfig {
@@ -110,4 +111,9 @@ export enum ServerType {
    * Web UI app
    */
   WebApp = 'webapp',
+}
+
+export enum CloudType {
+  Production = 0,
+  Test = 1
 }
