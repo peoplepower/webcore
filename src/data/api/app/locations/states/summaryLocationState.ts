@@ -70,25 +70,25 @@ export enum LocationSummaryBadgeStatus {
 }
 
 export interface LocationSummaryAverageTrend {
-  value: {
+  value?: {
     /**
      * Average value
      */
-    avg: number;
+    avg?: number;
 
     /**
      * Standard deviation
      */
-    std: number;
+    std?: number;
 
     /**
      * Number of measurements that went into the average and standard deviation
      */
-    n: number;
+    n?: number;
   },
 
   /**
    * Rounded difference between the latest snapshot and this past value
    */
-  diff: number;
+  diff?: number;
 }
