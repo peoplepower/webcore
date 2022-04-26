@@ -29,8 +29,17 @@ export type SummaryLocationState = {
    * Latest snapshot
    */
   now: {
+    /**
+     * Latest value
+     */
     value: number;
+
     diff: number; // Not sure, but it seems `diff` is always 0 for `now`
+
+    /**
+     * Average value
+     */
+    avg?: number;
   },
 
   /**
