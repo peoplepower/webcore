@@ -7,7 +7,5 @@ export enum DataStreamScope {
 export interface DataStreamMessage {
   locations?: number[];
   bots?: number[];
-  feed?: {
-    [key: string]: string;
-  };
+  feed?: any;
 }
