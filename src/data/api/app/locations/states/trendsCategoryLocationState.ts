@@ -31,4 +31,9 @@ export interface TrendCategory {
    * Additional trends associated with category
    */
   sub_trends?: TrendName[];
+
+  /**
+   * Hide this category from UI
+   */
+  hidden?: boolean;
 }
