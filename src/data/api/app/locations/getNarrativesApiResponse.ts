@@ -30,12 +30,12 @@ export enum NarrativeType {
   LocationMoved = 3,
 
   /**
-   * Low-frequency time-series "journal" narratives
+   * Low-frequency time-series "journal" (location)
    */
   Journal = 4,
 
   /**
-   * Location Insights
+   * Important "insights" (location)
    */
   Insight = 5,
 }
