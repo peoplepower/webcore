@@ -2,6 +2,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { PhoneType } from '../userAccounts/createUserAndLocationApiResponse';
 import { EmailVerificationStatus, PhoneVerificationStatus } from '../userAccounts/getUserInformationApiResponse';
 import { NarrativePriority, NarrativeStatus } from './createOrUpdateNarrativeApiResponse';
+import { LocationType } from "./editLocationApiResponse";
 
 export interface GetNarrativesApiResponse extends ApiResponseBase {
   nextMarker: string;
@@ -87,4 +88,16 @@ export interface Narrative {
     smsStatus?: PhoneVerificationStatus;
     language?: string;
   };
+
+  location?: {
+    id: number;
+    name: string;
+    type: LocationType;
+    language: string;
+    timezone: string;
+    organizationId: number;
+    groupId?: number;
+    creationDate: string;
+    creationDateMs: number;
+  }
 }
