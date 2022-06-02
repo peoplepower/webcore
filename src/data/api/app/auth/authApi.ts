@@ -4,6 +4,7 @@ import { GetOperationTokenApiResponse, OperationTokenType } from './getOperation
 import { ApiKeyType, LoginApiResponse } from './loginApiResponse';
 import { inject, injectable } from '../../../../modules/common/di';
 import { PasscodeMessagePrefix, PasscodeNotificationType, SendPasscodeApiResponse } from './sendPasscodeApiResponse';
+import { GetPrivateKeyApiResponse } from "./getPrivateKeyApiResponse";
 
 /**
  * Login, logout and operation token features.
@@ -146,7 +147,7 @@ export class AuthApi {
 
   /**
    * Send a temporary pass code to a user.
-   * Currently it can be send only by SMS, if the user has a valid mobile phone number.
+   * Currently, it can be sent only by SMS, if the user has a valid mobile phone number.
    * See {@link https://iotapps.docs.apiary.io/#reference/login-and-logout/passcode/send-passcode}
    *
    * @param params Request parameters.
@@ -168,6 +169,20 @@ export class AuthApi {
   }): Promise<SendPasscodeApiResponse> {
     return this.dal.get('passcode', {
       params: params,
+    });
+  }
+
+  /**
+   * Generate a new RSA signature private/public keys pair for the user.
+   * Both private and public keys are in Base64 format. The private key is PKCS #8 encoded. The public key must be X.509 formatted.
+   * @param appName appName App name used to store the public key
+   * returns {Promise<GetPrivateKeyApiResponse>}
+   */
+  getPrivateKey(appName: string): Promise<GetPrivateKeyApiResponse> {
+    return this.dal.get('signatureKey', {
+      params: {
+        appName: appName
+      },
     });
   }
 }

@@ -8,6 +8,7 @@ import { BaseService } from './baseService';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { UserAccountsApi } from '../api/app/userAccounts/userAccountsApi';
 import { OAuthHostApi } from '../api/app/OAuthHost/oAuthHostApi';
+import { GetPrivateKeyApiResponse } from "../api/app/auth/getPrivateKeyApiResponse";
 
 const LOCAL_STORAGE_API_KEY = 'Auth-Key';
 const LOCAL_STORAGE_API_KEY_EXPIRE = 'Auth-KeyExpire';
@@ -290,6 +291,17 @@ export class AuthService extends BaseService {
       this.logger.debug('Temporary API key has been requested.', result);
       return result;
     });
+  }
+
+  /**
+   * Generate a new RSA signature private/public keys pair for the user.
+   * Both private and public keys are in Base64 format. The private key is PKCS #8 encoded. The public key must be X.509 formatted.
+   * @param appName appName App name used to store the public key
+   * returns {Promise<GetPrivateKeyApiResponse>}
+   */
+  public getPrivateKey(appName: string): Promise<GetPrivateKeyApiResponse> {
+    return this.ensureAuthenticated()
+      .then(() => this.authApi.getPrivateKey(appName));
   }
 
   /**
