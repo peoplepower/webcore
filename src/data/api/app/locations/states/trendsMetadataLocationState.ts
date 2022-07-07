@@ -33,5 +33,19 @@ export interface TrendMetadata {
   operation: number;
   services: string[];
   updated_ms: number;
+
+  /**
+   * Suggested minimum value for trend values. You should use it to draw scales of charts
+   */
+  min_value?: number;
+
+  /**
+   * Suggested maximum value for trend values. You should use it to draw scales of charts
+   */
+  max_value?: number;
+
+  /**
+   * The number of days for which the `avg` field (in trends history) is calculated
+   */
   window: number;
 }
