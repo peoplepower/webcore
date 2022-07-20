@@ -13,6 +13,14 @@ export class WebCoreConfig {
   cloudName?: string;
 
   /**
+   * Sign in by digital signature feature
+   */
+  signInBySignature?: {
+    enabled: boolean;
+    allowProduction: boolean;
+  }
+
+  /**
    * Logger config
    */
   logger?: LoggerConfig;

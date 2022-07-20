@@ -9,11 +9,16 @@ import { ApiResponseBase } from '../models/apiResponseBase';
 import { UserAccountsApi } from '../api/app/userAccounts/userAccountsApi';
 import { OAuthHostApi } from '../api/app/OAuthHost/oAuthHostApi';
 import { GetPrivateKeyApiResponse } from "../api/app/auth/getPrivateKeyApiResponse";
+import { CloudConfigService } from "./cloudConfigService";
+import { CloudType } from "../api/app/common/getApiSettingsApiResponse";
+import { Tuner } from "../../modules/tuner/tuner";
+import { hashString } from "../../modules/common/hash";
 
 const LOCAL_STORAGE_API_KEY = 'Auth-Key';
 const LOCAL_STORAGE_API_KEY_EXPIRE = 'Auth-KeyExpire';
 const LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD = 'Auth-KeyExpirePeriod';
 const LOCAL_STORAGE_LAST_USERNAME = 'Auth-Username';
+const LOCAL_STORAGE_USER_SIGNATURE_PRIVATE_KEY = 'Auth-UserSignaturePrivateKey';
 
 /**
  * How many milliseconds before the end of the key validity period will it be necessary to update the key
@@ -26,6 +31,8 @@ export class AuthService extends BaseService {
   @inject('OAuthHostApi') protected readonly oAuthHostApi!: OAuthHostApi;
   @inject('UserAccountsApi') protected readonly userAccountsApi!: UserAccountsApi;
   @inject('WcStorage') protected readonly wcStorage!: WcStorage;
+  @inject('CloudConfigService') protected readonly cloudConfigService!: CloudConfigService;
+  @inject('Tuner') private tuner!: Tuner;
 
   /**
    * Event that triggered when for some reason token is no more valid we need to re-login.
@@ -114,50 +121,44 @@ export class AuthService extends BaseService {
    * Log in into the system by username and password
    * @param {string} username
    * @param {string} pwd
-   * @param {boolean} [admin] Use if need to get admin API_KEY type
+   * @param {string} appName
+   * @param {boolean} [admin] Use if you need to get admin API_KEY type
    * @returns {Promise<LoginInfo>}
    */
-  public login(username: string, pwd: string, admin?: boolean): Promise<LoginInfo> {
-    let me = this;
-    let params = admin ? {keyType: 11} : undefined;
-    return this.logoutFromThisBrowser()
-      .then(() => this.authApi.login(username, pwd, params))
-      .then((result) => {
-        me.logger.debug('Logged in as: ' + username, result);
-        me._apiKey = result.key;
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-        me.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
-        me.setUpKeyExpireTimeout(result.keyExpire!);
-        me.onLogin.trigger();
-        return result;
-      });
+  public async login(username: string, pwd: string, appName: string, admin?: boolean): Promise<LoginInfo> {
+    const params: any = {
+      appName: appName
+    }
+    if (admin) {
+      params.keyType = 11
+    }
+    await this.logoutFromThisBrowser();
+
+    try {
+      return await this.loginByPreservedSignature(username, pwd, appName, admin);
+    } catch (e) {
+      if (typeof e !== 'string') {
+        this.logger.error('Unable to login by signature: ' + username, e);
+      }
+    }
+
+    const result = await this.authApi.login(username, pwd, params);
+    return this.afterLogin(result, username, appName);
   }
 
   /**
    * Log in into the system by username and passcode
    * @param {string} username The username.
    * @param {string} passcode Passcode.
-   * @param {boolean} [admin] Use if need to get admin API_KEY type.
+   * @param {string} appName Application name.
+   * @param {boolean} [admin] Use if you need to get admin API_KEY type.
    * @returns {Promise<LoginInfo>}
    */
-  public loginByPasscode(username: string, passcode: string, admin?: boolean): Promise<LoginInfo> {
-    let me = this;
+  public async loginByPasscode(username: string, passcode: string, appName: string, admin?: boolean): Promise<LoginInfo> {
     let keyType = admin ? 11 : 0; // Admin or User key type
-    return this.logoutFromThisBrowser()
-      .then(() => this.authApi.login(username, undefined, {passcode: passcode, keyType: keyType}))
-      .then((result) => {
-        me.logger.debug('Logged in as: ' + username, result);
-        me._apiKey = result.key;
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-        me.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
-        me.setUpKeyExpireTimeout(result.keyExpire!);
-        me.onLogin.trigger();
-        return result;
-      });
+    await this.logoutFromThisBrowser()
+    const result = await this.authApi.login(username, undefined, {passcode: passcode, keyType: keyType});
+    return this.afterLogin(result, username, appName);
   }
 
   /**
@@ -200,7 +201,7 @@ export class AuthService extends BaseService {
    * @param {string} password Actual user password.
    * @param {string} privateKey Private key stored on server.
    * @param {string} appName Application name that was used to generate privateKey.
-   * @param {boolean} [admin] Use if need to get admin API_KEY type.
+   * @param {boolean} [admin] Use if you need to get admin API_KEY type.
    */
   public async loginBySignature(
     username: string,
@@ -229,19 +230,11 @@ export class AuthService extends BaseService {
     };
     const result = await this.authApi.login(username, undefined, params)
 
-    this.logger.debug('Logged in as: ' + username, result);
-    this._apiKey = result.key;
-    this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
-    this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
-    this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-    this.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
-    this.setUpKeyExpireTimeout(result.keyExpire!);
-    this.onLogin.trigger();
-    return result;
+    return this.afterLogin(result, username, appName);
   }
 
   /**
-   * Requests a new API_KEY and reset it's expiration to default.
+   * Requests a new API_KEY and reset its expiration to default.
    * @returns {Promise<LoginInfo>}
    */
   public refreshToken(): Promise<LoginInfo> {
@@ -512,6 +505,73 @@ export class AuthService extends BaseService {
     }
     return buf;
   }
+
+  private afterLogin(result: LoginApiResponse, username: string, appName: string): LoginApiResponse {
+    this.logger.debug('Logged in as: ' + username, result);
+    this._apiKey = result.key;
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
+    this.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
+    this.setUpKeyExpireTimeout(result.keyExpire!);
+    this.onLogin.trigger();
+    this.preserveSignature(username, appName);
+    return result;
+  }
+
+  /**
+   * Login by preserved digital signature
+   */
+  private async loginByPreservedSignature(username: string, pwd: string, appName: string, admin?: boolean) {
+    if (!this.tuner.config?.signInBySignature?.enabled) {
+      return Promise.reject('The digital signature login feature is disabled');
+    }
+
+    const currentCloud = await this.cloudConfigService.getCurrentCloud();
+    if (currentCloud.type === CloudType.Production && !this.tuner.config?.signInBySignature?.allowProduction) {
+      return Promise.reject('The digital signature login feature is unavailable for production servers');
+    }
+
+    const usernameHash = await hashString(username);
+    const key = LOCAL_STORAGE_USER_SIGNATURE_PRIVATE_KEY + '-' + appName + '-' + currentCloud.name + '-' + usernameHash;
+    const privateKey = this.wcStorage.get(key);
+
+    if (!privateKey || typeof privateKey !== 'string') {
+      return Promise.reject('The digital signature private key for the specified user was not found');
+    }
+
+    return this.loginBySignature(
+      username,
+      pwd,
+      privateKey,
+      appName,
+      !!admin,
+    );
+  }
+
+  /**
+   * Preserve digital signature for future logins
+   */
+  private async preserveSignature(username: string, appName: string): Promise<void> {
+    if (!this.tuner.config?.signInBySignature?.enabled) {
+      return Promise.reject('The digital signature login feature is disabled');
+    }
+
+    const currentCloud = await this.cloudConfigService.getCurrentCloud();
+    if (currentCloud.type === CloudType.Production && !this.tuner.config?.signInBySignature?.allowProduction) {
+      return Promise.reject('The digital signature login feature is unavailable for production servers');
+    }
+
+    try {
+      const {privateKey} = await this.getPrivateKey(appName);
+      const usernameHash = await hashString(username);
+      const key = LOCAL_STORAGE_USER_SIGNATURE_PRIVATE_KEY + '-' + appName + '-' + currentCloud.name + '-' + usernameHash;
+      this.wcStorage.set(key, privateKey);
+    } catch (e) {
+      this.logger.error('Unable to get digital signature for future login: ' + username, e);
+    }
+  }
+
 }
 
 export interface LoginInfo extends LoginApiResponse {
