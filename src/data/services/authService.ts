@@ -392,6 +392,10 @@ export class AuthService extends BaseService {
    * @param {string} [params.brand] A parameter identifying specific email template, among other customization settings
    * @param {string} [params.appName] App name to identify the brand
    * @param {string} [params.passcode] SMS passcode if it was sent (this API can return resultCode=17 which force user to enter passcode)
+   * @param {string} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
+   * @param {string} [params.appHash] 11-character app hash
+   * @param {string} [params.strongPassword] Check if the password is strong
+   * @param {string} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
    */
   public setNewPasswordByTempKey(
@@ -401,11 +405,13 @@ export class AuthService extends BaseService {
       brand?: string;
       appName?: string;
       passcode?: string;
+      smsPrefix?: number;
+      appHash?: string;
+      strongPassword?: boolean;
+      keepKeyVersion?: boolean;
     },
   ): Promise<ApiResponseBase> {
-    return this.userAccountsApi.newPasswordByTempKey(newPassword, tempKey, params).then((result) => {
-      return result;
-    });
+    return this.userAccountsApi.newPasswordByTempKey(newPassword, tempKey, params);
   }
 
   /**
@@ -417,6 +423,10 @@ export class AuthService extends BaseService {
    * @param [params] Request parameters
    * @param {string} [params.brand] A parameter identifying specific email template, among other customization settings
    * @param {string} [params.appName] App name to identify the brand
+   * @param {string} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
+   * @param {string} [params.appHash] 11-character app hash
+   * @param {string} [params.strongPassword] Check if the password is strong
+   * @param {string} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
    */
   public setNewPassword(
@@ -426,6 +436,10 @@ export class AuthService extends BaseService {
     params?: {
       brand?: string;
       appName?: string;
+      smsPrefix?: number;
+      appHash?: string;
+      strongPassword?: boolean;
+      keepKeyVersion?: boolean;
     },
   ): Promise<ApiResponseBase> {
     return this.ensureAuthenticated().then(() => {

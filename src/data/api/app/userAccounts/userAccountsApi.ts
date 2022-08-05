@@ -188,6 +188,10 @@ export class UserAccountsApi {
    * @param {string} [params.brand] A parameter identifying an Ensemble Customer specific email template, among other customization settings.
    * @param {string} [params.appName] App name to identify the brand
    * @param {string} [params.passcode] SMS passcode if it was sent (this API can return resultCode=17 which force user to enter passcode)
+   * @param {string} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
+   * @param {string} [params.appHash] 11-character app hash
+   * @param {string} [params.strongPassword] Check if the password is strong
+   * @param {string} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
    */
   newPasswordByTempKey(
@@ -195,8 +199,12 @@ export class UserAccountsApi {
     tempApiKey: string,
     params?: {
       brand?: string;
-      appName?: string;
+      appName?: string; // Is it still valid param?
       passcode?: string;
+      smsPrefix?: number;
+      appHash?: string;
+      strongPassword?: boolean;
+      keepKeyVersion?: boolean;
     },
   ): Promise<ApiResponseBase> {
     let {passcode, ...urlParams} = params || {};
@@ -229,6 +237,10 @@ export class UserAccountsApi {
    * @param [params] Request parameters
    * @param {string|undefined} [params.brand] A parameter identifying an Ensemble Customer specific email template, among other customization settings.
    * @param {string|undefined} [params.appName] App name to identify the brand
+   * @param {string|undefined} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
+   * @param {string|undefined} [params.appHash] 11-character app hash
+   * @param {string|undefined} [params.strongPassword] Check if the password is strong
+   * @param {string|undefined} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
    */
   newPassword(
@@ -238,6 +250,10 @@ export class UserAccountsApi {
     params?: {
       brand?: string;
       appName?: string;
+      smsPrefix?: number;
+      appHash?: string;
+      strongPassword?: boolean;
+      keepKeyVersion?: boolean;
     },
   ): Promise<ApiResponseBase> {
     return this.dal.put(
@@ -335,7 +351,7 @@ export class UserAccountsApi {
     appName?: string;
     type?: VerificationType;
   }): Promise<GetPronounsApiResponse> {
-    return this.dal.get('pronouns', { params: params });
+    return this.dal.get('pronouns', {params: params});
   }
 
   // #endregion
