@@ -392,10 +392,10 @@ export class AuthService extends BaseService {
    * @param {string} [params.brand] A parameter identifying specific email template, among other customization settings
    * @param {string} [params.appName] App name to identify the brand
    * @param {string} [params.passcode] SMS passcode if it was sent (this API can return resultCode=17 which force user to enter passcode)
-   * @param {string} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
+   * @param {number} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
    * @param {string} [params.appHash] 11-character app hash
-   * @param {string} [params.strongPassword] Check if the password is strong
-   * @param {string} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
+   * @param {boolean} [params.strongPassword] Check if the password is strong
+   * @param {boolean} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
    */
   public setNewPasswordByTempKey(
