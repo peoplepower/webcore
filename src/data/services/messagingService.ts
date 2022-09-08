@@ -22,6 +22,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Gets messages for the currently logged in user.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param [params] Request parameters.
    * @param {MessageStatus} [params.status] Status of the messages to get (receive).
    * @param {number} [params.messageId] Filter messages and replies by the original message ID.
@@ -51,6 +53,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Gets messages and reply messages corresponding to the particular original messageId.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param params Request parameters.
    * @param {MessageStatus} [params.status] Status of the messages to get (receive).
    * @param {number} params.messageId Filter messages and replies by the original message ID.
@@ -91,6 +95,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Gets messages for the specified user.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param {number} userId
    * @param {MessageStatus} status
    * @param {string} searchBy
@@ -125,6 +131,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Sends the message and returns the sent message Id.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param {Message} message
    * @returns {Promise<ApiResponseBase>}
    */
@@ -138,6 +146,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Replies to the specified message.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param {number} replyToMessageId Id of the message to reply to.
    * @param reply Reply model
    * @returns {Promise<ApiResponseBase>}
@@ -159,6 +169,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Updates specified message with the supplied message properties.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param {number} messageId
    * @param [messageProperties]
    * @param {boolean} [markAsRead]
@@ -185,6 +197,8 @@ export class MessagingService extends BaseService {
 
   /**
    * Deletes the specified message.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
    * @param {number} messageId
    * @returns {Promise<ApiResponseBase>}
    */

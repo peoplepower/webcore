@@ -38,58 +38,6 @@ export class UserCommunicationsApi {
   @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
-   * Allows to delete previously submitted message.
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/manage-a-message/delete-a-message}
-   * @param {number} messageId Id of the message to delete.
-   * @returns {Promise<DeleteMessageApiResponse>}
-   */
-  deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
-    return this.dal.delete('messages/' + encodeURIComponent(messageId.toString()));
-  }
-
-  /**
-   * Gets crowd feedback entry by its Id.
-   * See {@link
-    * http://docs.iotapps.apiary.io/#reference/user-communications/post-crowd-feedback/get-specific-crowd-feedback}
-   *
-   * @returns {Promise<GetCrowdFeedbackByIdApiResponse>}
-   */
-  getCrowdFeedbackById(feedbackId: number): Promise<GetCrowdFeedbackByIdApiResponse> {
-    return this.dal.get('feedback/' + encodeURIComponent(feedbackId.toString()));
-  }
-
-  /**
-   * It is possible for a user to get sent messages while remaining anonymous to other people within the Community
-   * Social Network. See <user updates> section to specify anonymity.
-   *
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/in-app-messaging/receive-messages}
-   *
-   * @param [params] Request parameters.
-   * @param {MessageStatus} [params.status] Status of the messages to get (receive).
-   * @param {number} [params.messageId] Filter messages and replies by the original message ID.
-   * @param {number} [params.userId] User ID to get messages for, for use by administrators only.
-   * @param {number} [params.type] This field is available for the application developer to use as needed. It is unused
-   *     and undefined by Ensemble.
-   * @param {number} [params.challengeId] Get messages linked to this challenge.
-   * @param {string} [params.searchBy] Search by subject, text, from or recipient fields. Use * for a wildcard.
-   * @returns {Promise<GetMessagesApiResponse>}
-   */
-  getMessages(params?: {
-    status?: MessageStatus;
-    messageId?: number;
-    userId?: number;
-    type?: number;
-    challengeId?: number;
-    searchBy?: string;
-    sortBy?: string;
-    sortOrder?: string;
-    sortCollection?: string;
-    rowCount?: number;
-  }): Promise<GetMessagesApiResponse> {
-    return this.dal.get('messages', {params: params});
-  }
-
-  /**
    * A user may subscribe or unsubscribe from certain types of push and email notifications, or set boundaries on how
    * many notifications their account can receive within a specified amount of time. This method allows to get the
    * current user subscriptions.
@@ -114,91 +62,6 @@ export class UserCommunicationsApi {
    */
   getNotificationSubscriptions(params?: { userId?: number }): Promise<GetNotificationSubscriptionsApiResponse> {
     return this.dal.get('notificationSubscriptions', {params: params});
-  }
-
-  /**
-   * Crowd feedback is first delivered to a support email for moderation. If the feedback is unique, then the support
-   * staff will make it public for other users to vote on.
-   *
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/post-crowd-feedback/post-crowd-feedback}
-   *
-   * @returns {Promise<PostCrowdFeedbackApiResponse>}
-   */
-  postCrowdFeedback(model: PostCrowdFeedbackModel): Promise<PostCrowdFeedbackApiResponse> {
-    return this.dal.post('feedback', model);
-  }
-
-  /**
-   * Allows to reply to the particular message.
-   *
-   * When replying to a message, the body may specify whether to also delivery the reply over email and push
-   * notification, to notify the recipient.
-   *
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/manage-a-message/reply-to-a-message}
-   *
-   * @param {number} messageId Id of the message to reply to.
-   * @param {ReplyToMessageModel} model Message to send
-   * @returns {Promise<ReplyToMessageApiResponse>}
-   */
-  replyToMessage(messageId: number, model: ReplyToMessageModel): Promise<ReplyToMessageApiResponse> {
-    return this.dal.post(`messages/${encodeURIComponent(messageId.toString())}`, model);
-  }
-
-  /**
-   * Allows a user to request support from PeoplePowerCo
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/request-support/request-support}
-   *
-   * @param {RequestSupportModel} [model] Request support model
-   * @param [params] Request parameters
-   * @param {string} [params.appName] App name to forward the support request
-   * @returns {Promise<RequestSupportApiResponse>}
-   */
-  requestSupport(model: RequestSupportModel, params?: { appName?: string }): Promise<RequestSupportApiResponse> {
-    return this.dal.post('support', model, {params: params});
-  }
-
-  /**
-   * Search crowd feedback entries according to supplied parameters.
-   * See {@link
-    * http://docs.iotapps.apiary.io/#reference/user-communications/get-crowd-feedback-by-searching/get-crowd-feedback-by-searching}
-   *
-   * @param {string} appName Unique name / identifier of the app or product, selected by the developer
-   * @param {CrowdFeedbackType} type Type of the feedback entry (1 - New feature request, 2 - Problem report)
-   * @param [params] Request parameters
-   * @param {number} [params.startPos] Index of the first record to be returned.
-   * @param {number} [params.length] Number of records to return.
-   * @param {number|number[]} [params.productId] Filter the response by product ID. You may include multiple of these
-   *     parameters to filter by multiple product IDs.
-   * @param {number|number[]} [params.productCategory] Filter the response by product category. You may include
-   *     multiple of these parameters to filter by multiple product categories.
-   * @param {boolean} [params.disabled] Return return not enabled feedbacks as well.
-   * @returns {Promise<SearchCrowdFeedbackApiResponse>}
-   */
-  searchCrowdFeedback(
-    appName: string,
-    type: CrowdFeedbackType,
-    params?: {
-      startPos?: number;
-      length?: number;
-      productId?: number | number[];
-      productCategory?: number | number[];
-      disabled?: boolean;
-    },
-  ): Promise<SearchCrowdFeedbackApiResponse> {
-    return this.dal.get(`feedback/${encodeURIComponent(appName)}/${encodeURIComponent(type.toString())}`, {params: params});
-  }
-
-  /**
-   * It is possible for a user to send a message while remaining anonymous to other people within the Community Social
-   * Network. See <user updates> section to specify anonymity.
-   *
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/in-app-messaging/send-a-message}
-   *
-   * @param {SendMessageModel} model Model containing message's data to be sent
-   * @returns {Promise<SendMessageApiResponse>}
-   */
-  sendMessage(model: SendMessageModel): Promise<SendMessageApiResponse> {
-    return this.dal.post('messages', model);
   }
 
   /**
@@ -283,6 +146,73 @@ export class UserCommunicationsApi {
   }
 
   /**
+   * Allows a user to request support from PeoplePowerCo
+   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/request-support/request-support}
+   *
+   * @param {RequestSupportModel} [model] Request support model
+   * @param [params] Request parameters
+   * @param {string} [params.appName] App name to forward the support request
+   * @returns {Promise<RequestSupportApiResponse>}
+   */
+   requestSupport(model: RequestSupportModel, params?: { appName?: string }): Promise<RequestSupportApiResponse> {
+    return this.dal.post('support', model, {params: params});
+  }
+
+  /**
+   * Search crowd feedback entries according to supplied parameters.
+   * See {@link
+   * http://docs.iotapps.apiary.io/#reference/user-communications/get-crowd-feedback-by-searching/get-crowd-feedback-by-searching}
+   *
+   * @param {string} appName Unique name / identifier of the app or product, selected by the developer
+   * @param {CrowdFeedbackType} type Type of the feedback entry (1 - New feature request, 2 - Problem report)
+   * @param [params] Request parameters
+   * @param {number} [params.startPos] Index of the first record to be returned.
+   * @param {number} [params.length] Number of records to return.
+   * @param {number|number[]} [params.productId] Filter the response by product ID. You may include multiple of these
+   *     parameters to filter by multiple product IDs.
+   * @param {number|number[]} [params.productCategory] Filter the response by product category. You may include
+   *     multiple of these parameters to filter by multiple product categories.
+   * @param {boolean} [params.disabled] Return return not enabled feedbacks as well.
+   * @returns {Promise<SearchCrowdFeedbackApiResponse>}
+   */
+  searchCrowdFeedback(
+    appName: string,
+    type: CrowdFeedbackType,
+    params?: {
+      startPos?: number;
+      length?: number;
+      productId?: number | number[];
+      productCategory?: number | number[];
+      disabled?: boolean;
+    },
+  ): Promise<SearchCrowdFeedbackApiResponse> {
+    return this.dal.get(`feedback/${encodeURIComponent(appName)}/${encodeURIComponent(type.toString())}`, {params: params});
+  }
+
+  /**
+   * Gets crowd feedback entry by its Id.
+   * See {@link
+   * http://docs.iotapps.apiary.io/#reference/user-communications/post-crowd-feedback/get-specific-crowd-feedback}
+   *
+   * @returns {Promise<GetCrowdFeedbackByIdApiResponse>}
+   */
+  getCrowdFeedbackById(feedbackId: number): Promise<GetCrowdFeedbackByIdApiResponse> {
+    return this.dal.get('feedback/' + encodeURIComponent(feedbackId.toString()));
+  }
+
+  /**
+   * Crowd feedback is first delivered to a support email for moderation. If the feedback is unique, then the support
+   * staff will make it public for other users to vote on.
+   *
+   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/post-crowd-feedback/post-crowd-feedback}
+   *
+   * @returns {Promise<PostCrowdFeedbackApiResponse>}
+   */
+   postCrowdFeedback(model: PostCrowdFeedbackModel): Promise<PostCrowdFeedbackApiResponse> {
+    return this.dal.post('feedback', model);
+  }
+
+  /**
    * Updates particular crowd feedback entry.
    * See {@link
     * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
@@ -293,30 +223,6 @@ export class UserCommunicationsApi {
    */
   updateCrowdFeedback(feedbackId: number, model: UpdateCrowdFeedbackModel): Promise<UpdateCrowdFeedbackApiResponse> {
     return this.dal.put(`feedback/${encodeURIComponent(feedbackId.toString())}`, model);
-  }
-
-  /**
-   * Allows to update message.
-   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/manage-a-message/update-message-attributes}
-   *
-   * @param {number} messageId Id of the message to update attributes for.
-   * @param {UpdateMessageModel} model Message model
-   * @param [params] Request parameters.
-   * @param {boolean} [params.read] Flag to specify whether we want to mark the message as read or unread
-   * @returns {Promise<UpdateMessageApiResponse>}
-   */
-  updateMessage(
-    messageId: number,
-    model?: UpdateMessageModel,
-    params?: {
-      read?: boolean;
-    },
-  ): Promise<UpdateMessageApiResponse> {
-    const parameters = {
-      params: params,
-      headers: {'Content-Type': 'application/json'}, //to explicitly tell the content type even if model is null
-    };
-    return this.dal.put('messages/' + encodeURIComponent(messageId.toString()), model, parameters);
   }
 
   /**
@@ -379,5 +285,99 @@ export class UserCommunicationsApi {
       headers: {'Content-Type': 'application/json'},
     };
     return this.dal.put('questions', model, parameters);
+  }
+
+  /**
+   * Deprecated messaging functionality below.
+   * @deprecated Functionality deprecated from Server v1.26
+   */
+
+  /**
+   * It is possible for a user to get sent messages while remaining anonymous to other people within the Community
+   * Social Network. See <user updates> section to specify anonymity.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
+   * @param [params] Request parameters.
+   * @param {MessageStatus} [params.status] Status of the messages to get (receive).
+   * @param {number} [params.messageId] Filter messages and replies by the original message ID.
+   * @param {number} [params.userId] User ID to get messages for, for use by administrators only.
+   * @param {number} [params.type] This field is available for the application developer to use as needed. It is unused
+   *     and undefined by Ensemble.
+   * @param {number} [params.challengeId] Get messages linked to this challenge.
+   * @param {string} [params.searchBy] Search by subject, text, from or recipient fields. Use * for a wildcard.
+   * @returns {Promise<GetMessagesApiResponse>}
+   */
+   getMessages(params?: {
+    status?: MessageStatus;
+    messageId?: number;
+    userId?: number;
+    type?: number;
+    challengeId?: number;
+    searchBy?: string;
+    sortBy?: string;
+    sortOrder?: string;
+    sortCollection?: string;
+    rowCount?: number;
+  }): Promise<GetMessagesApiResponse> {
+    return this.dal.get('messages', {params: params});
+  }
+
+  /**
+   * It is possible for a user to send a message while remaining anonymous to other people within the Community Social
+   * Network. See <user updates> section to specify anonymity.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
+   * @param {SendMessageModel} model Model containing message's data to be sent
+   * @returns {Promise<SendMessageApiResponse>}
+   */
+   sendMessage(model: SendMessageModel): Promise<SendMessageApiResponse> {
+    return this.dal.post('messages', model);
+  }
+
+  /**
+   * Allows to update message.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
+   * @param {number} messageId Id of the message to update attributes for.
+   * @param {UpdateMessageModel} model Message model
+   * @param [params] Request parameters.
+   * @param {boolean} [params.read] Flag to specify whether we want to mark the message as read or unread
+   * @returns {Promise<UpdateMessageApiResponse>}
+   */
+   updateMessage(
+    messageId: number,
+    model?: UpdateMessageModel,
+    params?: {
+      read?: boolean;
+    },
+  ): Promise<UpdateMessageApiResponse> {
+    const parameters = {
+      params: params,
+      headers: {'Content-Type': 'application/json'}, //to explicitly tell the content type even if model is null
+    };
+    return this.dal.put('messages/' + encodeURIComponent(messageId.toString()), model, parameters);
+  }
+
+  /**
+   * Allows to reply to the particular message.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
+   * @param {number} messageId Id of the message to reply to.
+   * @param {ReplyToMessageModel} model Message to send
+   * @returns {Promise<ReplyToMessageApiResponse>}
+   */
+   replyToMessage(messageId: number, model: ReplyToMessageModel): Promise<ReplyToMessageApiResponse> {
+    return this.dal.post(`messages/${encodeURIComponent(messageId.toString())}`, model);
+  }
+
+  /**
+   * Allows to delete previously submitted message.
+   * @deprecated Functionality deprecated from Server v1.26
+   *
+   * @param {number} messageId Id of the message to delete.
+   * @returns {Promise<DeleteMessageApiResponse>}
+   */
+   deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
+    return this.dal.delete('messages/' + encodeURIComponent(messageId.toString()));
   }
 }
