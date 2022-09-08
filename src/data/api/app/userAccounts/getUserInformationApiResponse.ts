@@ -29,6 +29,9 @@ export enum UserPermission {
   BotStoreAdmin = 6, // Bot store administrator
   SystemAdmin = 7, // System administrator
   CustomerServicesAdmin = 8, // Manage customer services
+  DeviceData = 9, // Access to devices data in organization
+  IntegrationService = 10, // Integration service account
+  OrganizationBilling = 11 // Access to bill generation
 }
 
 export enum LocationPriorityCategory {
