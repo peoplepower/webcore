@@ -8,6 +8,13 @@ export class WebCoreConfig {
   serverUrl?: string;
 
   /**
+   * Default server URL to get cloud settings.
+   * We use it only on localhost environment if serverUrl was mot defined.
+   * E.g. `https://sboxall.peoplepowerco.com`
+   */
+  sboxUrl?: string;
+
+  /**
    * Cloud name that will be used (or at least tried to) as preferred cloud name
    */
   cloudName?: string;

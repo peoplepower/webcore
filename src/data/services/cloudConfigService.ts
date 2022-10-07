@@ -9,7 +9,7 @@ import { CommonApi } from '../api/app/common/commonApi';
 import { Tuner } from "../../modules/tuner/tuner";
 
 const localhostSynonyms: string[] = ['localhost', '127.0.0.1', '0.0.0.0', '::'];
-const sboxServerUrl = 'https://sboxall.peoplepowerco.com';
+const sboxServerDefaultUrl = 'https://sboxall.peoplepowerco.com';
 const apiServerTypeName = ServerType.AppApi;
 const apiPath = '/cloud/json/';
 const localStorageCurrentCloudKey = 'Main-Cloud';
@@ -67,7 +67,7 @@ export class CloudConfigService extends BaseService {
       getSettingsBaseUrl = this.tuner.config.serverUrl;
     } else if (!globalThis?.location?.hostname || ~localhostSynonyms.indexOf(globalThis?.location?.hostname)) {
       // if in developer's environment or non-browser environment
-      getSettingsBaseUrl = sboxServerUrl;
+      getSettingsBaseUrl = this.tuner.config.sboxUrl || sboxServerDefaultUrl;
     } else {
       getSettingsBaseUrl = globalThis.location.protocol + '//' + globalThis.location.host;
     }

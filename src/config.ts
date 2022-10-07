@@ -5,6 +5,7 @@ let configs: { [env: string]: WebCoreConfig[] } = {
   default: [
     {
       localStoragePrefix: 'ppc.',
+      sboxUrl: 'https://sboxall.peoplepowerco.com',
       ping: {
         initialPingInterval: 1000,
         pingIntervalIncrease: 1000,
