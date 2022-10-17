@@ -27,27 +27,31 @@ export class OperationTokenService {
 export class OperationTokenProvider {
   @inject('AuthApi') protected readonly authApi!: AuthApi;
 
+  get isStopped(): boolean {
+    return this._isStopped;
+  }
+
   private getTokenFromApiPromise: Promise<GetOperationTokenApiResponse> | undefined;
-  private isStopped: boolean;
+  private _isStopped: boolean;
 
   constructor(protected readonly tokenType: number) {
-    this.isStopped = false;
+    this._isStopped = false;
     this.getTokenFromApi();
   }
 
   public getToken(): Promise<string> {
     return this.getTokenFromApiPromise!.then((result) => {
-      this.isStopped = true;
+      this._isStopped = true;
       return result.token;
     });
   }
 
   public stop() {
-    this.isStopped = true;
+    this._isStopped = true;
   }
 
   private getTokenFromApi() {
-    if (this.isStopped) {
+    if (this._isStopped) {
       return;
     }
     this.getTokenFromApiPromise = this.authApi.getOperationToken(this.tokenType).then((result) => {
