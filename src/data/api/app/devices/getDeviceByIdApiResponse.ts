@@ -43,6 +43,11 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     goalId?: number;
 
     /**
+     * Firmware update group ID.
+     */
+    fwGroupId?: number;
+
+    /**
      * Reported as 'true' to describe recently added device.
      */
     newDevice: boolean;
