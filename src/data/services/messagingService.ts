@@ -8,6 +8,8 @@ import { ApiResponseBase } from '../models/apiResponseBase';
 import { RequestSupportApiResponse, RequestSupportModel } from '../api/app/userCommunications/requestSupportApiResponse';
 import { BaseService } from './baseService';
 import { UpdateMessageModel } from '../api/app/userCommunications/updateMessageApiResponse';
+import { PostSupportTicketApiResponse, PostSupportTicketModel } from '../api/app/userCommunications/postSupportTicketApiResponse';
+import { AuthService } from './authService';
 
 /**
  * Exposes interface to operate the messages that are send from user to user in the system.
@@ -15,6 +17,7 @@ import { UpdateMessageModel } from '../api/app/userCommunications/updateMessageA
 @injectable('MessagingService')
 export class MessagingService extends BaseService {
   @inject('UserCommunicationsApi') protected readonly userCommunicationsApi!: UserCommunicationsApi;
+  @inject('AuthService') protected readonly authService!: AuthService;
 
   constructor() {
     super();
@@ -290,5 +293,30 @@ export class MessagingService extends BaseService {
   public requestSupport(model: RequestSupportModel, appName?: string): Promise<RequestSupportApiResponse> {
     let params = appName ? {appName: appName} : undefined;
     return this.userCommunicationsApi.requestSupport(model, params);
+  }
+
+  /**
+   * Post support ticket.
+   * The request is executed asynchronously. The user will be notified about created ticket.
+   * @param model Support ticket model.
+   * @param {number} [userId] Request support for this user by an administrator.
+   * @returns
+   */
+  public postSupportTicket(
+    model: PostSupportTicketModel,
+    userId?: number,
+  ): Promise<PostSupportTicketApiResponse> {
+    let params: {
+      userId?: number;
+    } = {};
+
+    if (userId) {
+      if (userId < 1 || isNaN(userId)) {
+        return this.reject(`User ID is incorrect [${userId}].`);
+      }
+      params.userId = userId;
+    }
+
+    return this.authService.ensureAuthenticated().then(() => this.userCommunicationsApi.postSupportTicket(model, params));
   }
 }

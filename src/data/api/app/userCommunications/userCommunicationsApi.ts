@@ -17,6 +17,7 @@ import { VoteForCrowdFeedbackApiResponse } from './voteForCrowdFeedbackApiRespon
 import { GetQuestionsApiResponse } from './getQuestionsApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from './answerQuestionsApiResponse';
+import { PostSupportTicketApiResponse, PostSupportTicketModel } from './postSupportTicketApiResponse';
 
 /**
  * User Communications.
@@ -154,7 +155,7 @@ export class UserCommunicationsApi {
    * @param {string} [params.appName] App name to forward the support request
    * @returns {Promise<RequestSupportApiResponse>}
    */
-   requestSupport(model: RequestSupportModel, params?: { appName?: string }): Promise<RequestSupportApiResponse> {
+  requestSupport(model: RequestSupportModel, params?: { appName?: string }): Promise<RequestSupportApiResponse> {
     return this.dal.post('support', model, {params: params});
   }
 
@@ -208,7 +209,7 @@ export class UserCommunicationsApi {
    *
    * @returns {Promise<PostCrowdFeedbackApiResponse>}
    */
-   postCrowdFeedback(model: PostCrowdFeedbackModel): Promise<PostCrowdFeedbackApiResponse> {
+  postCrowdFeedback(model: PostCrowdFeedbackModel): Promise<PostCrowdFeedbackApiResponse> {
     return this.dal.post('feedback', model);
   }
 
@@ -288,6 +289,17 @@ export class UserCommunicationsApi {
   }
 
   /**
+   * Post support ticket.
+   * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/support-ticket/post-support-ticket}
+   * @param {PostSupportTicketModel} model Ticket content.
+   * @param {number} [userId] Request support for this user by an administrator.
+   * @returns {Promise<PostSupportTicketApiResponse>}
+   */
+  postSupportTicket(model: PostSupportTicketModel, params?: { userId?: number }): Promise<PostSupportTicketApiResponse> {
+    return this.dal.post('ticket', model, {params: params});
+  }
+
+  /**
    * Deprecated messaging functionality below.
    * @deprecated Functionality deprecated from Server v1.26
    */
@@ -330,7 +342,7 @@ export class UserCommunicationsApi {
    * @param {SendMessageModel} model Model containing message's data to be sent
    * @returns {Promise<SendMessageApiResponse>}
    */
-   sendMessage(model: SendMessageModel): Promise<SendMessageApiResponse> {
+  sendMessage(model: SendMessageModel): Promise<SendMessageApiResponse> {
     return this.dal.post('messages', model);
   }
 
@@ -344,7 +356,7 @@ export class UserCommunicationsApi {
    * @param {boolean} [params.read] Flag to specify whether we want to mark the message as read or unread
    * @returns {Promise<UpdateMessageApiResponse>}
    */
-   updateMessage(
+  updateMessage(
     messageId: number,
     model?: UpdateMessageModel,
     params?: {
@@ -353,7 +365,7 @@ export class UserCommunicationsApi {
   ): Promise<UpdateMessageApiResponse> {
     const parameters = {
       params: params,
-      headers: {'Content-Type': 'application/json'}, //to explicitly tell the content type even if model is null
+      headers: {'Content-Type': 'application/json'}, // Explicitly tell the content type even if model is null
     };
     return this.dal.put('messages/' + encodeURIComponent(messageId.toString()), model, parameters);
   }
@@ -366,7 +378,7 @@ export class UserCommunicationsApi {
    * @param {ReplyToMessageModel} model Message to send
    * @returns {Promise<ReplyToMessageApiResponse>}
    */
-   replyToMessage(messageId: number, model: ReplyToMessageModel): Promise<ReplyToMessageApiResponse> {
+  replyToMessage(messageId: number, model: ReplyToMessageModel): Promise<ReplyToMessageApiResponse> {
     return this.dal.post(`messages/${encodeURIComponent(messageId.toString())}`, model);
   }
 
@@ -377,7 +389,7 @@ export class UserCommunicationsApi {
    * @param {number} messageId Id of the message to delete.
    * @returns {Promise<DeleteMessageApiResponse>}
    */
-   deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
+  deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
     return this.dal.delete('messages/' + encodeURIComponent(messageId.toString()));
   }
 }
