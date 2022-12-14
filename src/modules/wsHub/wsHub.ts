@@ -225,7 +225,7 @@ export class WsHub {
     subscription.onUnsubscribe(() => {
       this.subscriptions = this.subscriptions.filter((s) => s !== subscription);
       subscription.status = SubscriptionStatus.CANCELLED;
-      if (this.webSocket!.readyState === WebSocket.OPEN && !!subscription.id) {
+      if (!!this.webSocket && this.webSocket.readyState === WebSocket.OPEN && !!subscription.id) {
         let dataString = this.encode({
           id: this.generateMessageId(),
           goal: WsPacketGoal.Unsubscribe,
