@@ -9,6 +9,33 @@ export enum SimStatus {
   Expired = 3,
 }
 
+export enum DeviceSimulationStatus {
+  /**
+   * Real device, which data copied to simulated device
+   */
+  Source = -1,
+
+  /**
+   * Real Device
+   */
+  None = 0,
+
+  /**
+   * Device instance simulated by cloud scheduler
+   */
+  SimulatedByCloudScheduler = 1,
+
+  /**
+   * Device copy
+   */
+  SimulatedCopy = 2,
+
+  /**
+   * Device instance simulated by "flexible" simulator
+   */
+  SimulatedByFlexibleSimulator = 3,
+}
+
 export interface GetDeviceByIdApiResponse extends ApiResponseBase {
   device: {
     id: string;
@@ -56,6 +83,23 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
      * Device proxy ID (gateway)
      */
     proxyId?: string;
+
+    /**
+     * Device simulation status
+     */
+    simulated?: DeviceSimulationStatus,
+
+    /**
+     * If this real device is the source of data for the simulator
+     * (the simulator is a copy of this device that receives an exact
+     * copy of all data), then this field stores the ID prefixes of
+     * all simulators separated by commas. That is, if this field
+     * contains, for example, "SIM1_,SIM2_", then somewhere there
+     * are (possibly) devices with IDs "SIM1_{DEVICE_ID}" and
+     * "SIM2_{DEVICE_ID}", where `{DEVICE_ID}` - is the ID of the
+     * current source device.
+     */
+    simulatedPrefix?: string,
 
     startDate: string;
     startDateMs: number;
