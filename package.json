@@ -1,6 +1,6 @@
 {
   "name": "@peoplepower/webcore",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Client JS/TS SDK for People Power App API",
   "keywords": [
     "WebCore",
