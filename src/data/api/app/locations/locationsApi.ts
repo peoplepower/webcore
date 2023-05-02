@@ -6,7 +6,7 @@ import { EditLocationApiResponse, EditLocationModel } from './editLocationApiRes
 import { GetLocationScenesHistoryApiResponse } from './getLocationScenesHistoryApiResponse';
 import { GetCountriesApiResponse } from './getCountriesApiResponse';
 import { GetLocationUsersApiResponse } from './getLocationUsersApiResponse';
-import { AddLocationUsersApiResponse, LocationUsersModel } from './addLocationUsersApiResponse';
+import { AddLocationUsersApiResponse, AddLocationUsersModel } from './addLocationUsersApiResponse';
 import { GetSpacesApiResponse } from './getSpacesApiResponse';
 import {
   CreateOrUpdateNarrativeApiResponse,
@@ -22,6 +22,7 @@ import { SetLocationStateApiResponse, SetLocationStateModel } from './setLocatio
 import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from './getLocationTimeStateApiResponse';
 import { UpdateLocationSpaceApiResponse, UpdateLocationSpaceModel } from './updateSpaceApiResponse';
 import { GetLocationPrioritiesApiResponse } from './getLocationPrioritiesApiResponse';
+import { UpdateLocationUserApiResponse, UpdateLocationUserModel } from "./updateLocationUserApiResponse";
 
 /**
  * Locations API.
@@ -145,15 +146,24 @@ export class LocationsApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/location-users/add-location-users}
    *
    * @param {number} locationId Location ID.
-   * @param {LocationUsersModel} users Users to add.
+   * @param {AddLocationUsersModel} users Users to add.
    * @returns {Promise<AddLocationUsersApiResponse>}
    */
-  addLocationUsers(locationId: number, users: LocationUsersModel): Promise<AddLocationUsersApiResponse> {
+  addLocationUsers(locationId: number, users: AddLocationUsersModel): Promise<AddLocationUsersApiResponse> {
     return this.dal.post(`location/${encodeURIComponent(locationId.toString())}/users`, users);
   }
 
-  // TODO(max): Add update location user API, see Apiary.
-  // https://iotapps.docs.apiary.io/#reference/locations/location-users/update-location-user
+  /**
+   * Update location users on specified location.
+   * See {@link https://iotapps.docs.apiary.io/#reference/locations/location-users/update-location-user}
+   *
+   * @param {number} locationId Location ID.
+   * @param {UpdateLocationUserModel} user updated fields.
+   * @returns {Promise<UpdateLocationUserApiResponse>}
+   */
+  updateLocationUser(locationId: number, user: UpdateLocationUserModel): Promise<UpdateLocationUserApiResponse> {
+    return this.dal.put(`location/${encodeURIComponent(locationId.toString())}/users`, user);
+  }
 
   /**
    * Removes user(s) access from specified location.

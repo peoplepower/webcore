@@ -10,9 +10,25 @@ export enum LocationAccessLevel {
 }
 
 export enum LocationNotificationsCategory {
-  NoCategory = 0,
+  /**
+   * Does not get smart home alerts
+   */
+  NoAlerts = 0,
+
+  /**
+   * First to get smart home alerts
+   */
   HomeOwner = 1,
-  Supporter = 2,
+
+  /**
+   * Get alerts if a resident doesn't respond
+   */
+  FamilyOrFriend = 2,
+
+  /**
+   * Get reminded to call or check in
+   */
+  SocialRemindersOnly = 3,
 }
 
 /**

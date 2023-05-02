@@ -4,22 +4,24 @@ import { LocationAccessLevel, LocationNotificationsCategory, UserRole } from './
 export interface AddLocationUsersApiResponse extends ApiResponseBase {
 }
 
-export interface LocationUsersModel {
-  users: Array<{
-    id: number;
-    locationAccess: LocationAccessLevel;
-    temporary: boolean;
-    category: LocationNotificationsCategory;
-    nickname?: string;
-    schedules?: Array<{
-      daysOfWeek?: number;
-      startTime?: number;
-      endTime?: number;
-    }>;
+export interface AddLocationUsersModel {
+  users: Array<AddSingleLocationUserModel>;
+}
 
-    /**
-     * User role.
-     */
-    role?: UserRole;
+export interface AddSingleLocationUserModel {
+  id: number;
+  locationAccess?: LocationAccessLevel;
+  temporary?: boolean;
+  category?: LocationNotificationsCategory;
+  nickname?: string;
+  schedules?: Array<{
+    daysOfWeek?: number;
+    startTime?: number;
+    endTime?: number;
   }>;
+
+  /**
+   * User role.
+   */
+  role?: UserRole;
 }

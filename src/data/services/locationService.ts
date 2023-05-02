@@ -7,7 +7,7 @@ import { GetCountriesApiResponse } from '../api/app/locations/getCountriesApiRes
 import { LocationModel } from '../api/app/locations/editLocationApiResponse';
 import { AuthService } from './authService';
 import { GetLocationUsersApiResponse } from '../api/app/locations/getLocationUsersApiResponse';
-import { LocationUsersModel } from '../api/app/locations/addLocationUsersApiResponse';
+import { AddLocationUsersApiResponse, AddLocationUsersModel } from '../api/app/locations/addLocationUsersApiResponse';
 import { GetLocationStateApiResponse, LocationStateName } from '../api/app/locations/getLocationStateApiResponse';
 import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from '../api/app/locations/getLocationTimeStateApiResponse';
 import { SetLocationStateApiResponse, SetLocationStateModel } from '../api/app/locations/setLocationStateApiResponse';
@@ -19,6 +19,7 @@ import { WsSubscriptionType } from '../../modules/wsHub/wsSubscriptionType';
 import { WsSubscriptionOperation } from '../../modules/wsHub/wsSubscriptionOperation';
 import { WsSubscription } from '../../modules/wsHub/wsSubscription';
 import { WsHub } from '../../modules/wsHub/wsHub';
+import { UpdateLocationUserApiResponse, UpdateLocationUserModel } from "../api/app/locations/updateLocationUserApiResponse";
 
 @injectable('LocationService')
 export class LocationService extends BaseService {
@@ -112,18 +113,34 @@ export class LocationService extends BaseService {
   }
 
   /**
-   * Add/Update location users with specific access details.
+   * Add location users to specified location.
    * @param {number} locationId Location ID to add users into
-   * @param {LocationUsersModel} users Users to add/update
-   * @returns {Promise<ApiResponseBase>}
+   * @param {AddLocationUsersModel} users Users to add
+   * @returns {Promise<AddLocationUsersApiResponse>}
    */
-  public updateLocationUsers(locationId: number, users: LocationUsersModel): Promise<ApiResponseBase> {
+  public addLocationUsers(locationId: number, users: AddLocationUsersModel): Promise<AddLocationUsersApiResponse> {
     if (locationId < 1 || isNaN(locationId)) {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
     return this.authService.ensureAuthenticated().then(() => {
       return this.locationsApi.addLocationUsers(locationId, users);
+    });
+  }
+
+  /**
+   * Update location user.
+   * @param {number} locationId Location ID
+   * @param {UpdateLocationUserModel} user User to update
+   * @returns {Promise<UpdateLocationUserApiResponse>}
+   */
+  public updateLocationUser(locationId: number, user: UpdateLocationUserModel): Promise<UpdateLocationUserApiResponse> {
+    if (locationId < 1 || isNaN(locationId)) {
+      return this.reject(`Location ID is incorrect [${locationId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.updateLocationUser(locationId, user);
     });
   }
 
