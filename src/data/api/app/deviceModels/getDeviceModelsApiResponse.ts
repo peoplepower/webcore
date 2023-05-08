@@ -79,8 +79,25 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
         [key: string]: string;
       };
       displayInfo?: {
+
+        /**
+         * Controllable by user,
+         * so user can send commands to control device
+         */
         controllable?: boolean;
+
+        /**
+         * Rebootable device model,
+         * so user can send reboot command to device
+         */
         rebootable?: boolean;
+
+        /**
+         * Refreshable parameneters,
+         * so user can send request to refresh device params
+         */
+        refreshable?: boolean;
+
         locationSpaces?: number[];
         deviceListBindings?: Array<{
           name: string;
@@ -91,7 +108,18 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
           name: string;
           defaultOption?: number;
           availableOptions?: number[];
+
+          /**
+           * List of parameters that need to be passed
+           * along with current parameter to update value
+           */
           linkedParams?: string[];
+
+          /**
+           * Parameter can be refreshed via special command to device,
+           * used if device model 'refreshable' attribute set to TRUE
+           */
+          refresh?: boolean;
         }>;
       };
     }>;
