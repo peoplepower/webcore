@@ -13,6 +13,10 @@ import { CloudConfigService } from "./cloudConfigService";
 import { CloudType } from "../api/app/common/getApiSettingsApiResponse";
 import { Tuner } from "../../modules/tuner/tuner";
 import { hashString } from "../../modules/common/hash";
+import { CreateTotpSecretApiResponse } from "../api/app/auth/createTotpSecretApiResponse";
+import { ConfirmTotpSecretApiResponse } from "../api/app/auth/confirmTotpSecretApiResponse";
+import { GetTotpFactorsApiResponse } from "../api/app/auth/getTotpFactorsApiResponse";
+import { DeleteTotpFactorApiResponse } from "../api/app/auth/deleteTotpFactorApiResponse";
 
 const LOCAL_STORAGE_API_KEY = 'Auth-Key';
 const LOCAL_STORAGE_API_KEY_EXPIRE = 'Auth-KeyExpire';
@@ -123,14 +127,24 @@ export class AuthService extends BaseService {
    * @param {string} pwd
    * @param {string} appName
    * @param {boolean} [admin] Use if you need to get admin API_KEY type
+   * @param {PasscodeType} [passcodeType] Second factor type. 1 - sms, 2 - totp
    * @returns {Promise<LoginInfo>}
    */
-  public async login(username: string, pwd: string, appName: string, admin?: boolean): Promise<LoginInfo> {
+  public async login(
+    username: string,
+    pwd: string,
+    appName: string,
+    admin?: boolean,
+    passcodeType?: PasscodeType
+  ): Promise<LoginInfo> {
     const params: any = {
       appName: appName
     }
     if (admin) {
       params.keyType = 11
+    }
+    if (passcodeType === PasscodeType.Totp) {
+      params.totp = true;
     }
     await this.logoutFromThisBrowser();
 
@@ -154,10 +168,46 @@ export class AuthService extends BaseService {
    * @param {boolean} [admin] Use if you need to get admin API_KEY type.
    * @returns {Promise<LoginInfo>}
    */
-  public async loginByPasscode(username: string, passcode: string, appName: string, admin?: boolean): Promise<LoginInfo> {
+  public async loginByPasscode(
+    username: string,
+    passcode: string,
+    appName: string,
+    admin?: boolean,
+  ): Promise<LoginInfo> {
     let keyType = admin ? 11 : 0; // Admin or User key type
     await this.logoutFromThisBrowser()
-    const result = await this.authApi.login(username, undefined, {passcode: passcode, keyType: keyType});
+    const params: any = {
+      passcode: passcode,
+      keyType: keyType,
+    }
+    const result = await this.authApi.login(username, undefined, params);
+    return this.afterLogin(result, username, appName);
+  }
+
+  /**
+   * Log in into the system by TOTP
+   * @param {string} username The username.
+   * @param {string} password Password.
+   * @param {string} passcode Passcode.
+   * @param {string} appName Application name.
+   * @param {boolean} [admin] Use if you need to get admin API_KEY type.
+   * @returns {Promise<LoginInfo>}
+   */
+  public async loginByTotp(
+    username: string,
+    password: string,
+    passcode: string,
+    appName: string,
+    admin?: boolean,
+  ): Promise<LoginInfo> {
+    let keyType = admin ? 11 : 0; // Admin or User key type
+    await this.logoutFromThisBrowser()
+    const params: any = {
+      passcode: passcode,
+      keyType: keyType,
+      totp: true
+    }
+    const result = await this.authApi.login(username, password, params);
     return this.afterLogin(result, username, appName);
   }
 
@@ -261,13 +311,13 @@ export class AuthService extends BaseService {
     if (!username || username.length === 0) {
       return Promise.reject(`Username can not be empty [${username}].`);
     }
-    let keyType = admin ? 11 : 0; // Admin or User key type
+    // let keyType = admin ? 11 : 0; // Admin or User key type
     let brandName = brand ? brand : undefined;
     return this.authApi
       .sendPasscode({
         username: username,
         type: 2,
-        keyType: keyType,
+        // keyType: keyType,
         brand: brandName,
       })
       .then((result) => {
@@ -474,6 +524,77 @@ export class AuthService extends BaseService {
     return this.oAuthHostApi.getUrlToApproveOrDenyAuthorization(approved, params);
   }
 
+  // #region -------------------- Time-based one-time password (TOTP) --------------------
+
+  /**
+   * Generate Time-based One-Time Password (TOTP) Secret and QR code URL.
+   * The client has to confirm that the secret has been set in the Authenticator app by submitting code.
+   *
+   * All TOTP factor management APIs require 2-step authentication (administrator API key).
+   * Google Authenticator and Microsoft Authenticator apps are supported.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/create-totp-secret}
+   *
+   * @param params Request parameters.
+   * @param {string} params.name Device name used to store the authentication factor
+   * @param {string} [params.issuer] Optional issuer returned in the QR code URL and be displayed in the app
+   *
+   * returns {Promise<CreateTotpSecretApiResponse>}
+   */
+  createTotpSecret(params: { name: string, issuer?: string }): Promise<CreateTotpSecretApiResponse> {
+    return this.ensureAuthenticated()
+      .then(() => this.authApi.createTotpSecret(params));
+  }
+
+  /**
+   * The client has to confirm that the secret has been set in the Authenticator app
+   * by submitting code.
+   *
+   * The API returns the authentication factor's status.
+   * The value 1 means that the factor is active and can be used.
+   * Zero or negative value means that additional confirmations are required.
+   * On each successful confirmation the status value is decremented starting from zero.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/confirm-totp-secret}
+   *
+   * @param {string} name Device name used to store the authentication factor
+   * @param {string} code Code generated in the Authenticator app
+   *
+   * returns {Promise<ConfirmTotpSecretApiResponse>}
+   */
+  confirmTotpSecret(name: string, code: string): Promise<ConfirmTotpSecretApiResponse> {
+    return this.ensureAuthenticated()
+      .then(() => this.authApi.confirmTotpSecret(name, code));
+  }
+
+  /**
+   * Return active and not expired user's TOTP factors.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/get-totp-factors}
+   *
+   * returns {Promise<GetTotpFactorsApiResponse>}
+   */
+  getTotpFactors(): Promise<GetTotpFactorsApiResponse> {
+    return this.ensureAuthenticated()
+      .then(() => this.authApi.getTotpFactors());
+  }
+
+  /**
+   * Delete TOTP factor
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/delete-totp-factor}
+   *
+   * @param {string} name Authentication factor name to delete
+   *
+   * returns {Promise<DeleteTotpFactorApiResponse>}
+   */
+  deleteTotpFactor(name: string): Promise<DeleteTotpFactorApiResponse> {
+    return this.ensureAuthenticated()
+      .then(() => this.authApi.deleteTotpFactor(name));
+  }
+
+  // #endregion
+
   /**
    * Sign tempKey with privateKey
    * @param privateKey private key that we get from server (or previously uploaded public key)
@@ -592,4 +713,10 @@ export interface LoginInfo extends LoginApiResponse {
 }
 
 export interface LogoutApiResponse extends ApiResponseBase {
+}
+
+export enum PasscodeType {
+  Sms = 1,
+  Totp = 2,
+  // EMail = 3
 }

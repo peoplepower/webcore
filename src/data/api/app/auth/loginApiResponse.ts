@@ -16,4 +16,11 @@ export interface LoginApiResponse extends ApiResponseBase {
    * User ID.
    */
   userId: number;
+
+  passcodeDeliveryType?: PasscodeDeliveryType;
+}
+
+export enum PasscodeDeliveryType {
+  Email = 2,
+  Sms = 3
 }

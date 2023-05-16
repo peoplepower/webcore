@@ -5,6 +5,10 @@ import { ApiKeyType, LoginApiResponse } from './loginApiResponse';
 import { inject, injectable } from '../../../../modules/common/di';
 import { PasscodeMessagePrefix, PasscodeNotificationType, SendPasscodeApiResponse } from './sendPasscodeApiResponse';
 import { GetPrivateKeyApiResponse } from "./getPrivateKeyApiResponse";
+import { CreateTotpSecretApiResponse } from "./createTotpSecretApiResponse";
+import { ConfirmTotpSecretApiResponse } from "./confirmTotpSecretApiResponse";
+import { GetTotpFactorsApiResponse } from "./getTotpFactorsApiResponse";
+import { DeleteTotpFactorApiResponse } from "./deleteTotpFactorApiResponse";
 
 /**
  * Login, logout and operation token features.
@@ -44,7 +48,7 @@ export class AuthApi {
    * @param [params] Request parameters.
    * @param {number} [params.expiry] API key expiration period in days, nonzero. By default, this is set to -1, which means the key will never expire.
    * @param {string} [params.clientId] Short application client ID to generate a specific user API key.
-   * @param {string} [params.passcode] Temporary pass code for one-time login.
+   * @param {string} [params.passcode] Temporary passcode or TOTP code for one-time login.
    * @param {ApiKeyType} [params.keyType] Key type, 0 - User (default), 11 - Admin.
    * @param {string} [params.appName] Short application name.
    * @param {number} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>.
@@ -52,6 +56,7 @@ export class AuthApi {
    * @param {boolean} [params.sign] Set it to true, if an encrypted signature authentication is used.
    * @param {string} [params.signAlgorithm] Signature algorithm.
    *   (SHA512withRSA (recommended), SHA1withRSA, SHA224withRSA, SHA256withRSA, SHA384withRSA, MD2withRSA, MD5withRSA, NONEwithRSA)
+   * @param {string} [params.totp] Set it to true, if TOTP authentication is supported on the 2'nd step.
    * @returns {Promise<LoginApiResponse>}
    */
   login(
@@ -67,6 +72,7 @@ export class AuthApi {
       appHash?: string;
       sign?: boolean;
       signAlgorithm?: string;
+      totp?: boolean;
     },
   ): Promise<LoginApiResponse> {
     params = params || {};
@@ -93,7 +99,8 @@ export class AuthApi {
         smsPrefix: params.smsPrefix,
         appHash: params.appHash,
         sign: params.sign,
-        signAlgorithm: params.signAlgorithm
+        signAlgorithm: params.signAlgorithm,
+        totp: params.totp
       },
       headers: headers,
     });
@@ -153,7 +160,6 @@ export class AuthApi {
    * @param params Request parameters.
    * @param {string} params.username The username.
    * @param {PasscodeNotificationType} params.type Notification type: 2 = SMS.
-   * @param {ApiKeyType} [params.keyType] API key type requested by this passcode.
    * @param {number} [params.brand] A parameter identifying a customer's specific notification template.
    * @param {PasscodeMessagePrefix} [params.prefix] Message prefix type.
    * @param {string} [params.appHash] 11-character app hash.
@@ -162,7 +168,6 @@ export class AuthApi {
   sendPasscode(params: {
     username: string;
     type: PasscodeNotificationType;
-    keyType?: ApiKeyType;
     brand?: string;
     prefix?: PasscodeMessagePrefix;
     appHash?: string;
@@ -185,4 +190,88 @@ export class AuthApi {
       },
     });
   }
+
+  // #region -------------------- Time-based one-time password (TOTP) --------------------
+
+  /**
+   * Generate Time-based One-Time Password (TOTP) Secret and QR code URL.
+   * The client has to confirm that the secret has been set in the Authenticator app by submitting codes multiple times (usually two).
+   *
+   * All TOTP factor management APIs require 2-step authentication (administrator API key).
+   * Google Authenticator and Microsoft Authenticator apps are supported.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/create-totp-secret}
+   *
+   * @param params Request parameters.
+   * @param {string} params.name Device name used to store the authentication factor
+   * @param {string} [params.issuer] Optional issuer returned in the QR code URL and be displayed in the app
+   *
+   * returns {Promise<CreateTotpSecretApiResponse>}
+   */
+  createTotpSecret(params: { name: string, issuer?: string }): Promise<CreateTotpSecretApiResponse> {
+    return this.dal.post('totp', {}, {
+      params: params,
+    });
+  }
+
+  /**
+   * The client has to confirm that the secret has been set in the Authenticator app
+   * by submitting code.
+   *
+   * The API returns the authentication factor's status.
+   * The value 1 means that the factor is active and can be used.
+   * Zero or negative value means that additional confirmations are required.
+   * On each successful confirmation the status value is decremented starting from zero.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/confirm-totp-secret}
+   *
+   * @param {string} name Device name used to store the authentication factor
+   * @param {string} code Code generated in the Authenticator app
+   *
+   * returns {Promise<ConfirmTotpSecretApiResponse>}
+   */
+  confirmTotpSecret(name: string, code: string): Promise<ConfirmTotpSecretApiResponse> {
+    return this.dal.put('totp',
+      {
+        code: code
+      },
+      {
+        params: {
+          name: name
+        },
+      }
+    );
+  }
+
+  /**
+   * Return active and not expired user's TOTP factors.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/get-totp-factors}
+   *
+   * returns {Promise<GetTotpFactorsApiResponse>}
+   */
+  getTotpFactors(): Promise<GetTotpFactorsApiResponse> {
+    return this.dal.get('totp');
+  }
+
+  /**
+   * Delete TOTP factor
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/authentication/totp/delete-totp-factor}
+   *
+   * @param {string} name Authentication factor name to delete
+   *
+   * returns {Promise<DeleteTotpFactorApiResponse>}
+   */
+  deleteTotpFactor(name: string): Promise<DeleteTotpFactorApiResponse> {
+    return this.dal.delete('totp', {
+      params: {
+        name: name
+      }
+    });
+  }
+
+  // #endregion
+
+
 }
