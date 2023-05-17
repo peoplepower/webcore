@@ -1,7 +1,7 @@
 import { AppApiDal } from '../appApiDal';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { GetOperationTokenApiResponse, OperationTokenType } from './getOperationTokenApiResponse';
-import { ApiKeyType, LoginApiResponse } from './loginApiResponse';
+import { ApiKeyType, LoginApiResponse, PasscodeDeliveryType } from './loginApiResponse';
 import { inject, injectable } from '../../../../modules/common/di';
 import { PasscodeMessagePrefix, PasscodeNotificationType, SendPasscodeApiResponse } from './sendPasscodeApiResponse';
 import { GetPrivateKeyApiResponse } from "./getPrivateKeyApiResponse";
@@ -57,6 +57,7 @@ export class AuthApi {
    * @param {string} [params.signAlgorithm] Signature algorithm.
    *   (SHA512withRSA (recommended), SHA1withRSA, SHA224withRSA, SHA256withRSA, SHA384withRSA, MD2withRSA, MD5withRSA, NONEwithRSA)
    * @param {string} [params.totp] Set it to true, if TOTP authentication is supported on the 2'nd step.
+   * @param {string} [params.prefDeliveryType] Preferred 2'nd step passcode delivery type: 2 = Email, 3 = SMS
    * @returns {Promise<LoginApiResponse>}
    */
   login(
@@ -73,6 +74,7 @@ export class AuthApi {
       sign?: boolean;
       signAlgorithm?: string;
       totp?: boolean;
+      prefDeliveryType?: PasscodeDeliveryType
     },
   ): Promise<LoginApiResponse> {
     params = params || {};
@@ -100,7 +102,8 @@ export class AuthApi {
         appHash: params.appHash,
         sign: params.sign,
         signAlgorithm: params.signAlgorithm,
-        totp: params.totp
+        totp: params.totp,
+        prefDeliveryType: params.prefDeliveryType
       },
       headers: headers,
     });
@@ -126,6 +129,7 @@ export class AuthApi {
    * @param {number} [params.expiry] API key expiry period in days, nonzero. By default the key will never expire.
    * @param {number|string} [params.clientId] Client ID to retrieve a specific key for this app.
    * @param {string} [params.cloudName] The third party cloud name, where the API key must be validated.
+   * @param {string} [params.prefDeliveryType] Preferred 2'nd step passcode delivery type: 2 = Email, 3 = SMS
    * @returns {Promise<LoginApiResponse>}
    */
   loginByKey(params?: {
@@ -134,6 +138,7 @@ export class AuthApi {
     expiry?: number;
     clientId?: string;
     cloudName?: string;
+    prefDeliveryType?: PasscodeDeliveryType;
   }): Promise<LoginApiResponse> {
     params = params || {};
     let headers: { [headerName: string]: string } = {};
@@ -147,6 +152,7 @@ export class AuthApi {
         expiry: params.expiry,
         clientId: params.clientId,
         cloudName: params.cloudName,
+        prefDeliveryType: params.prefDeliveryType,
       },
       headers: headers,
     });
@@ -163,6 +169,7 @@ export class AuthApi {
    * @param {number} [params.brand] A parameter identifying a customer's specific notification template.
    * @param {PasscodeMessagePrefix} [params.prefix] Message prefix type.
    * @param {string} [params.appHash] 11-character app hash.
+   * @param {string} [params.prefDeliveryType] Preferred 2'nd step passcode delivery type: 2 = Email, 3 = SMS
    * @returns {Promise<SendPasscodeApiResponse>}
    */
   sendPasscode(params: {
@@ -171,6 +178,7 @@ export class AuthApi {
     brand?: string;
     prefix?: PasscodeMessagePrefix;
     appHash?: string;
+    prefDeliveryType?: PasscodeDeliveryType;
   }): Promise<SendPasscodeApiResponse> {
     return this.dal.get('passcode', {
       params: params,
