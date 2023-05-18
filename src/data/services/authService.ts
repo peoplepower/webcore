@@ -1,7 +1,7 @@
 import { WcStorage } from '../../modules/localStorage/localStorage';
 import { LiteEvent } from '../../modules/common/liteEvent';
 import { AuthApi } from '../api/app/auth/authApi';
-import { LoginApiResponse } from '../api/app/auth/loginApiResponse';
+import { LoginApiResponse, PasscodeDeliveryType } from '../api/app/auth/loginApiResponse';
 import { SendPasscodeApiResponse } from '../api/app/auth/sendPasscodeApiResponse';
 import { inject, injectable } from '../../modules/common/di';
 import { BaseService } from './baseService';
@@ -145,6 +145,10 @@ export class AuthService extends BaseService {
     }
     if (passcodeType === PasscodeType.Totp) {
       params.totp = true;
+    } else if (passcodeType === PasscodeType.EMail) {
+      params.prefDeliveryType = PasscodeDeliveryType.Email
+    } else {
+      params.prefDeliveryType = PasscodeDeliveryType.Sms
     }
     await this.logoutFromThisBrowser();
 
@@ -243,6 +247,36 @@ export class AuthService extends BaseService {
       .catch((err) => {
         return err;
       });
+  }
+
+  /**
+   * Login by preserved digital signature
+   */
+  public async loginByPreservedSignature(username: string, pwd: string, appName: string, admin?: boolean) {
+    if (!this.tuner.config?.signInBySignature?.enabled) {
+      return Promise.reject('The digital signature login feature is disabled');
+    }
+
+    const currentCloud = await this.cloudConfigService.getCurrentCloud();
+    if (currentCloud.type === CloudType.Production && !this.tuner.config?.signInBySignature?.allowProduction) {
+      return Promise.reject('The digital signature login feature is unavailable for production servers');
+    }
+
+    const usernameHash = await hashString(username);
+    const key = LOCAL_STORAGE_USER_SIGNATURE_PRIVATE_KEY + '-' + appName + '-' + currentCloud.name + '-' + usernameHash;
+    const privateKey = this.wcStorage.get(key);
+
+    if (!privateKey || typeof privateKey !== 'string') {
+      return Promise.reject('The digital signature private key for the specified user was not found');
+    }
+
+    return this.loginBySignature(
+      username,
+      pwd,
+      privateKey,
+      appName,
+      !!admin,
+    );
   }
 
   /**
@@ -655,36 +689,6 @@ export class AuthService extends BaseService {
   }
 
   /**
-   * Login by preserved digital signature
-   */
-  private async loginByPreservedSignature(username: string, pwd: string, appName: string, admin?: boolean) {
-    if (!this.tuner.config?.signInBySignature?.enabled) {
-      return Promise.reject('The digital signature login feature is disabled');
-    }
-
-    const currentCloud = await this.cloudConfigService.getCurrentCloud();
-    if (currentCloud.type === CloudType.Production && !this.tuner.config?.signInBySignature?.allowProduction) {
-      return Promise.reject('The digital signature login feature is unavailable for production servers');
-    }
-
-    const usernameHash = await hashString(username);
-    const key = LOCAL_STORAGE_USER_SIGNATURE_PRIVATE_KEY + '-' + appName + '-' + currentCloud.name + '-' + usernameHash;
-    const privateKey = this.wcStorage.get(key);
-
-    if (!privateKey || typeof privateKey !== 'string') {
-      return Promise.reject('The digital signature private key for the specified user was not found');
-    }
-
-    return this.loginBySignature(
-      username,
-      pwd,
-      privateKey,
-      appName,
-      !!admin,
-    );
-  }
-
-  /**
    * Preserve digital signature for future logins
    */
   private async preserveSignature(username: string, appName: string): Promise<void> {
@@ -716,7 +720,7 @@ export interface LogoutApiResponse extends ApiResponseBase {
 }
 
 export enum PasscodeType {
-  Sms = 1,
-  Totp = 2,
-  // EMail = 3
+  EMail = 2,
+  Sms = 3,
+  Totp = 4
 }
