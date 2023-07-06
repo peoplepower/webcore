@@ -9,9 +9,14 @@ export type OccupancyOverviewLocationState = {
   override?: boolean;
 
   /**
+   * Start date
+   */
+  startDate?: string;
+
+  /**
    * Start date in ms format
    */
-  startDate?: number;
+  startDateMs?: number;
 
   /**
    * Location Occupancy Status. One of three values: PRESENT, ABSENT or VACATION
