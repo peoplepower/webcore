@@ -4,7 +4,6 @@ export enum BotType {
   Location = 0, // Intended for purchase by users for locations (default type)
   Organization = 1, // Intended for purchase by organization admins for their organizations
   OrgLocations = 2, // Intended for purchase for the organization locations only
-  Circles = 3, // Intended for purchase by the circle users for their circles
 }
 
 export enum BotCategory {

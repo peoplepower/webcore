@@ -54,16 +54,23 @@ export class BotService extends BaseService {
   }
 
   /**
-   * Gets info for the specific bot
-   * @param {string} bundle Globally unique bundle ID for the bot.
+   * Gets info for the specific bot.
+   * @param {number} [appInstanceId] Bot instance ID.
+   * @param {string} [bundle] Globally unique bundle ID for the bot.
    * @param {number} [organizationId] Organization ID.
    * @param {number} [locationId] Location ID.
    * @param {string} [lang] Return info in specified language.
    * @returns {Promise<BotInformation>}
    */
-  public getBotInfo(bundle: string, organizationId?: number, locationId?: number, lang?: string): Promise<BotInformation> {
-    if (!bundle) {
-      return this.reject('Bot bundle ID is mandatory.');
+  public getBotInfo(
+    bundle?: string,
+    organizationId?: number,
+    locationId?: number,
+    lang?: string,
+    appInstanceId?: number
+  ): Promise<BotInformation> {
+    if (!bundle && !appInstanceId) {
+      return this.reject('Bot bundle ID or instance ID is mandatory.');
     }
     if (organizationId && (organizationId < 0 || isNaN(organizationId))) {
       return this.reject(`Organization ID is incorrect [${organizationId}].`);
@@ -73,11 +80,13 @@ export class BotService extends BaseService {
     }
 
     const params: {
-      bundle: string;
+      appInstanceId?: number;
+      bundle?: string;
       organizationId?: number;
       locationId?: number;
       lang?: string;
     } = {
+      appInstanceId: appInstanceId,
       bundle: bundle,
       organizationId: organizationId,
       locationId: locationId,

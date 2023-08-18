@@ -48,13 +48,20 @@ export class BotShopApi {
    * See {@link https://iotbots.docs.apiary.io/#reference/end-user-bot-shop-apis/bot-information/get-bot-information}
    *
    * @param params Request parameters.
-   * @param {string} params.bundle Globally unique bundle ID for the app.
+   * @param {number} [params.appInstanceId] Bot instance ID.
+   * @param {string} [params.bundle] Globally unique bundle ID for the app.
    * @param {string} [params.lang] Language identifier, default is user's language or 'en'.
    * @param {number} [params.locationId] Check compatibility for this location.
    * @param {number} [params.organizationId] Check compatibility for this organization.
    * @returns {Promise<GetBotInfoApiResponse>}
    */
-  getBotInfo(params: { bundle: string; lang?: string; locationId?: number; organizationId?: number }): Promise<GetBotInfoApiResponse> {
+  getBotInfo(params: {
+    appInstanceId?: number;
+    bundle?: string;
+    lang?: string;
+    locationId?: number;
+    organizationId?: number
+  }): Promise<GetBotInfoApiResponse> {
     return this.dal.get('cloud/appstore/appInfo', {params: params});
   }
 
@@ -66,14 +73,12 @@ export class BotShopApi {
    * @param {string} params.bundle Globally unique bundle ID for the app.
    * @param {number} [params.locationId] Assign the bot instance to the specific user location.
    * @param {number} [params.organizationId] Assign the bot instance to the specific organization.
-   * @param {number} [params.circleId] Assign the bot instance to the specific circle.
    * @returns {Promise<PurchaseBotApiResponse>}
    */
   purchaseBot(params: {
     bundle: string;
     locationId?: number;
     organizationId?: number;
-    circleId?: number;
   }): Promise<PurchaseBotApiResponse> {
     return this.dal.post('cloud/appstore/appInstance', {}, {params: params});
   }
@@ -108,8 +113,7 @@ export class BotShopApi {
    * @param {string} [params.bundle] Filter by the bots' bundle ID.
    * @param {number} [params.locationId] Filtering bot instances by location, locationId=0 means the bot instances accessing to all locations.
    * @param {number} [params.organizationId] Return bots purchased by this organization.
-   * @param {number} [params.circleId] Return bots purchased by this circle.
-   * @param {number} [params.userId] Return bots purchased by this circle.
+   * @param {number} [params.userId] Get specific user bot instances by organization administrator.
    * @returns {Promise<GetListOfBotsApiResponse>}
    */
   getListOfBots(params?: {
@@ -117,7 +121,6 @@ export class BotShopApi {
     bundle?: string;
     locationId?: number;
     organizationId?: number;
-    circleId?: number;
     userId?: number;
   }): Promise<GetListOfBotsApiResponse> {
     return this.dal.get('cloud/appstore/appInstance', {params: params});
@@ -143,7 +146,7 @@ export class BotShopApi {
    *
    * @param {DataStreamMessage} message Data stream message
    * @param params Request parameters.
-   * @param {DataStreamScope} params.scope Bitmask to feed organizational, individual and circle bots.
+   * @param {DataStreamScope} params.scope Bitmask to feed organizational or individual bots.
    * @param {string} params.address Data stream address.
    * @param {number} [params.locationId] Send data to bots of this location. Mandatory for users.
    * @param {number} [params.organizationId] Send data to bots of this organization, used by an administrators.

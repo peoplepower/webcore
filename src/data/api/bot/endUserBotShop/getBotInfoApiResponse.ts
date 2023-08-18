@@ -1,4 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { BotCategory } from './searchBotsApiResponse';
 
 export enum BotAccessCategory {
   Locations = 1,
@@ -11,12 +12,14 @@ export enum BotAccessCategory {
 
 export enum BotCommunicationCategory {
   LocationUsers = 0,
+  SpecificAddress = 1,
+  OrganizationUsers = 2,
   OrganizationAdmins = 4,
 }
 
 export interface GetBotInfoApiResponse extends ApiResponseBase {
   app: {
-    category?: string;
+    category?: BotCategory;
     marketing?: {
       name?: string;
       author?: string;
