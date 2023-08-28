@@ -1,7 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { BotInstanceStatus } from './configureBotApiResponse';
 import { BotAccessCategory, BotCommunicationCategory } from './getBotInfoApiResponse';
-import { BotType } from './searchBotsApiResponse';
+import { BotCategory, BotType } from './searchBotsApiResponse';
 
 export interface GetListOfBotsApiResponse extends ApiResponseBase {
   bots: Array<{
@@ -27,6 +27,11 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
      * This depends on the values of the attributes 'status', 'development', 'published', 'endDate'.
      */
     active?: boolean;
+
+    /**
+     * Bot Instance Status
+     */
+    status?: BotInstanceStatus;
 
     /**
      * The date when the bot instance can be automatically paused.
@@ -56,6 +61,10 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
      */
     nickname?: string;
 
+    badge?: number;
+
+    condition?: string;
+
     /**
      * Bot instance version information.
      */
@@ -70,9 +79,10 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
       goalRule: boolean;
 
       /**
-       * Bot instance status.
+       * Bot version status.
        */
-      status?: BotInstanceStatus;
+      status?: BotVersionStatus;
+
       statusDateMs?: number;
 
       /**
@@ -127,10 +137,15 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
        * Bot instance type.
        */
       type?: BotType;
+
+      /**
+       * Bot Category comma-separated string
+       */
+      category?: BotCategoryCommaSeparated;
     };
 
     /**
-     * Bot instance access rueles.
+     * Bot instance access rules.
      */
     access?: Array<{
 
@@ -145,17 +160,17 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
       executed?: boolean;
 
       /**
-       * Specific device ID Bot instance have an access to.
+       * Specific device ID Bot instance have access to.
        */
       deviceId?: string;
 
       /**
-       * Specific device type Bot instance have an access to.
+       * Specific device type Bot instance have access to.
        */
       deviceType?: string;
 
       /**
-       * Multilanguage description.
+       * Multilingual description.
        */
       reason?: {
         [key: string]: string;
@@ -174,3 +189,25 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
     }>;
   }>;
 }
+
+export enum BotVersionStatus {
+  WaitingForUpload = 0,
+  PrivatelyAvailable = 1,
+  SubmittedForReview = 2,
+  UnderReview = 3,
+  PubliclyAvailable = 4,
+  StoreOrSystemRejected = 5,
+  DeveloperRejected = 6,
+  Restorable = 7,
+  Archived = 8
+}
+
+/**
+ * Bot Category encoded in comma-separated string
+ */
+export type BotCategoryCommaSeparated = `${BotCategory}` |
+  `${BotCategory},${BotCategory}` |
+  `${BotCategory},${BotCategory},${BotCategory}` |
+  `${BotCategory},${BotCategory},${BotCategory},${BotCategory}` |
+  `${BotCategory},${BotCategory},${BotCategory},${BotCategory},${BotCategory}` |
+  `${BotCategory},${BotCategory},${BotCategory},${BotCategory},${BotCategory},${BotCategory}`;
