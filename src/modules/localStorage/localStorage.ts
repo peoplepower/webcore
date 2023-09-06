@@ -32,6 +32,39 @@ export class WcStorage {
     }
   }
 
+  /**
+   * Get values by regular expression describing value keys in localStorage.
+   * @param regExp
+   */
+  public getByRegexp(regExp: RegExp) {
+    if (!regExp) {
+      this.logger.error(`WcStorage.getByRegexp("${regExp}"): empty path`);
+      throw new Error('Unable to get values by empty regular expression from localStorage');
+    }
+    const prefix = this.tuner.config?.localStoragePrefix || '';
+    return this.getKeys()
+      .filter(key => {
+        if (prefix && key.startsWith(prefix)) {
+          key = key.slice(prefix.length)
+        }
+        return regExp.test(key);
+      })
+      .map(key => {
+        if (prefix && key.startsWith(prefix)) {
+          key = key.slice(prefix.length)
+        }
+        const value = this.get(key);
+        return {key, value};
+      });
+  }
+
+  /**
+   * Get a list of keys stored in localStorage.
+   */
+  public getKeys(): string[] {
+    return Object.keys(this.ls);
+  }
+
   public set(path: string, data: string | number | boolean | object | null | undefined): void {
     if (typeof data === 'undefined') {
       this.logger.error(`WcStorage.set("${path}"): empty data`);
@@ -74,7 +107,7 @@ export class WcStorage {
 /**
  * Custom localStorage realization
  */
-export interface LocalStorageProvider {
+export interface LocalStorageProvider extends Storage {
   /**
    * Returns the current value associated with the given key, or null if the given key does not exist in the list associated with the object.
    */

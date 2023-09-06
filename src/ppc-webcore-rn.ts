@@ -22,6 +22,26 @@ const ASYNC_STORAGE_KEY = 'PPC_WEBCORE_DATA';
  * Fake sync local storage. You could use any realization that fit your needs.
  */
 class LocalStorageMimic implements LocalStorageProvider {
+  constructor() {
+    return new Proxy(this, this);
+  }
+
+  get length(): number {
+    return Object.keys(this.storageObject).length;
+  }
+
+  [name: string]: any;
+
+  get(target, key) {
+    return this[key] || this.storageObject[key];
+  }
+
+  key(index: number): string | null {
+    return Object.entries(this.storageObject)
+      .find(([key, value], i) => index === i)
+      ?.[1];
+  }
+
   private storageObject: { [key: string]: any } = {};
 
   load(): Promise<void> {
