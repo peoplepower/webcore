@@ -693,12 +693,14 @@ export class AuthService extends BaseService {
    */
   private async preserveSignature(username: string, appName: string): Promise<void> {
     if (!this.tuner.config?.signInBySignature?.enabled) {
-      return Promise.reject('The digital signature login feature is disabled');
+      this.logger.debug('The digital signature login feature is disabled');
+      return;
     }
 
     const currentCloud = await this.cloudConfigService.getCurrentCloud();
     if (currentCloud.type === CloudType.Production && !this.tuner.config?.signInBySignature?.allowProduction) {
-      return Promise.reject('The digital signature login feature is unavailable for production servers');
+      this.logger.warn('The digital signature login feature is unavailable for production servers');
+      return;
     }
 
     try {
