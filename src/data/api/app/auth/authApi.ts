@@ -51,6 +51,7 @@ export class AuthApi {
    * @param {string} [params.passcode] Temporary passcode or TOTP code for one-time login.
    * @param {ApiKeyType} [params.keyType] Key type, 0 - User (default), 11 - Admin.
    * @param {string} [params.appName] Short application name.
+   * @param {string} [params.brand] Brand name.
    * @param {number} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>.
    * @param {string} [params.appHash] 11-character app hash.
    * @param {boolean} [params.sign] Set it to true, if an encrypted signature authentication is used.
@@ -69,6 +70,7 @@ export class AuthApi {
       clientId?: string;
       keyType?: ApiKeyType;
       appName?: string;
+      brand?: string;
       smsPrefix?: number;
       appHash?: string;
       sign?: boolean;
@@ -98,6 +100,7 @@ export class AuthApi {
         clientId: params.clientId,
         keyType: params.keyType,
         appName: params.appName,
+        brand: params.brand,
         smsPrefix: params.smsPrefix,
         appHash: params.appHash,
         sign: params.sign,
@@ -126,10 +129,11 @@ export class AuthApi {
    * @param [params] Request parameters.
    * @param {string} [params.apiKey] Normal or temporary API key.
    * @param {ApiKeyType} [params.keyType] Returned API key type.
-   * @param {number} [params.expiry] API key expiry period in days, nonzero. By default the key will never expire.
+   * @param {number} [params.expiry] API key expiry period in days, nonzero. By default, the key will never expire.
    * @param {number|string} [params.clientId] Client ID to retrieve a specific key for this app.
    * @param {string} [params.cloudName] The third party cloud name, where the API key must be validated.
    * @param {string} [params.prefDeliveryType] Preferred 2'nd step passcode delivery type: 2 = Email, 3 = SMS
+   * @param {string} [params.brand] Brand name
    * @returns {Promise<LoginApiResponse>}
    */
   loginByKey(params?: {
@@ -139,6 +143,7 @@ export class AuthApi {
     clientId?: string;
     cloudName?: string;
     prefDeliveryType?: PasscodeDeliveryType;
+    brand?: string;
   }): Promise<LoginApiResponse> {
     params = params || {};
     let headers: { [headerName: string]: string } = {};
@@ -153,6 +158,7 @@ export class AuthApi {
         clientId: params.clientId,
         cloudName: params.cloudName,
         prefDeliveryType: params.prefDeliveryType,
+        brand: params.brand,
       },
       headers: headers,
     });

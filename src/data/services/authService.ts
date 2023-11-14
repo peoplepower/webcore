@@ -128,6 +128,7 @@ export class AuthService extends BaseService {
    * @param {string} appName
    * @param {boolean} [admin] Use if you need to get admin API_KEY type
    * @param {PasscodeType} [passcodeType] Second factor type. 1 - sms, 2 - totp
+   * @param {string} [brand] Optional brand name
    * @returns {Promise<LoginInfo>}
    */
   public async login(
@@ -135,10 +136,12 @@ export class AuthService extends BaseService {
     pwd: string,
     appName: string,
     admin?: boolean,
-    passcodeType?: PasscodeType
+    passcodeType?: PasscodeType,
+    brand?: string
   ): Promise<LoginInfo> {
     const params: any = {
-      appName: appName
+      appName: appName,
+      brand: brand
     }
     if (admin) {
       params.keyType = 11
@@ -153,7 +156,7 @@ export class AuthService extends BaseService {
     await this.logoutFromThisBrowser();
 
     try {
-      return await this.loginByPreservedSignature(username, pwd, appName, admin);
+      return await this.loginByPreservedSignature(username, pwd, appName, admin, brand);
     } catch (e) {
       if (typeof e !== 'string') {
         this.logger.error('Unable to login by signature: ' + username, e);
@@ -161,7 +164,7 @@ export class AuthService extends BaseService {
     }
 
     const result = await this.authApi.login(username, pwd, params);
-    return this.afterLogin(result, username, appName);
+    return this.afterLogin(result, username, appName, brand);
   }
 
   /**
@@ -170,6 +173,7 @@ export class AuthService extends BaseService {
    * @param {string} passcode Passcode.
    * @param {string} appName Application name.
    * @param {boolean} [admin] Use if you need to get admin API_KEY type.
+   * @param {string} [brand] Optional brand name.
    * @returns {Promise<LoginInfo>}
    */
   public async loginByPasscode(
@@ -177,15 +181,17 @@ export class AuthService extends BaseService {
     passcode: string,
     appName: string,
     admin?: boolean,
+    brand?: string,
   ): Promise<LoginInfo> {
     let keyType = admin ? 11 : 0; // Admin or User key type
     await this.logoutFromThisBrowser()
     const params: any = {
       passcode: passcode,
       keyType: keyType,
+      brand: brand
     }
     const result = await this.authApi.login(username, undefined, params);
-    return this.afterLogin(result, username, appName);
+    return this.afterLogin(result, username, appName, brand);
   }
 
   /**
@@ -195,6 +201,7 @@ export class AuthService extends BaseService {
    * @param {string} passcode Passcode.
    * @param {string} appName Application name.
    * @param {boolean} [admin] Use if you need to get admin API_KEY type.
+   * @param {string} [brand] Optional brand name.
    * @returns {Promise<LoginInfo>}
    */
   public async loginByTotp(
@@ -203,16 +210,18 @@ export class AuthService extends BaseService {
     passcode: string,
     appName: string,
     admin?: boolean,
+    brand?: string,
   ): Promise<LoginInfo> {
     let keyType = admin ? 11 : 0; // Admin or User key type
     await this.logoutFromThisBrowser()
     const params: any = {
       passcode: passcode,
       keyType: keyType,
-      totp: true
+      totp: true,
+      brand: brand
     }
     const result = await this.authApi.login(username, password, params);
-    return this.afterLogin(result, username, appName);
+    return this.afterLogin(result, username, appName, brand);
   }
 
   /**
@@ -222,13 +231,14 @@ export class AuthService extends BaseService {
    *
    * @param {string} apiKey Temporary or normal API_KEY
    * @param {boolean} [admin] Use if need to get admin API_KEY type.
+   * @param {string} [brand] Brand name.
    * @returns {Promise<LoginApiResponse>}
    */
-  loginByKey(apiKey: string, admin?: boolean): Promise<LoginApiResponse> {
+  loginByKey(apiKey: string, admin?: boolean, brand?: string): Promise<LoginApiResponse> {
     let me = this;
     let keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
-      .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType}))
+      .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType, brand: brand}))
       .then((result) => {
         me.logger.debug('Logged in by API_KEY', result);
 
@@ -240,7 +250,7 @@ export class AuthService extends BaseService {
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
         me.wcStorage.remove(LOCAL_STORAGE_LAST_USERNAME);
-        me.setUpKeyExpireTimeout(result.keyExpire!);
+        me.setUpKeyExpireTimeout(result.keyExpire!, brand);
         me.onLogin.trigger();
         return result;
       })
@@ -252,7 +262,7 @@ export class AuthService extends BaseService {
   /**
    * Login by preserved digital signature
    */
-  public async loginByPreservedSignature(username: string, pwd: string, appName: string, admin?: boolean) {
+  public async loginByPreservedSignature(username: string, pwd: string, appName: string, admin?: boolean, brand?: string) {
     if (!this.tuner.config?.signInBySignature?.enabled) {
       return Promise.reject('The digital signature login feature is disabled');
     }
@@ -276,6 +286,7 @@ export class AuthService extends BaseService {
       privateKey,
       appName,
       !!admin,
+      brand
     );
   }
 
@@ -286,6 +297,7 @@ export class AuthService extends BaseService {
    * @param {string} privateKey Private key stored on server.
    * @param {string} appName Application name that was used to generate privateKey.
    * @param {boolean} [admin] Use if you need to get admin API_KEY type.
+   * @param {string} [brand] Optional brand name
    */
   public async loginBySignature(
     username: string,
@@ -293,13 +305,15 @@ export class AuthService extends BaseService {
     privateKey: string,
     appName: string,
     admin?: boolean,
+    brand?: string,
   ): Promise<LoginInfo> {
     await this.logoutFromThisBrowser();
 
     let params: any = {
       keyType: admin ? 11 : 0, // Admin or User key type
       appName: appName,
-      sign: true
+      sign: true,
+      brand: brand
     };
     const getTempKeyResult = await this.authApi.login(username, password, params)
 
@@ -310,26 +324,28 @@ export class AuthService extends BaseService {
       appName: appName,
       sign: true,
       signAlgorithm: 'SHA512withRSA',
-      passcode: signature
+      passcode: signature,
+      brand: brand
     };
     const result = await this.authApi.login(username, undefined, params)
 
-    return this.afterLogin(result, username, appName);
+    return this.afterLogin(result, username, appName, brand);
   }
 
   /**
    * Requests a new API_KEY and reset its expiration to default.
+   * @param {string} [brand] Optional brand name.
    * @returns {Promise<LoginInfo>}
    */
-  public refreshToken(): Promise<LoginInfo> {
+  public refreshToken(brand?: string): Promise<LoginInfo> {
     let me = this;
-    return me.authApi.loginByKey({apiKey: me._apiKey}).then((result) => {
+    return me.authApi.loginByKey({apiKey: me._apiKey, brand: brand}).then((result) => {
       me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
       me._apiKey = result.key;
       me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
       me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
       me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-      me.setUpKeyExpireTimeout(result.keyExpire!);
+      me.setUpKeyExpireTimeout(result.keyExpire!, brand);
       return result;
     });
   }
@@ -361,10 +377,11 @@ export class AuthService extends BaseService {
 
   /**
    * Gets temporary API key that is valid for only a brief amount of time.
+   * @param {string} [brand] Optional brand name.
    * @returns {Promise<LoginInfo>}
    */
-  public getTempToken(): Promise<LoginInfo> {
-    return this.authApi.loginByKey({keyType: 1}).then((result) => {
+  public getTempToken(brand?: string): Promise<LoginInfo> {
+    return this.authApi.loginByKey({keyType: 1, brand: brand}).then((result) => {
       this.logger.debug('Temporary API key has been requested.', result);
       return result;
     });
@@ -384,8 +401,9 @@ export class AuthService extends BaseService {
   /**
    * Set up timeout to handle token expiration time
    * @param {string|number} keyExpireDate date/time as string in RFC2822 or ISO 8601 formats, or in milliseconds since UNIX epoch
+   * @param {string} [brand] Optional brand
    */
-  public setUpKeyExpireTimeout(keyExpireDate: string | number) {
+  public setUpKeyExpireTimeout(keyExpireDate: string | number, brand?: string) {
     let me = this;
     if (keyExpireDate) {
       let keyExpireDateObj = new Date(keyExpireDate);
@@ -408,10 +426,11 @@ export class AuthService extends BaseService {
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, keyExpireDateObj.toISOString());
         this.apiKeyExpireTimeout = setTimeout(function () {
           me.logger.debug(`API key (${me._apiKey}) is about to expire. Refreshing...`);
-          me.refreshToken().catch(() => {
-            me.logoutFromThisBrowser();
-            me.onNeedRelogin.trigger();
-          });
+          me.refreshToken(brand)
+            .catch(() => {
+              me.logoutFromThisBrowser();
+              me.onNeedRelogin.trigger();
+            });
         }, expirePeriod);
       }
     } else {
@@ -487,7 +506,6 @@ export class AuthService extends BaseService {
     tempKey: string,
     params?: {
       brand?: string;
-      appName?: string;
       passcode?: string;
       smsPrefix?: number;
       appHash?: string;
@@ -506,9 +524,6 @@ export class AuthService extends BaseService {
    * @param {string} [passcode] 2-factor auth passcode
    * @param [params] Request parameters
    * @param {string} [params.brand] A parameter identifying specific email template, among other customization settings
-   * @param {string} [params.appName] App name to identify the brand
-   * @param {string} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
-   * @param {string} [params.appHash] 11-character app hash
    * @param {string} [params.strongPassword] Check if the password is strong
    * @param {string} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
@@ -519,9 +534,6 @@ export class AuthService extends BaseService {
     passcode?: string,
     params?: {
       brand?: string;
-      appName?: string;
-      smsPrefix?: number;
-      appHash?: string;
       strongPassword?: boolean;
       keepKeyVersion?: boolean;
     },
@@ -675,14 +687,14 @@ export class AuthService extends BaseService {
     return buf;
   }
 
-  private afterLogin(result: LoginApiResponse, username: string, appName: string): LoginApiResponse {
+  private afterLogin(result: LoginApiResponse, username: string, appName: string, brand?: string): LoginApiResponse {
     this.logger.debug('Logged in as: ' + username, result);
     this._apiKey = result.key;
     this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
     this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
     this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
     this.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
-    this.setUpKeyExpireTimeout(result.keyExpire!);
+    this.setUpKeyExpireTimeout(result.keyExpire!, brand);
     this.onLogin.trigger();
     this.preserveSignature(username, appName);
     return result;

@@ -199,7 +199,6 @@ export class UserAccountsApi {
     tempApiKey: string,
     params?: {
       brand?: string;
-      appName?: string; // Is it still valid param?
       passcode?: string;
       smsPrefix?: number;
       appHash?: string;
@@ -236,9 +235,6 @@ export class UserAccountsApi {
    * @param {string|undefined} passcode Passcode for 2-factor auth
    * @param [params] Request parameters
    * @param {string|undefined} [params.brand] A parameter identifying an Ensemble Customer specific email template, among other customization settings.
-   * @param {string|undefined} [params.appName] App name to identify the brand
-   * @param {number|undefined} [params.smsPrefix] Passcode SMS prefix type to automatically parse it by the app: 1 = Google <#>
-   * @param {string|undefined} [params.appHash] 11-character app hash
    * @param {boolean|undefined} [params.strongPassword] Check if the password is strong
    * @param {boolean|undefined} [params.keepKeyVersion] Keep the current user key version to keep previously generated API keys active
    * @returns {Promise<ApiResponseBase>}
@@ -249,9 +245,6 @@ export class UserAccountsApi {
     passcode?: string,
     params?: {
       brand?: string;
-      appName?: string;
-      smsPrefix?: number;
-      appHash?: string;
       strongPassword?: boolean;
       keepKeyVersion?: boolean;
     },
@@ -279,10 +272,9 @@ export class UserAccountsApi {
    * @param params Request parameters
    * @param {string} params.username The username, which is typically the user's email address.
    * @param {string} [params.brand] A parameter identifying an Ensemble Customer specific email template, among other customization settings.
-   * @param {string} [params.appName] App name to identify the brand.
    * @returns {Promise<ApiResponseBase>}
    */
-  recoverPassword(params: { username: string; brand?: string; appName?: string }): Promise<ApiResponseBase> {
+  recoverPassword(params: { username: string; brand?: string; }): Promise<ApiResponseBase> {
     return this.dal.get('newPassword', {
       params: params,
     });

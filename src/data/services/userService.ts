@@ -110,12 +110,11 @@ export class UserService extends BaseService {
    * Requests user password recover.
    * @returns {Promise<RecoverPasswordInfo>}
    */
-  public recoverPassword(username: string, brand?: string, appName?: string): Promise<RecoverPasswordInfo> {
+  public recoverPassword(username: string, brand?: string): Promise<RecoverPasswordInfo> {
     return this.userAccountsApi.recoverPassword({
-                                                  username: username,
-                                                  brand: brand,
-                                                  appName: appName,
-                                                });
+      username: username,
+      brand: brand,
+    });
   }
 
   /**
