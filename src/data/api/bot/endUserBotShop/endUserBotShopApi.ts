@@ -5,7 +5,7 @@ import { GetListOfBotsApiResponse } from './getListOfBotsApiResponse';
 import { BotInstanceStatus, ConfigureBotApiResponse, ConfigureBotBody } from './configureBotApiResponse';
 import { GetBotInfoApiResponse } from './getBotInfoApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
+import { BotCoreClass, BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
 import { GetBotSummaryApiResponse } from './getBotSummaryApiResponse';
 import { DataStreamMessage, DataStreamScope } from './dataStreamMessageApiResponse';
 
@@ -27,6 +27,7 @@ export class BotShopApi {
    * @param {boolean} [params.compatible] Filter by bots that are compatible with our user account or not, leave blank to return all bots.
    * @param {string} [params.lang] Language filter, i.e. 'en'.
    * @param {BotType} [params.type] Filter by the bot type field.
+   * @param {BotType} [params.core] Filter by the bot core class.
    * @param {number} [params.locationId] Check compatibility for this location.
    * @param {number} [params.organizationId] Check compatibility for this organization.
    * @returns {Promise<SearchBotsApiResponse>}
@@ -37,6 +38,7 @@ export class BotShopApi {
     compatible?: boolean;
     lang?: string;
     type?: BotType;
+    core?: BotCoreClass;
     locationId?: number;
     organizationId?: number;
   }): Promise<SearchBotsApiResponse> {

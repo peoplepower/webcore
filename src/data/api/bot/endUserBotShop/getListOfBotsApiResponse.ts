@@ -106,6 +106,11 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
         SLEEP?: string;
         WAKE_UP?: string;
       };
+
+      /**
+       * Decryption of the latest bot update.
+       */
+      whatsnew?: string;
     };
 
     /**

@@ -3,7 +3,7 @@ import { BaseService } from './baseService';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { AuthService } from './authService';
 import { BotShopApi } from '../api/bot/endUserBotShop/endUserBotShopApi';
-import { BotType, SearchBotsApiResponse } from '../api/bot/endUserBotShop/searchBotsApiResponse';
+import { BotCoreClass, BotType, SearchBotsApiResponse } from '../api/bot/endUserBotShop/searchBotsApiResponse';
 import { GetBotInfoApiResponse } from '../api/bot/endUserBotShop/getBotInfoApiResponse';
 import { PurchaseBotApiResponse } from '../api/bot/endUserBotShop/purchaseBotApiResponse';
 import { GetListOfBotsApiResponse } from '../api/bot/endUserBotShop/getListOfBotsApiResponse';
@@ -30,6 +30,7 @@ export class BotService extends BaseService {
    * @param {boolean} [params.compatible] Filter by compatibility with user account.
    * @param {string} [params.lang] Language filter.
    * @param {BotType} [params.type] Filter by the bot type field.
+   * @param {BotType} [params.core] Filter by the bot core class.
    * @returns {Promise<BotsList>}
    */
   public searchBots(params?: {
@@ -40,6 +41,7 @@ export class BotService extends BaseService {
     compatible?: boolean;
     lang?: string;
     type?: BotType;
+    core?: BotCoreClass;
   }): Promise<BotsList> {
     if (params) {
       if (params.organizationId && (params.organizationId < 0 || isNaN(params.organizationId))) {

@@ -6,6 +6,12 @@ export enum BotType {
   OrgLocations = 2, // Intended for purchase for the organization locations only
 }
 
+export enum BotCoreClass {
+  Default = 0, // No requirements (default)
+  Positive = 1, // Provides Core functionality (core positive)
+  Negative = -1, // Requires Core functionality (core negative)
+}
+
 export enum BotCategory {
   Energy = 'E',
   Security = 'S',
@@ -19,6 +25,7 @@ export interface SearchBotsApiResponse extends ApiResponseBase {
   apps?: Array<{
     bundle: string;
     type: BotType;
+    core: BotCoreClass;
     name?: string;
     author?: string;
     category?: string;
