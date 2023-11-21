@@ -1,5 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { BotCategory } from './searchBotsApiResponse';
+import { BotCoreClass, BotType } from './searchBotsApiResponse';
+import { BotCategoryCommaSeparated, BotVersionStatus } from "./getListOfBotsApiResponse";
 
 export enum BotAccessCategory {
   Locations = 1,
@@ -19,44 +20,52 @@ export enum BotCommunicationCategory {
 
 export interface GetBotInfoApiResponse extends ApiResponseBase {
   app: {
-    category?: BotCategory;
+    bundle: string;
+    category?: BotCategoryCommaSeparated;
+    type?: BotType;
+    core?: BotCoreClass;
+    instancesSummary?: string;
+    trigger?: number;
+
     marketing?: {
       name?: string;
       author?: string;
       copyright?: string;
       description?: string;
+      marketingUrl?: string;
+      supportUrl?: string;
+      videoUrl?: string;
+      privacyUrl?: string;
     };
-    instancesSummary?: string;
-    rating?: {
-      total?: number;
-      average?: number;
-    };
+
     versions?: Array<{
       version?: string;
-      statusChangeDate?: string;
-      statusChangeDateMs?: number;
+      creationDate: string;
+      creationDateMs: number;
+      status?: BotVersionStatus;
+      statusDate?: string;
+      statusDateMs?: number;
       whatsnew?: string;
-      rating?: {
-        total?: number;
-        average?: number;
-      };
     }>;
-    trigger?: number;
+
     schedules?: Array<Object>;
+
     deviceTypes?: Array<{
       id: number;
       minOccurrence?: number;
       reason?: string;
     }>;
+
     access?: Array<{
       category: BotAccessCategory;
       reason?: string;
     }>;
+
     communications?: Array<{
       category: BotCommunicationCategory;
-      email: boolean;
-      push: boolean;
-      sms: boolean;
+      email?: boolean;
+      push?: boolean;
+      sms?: boolean;
       msg?: boolean;
     }>;
   };

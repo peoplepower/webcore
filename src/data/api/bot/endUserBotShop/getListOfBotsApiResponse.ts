@@ -1,7 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { BotInstanceStatus } from './configureBotApiResponse';
 import { BotAccessCategory, BotCommunicationCategory } from './getBotInfoApiResponse';
-import { BotCategory, BotType } from './searchBotsApiResponse';
+import { BotCategory, BotCoreClass, BotType } from './searchBotsApiResponse';
 
 export interface GetListOfBotsApiResponse extends ApiResponseBase {
   bots: Array<{
@@ -100,11 +100,17 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
        * Bot instance schedules.
        */
       schedules?: {
+        DAILY_MID_DAY?: string;
+        DAILY_REMINDER?: string;
+        HEALTH_ANALYSIS?: string;
         HOUR?: string;
+        JOURNAL?: string;
         MIDNIGHT?: string;
         ML?: string;
+        REMINDER?: string;
         SLEEP?: string;
         WAKE_UP?: string;
+        WEEKLY_STOVETOP?: string;
       };
 
       /**
@@ -147,6 +153,11 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
        * Bot Category comma-separated string
        */
       category?: BotCategoryCommaSeparated;
+
+      /**
+       * Bot Core class
+       */
+      core?: BotCoreClass;
     };
 
     /**
@@ -163,6 +174,7 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
       read?: boolean;
       control?: boolean;
       executed?: boolean;
+      excluded?: boolean;
 
       /**
        * Specific device ID Bot instance have access to.
