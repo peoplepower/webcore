@@ -52,11 +52,6 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
     purchaseDateMs?: number;
 
     /**
-     * Indicates whether the parent bot version has been published.
-     */
-    published?: boolean;
-
-    /**
      * Bot instance nickname.
      */
     nickname?: string;
