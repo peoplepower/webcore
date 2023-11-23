@@ -64,7 +64,7 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
      * Bot instance version information.
      */
     version: {
-      id: number;
+      appVersionId: number;
 
       /**
        * The release number of the parent bot version.
@@ -78,6 +78,7 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
        */
       status?: BotVersionStatus;
 
+      statusDate?: string;
       statusDateMs?: number;
 
       /**
@@ -168,7 +169,6 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
       trigger?: boolean;
       read?: boolean;
       control?: boolean;
-      executed?: boolean;
       excluded?: boolean;
 
       /**
@@ -181,12 +181,7 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
        */
       deviceType?: string;
 
-      /**
-       * Multilingual description.
-       */
-      reason?: {
-        [key: string]: string;
-      };
+      reason?: string;
     }>;
 
     /**
