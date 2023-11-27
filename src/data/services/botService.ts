@@ -3,7 +3,7 @@ import { BaseService } from './baseService';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { AuthService } from './authService';
 import { BotShopApi } from '../api/bot/endUserBotShop/endUserBotShopApi';
-import { BotCoreClass, BotType, SearchBotsApiResponse } from '../api/bot/endUserBotShop/searchBotsApiResponse';
+import { BotCategory, BotCoreClass, BotType, SearchBotsApiResponse } from '../api/bot/endUserBotShop/searchBotsApiResponse';
 import { GetBotInfoApiResponse } from '../api/bot/endUserBotShop/getBotInfoApiResponse';
 import { PurchaseBotApiResponse } from '../api/bot/endUserBotShop/purchaseBotApiResponse';
 import { GetListOfBotsApiResponse } from '../api/bot/endUserBotShop/getListOfBotsApiResponse';
@@ -26,7 +26,7 @@ export class BotService extends BaseService {
    * @param {number} [params.organizationId] Organization ID.
    * @param {number} [params.locationId] Location ID.
    * @param {string} [params.searchBy] Search by name, author, keywords.
-   * @param {string} [params.category] Bots category, multiple allowed.
+   * @param {BotCategory | BotCategory[]} [params.category] Bots category, multiple allowed.
    * @param {boolean} [params.compatible] Filter by compatibility with user account.
    * @param {string} [params.lang] Language filter.
    * @param {BotType} [params.type] Filter by the bot type field.
@@ -37,7 +37,7 @@ export class BotService extends BaseService {
     organizationId?: number;
     locationId?: number;
     searchBy?: string;
-    category?: string;
+    category?: BotCategory | BotCategory[];
     compatible?: boolean;
     lang?: string;
     type?: BotType;

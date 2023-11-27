@@ -5,7 +5,7 @@ import { GetListOfBotsApiResponse } from './getListOfBotsApiResponse';
 import { BotInstanceStatus, ConfigureBotApiResponse, ConfigureBotBody } from './configureBotApiResponse';
 import { GetBotInfoApiResponse } from './getBotInfoApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { BotCoreClass, BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
+import { BotCategory, BotCoreClass, BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
 import { GetBotSummaryApiResponse } from './getBotSummaryApiResponse';
 import { DataStreamMessage, DataStreamScope } from './dataStreamMessageApiResponse';
 
@@ -23,7 +23,7 @@ export class BotShopApi {
    *
    * @param [params] Request parameters.
    * @param {string} [params.searchBy] Search in name, author, keywords.
-   * @param {string} [params.category] Category search.Multiple parameters are allowed.
+   * @param {BotCategory | BotCategory[]} [params.category] Category search. Multiple parameters are allowed.
    * @param {boolean} [params.compatible] Filter by bots that are compatible with our user account or not, leave blank to return all bots.
    * @param {string} [params.lang] Language filter, i.e. 'en'.
    * @param {BotType} [params.type] Filter by the bot type field.
@@ -34,7 +34,7 @@ export class BotShopApi {
    */
   searchBots(params?: {
     searchBy?: string;
-    category?: string;
+    category?: BotCategory | BotCategory[];
     compatible?: boolean;
     lang?: string;
     type?: BotType;

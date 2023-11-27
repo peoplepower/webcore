@@ -1,4 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { BotCategoryCommaSeparated } from "./getListOfBotsApiResponse";
 
 export enum BotType {
   Location = 0, // Intended for purchase by users for locations (default type)
@@ -28,7 +29,7 @@ export interface SearchBotsApiResponse extends ApiResponseBase {
     core: BotCoreClass;
     name?: string;
     author?: string;
-    category?: string;
+    category?: BotCategoryCommaSeparated;
     description?: string;
     rating?: number;
     compatible?: boolean;
