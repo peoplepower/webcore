@@ -59,6 +59,9 @@ export interface GetBotInfoApiResponse extends ApiResponseBase {
     access?: Array<{
       category: BotAccessCategory;
       reason?: string;
+      trigger?: boolean;
+      read?: boolean;
+      control?: boolean;
     }>;
 
     communications?: Array<{

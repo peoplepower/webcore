@@ -56,46 +56,40 @@ export class BotService extends BaseService {
   }
 
   /**
-   * Gets info for the specific bot.
-   * @param {number} [appInstanceId] Bot instance ID.
-   * @param {string} [bundle] Globally unique bundle ID for the bot.
-   * @param {number} [organizationId] Organization ID.
-   * @param {number} [locationId] Location ID.
-   * @param {string} [lang] Return info in specified language.
-   * @returns {Promise<BotInformation>}
+   * Retrieve bot information.
+   * @param params Request parameters.
+   * @param {string} params.bundle Globally unique bundle ID for the app
+   * @param {string} [params.lang] Language identifier, default is user's language or 'en'
+   * @param {string} [params.lastNVersions] Max number of versions to show, default is 10
+   * @returns {Promise<GetBotInfoApiResponse>}
    */
-  public getBotInfo(
-    bundle?: string,
-    organizationId?: number,
-    locationId?: number,
-    lang?: string,
-    appInstanceId?: number
-  ): Promise<BotInformation> {
-    if (!bundle && !appInstanceId) {
-      return this.reject('Bot bundle ID or instance ID is mandatory.');
+  public getBotInfo(params: {
+    bundle: string;
+    lang?: string;
+    lastNVersions?: number;
+  }): Promise<GetBotInfoApiResponse> {
+    if (!params?.bundle) {
+      return this.reject('Bot bundle ID is mandatory.');
     }
-    if (organizationId && (organizationId < 0 || isNaN(organizationId))) {
-      return this.reject(`Organization ID is incorrect [${organizationId}].`);
-    }
-    if (locationId && (locationId < 0 || isNaN(locationId))) {
-      return this.reject(`Location ID is incorrect [${locationId}].`);
-    }
-
-    const params: {
-      appInstanceId?: number;
-      bundle?: string;
-      organizationId?: number;
-      locationId?: number;
-      lang?: string;
-    } = {
-      appInstanceId: appInstanceId,
-      bundle: bundle,
-      organizationId: organizationId,
-      locationId: locationId,
-      lang: lang,
-    };
 
     return this.authService.ensureAuthenticated().then(() => this.botShopApi.getBotInfo(params));
+  }
+
+  /**
+   * Get bot object (binary file).
+   * Each bot can contain a publicly available icon and/or other images.
+   * @param params Request parameters.
+   * @param {string} params.name Object name. Use "icon" for icons.
+   * @param {number} params.bundle Globally unique bundle ID for the bot, i.e. `com.peoplepowerco.MyBot`
+   * @returns {Promise<Blob>}
+   */
+  public getBotObject(
+    params: {
+      name: 'icon',
+      bundle: string,
+    }
+  ): Promise<Blob> {
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.getBotObject(params));
   }
 
   /**
@@ -277,7 +271,4 @@ export class BotService extends BaseService {
 }
 
 export interface BotsList extends SearchBotsApiResponse {
-}
-
-export interface BotInformation extends GetBotInfoApiResponse {
 }

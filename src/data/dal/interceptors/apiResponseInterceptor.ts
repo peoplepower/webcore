@@ -17,7 +17,7 @@ export class ApiResponseInterceptor implements Interceptor {
     if (response?.config?.ignoreApiResponseTransformation === true) {
       return response;
     }
-    if (response && response.config && response.config.responseType === 'text') {
+    if (response && response.config && (response.config.responseType === 'text' || response.config.responseType === 'blob' || response.config.responseType === 'arraybuffer' || response.config.responseType === 'stream')) {
       return response.data;
     }
     if (response === null || response.data === null) {

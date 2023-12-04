@@ -50,19 +50,15 @@ export class BotShopApi {
    * See {@link https://iotbots.docs.apiary.io/#reference/end-user-bot-shop-apis/bot-information/get-bot-information}
    *
    * @param params Request parameters.
-   * @param {number} [params.appInstanceId] Bot instance ID.
-   * @param {string} [params.bundle] Globally unique bundle ID for the app.
-   * @param {string} [params.lang] Language identifier, default is user's language or 'en'.
-   * @param {number} [params.locationId] Check compatibility for this location.
-   * @param {number} [params.organizationId] Check compatibility for this organization.
+   * @param {string} params.bundle Globally unique bundle ID for the app
+   * @param {string} [params.lang] Language identifier, default is user's language or 'en'
+   * @param {string} [params.lastNVersions] Max number of versions to show, default is 10
    * @returns {Promise<GetBotInfoApiResponse>}
    */
   getBotInfo(params: {
-    appInstanceId?: number;
-    bundle?: string;
+    bundle: string;
     lang?: string;
-    locationId?: number;
-    organizationId?: number
+    lastNVersions?: number;
   }): Promise<GetBotInfoApiResponse> {
     return this.dal.get('cloud/appstore/appInfo', {params: params});
   }
@@ -179,5 +175,31 @@ export class BotShopApi {
    */
   getBotSummary(params?: { locationId?: number; organizationId?: number }): Promise<GetBotSummaryApiResponse> {
     return this.dal.get('cloud/appstore/summary', {params: params});
+  }
+
+  /**
+   * Get bot object (binary file).
+   * Each bot can contain a publicly available icon and/or other images.
+   *
+   * See {@link https://iotbots.docs.apiary.io/#/reference/end-user-bot-shop-ap-is/bot-objects/get-an-object}
+   *
+   * @param params Request parameters.
+   * @param {string} params.name Object name. Use "icon" for icons.
+   * @param {number} params.bundle Globally unique bundle ID for the bot, i.e. `com.peoplepowerco.MyBot`
+   * @returns {Promise<Blob>}
+   */
+  getBotObject(
+    params: {
+      name: 'icon',
+      bundle: string,
+    }
+  ): Promise<Blob> {
+    return this.dal.get(
+      'cloud/appstore/objects/' + encodeURIComponent(params.name),
+      {
+        params: {...params, name: undefined},
+        responseType: 'blob'
+      }
+    );
   }
 }

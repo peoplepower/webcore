@@ -164,7 +164,7 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
       /**
        * Bot instance access category.
        */
-      category?: BotAccessCategory
+      category: BotAccessCategory
 
       trigger?: boolean;
       read?: boolean;

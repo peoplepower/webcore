@@ -31,7 +31,7 @@ export interface SearchBotsApiResponse extends ApiResponseBase {
     author?: string;
     category?: BotCategoryCommaSeparated;
     description?: string;
-    rating?: number;
+    // rating?: number;
     compatible?: boolean;
   }>;
 }
