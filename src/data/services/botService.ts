@@ -3,7 +3,7 @@ import { BaseService } from './baseService';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { AuthService } from './authService';
 import { BotShopApi } from '../api/bot/endUserBotShop/endUserBotShopApi';
-import { BotCategory, BotCoreClass, BotType, SearchBotsApiResponse } from '../api/bot/endUserBotShop/searchBotsApiResponse';
+import { BotCategory, BotCoreClass, BotObjectName, BotType, SearchBotsApiResponse } from '../api/bot/endUserBotShop/searchBotsApiResponse';
 import { GetBotInfoApiResponse } from '../api/bot/endUserBotShop/getBotInfoApiResponse';
 import { PurchaseBotApiResponse } from '../api/bot/endUserBotShop/purchaseBotApiResponse';
 import { GetListOfBotsApiResponse } from '../api/bot/endUserBotShop/getListOfBotsApiResponse';
@@ -21,27 +21,31 @@ export class BotService extends BaseService {
   }
 
   /**
-   * Allows to get list of available bots
+   * Search for available bots.
    * @param [params] Options to search bots according to.
-   * @param {number} [params.organizationId] Organization ID.
-   * @param {number} [params.locationId] Location ID.
-   * @param {string} [params.searchBy] Search by name, author, keywords.
-   * @param {BotCategory | BotCategory[]} [params.category] Bots category, multiple allowed.
-   * @param {boolean} [params.compatible] Filter by compatibility with user account.
-   * @param {string} [params.lang] Language filter.
+   * @param {string} [params.searchBy] Search in name, author, keywords, bundle. Use * for a wildcard.
+   * @param {BotCategory | BotCategory[]} [params.category] Category search. i.e. 'S', 'E', etc. Multiple values are allowed and OR-ed.
+   * @param {boolean} [params.compatible] Filter by bots that are compatible with our user account or not, leave blank to return all bots.
+   * @param {string} [params.lang] Language filter, i.e. 'en'. Leave blank to return bots in all languages
    * @param {BotType} [params.type] Filter by the bot type field.
    * @param {BotType} [params.core] Filter by the bot core class.
-   * @returns {Promise<BotsList>}
+   * @param {number} [params.locationId] Return bots available for this location.
+   * @param {number} [params.organizationId] Return bots available for this organization.
+   * @param {BotObjectName} [params.objectName] Show objects with such name(s). Multiple values are allowed.
+   * @param {number} [params.limit] Limit the response size
+   * @returns {Promise<SearchBotsApiResponse>}
    */
-  public searchBots(params?: {
-    organizationId?: number;
-    locationId?: number;
+  searchBots(params?: {
     searchBy?: string;
     category?: BotCategory | BotCategory[];
     compatible?: boolean;
     lang?: string;
     type?: BotType;
     core?: BotCoreClass;
+    locationId?: number;
+    organizationId?: number;
+    objectName?: BotObjectName;
+    limit?: number;
   }): Promise<BotsList> {
     if (params) {
       if (params.organizationId && (params.organizationId < 0 || isNaN(params.organizationId))) {
@@ -61,12 +65,14 @@ export class BotService extends BaseService {
    * @param {string} params.bundle Globally unique bundle ID for the app
    * @param {string} [params.lang] Language identifier, default is user's language or 'en'
    * @param {string} [params.lastNVersions] Max number of versions to show, default is 10
+   * @param {BotObjectName} [params.objectName] Show objects with such name(s). Multiple values are allowed.
    * @returns {Promise<GetBotInfoApiResponse>}
    */
   public getBotInfo(params: {
     bundle: string;
     lang?: string;
     lastNVersions?: number;
+    objectName?: BotObjectName;
   }): Promise<GetBotInfoApiResponse> {
     if (!params?.bundle) {
       return this.reject('Bot bundle ID is mandatory.');
@@ -79,13 +85,13 @@ export class BotService extends BaseService {
    * Get bot object (binary file).
    * Each bot can contain a publicly available icon and/or other images.
    * @param params Request parameters.
-   * @param {string} params.name Object name. Use "icon" for icons.
+   * @param {BotObjectName} params.name Object name. Use "icon" for icons.
    * @param {number} params.bundle Globally unique bundle ID for the bot, i.e. `com.peoplepowerco.MyBot`
    * @returns {Promise<Blob>}
    */
   public getBotObject(
     params: {
-      name: 'icon',
+      name: BotObjectName,
       bundle: string,
     }
   ): Promise<Blob> {
@@ -130,6 +136,7 @@ export class BotService extends BaseService {
    * @param {number} [locationId] Location ID.
    * @param {string} [bundle] Bot bundle ID.
    * @param {number} [userId] Administrator user ID.
+   * @param {BotObjectName} [objectName] Show objects with such name(s). Multiple values are allowed.
    * @returns {Promise<GetListOfBotsApiResponse>}
    */
   public getListOfBotInstances(
@@ -138,6 +145,7 @@ export class BotService extends BaseService {
     locationId?: number,
     bundle?: string,
     userId?: number,
+    objectName?: BotObjectName
   ): Promise<GetListOfBotsApiResponse> {
     if (appInstanceId && (appInstanceId < 0 || isNaN(appInstanceId))) {
       return this.reject(`Bot Instance ID is incorrect [${appInstanceId}].`);
@@ -158,12 +166,14 @@ export class BotService extends BaseService {
       locationId?: number;
       bundle?: string;
       userId?: number;
+      objectName?: BotObjectName;
     } = {
       appInstanceId: appInstanceId,
       organizationId: organizationId,
       locationId: locationId,
       bundle: bundle,
       userId: userId,
+      objectName: objectName
     };
 
     return this.authService.ensureAuthenticated().then(() => this.botShopApi.getListOfBots(params));

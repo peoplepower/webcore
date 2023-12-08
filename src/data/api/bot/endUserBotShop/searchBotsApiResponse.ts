@@ -22,6 +22,34 @@ export enum BotCategory {
   Wellness = 'W',
 }
 
+export type BotObjectName = 'icon';
+
+export enum BotObjectType {
+  Icon = 3
+}
+
+export interface BotObject {
+  /**
+   * Object name
+   */
+  name: BotObjectName;
+
+  /**
+   * Object type
+   */
+  objectType: BotObjectType;
+
+  /**
+   * Content type, MIME type, Media type in format of RFC2046 (e.g. "image/png")
+   */
+  contentType: string;
+
+  /**
+   * Amazon S3 URL to the object file
+   */
+  url: string;
+}
+
 export interface SearchBotsApiResponse extends ApiResponseBase {
   apps?: Array<{
     bundle: string;
@@ -33,5 +61,6 @@ export interface SearchBotsApiResponse extends ApiResponseBase {
     description?: string;
     // rating?: number;
     compatible?: boolean;
+    objects?: BotObject[]
   }>;
 }

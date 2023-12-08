@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { BotCoreClass, BotType } from './searchBotsApiResponse';
+import { BotCoreClass, BotObject, BotType } from './searchBotsApiResponse';
 import { BotCategoryCommaSeparated, BotVersionStatus } from "./getListOfBotsApiResponse";
 
 export enum BotAccessCategory {
@@ -26,6 +26,8 @@ export interface GetBotInfoApiResponse extends ApiResponseBase {
     core?: BotCoreClass;
     instancesSummary?: string;
     trigger?: number;
+
+    objects?: BotObject[]
 
     marketing?: {
       name?: string;

@@ -5,7 +5,7 @@ import { GetListOfBotsApiResponse } from './getListOfBotsApiResponse';
 import { BotInstanceStatus, ConfigureBotApiResponse, ConfigureBotBody } from './configureBotApiResponse';
 import { GetBotInfoApiResponse } from './getBotInfoApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { BotCategory, BotCoreClass, BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
+import { BotCategory, BotCoreClass, BotObjectName, BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
 import { GetBotSummaryApiResponse } from './getBotSummaryApiResponse';
 import { DataStreamMessage, DataStreamScope } from './dataStreamMessageApiResponse';
 
@@ -22,14 +22,16 @@ export class BotShopApi {
    * See {@link https://iotbots.docs.apiary.io/#reference/end-user-bot-shop-apis/bot-shop-search/search}
    *
    * @param [params] Request parameters.
-   * @param {string} [params.searchBy] Search in name, author, keywords.
-   * @param {BotCategory | BotCategory[]} [params.category] Category search. Multiple parameters are allowed.
+   * @param {string} [params.searchBy] Search in name, author, keywords, bundle. Use * for a wildcard.
+   * @param {BotCategory | BotCategory[]} [params.category] Category search. i.e. 'S', 'E', etc. Multiple values are allowed and OR-ed.
    * @param {boolean} [params.compatible] Filter by bots that are compatible with our user account or not, leave blank to return all bots.
-   * @param {string} [params.lang] Language filter, i.e. 'en'.
+   * @param {string} [params.lang] Language filter, i.e. 'en'. Leave blank to return bots in all languages
    * @param {BotType} [params.type] Filter by the bot type field.
    * @param {BotType} [params.core] Filter by the bot core class.
-   * @param {number} [params.locationId] Check compatibility for this location.
-   * @param {number} [params.organizationId] Check compatibility for this organization.
+   * @param {number} [params.locationId] Return bots available for this location.
+   * @param {number} [params.organizationId] Return bots available for this organization.
+   * @param {BotObjectName} [params.objectName] Show objects with such name(s). Multiple values are allowed.
+   * @param {number} [params.limit] Limit the response size
    * @returns {Promise<SearchBotsApiResponse>}
    */
   searchBots(params?: {
@@ -41,6 +43,8 @@ export class BotShopApi {
     core?: BotCoreClass;
     locationId?: number;
     organizationId?: number;
+    objectName?: BotObjectName;
+    limit?: number;
   }): Promise<SearchBotsApiResponse> {
     return this.dal.get('cloud/appstore/search', {params: params});
   }
@@ -53,12 +57,14 @@ export class BotShopApi {
    * @param {string} params.bundle Globally unique bundle ID for the app
    * @param {string} [params.lang] Language identifier, default is user's language or 'en'
    * @param {string} [params.lastNVersions] Max number of versions to show, default is 10
+   * @param {BotObjectName} [params.objectName] Show objects with such name(s). Multiple values are allowed.
    * @returns {Promise<GetBotInfoApiResponse>}
    */
   getBotInfo(params: {
     bundle: string;
     lang?: string;
     lastNVersions?: number;
+    objectName?: BotObjectName;
   }): Promise<GetBotInfoApiResponse> {
     return this.dal.get('cloud/appstore/appInfo', {params: params});
   }
@@ -112,6 +118,7 @@ export class BotShopApi {
    * @param {number} [params.locationId] Filtering bot instances by location, locationId=0 means the bot instances accessing to all locations.
    * @param {number} [params.organizationId] Return bots purchased by this organization.
    * @param {number} [params.userId] Get specific user bot instances by organization administrator.
+   * @param {BotObjectName} [params.objectName] Show objects with such name(s). Multiple values are allowed.
    * @returns {Promise<GetListOfBotsApiResponse>}
    */
   getListOfBots(params?: {
@@ -120,6 +127,7 @@ export class BotShopApi {
     locationId?: number;
     organizationId?: number;
     userId?: number;
+    objectName?: BotObjectName;
   }): Promise<GetListOfBotsApiResponse> {
     return this.dal.get('cloud/appstore/appInstance', {params: params});
   }
@@ -184,13 +192,13 @@ export class BotShopApi {
    * See {@link https://iotbots.docs.apiary.io/#/reference/end-user-bot-shop-ap-is/bot-objects/get-an-object}
    *
    * @param params Request parameters.
-   * @param {string} params.name Object name. Use "icon" for icons.
+   * @param {BotObjectName} params.name Object name. Use "icon" for icons.
    * @param {number} params.bundle Globally unique bundle ID for the bot, i.e. `com.peoplepowerco.MyBot`
    * @returns {Promise<Blob>}
    */
   getBotObject(
     params: {
-      name: 'icon',
+      name: BotObjectName,
       bundle: string,
     }
   ): Promise<Blob> {
