@@ -33,7 +33,7 @@ export class BotService extends BaseService {
    * @param {number} [params.organizationId] Return bots available for this organization.
    * @param {BotObjectName} [params.objectName] Show objects with such name(s). Multiple values are allowed.
    * @param {number} [params.limit] Limit the response size
-   * @returns {Promise<SearchBotsApiResponse>}
+   * @returns {Promise<BotsList>}
    */
   searchBots(params?: {
     searchBy?: string;
