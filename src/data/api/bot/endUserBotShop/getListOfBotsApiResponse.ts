@@ -1,7 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { BotInstanceStatus } from './configureBotApiResponse';
 import { BotAccessCategory, BotCommunicationCategory } from './getBotInfoApiResponse';
-import { BotCategory, BotCoreClass, BotType } from './searchBotsApiResponse';
+import { BotCategory, BotCoreClass, BotObject, BotType } from './searchBotsApiResponse';
 
 export interface GetListOfBotsApiResponse extends ApiResponseBase {
   bots: Array<{
@@ -154,6 +154,8 @@ export interface GetListOfBotsApiResponse extends ApiResponseBase {
        * Bot Core class
        */
       core?: BotCoreClass;
+
+      objects?: BotObject[]
     };
 
     /**
