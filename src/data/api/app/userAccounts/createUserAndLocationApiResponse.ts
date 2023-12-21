@@ -1,4 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { Pronoun } from './getPronounsApiResponse';
 
 export enum PhoneType {
   Unknown = 0,
@@ -6,6 +7,13 @@ export enum PhoneType {
   Home = 2,
   Work = 3,
   Office = 4,
+}
+
+export enum AccessibilityType {
+  None = 0,
+  Blind = 1,
+  Deaf = 2,
+  Immobile = 4,
 }
 
 export interface CreateUserAndLocationApiResponse extends ApiResponseBase {
@@ -23,11 +31,6 @@ export interface CreateUserAndLocationApiResponse extends ApiResponseBase {
    * New API Key for the user to login with
    */
   key: string;
-
-  /**
-   * Expiration time of the API key
-   */
-  keyExpire: string;
 }
 
 export interface CreateUserAndLocationModel {
@@ -102,6 +105,23 @@ export interface CreateUserAndLocationModel {
      * etc
      */
     language?: string;
+
+    /**
+     * Bitmask representation of accessibility preferences.
+     */
+    accessibility?: AccessibilityType;
+
+    /**
+     * User's pronoun ID.
+     * Use the Pronouns API to obtain a list of pronouns.
+     */
+    pronounId?: number;
+
+    /**
+     * Avatar file ID.
+     * Use the Files API to upload an avatar image.
+     */
+    avatarFileId?: number;
   };
 
   /**

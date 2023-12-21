@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { PhoneType } from './createUserAndLocationApiResponse';
+import { AccessibilityType, PhoneType } from './createUserAndLocationApiResponse';
 
 export interface UpdateUserApiResponse extends ApiResponseBase {
 }
@@ -97,6 +97,12 @@ export interface UserModel {
    * @type {number}
    */
   pronounId?: number;
+
+  /**
+   * A bitmask of the accessibility preferences.
+   * @type {AccessibilityType}
+   */
+  accessibility?: AccessibilityType;
 }
 
 export interface UpdateUserModel {

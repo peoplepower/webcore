@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { PhoneType } from './createUserAndLocationApiResponse';
+import { AccessibilityType, PhoneType } from './createUserAndLocationApiResponse';
 import { ResourceType } from '../paidServices/getSoftwareSubscriptionsApiResponse';
 import { LocationAccessLevel, LocationNotificationsCategory } from '../locations/getLocationUsersApiResponse';
 import { LocationType } from '../locations/editLocationApiResponse';
@@ -65,6 +65,10 @@ export interface LocationInfo {
    * Organization ID to which location belongs to.
    */
   organizationId?: number;
+
+  /**
+   * Organization details.
+   */
   organization?: {
     id: number;
     name: string;
@@ -313,6 +317,11 @@ export interface LocationInfo {
     endDate: string;
     endDateMs: number;
   }>;
+
+  /**
+   * Test location.
+   */
+  test?: boolean;
 }
 
 export interface GetUserInformationApiResponse extends ApiResponseBase {
@@ -440,21 +449,17 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      * User's pronoun ID. See get pronouns API.
      * @type {number}
      */
-    pronounId: number;
+    pronounId?: number;
+
+    /**
+     * Bitmask representation of accessibility preferences.
+     */
+    accessibility?: AccessibilityType;
 
     /**
      * Organization ID used the user's creation.
      */
     organizationId: number;
-
-    auths?: Array<{
-      appId: number;
-      appName: string;
-      userName: string;
-      active: boolean;
-      expiry: string;
-      autoRefresh: boolean;
-    }>;
 
     authClients?: Array<{
       appId: string;
