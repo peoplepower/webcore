@@ -1,3 +1,5 @@
+import { TrendName } from "./trendsMetadataLocationState";
+
 /**
  * The summary state variable assists user interfaces by providing snapshots
  *  of 'scores' back in time which rank how well this location is doing or
@@ -40,6 +42,16 @@ export type SummaryLocationState = {
      * Average value
      */
     avg?: number;
+
+    distribution?: {
+      total_trend_weight: number;
+    } & {
+      [trendName: TrendName]: LocationSummaryTrendDistribution & {
+        total_time_weight: number;
+        total_score_contribution: number;
+      }
+    }
+
   },
 
   /**
@@ -71,6 +83,17 @@ export type SummaryLocationState = {
    * 7-day averaged trends from 90 days ago
    */
   90?: LocationSummaryAverageTrend;
+};
+
+type LocationSummaryTrendDistribution = {
+  [period in '0' | '15' | '30' | '45' | '60' | '90' | 'now']: {
+    trend_weight_percent: number;
+    time_weight_percent: number;
+    percent_contribution: number;
+    normalized_score: number;
+    score: number;
+    zscore: number;
+  }
 };
 
 export enum LocationSummaryBadgeStatus {
