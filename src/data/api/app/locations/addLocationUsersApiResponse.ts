@@ -1,5 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { LocationAccessLevel, LocationNotificationsCategory, UserRole } from './getLocationUsersApiResponse';
+import { AccessibilityType } from "../userAccounts/createUserAndLocationApiResponse";
 
 export interface AddLocationUsersApiResponse extends ApiResponseBase {
 }
@@ -24,4 +25,9 @@ export interface AddSingleLocationUserModel {
    * User role.
    */
   role?: UserRole;
+
+  /**
+   * Bitmask representation of accessibility preferences.
+   */
+  accessibility?: AccessibilityType;
 }

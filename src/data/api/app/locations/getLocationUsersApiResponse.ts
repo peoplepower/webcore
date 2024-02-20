@@ -1,6 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { EmailVerificationStatus, PhoneVerificationStatus } from '../userAccounts/getUserInformationApiResponse';
-import { PhoneType } from '../userAccounts/createUserAndLocationApiResponse';
+import { AccessibilityType, PhoneType } from '../userAccounts/createUserAndLocationApiResponse';
 
 export enum LocationAccessLevel {
   None = 0,
@@ -41,6 +41,7 @@ export enum UserRole {
   SecondaryCaregiver = 3,
 }
 
+
 export interface GetLocationUsersApiResponse extends ApiResponseBase {
   users: LocationUser[];
 }
@@ -79,4 +80,9 @@ export interface LocationUser {
     startTime: number;
     endTime: number;
   }>;
+
+  /**
+   * Bitmask representation of accessibility preferences.
+   */
+  accessibility?: AccessibilityType;
 }
