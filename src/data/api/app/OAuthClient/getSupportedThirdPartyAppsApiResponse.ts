@@ -4,8 +4,6 @@ export interface GetSupportedThirdPartyAppsApiResponse extends ApiResponseBase {
   applications: Array<{
     id: number;
     name: string;
-    microService?: boolean;
-    greenButton?: boolean;
-    icon: string;
+    // logo: string
   }>;
 }
