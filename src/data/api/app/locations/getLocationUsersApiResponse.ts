@@ -36,9 +36,11 @@ export enum LocationNotificationsCategory {
  * Used by Bots and UI to determine who is who.
  */
 export enum UserRole {
+  EmptyRole = 0,
   CareRecipient = 1,
   PrimaryCaregiver = 2,
   SecondaryCaregiver = 3,
+  ProfessionalCaregiver = 4,
 }
 
 
