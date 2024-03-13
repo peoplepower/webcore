@@ -51,7 +51,7 @@ export interface Question {
    * (for example, yes/no vs. on/off switch, or a slider that
    * shows integers vs. a slider that shows minutes:seconds)
    */
-  displayType: QuestionDisplayType<this>;
+  displayType: QuestionDisplayType<this['responseType']>;
 
   /**
    * User's answer.
@@ -337,15 +337,15 @@ export enum QuestionResponseType {
 
 //region Question Response Display Types
 
-export type QuestionDisplayType<Q extends Question> =
-  Q['responseType'] extends QuestionResponseType.Boolean ? BooleanResponseDisplayType :
-    Q['responseType'] extends QuestionResponseType.SingleSelect ? SingleSelectResponseDisplayType :
-      Q['responseType'] extends QuestionResponseType.MultipleSelect ? MultipleSelectResponseDisplayType :
-        Q['responseType'] extends QuestionResponseType.DayOfWeek ? DayOfWeekResponseDisplayType :
-          Q['responseType'] extends QuestionResponseType.Slider ? SliderResponseDisplayType :
-            Q['responseType'] extends QuestionResponseType.TimeSeconds ? TimeSecondsResponseDisplayType :
-              Q['responseType'] extends QuestionResponseType.DateTime ? DateTimeResponseDisplayType :
-                Q['responseType'] extends QuestionResponseType.TextBox ? TextBoxResponseDisplayType :
+export type QuestionDisplayType<QRT extends QuestionResponseType> =
+  QRT extends QuestionResponseType.Boolean ? BooleanResponseDisplayType :
+    QRT extends QuestionResponseType.SingleSelect ? SingleSelectResponseDisplayType :
+      QRT extends QuestionResponseType.MultipleSelect ? MultipleSelectResponseDisplayType :
+        QRT extends QuestionResponseType.DayOfWeek ? DayOfWeekResponseDisplayType :
+          QRT extends QuestionResponseType.Slider ? SliderResponseDisplayType :
+            QRT extends QuestionResponseType.TimeSeconds ? TimeSecondsResponseDisplayType :
+              QRT extends QuestionResponseType.DateTime ? DateTimeResponseDisplayType :
+                QRT extends QuestionResponseType.TextBox ? TextBoxResponseDisplayType :
                   undefined;
 
 
