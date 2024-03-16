@@ -14,7 +14,7 @@ import { GetNotificationsApiResponse } from './getNotificationsApiResponse';
 import { UpdateCrowdFeedbackApiResponse, UpdateCrowdFeedbackModel } from './updateCrowdFeedbackApiResponse';
 import { UpdateMessageApiResponse, UpdateMessageModel } from './updateMessageApiResponse';
 import { VoteForCrowdFeedbackApiResponse } from './voteForCrowdFeedbackApiResponse';
-import { GetQuestionsApiResponse } from './getQuestionsApiResponse';
+import { GetQuestionsApiResponse, QuestionStatus } from './getQuestionsApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from './answerQuestionsApiResponse';
 import { PostSupportTicketApiResponse, PostSupportTicketModel } from './postSupportTicketApiResponse';
@@ -55,7 +55,7 @@ export class UserCommunicationsApi {
    * 8 - External notification by API call - true
    *
    * See {@link
-    * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
+   * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
    *
    * @param [params] Request parameters.
    * @param {number} [params.userId] User ID for administrators.
@@ -116,7 +116,7 @@ export class UserCommunicationsApi {
    * receive within a specified amount of time. This method allows to set the current user subscriptions.
    *
    * See {@link
-    * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
+   * http://docs.iotapps.apiary.io/#reference/user-communications/get-notification-subscriptions/get-my-notification-subscriptions}
    *
    * @param {NotificationType} type Type of notification, as defined by Ensemble during the request to Get Subscription Notifications.
    * @param params Request parameters
@@ -216,7 +216,7 @@ export class UserCommunicationsApi {
   /**
    * Updates particular crowd feedback entry.
    * See {@link
-    * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
+   * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
    *
    * @param {number} feedbackId Feedback ID to update
    * @param {UpdateCrowdFeedbackModel} model Feedback Crowd Feedback Model
@@ -229,7 +229,7 @@ export class UserCommunicationsApi {
   /**
    * Updates particular crowd feedback entry.
    * See {@link
-    * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
+   * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
    *
    * @param {number} feedbackId Feedback ID to vote on
    * @param {number} rank 1 to cast a vote, 0 to remove a vote.
@@ -240,17 +240,22 @@ export class UserCommunicationsApi {
   }
 
   /**
-   * Retrieve requested questions for specific location.
+   * Retrieve requested questions.
+   *
+   * For an individual user, there should be at most one unanswered question available per day, unless the question is urgent.
+   * For public users, there can be many questions as we are using this on public surveys during a sign-up process.
+   *
    * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/questions/get-questions}
    *
    * @param params Requested parameters.
    * @param {number} params.locationId Location ID to get questions.
-   * @param {number | number[]} [params.answerStatus] Return questions with requested answer statuses. By default questions with statuses 2 and 3 are returned.
-   *   Multiple values are supported.
+   * @param {QuestionStatus | QuestionStatus[]} [params.answerStatus] Return questions with requested answer statuses.
+   *  By default, questions with statuses 2 and 3 are returned.
+   *  Multiple values are supported.
    * @param {boolean} [params.editable] Filter answered questions:
    *   - true - return only editable answered questions,
    *   - false - return only not editable answered questions,
-   * otherwise return all answered questions.
+   *  otherwise return all answered questions.
    * @param {string} [params.collectionName] Questions collection name filter.
    * @param {number} [params.questionId] Extract a specific question ID.
    * @param {number} [params.appInstanceId] Only retrieve questions for a specific bot.
@@ -260,13 +265,19 @@ export class UserCommunicationsApi {
    */
   getQuestions(params: {
     locationId: number;
-    answerStatus?: number | number[];
+    answerStatus?: QuestionStatus | QuestionStatus[];
     editable?: boolean;
     collectionName?: string;
     questionId?: number;
     appInstanceId?: number;
     lang?: string;
     limit?: number;
+
+    sortCollection?: string;
+    sortBy?: string;
+    sortOrder?: string;
+    firstRow?: number;
+    rowCount?: number;
   }): Promise<GetQuestionsApiResponse> {
     return this.dal.get('questions', {params: params});
   }
@@ -292,7 +303,8 @@ export class UserCommunicationsApi {
    * Post support ticket.
    * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/support-ticket/post-support-ticket}
    * @param {PostSupportTicketModel} model Ticket content.
-   * @param {number} [userId] Request support for this user by an administrator.
+   * @param [params] Request params
+   * @param {number} [params.userId] Request support for this user by an administrator.
    * @returns {Promise<PostSupportTicketApiResponse>}
    */
   postSupportTicket(model: PostSupportTicketModel, params?: { userId?: number }): Promise<PostSupportTicketApiResponse> {
@@ -319,7 +331,7 @@ export class UserCommunicationsApi {
    * @param {string} [params.searchBy] Search by subject, text, from or recipient fields. Use * for a wildcard.
    * @returns {Promise<GetMessagesApiResponse>}
    */
-   getMessages(params?: {
+  getMessages(params?: {
     status?: MessageStatus;
     messageId?: number;
     userId?: number;
