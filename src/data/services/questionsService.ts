@@ -9,18 +9,32 @@ export class QuestionsService extends BaseService {
   @inject('UserCommunicationsApi') protected readonly userCommunicationsApi!: UserCommunicationsApi;
 
   /**
-   * Retrieve questions for specific location.
-   * @param {number} locationId Location ID to get questions for.
-   * @param [params] Additional request parameters.
+   * Retrieve requested questions.
+   *
+   * For an individual user, there should be at most one unanswered question available per day, unless the question is urgent.
+   * For public users, there can be many questions as we are using this on public surveys during a sign-up process.
+   *
+   * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/questions/get-questions}
+   *
+   * @param {number} locationId Location ID to get questions.
+   * @param [params] Requested parameters.
+   * @param {QuestionStatus | QuestionStatus[]} [params.answerStatus] Return questions with requested answer statuses.
+   *  By default, questions with statuses 2 and 3 are returned.
+   *  Multiple values are supported.
+   * @param {boolean} [params.editable] Filter answered questions:
+   *   - true - return only editable answered questions,
+   *   - false - return only not editable answered questions,
+   *  otherwise return all answered questions.
+   * @param {string} [params.collectionName] Questions collection name filter.
+   * @param {number} [params.questionId] Extract a specific question ID.
+   * @param {number} [params.appInstanceId] Only retrieve questions for a specific bot.
+   * @param {string} [params.lang] Questions text language. If not set, user's or default language will be used.
+   * @param {number} [params.limit] Maximum number of questions to return. The default is unlimited.
    * @returns {Promise<GetQuestionsApiResponse>}
    */
-  getLocationQuestions(locationId: number, params?: any): Promise<GetQuestionsApiResponse> {
-    if (locationId < 1 || isNaN(locationId)) {
-      return this.reject(`Location ID is incorrect [${locationId}].`);
-    }
-
-    let parameters: {
-      locationId: number;
+  getLocationQuestions(
+    locationId: number,
+    params?: {
       answerStatus?: QuestionStatus | QuestionStatus[];
       editable?: boolean;
       collectionName?: string;
@@ -28,19 +42,24 @@ export class QuestionsService extends BaseService {
       appInstanceId?: number;
       lang?: string;
       limit?: number;
+
       sortCollection?: string;
       sortBy?: string;
       sortOrder?: string;
       firstRow?: number;
       rowCount?: number;
-    } = params || {};
-
-    parameters.locationId = locationId;
-    if (params && !parameters.sortCollection) {
-      parameters.sortCollection = 'questions';
+    }): Promise<GetQuestionsApiResponse> {
+    if (locationId < 1 || isNaN(locationId)) {
+      return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    return this.userCommunicationsApi.getQuestions(params);
+    let parameters = {
+      locationId,
+      sortCollection: 'questions',
+      ...params,
+    }
+
+    return this.userCommunicationsApi.getQuestions(parameters);
   }
 
   /**
