@@ -131,12 +131,23 @@ export class UserService extends BaseService {
   /**
    * Creates specified user using supplied data. Usually used by Maestro administrators.
    * @param {CreateUserAndLocationModel} user
-   * @param {boolean} [strongPassword] Set to 'true' for full password test.
+   * @param params Requested parameters.
+   * @param {boolean} [params.strongPassword] Set to 'true' for full password test.
+   * @param {number} [params.organizationId] Organization ID to create user with the specified brand.
+   * @param {string} [params.brand] Brand name for the user registration email.
    * @returns {Promise<UserCreationResult>}
    */
-  public createNewUser(user: CreateUserAndLocationModel, strongPassword?: boolean): Promise<UserCreationResult> {
+  public createNewUser(user: CreateUserAndLocationModel, strongPassword?: boolean, params?: {
+    strongPassword?: boolean,
+    organizationId?: number,
+    brand?: string
+  }): Promise<UserCreationResult> {
+    params = params || {};
+    // Backward compatibility for service parameter
+    params.strongPassword = params.strongPassword || strongPassword;
+
     return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, strongPassword));
+      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, params));
   }
 
   /**
