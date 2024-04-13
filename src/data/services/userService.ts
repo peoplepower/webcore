@@ -136,12 +136,15 @@ export class UserService extends BaseService {
    * @param {CreateUserAndLocationModel} user
    * @param {string} [operationToken]
    * @param {boolean} [strongPassword] Set to 'true' for full password test.
+   * @param {string} [brand] Brand name for the user registration email.
    * @returns {Promise<UserCreationResult>}
    */
-  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean): Promise<UserCreationResult> {
+  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean, brand?: string): Promise<UserCreationResult> {
     let params = {
       strongPassword: strongPassword ? true : false,
+      brand: brand || void 0,
     };
+
     return this.userAccountsApi.createUserAndLocation(user, operationToken, true, params);
   }
 
