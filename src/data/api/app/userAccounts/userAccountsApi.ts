@@ -24,14 +24,18 @@ export class UserAccountsApi {
    * See {@link http://docs.iotapps.apiary.io/#reference/user-accounts/manage-a-user/create-user-and-location}
    *
    * When creating a new user, the email address field and appName are mandatory.
-   * If the password is not set, the user account will be created, but the user will not be able to login and will have to go throw the password renew process.
+   * If the password is not set, the user account will be created, but the user will not be able to log in and will have to go throw the password renew process.
    * Although it's not required, we recommend creating a default Location when creating a new user account.
    *  The API returns registered user ID and a new API key. A new user account can be created by an existing user. In this case the API key must be used.
-   * Otherwise an operation token of type 1 must be provided.
+   * Otherwise, an operation token of type 1 must be provided.
    *
    * @param {CreateUserAndLocationModel} userModel User and Location information.
    * @param {string} [operationToken] Operation token.
    * @param {boolean} [noApiKey] Set to 'true' to avoid adding of ApiKey. Default is 'false'.
+   * @param [params] Request parameters
+   * @param {boolean} [params.strongPassword] Set to 'true' for full password test.
+   * @param {number} [params.organizationId] Organization ID to get brand name.
+   * @param {string} [params.brand] Brand name for the notification.
    * @returns {Promise<CreateUserAndLocationApiResponse>}
    */
   createUserAndLocation(
@@ -107,17 +111,20 @@ export class UserAccountsApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/user-accounts/manage-a-user/update-user}
    *
    * @param {UpdateUserModel} user User model. All fields are optional.
-   * @param params Request parameters.
-   * @param {number} [params.userId] User ID to update. Availbale only for admins.
+   * @param [params] Request parameters.
+   * @param {number} [params.userId] User ID to update. Available only for admins.
    * @param {number} [params.organizationId] Organization ID to get brand name.
    * @param {string} [params.brand] Brand name for the notification.
    * @returns {Promise<UpdateUserApiResponse>}
    */
-  updateUser(user: UpdateUserModel, params?:{
-    userId?: number,
-    organizationId?: number,
-    brand?: string,
-  }): Promise<UpdateUserApiResponse> {
+  updateUser(
+    user: UpdateUserModel,
+    params?: {
+      userId?: number,
+      organizationId?: number,
+      brand?: string,
+    }
+  ): Promise<UpdateUserApiResponse> {
     return this.dal.put('user', user, {
       params: params
     });
