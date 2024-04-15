@@ -82,11 +82,25 @@ export class UserService extends BaseService {
   /**
    * Updates user information with the data from supplied model
    * @param {UserModel} user Model with data to update with
-   * @param {number} [userId] Id of the user to update. Allowed for administrator users only.
+   * @param {number} [userId] ID of the user to update. Allowed for administrator users only.
+   * @param params Request parameters.
+   * @param {number} [param.userId] User ID to update.
+   * @param {number} [param.organizationId] Organization ID to get brand name.
+   * @param {string} [param.brand] Brand name for the notification.
    * @returns {Promise<UpdateUserResponse>}
    */
-  public updateUserInfo(user: UserModel, userId?: number): Promise<UpdateUserResponse> {
-    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.updateUser({user: user}, userId));
+  public updateUserInfo(user: UserModel, userId?: number, params?: {
+    userId?: number,
+    organizationId?: number,
+    brand?: string
+  }): Promise<UpdateUserResponse> {
+    params = params || {};
+    if (userId && !isNaN(userId)) {
+      params.userId = userId;
+    };
+
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userAccountsApi.updateUser({user: user}, params));
   }
 
   /**
@@ -124,21 +138,41 @@ export class UserService extends BaseService {
    * @param {CreateUserAndLocationModel} user
    * @param {string} [operationToken]
    * @param {boolean} [strongPassword] Set to 'true' for full password test.
+   * @param {string} [brand] Brand name for the user registration email.
    * @returns {Promise<UserCreationResult>}
    */
-  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean): Promise<UserCreationResult> {
-    return this.userAccountsApi.createUserAndLocation(user, operationToken, true, strongPassword);
+  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean, brand?: string): Promise<UserCreationResult> {
+    let params = {
+      strongPassword: strongPassword ? true : false,
+      brand: brand || void 0,
+    };
+
+    return this.userAccountsApi.createUserAndLocation(user, operationToken, true, params);
   }
 
   /**
    * Creates specified user using supplied data. Usually used by Maestro administrators.
    * @param {CreateUserAndLocationModel} user
-   * @param {boolean} [strongPassword] Set to 'true' for full password test.
+   * @param {boolean} [strongPassword] Kept for the backward compatibiliy.
+   * @param params Requested parameters.
+   * @param {boolean} [params.strongPassword] Set to 'true' for full password test.
+   * @param {number} [params.organizationId] Organization ID to create user with the specified brand.
+   * @param {string} [params.brand] Brand name for the user registration email.
    * @returns {Promise<UserCreationResult>}
    */
-  public createNewUser(user: CreateUserAndLocationModel, strongPassword?: boolean): Promise<UserCreationResult> {
+  public createNewUser(user: CreateUserAndLocationModel, strongPassword?: boolean, params?: {
+    strongPassword?: boolean,
+    organizationId?: number,
+    brand?: string
+  }): Promise<UserCreationResult> {
+    params = params || {};
+    // Backward compatibility for service parameter
+    if (strongPassword) {
+      params.strongPassword = true;
+    }
+
     return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, strongPassword));
+      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, params));
   }
 
   // #region -------------------- User and System Properties --------------------
