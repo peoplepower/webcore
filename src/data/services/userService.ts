@@ -10,6 +10,8 @@ import { CreateUserAndLocationApiResponse, CreateUserAndLocationModel } from '..
 import { GetUserPropertiesApiResponse } from '../api/app/systemAndUserProperties/getUserPropertiesApiResponse';
 import { BaseService } from './baseService';
 import { GetSignaturesApiResponse } from '../api/app/userAccounts/getSignaturesApiResponse';
+import { UpdateUserPropertiesModel } from "../api/app/systemAndUserProperties/updateUserPropertiesApiResponse";
+import { GetUserOrSystemPropertyApiResponse } from "../api/app/systemAndUserProperties/getUserOrSystemPropertyApiResponse";
 
 @injectable('UserService')
 export class UserService extends BaseService {
@@ -139,44 +141,53 @@ export class UserService extends BaseService {
       .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, strongPassword));
   }
 
+  // #region -------------------- User and System Properties --------------------
+
   /**
-   * Get current user properties
-   * @returns {Promise<UserProperties>}
+   * Gets value of the specified system property.
+   * @param {string} propertyName system property name
+   * @returns {Promise<string>}
    */
-  public getCurrentUserProperties(): Promise<UserProperties> {
-    return this.getCurrentUserInfo().then((userInfo) => {
-      return this.systemAndUserPropertiesApi.getUserProperties({userId: userInfo.user.id});
-    });
+  public getSystemPropertyValue(propertyName: string): Promise<string> {
+    return this.systemAndUserPropertiesApi.getSystemProperty(propertyName);
   }
 
   /**
-   * Gets list of user properties according to parameters.
-   * @param {number} userId
-   * @param {string|string[]} propertyName
+   * This API will first attempt to return a user-specific property value in plain text.
+   * If there is no user-specific property set, it will attempt to return a system-wide property value as plain text,
+   *  otherwise it will return no content.
+   *
+   * @param {string} propertyName user or system property name
+   * @param {number} [userId] User ID, used by an account with administrative privileges to retrieve the properties of another user.
+   * @returns {Promise<GetUserOrSystemPropertyApiResponse>}
+   */
+  public getUserOrSystemPropertyValue(propertyName: string, userId?: number): Promise<GetUserOrSystemPropertyApiResponse> {
+    return this.systemAndUserPropertiesApi.getUserOrSystemProperty(propertyName, userId);
+  }
+
+  /**
+   * Gets list of user properties
+   * @param {string|string[]} [propertyName] User property name or optional name prefix to filter properties.
+   *   Multiple values are supported.
+   *   Provide no value to get all available properties
+   * @param {number} [userId] User ID, used by an account with administrative privileges to retrieve the properties of another user
    * @returns {Promise<UserProperties>}
    */
-  public getUserProperties(userId?: number, propertyName?: string | string[]): Promise<UserProperties> {
+  public getUserProperties(propertyName?: string | string[], userId?: number): Promise<UserProperties> {
     return this.systemAndUserPropertiesApi.getUserProperties({name: propertyName, userId: userId});
   }
 
   /**
-   * Gets value of the specified user or system property.
-   * @param {string} propertyName
-   * @returns {Promise<string>}
-   */
-  public getUserOrSystemPropertyValue(propertyName: string): Promise<string> {
-    return this.systemAndUserPropertiesApi.getUserOrSystemProperty(propertyName);
-  }
-
-  /**
    * Saves supplied properties array to the server.
-   * @param properties
-   * @param {number} userId
+   * @param {Array<{ name: string; content: any; }>} properties Properties to update
+   * @param {number} [userId] User ID, used by an account with administrative privileges to update the properties for another user
    * @returns {Promise<ApiResponseBase>}
    */
-  public updateUserProperties(properties: Array<{ name: string; content: any }>, userId?: number): Promise<ApiResponseBase> {
+  public updateUserProperties(properties: UpdateUserPropertiesModel['property'], userId?: number): Promise<ApiResponseBase> {
     return this.systemAndUserPropertiesApi.updateUserProperties({property: properties}, {userId: userId});
   }
+
+  // #endregion
 
   // #region -------------------- Terms Of Service --------------------
 
@@ -257,7 +268,4 @@ export interface RecoverPasswordInfo extends ApiResponseBase {
 }
 
 export interface UserCreationResult extends CreateUserAndLocationApiResponse {
-}
-
-export interface UserProperties extends GetUserPropertiesApiResponse {
 }
