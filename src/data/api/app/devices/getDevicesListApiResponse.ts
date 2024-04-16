@@ -7,6 +7,7 @@ export interface GetDevicesListApiResponse extends ApiResponseBase {
     type: number;
     typeCategory: number;
     locationId: number;
+    userId: number;
 
     /**
      * Current device connection status.
