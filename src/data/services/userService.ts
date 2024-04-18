@@ -10,6 +10,8 @@ import { CreateUserAndLocationApiResponse, CreateUserAndLocationModel } from '..
 import { GetUserPropertiesApiResponse } from '../api/app/systemAndUserProperties/getUserPropertiesApiResponse';
 import { BaseService } from './baseService';
 import { GetSignaturesApiResponse } from '../api/app/userAccounts/getSignaturesApiResponse';
+import { UpdateUserPropertiesModel } from "../api/app/systemAndUserProperties/updateUserPropertiesApiResponse";
+import { GetUserOrSystemPropertyApiResponse } from "../api/app/systemAndUserProperties/getUserOrSystemPropertyApiResponse";
 
 @injectable('UserService')
 export class UserService extends BaseService {
@@ -80,11 +82,29 @@ export class UserService extends BaseService {
   /**
    * Updates user information with the data from supplied model
    * @param {UserModel} user Model with data to update with
-   * @param {number} [userId] Id of the user to update. Allowed for administrator users only.
+   * @param {number} [userId] ID of the user to update. Allowed for administrator users only.
+   * @param [params] Request parameters.
+   * @param {number} [params.userId] User ID to update.
+   * @param {number} [params.organizationId] Organization ID to get brand name.
+   * @param {string} [params.brand] Brand name for the notification.
    * @returns {Promise<UpdateUserResponse>}
    */
-  public updateUserInfo(user: UserModel, userId?: number): Promise<UpdateUserResponse> {
-    return this.authService.ensureAuthenticated().then(() => this.userAccountsApi.updateUser({user: user}, userId));
+  public updateUserInfo(
+    user: UserModel,
+    userId?: number,
+    params?: {
+      userId?: number,
+      organizationId?: number,
+      brand?: string
+    }
+  ): Promise<UpdateUserResponse> {
+    params = params || {};
+    if (userId && !isNaN(userId)) {
+      params.userId = userId;
+    }
+
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userAccountsApi.updateUser({user: user}, params));
   }
 
   /**
@@ -122,61 +142,90 @@ export class UserService extends BaseService {
    * @param {CreateUserAndLocationModel} user
    * @param {string} [operationToken]
    * @param {boolean} [strongPassword] Set to 'true' for full password test.
+   * @param {string} [brand] Brand name for the user registration email.
    * @returns {Promise<UserCreationResult>}
    */
-  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean): Promise<UserCreationResult> {
-    return this.userAccountsApi.createUserAndLocation(user, operationToken, true, strongPassword);
+  public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean, brand?: string): Promise<UserCreationResult> {
+    let params = {
+      strongPassword: !!strongPassword,
+      brand: brand || void 0,
+    };
+
+    return this.userAccountsApi.createUserAndLocation(user, operationToken, true, params);
   }
 
   /**
    * Creates specified user using supplied data. Usually used by Maestro administrators.
    * @param {CreateUserAndLocationModel} user
-   * @param {boolean} [strongPassword] Set to 'true' for full password test.
+   * @param {boolean} [strongPassword] Kept for the backward compatibility.
+   * @param params Requested parameters.
+   * @param {boolean} [params.strongPassword] Set to 'true' for full password test.
+   * @param {number} [params.organizationId] Organization ID to create user with the specified brand.
+   * @param {string} [params.brand] Brand name for the user registration email.
    * @returns {Promise<UserCreationResult>}
    */
-  public createNewUser(user: CreateUserAndLocationModel, strongPassword?: boolean): Promise<UserCreationResult> {
+  public createNewUser(
+    user: CreateUserAndLocationModel,
+    strongPassword?: boolean,
+    params?: {
+      strongPassword?: boolean,
+      organizationId?: number,
+      brand?: string
+    }
+  ): Promise<UserCreationResult> {
+    params = params || {};
+
     return this.authService.ensureAuthenticated()
-      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, strongPassword));
+      .then(() => this.userAccountsApi.createUserAndLocation(user, void 0, false, params));
+  }
+
+  // #region -------------------- User and System Properties --------------------
+
+  /**
+   * Gets value of the specified system property.
+   * @param {string} propertyName system property name
+   * @returns {Promise<string>}
+   */
+  public getSystemPropertyValue(propertyName: string): Promise<string> {
+    return this.systemAndUserPropertiesApi.getSystemProperty(propertyName);
   }
 
   /**
-   * Get current user properties
-   * @returns {Promise<UserProperties>}
+   * This API will first attempt to return a user-specific property value in plain text.
+   * If there is no user-specific property set, it will attempt to return a system-wide property value as plain text,
+   *  otherwise it will return no content.
+   *
+   * @param {string} propertyName user or system property name
+   * @param {number} [userId] User ID, used by an account with administrative privileges to retrieve the properties of another user.
+   * @returns {Promise<GetUserOrSystemPropertyApiResponse>}
    */
-  public getCurrentUserProperties(): Promise<UserProperties> {
-    return this.getCurrentUserInfo().then((userInfo) => {
-      return this.systemAndUserPropertiesApi.getUserProperties({userId: userInfo.user.id});
-    });
+  public getUserOrSystemPropertyValue(propertyName: string, userId?: number): Promise<GetUserOrSystemPropertyApiResponse> {
+    return this.systemAndUserPropertiesApi.getUserOrSystemProperty(propertyName, userId);
   }
 
   /**
-   * Gets list of user properties according to parameters.
-   * @param {number} userId
-   * @param {string|string[]} propertyName
+   * Gets list of user properties
+   * @param {string|string[]} [propertyName] User property name or optional name prefix to filter properties.
+   *   Multiple values are supported.
+   *   Provide no value to get all available properties
+   * @param {number} [userId] User ID, used by an account with administrative privileges to retrieve the properties of another user
    * @returns {Promise<UserProperties>}
    */
-  public getUserProperties(userId?: number, propertyName?: string | string[]): Promise<UserProperties> {
+  public getUserProperties(propertyName?: string | string[], userId?: number): Promise<UserProperties> {
     return this.systemAndUserPropertiesApi.getUserProperties({name: propertyName, userId: userId});
   }
 
   /**
-   * Gets value of the specified user or system property.
-   * @param {string} propertyName
-   * @returns {Promise<string>}
-   */
-  public getUserOrSystemPropertyValue(propertyName: string): Promise<string> {
-    return this.systemAndUserPropertiesApi.getUserOrSystemProperty(propertyName);
-  }
-
-  /**
    * Saves supplied properties array to the server.
-   * @param properties
-   * @param {number} userId
+   * @param {Array<{ name: string; content: any; }>} properties Properties to update
+   * @param {number} [userId] User ID, used by an account with administrative privileges to update the properties for another user
    * @returns {Promise<ApiResponseBase>}
    */
-  public updateUserProperties(properties: Array<{ name: string; content: any }>, userId?: number): Promise<ApiResponseBase> {
+  public updateUserProperties(properties: UpdateUserPropertiesModel['property'], userId?: number): Promise<ApiResponseBase> {
     return this.systemAndUserPropertiesApi.updateUserProperties({property: properties}, {userId: userId});
   }
+
+  // #endregion
 
   // #region -------------------- Terms Of Service --------------------
 
@@ -257,7 +306,4 @@ export interface RecoverPasswordInfo extends ApiResponseBase {
 }
 
 export interface UserCreationResult extends CreateUserAndLocationApiResponse {
-}
-
-export interface UserProperties extends GetUserPropertiesApiResponse {
 }

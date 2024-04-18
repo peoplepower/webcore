@@ -3,6 +3,7 @@ import { inject, injectable } from '../../../../modules/common/di';
 import { GetUserPropertiesApiResponse } from './getUserPropertiesApiResponse';
 import { UpdateUserPropertiesApiResponse, UpdateUserPropertiesModel } from './updateUserPropertiesApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { GetUserOrSystemPropertyApiResponse } from "./getUserOrSystemPropertyApiResponse";
 
 /**
  * System Properties are one of the most useful tools to manage and synchronize the behavior of production apps,
@@ -14,15 +15,32 @@ export class SystemAndUserPropertiesApi {
   @inject('AppApiDal') protected readonly dal!: AppApiDal;
 
   /**
-   * This API will first attempt to return a user-specific property value in plain text.
-   * If there is no user-specific property set, it will attempt to return a system wide property value as plain text, otherwise it will return no content.
-   * See {@link http://docs.iotapps.apiary.io/#reference/system-and-user-properties/get-user-or-system-property}
+   * This API returns only system property values.
+   * See {@link https://iotapps.docs.apiary.io/#/reference/system-and-user-properties/user-and-system-properties/get-user-or-system-property/200}
    *
    * @param {string} propertyName Name of the property value to retrieve, i.e. "presence-ios-debug_level".
    * @returns {Promise<string>}
    */
-  getUserOrSystemProperty(propertyName: string): Promise<string> {
+  getSystemProperty(propertyName: string): Promise<string> {
     return this.dal.get('systemProperty/' + encodeURIComponent(propertyName), {responseType: 'text'});
+  }
+
+  /**
+   * This API will first attempt to return a user-specific property value in plain text.
+   * If there is no user-specific property set, it will attempt to return a system wide property value as plain text, otherwise it will return no content.
+   * See {@link http://docs.iotapps.apiary.io/#reference/system-and-user-properties/manage-multiple-user-properties/get-user-properties}
+   *
+   * @param {string} propertyName Property name
+   * @param {number} [userId] User ID, used by an account with administrative privileges to retrieve the properties of another user.
+   * @returns {Promise<GetUserOrSystemPropertyApiResponse>}
+   */
+  getUserOrSystemProperty(propertyName: string, userId?: number): Promise<GetUserOrSystemPropertyApiResponse> {
+    return this.dal.get(
+      'userProperty/' + encodeURIComponent(propertyName),
+      {
+        params: {userId: userId}
+      }
+    );
   }
 
   /**
@@ -30,7 +48,9 @@ export class SystemAndUserPropertiesApi {
    * See {@link http://docs.iotapps.apiary.io/#reference/system-and-user-properties/manage-multiple-user-properties/get-user-properties}
    *
    * @param [params] Request parameters.
-   * @param {string|string[]} [params.name] Property name or optional name prefix to filter properties in the batch version.
+   * @param {string|string[]} [params.name] User property name or optional name prefix to filter properties.
+   *   Multiple values are supported.
+   *   Provide no value to get all available properties
    * @param {number} [params.userId] User ID, used by an account with administrative privileges to retrieve the properties of another user.
    * @returns {Promise<GetUserPropertiesApiResponse>}
    */
@@ -58,7 +78,7 @@ export class SystemAndUserPropertiesApi {
   }
 
   /**
-   * The application may update a single user property with a very simple API requiring no JSON body.
+   * Update a single user property with a very simple API requiring no JSON body.
    * See {@link https://iotapps.docs.apiary.io/#reference/system-and-user-properties/manage-a-single-user-property/update-a-single-user-property}
    *
    * @param {string} name Name of the property to set a value for. Maximum of 250 characters.

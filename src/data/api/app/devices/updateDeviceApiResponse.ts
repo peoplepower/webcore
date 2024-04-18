@@ -6,6 +6,7 @@ export interface UpdateDeviceModel {
     goalId?: number;
     modelId?: string;
     newDevice?: boolean;
+    userId?: number;
   };
   location?: {
     id: number;

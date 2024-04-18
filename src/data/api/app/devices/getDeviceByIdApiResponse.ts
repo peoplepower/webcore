@@ -1,5 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { TimezoneModel } from '../common/getApiSettingsApiResponse';
+import { LocationType } from '../locations/editLocationApiResponse';
 import { FileUploadPolicy, LocationPriorityCategory } from '../userAccounts/getUserInformationApiResponse';
 
 export enum SimStatus {
@@ -42,6 +43,11 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     type: number;
     typeCategory: number;
     locationId: number;
+
+    /**
+     * Assigned user for personal devices.
+     */
+    userId: number;
 
     /**
      * Current device connection status.
@@ -142,11 +148,12 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     event?: string;
     appName?: string;
     organizationId?: number;
+    language?: string;
 
     /**
      * Location type.
      */
-    type?: number;
+    type?: LocationType;
 
     /**
      * Location priority.
@@ -157,23 +164,44 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     priorityDateMs?: number;
     priorityRank?: number;
 
+    /**
+     * Location address and geo coordinates.
+     */
     addrStreet1?: string;
     addrStreet2?: string;
     addrCity?: string;
-    state?: {
-      id: number;
-    };
-    country?: {
-      id: number;
-    };
     zip?: string;
     latitude?: string;
     longitude?: string;
-    timezone?: TimezoneModel;
+
+    /**
+     * Location state.
+     */
+    state?: {
+      id: number;
+    };
+
+    /**
+     * Location country.
+     */
+    country?: {
+      id: number;
+    };
+
+    /**
+     * Additional location attributes.
+     */
+    occupantsNumber?: number;
+    salesTaxRate?: string;
     size?: {
       unit: string;
       content: number;
     };
+
+    /**
+     * Location timezone.
+     */
+    timezone?: TimezoneModel;
 
     /**
      * Location file storage policy.
