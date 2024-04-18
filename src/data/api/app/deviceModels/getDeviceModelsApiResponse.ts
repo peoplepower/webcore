@@ -57,7 +57,12 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
       desc?: {
         [key: string]: string;
       };
+
+      /**
+       * Device type IDs which is required to connect current device model.
+       */
       dependencyDeviceTypes?: number[];
+
       template?: string;
       media: Array<{
         id: string;
@@ -82,28 +87,43 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
 
         /**
          * Controllable by user,
-         * so user can send commands to control device
+         * so user can send commands to control device.
          */
         controllable?: boolean;
 
         /**
          * Rebootable device model,
-         * so user can send reboot command to device
+         * so user can send reboot command to device.
          */
         rebootable?: boolean;
 
         /**
          * Refreshable parameneters,
-         * so user can send request to refresh device params
+         * so user can send request to refresh device params.
          */
         refreshable?: boolean;
 
-        locationSpaces?: number[];
+        /**
+         * Location spaces supported by device type.
+         */
+        locationSpaces?: Array<{
+          type: number;
+          name: string;
+        }>;
+
+        /**
+         * Describes how parameters returned for each device
+         * should be binded into the list items.
+         */
         deviceListBindings?: Array<{
           name: string;
           position: ParamPositionType;
           displayType?: ParamDisplayType;
         }>;
+
+        /**
+         * Device parameters to be displayed.
+         */
         parameters?: Array<{
           name: string;
           defaultOption?: number;
@@ -111,16 +131,54 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
 
           /**
            * List of parameters that need to be passed
-           * along with current parameter to update value
+           * along with current parameter to update value.
            */
           linkedParams?: string[];
 
           /**
            * Parameter can be refreshed via special command to device,
-           * used if device model 'refreshable' attribute set to TRUE
+           * used if device model 'refreshable' attribute set to TRUE.
            */
           refresh?: boolean;
         }>;
+
+        /**
+         * Devices that require a calibration step the device model
+         * should provide the required parameter name.
+         */
+        calibrationParams?: {
+          [key: string]: string;
+        };
+
+        /**
+         * Dictionary of brands that are supported as a bundle.
+         * Each brand contains a bundle story ID, and an array of model ids with the number of devices included in bundle
+         */
+        deviceBundle?: {
+          [key: string]: {
+            storyId: string;
+            models: Array<{
+              modelId: string;
+              count: number;
+              isProxy?: boolean;
+            }>;
+          };
+        };
+
+        /**
+         * Associating users with a given device.
+         */
+        userMapping?: {
+          show: boolean;
+          required: boolean;
+        };
+
+        /**
+         * Describes if this device type provides a connected status.
+         * Otherwise ignore "connnected" device attribute.
+         */
+        connectedStatus?: boolean;
+
       };
     }>;
   }>;
