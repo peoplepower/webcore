@@ -1,7 +1,7 @@
 import { WcStorage } from '../../modules/localStorage/localStorage';
 import { LiteEvent } from '../../modules/common/liteEvent';
 import { AuthApi } from '../api/app/auth/authApi';
-import { LoginApiResponse, PasscodeDeliveryType } from '../api/app/auth/loginApiResponse';
+import { ApiKeyType, LoginApiResponse, PasscodeDeliveryType } from '../api/app/auth/loginApiResponse';
 import { SendPasscodeApiResponse } from '../api/app/auth/sendPasscodeApiResponse';
 import { inject, injectable } from '../../modules/common/di';
 import { BaseService } from './baseService';
@@ -19,6 +19,7 @@ import { GetTotpFactorsApiResponse } from "../api/app/auth/getTotpFactorsApiResp
 import { DeleteTotpFactorApiResponse } from "../api/app/auth/deleteTotpFactorApiResponse";
 
 const LOCAL_STORAGE_API_KEY = 'Auth-Key';
+const LOCAL_STORAGE_API_KEY_TYPE = 'Auth-KeyType';
 const LOCAL_STORAGE_API_KEY_EXPIRE = 'Auth-KeyExpire';
 const LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD = 'Auth-KeyExpirePeriod';
 const LOCAL_STORAGE_LAST_USERNAME = 'Auth-Username';
@@ -63,6 +64,8 @@ export class AuthService extends BaseService {
 
   private _apiKey: string | undefined;
 
+  private _apiKeyType: ApiKeyType | undefined;
+
   private ensureAuthenticatedPromise: Promise<boolean> | undefined;
 
   private apiKeyExpireTimeout: any;
@@ -95,6 +98,7 @@ export class AuthService extends BaseService {
     if (_apiKey) {
       this.logger.debug('API key extracted from local storage: ' + _apiKey);
       this._apiKey = _apiKey;
+      this._apiKeyType = this.wcStorage.get<ApiKeyType>(LOCAL_STORAGE_API_KEY_TYPE) ?? undefined;
       let keyExpire = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
       if (keyExpire) {
         this.setUpKeyExpireTimeout(keyExpire);
@@ -246,7 +250,9 @@ export class AuthService extends BaseService {
         const key = result.key || apiKey;
 
         me._apiKey = key;
+        me._apiKeyType = result.keyType;
         me.wcStorage.set(LOCAL_STORAGE_API_KEY, key);
+        me.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
         me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
         me.wcStorage.remove(LOCAL_STORAGE_LAST_USERNAME);
@@ -339,10 +345,12 @@ export class AuthService extends BaseService {
    */
   public refreshToken(brand?: string): Promise<LoginInfo> {
     let me = this;
-    return me.authApi.loginByKey({apiKey: me._apiKey, brand: brand}).then((result) => {
+    return me.authApi.loginByKey({apiKey: me._apiKey, brand: brand, keyType: me._apiKeyType}).then((result) => {
       me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
       me._apiKey = result.key;
+      me._apiKeyType = result.keyType;
       me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+      me.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
       me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
       me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
       me.setUpKeyExpireTimeout(result.keyExpire!, brand);
@@ -455,8 +463,10 @@ export class AuthService extends BaseService {
    * @returns {Promise<boolean>}
    */
   public logoutFromThisBrowser() {
-    delete this._apiKey;
+    this._apiKey = undefined;
     this.wcStorage.remove(LOCAL_STORAGE_API_KEY);
+    this._apiKeyType = undefined;
+    this.wcStorage.remove(LOCAL_STORAGE_API_KEY_TYPE);
     this.clearKeyExpireTimeout();
     this.onLogout.trigger();
     this.logger.debug('System logged out');
@@ -474,6 +484,8 @@ export class AuthService extends BaseService {
       me.logger.debug('System logged out from all the browsers');
       me._apiKey = undefined;
       me.wcStorage.remove(LOCAL_STORAGE_API_KEY);
+      me._apiKeyType = this._apiKeyType;
+      this.wcStorage.remove(LOCAL_STORAGE_API_KEY_TYPE);
       this.clearKeyExpireTimeout();
       me.onLogout.trigger();
     });
@@ -690,20 +702,26 @@ export class AuthService extends BaseService {
   private afterLogin(result: LoginApiResponse, username: string, appName: string, brand?: string): LoginApiResponse {
     this.logger.debug('Logged in as: ' + username, result);
     this._apiKey = result.key;
+    this._apiKeyType = result.keyType;
     this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+    this.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
     this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
     this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
     this.wcStorage.set(LOCAL_STORAGE_LAST_USERNAME, username);
     this.setUpKeyExpireTimeout(result.keyExpire!, brand);
     this.onLogin.trigger();
-    this.preserveSignature(username, appName);
+    this.preserveSignature(username, appName, result.keyType);
     return result;
   }
 
   /**
    * Preserve digital signature for future logins
    */
-  private async preserveSignature(username: string, appName: string): Promise<void> {
+  private async preserveSignature(username: string, appName: string, keyType?: ApiKeyType): Promise<void> {
+    if (keyType != null && keyType !== ApiKeyType.AdminApiKey) {
+      // Signature sign in is available only for admins
+      return;
+    }
     if (!this.tuner.config?.signInBySignature?.enabled) {
       this.logger.debug('The digital signature login feature is disabled');
       return;
