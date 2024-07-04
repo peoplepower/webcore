@@ -2,7 +2,7 @@ import { AppApiDal } from '../appApiDal';
 import { inject, injectable } from '../../../../modules/common/di';
 import { GetDeviceActivationInfoApiResponse } from './getDeviceActivationInfoApiResponse';
 import { GetDeviceActivationInfoAtLocationApiResponse } from './getDeviceActivationInfoAtLocationApiResponse';
-import { GetDeviceByIdApiResponse } from './getDeviceByIdApiResponse';
+import { GetDeviceByIdApiResponse, SimStatus } from './getDeviceByIdApiResponse';
 import { GetDevicePropertiesApiResponse } from './getDevicePropertiesApiResponse';
 import { GetDevicesListApiResponse } from './getDevicesListApiResponse';
 import { GetFirmwareJobsApiResponse } from './getFirmwareJobsApiResponse';
@@ -391,6 +391,29 @@ export class DevicesApi {
     userId?: number;
   }): Promise<SetFirmwareUpdateStatusApiResponse> {
     return this.dal.put('fwupdate', {}, {params: params});
+  }
+
+  /**
+   * Activate SIM card for a device.
+   * See {@link https://iotapps.docs.apiary.io/#/reference/devices/sim-cards/activate-sim-card}
+   * @param {string} deviceId Device ID for which to change SIM card activation.
+   * @param {number} locationId Location ID for the device.
+   * @param params Request parameters
+   * @param {string} params.status New SIM card status: 1 = Activate, 5 = Deactivate.
+   * @param {number} [params.simId] SIM card ID to change activation status.
+   * @returns
+   */
+  activateSimCard(
+    deviceId: string,
+    locationId: number,
+    params: {
+      status: number;
+      simId?: number;
+    },
+  ): Promise<ApiResponseBase> {
+    return this.dal.delete(`locations/${encodeURIComponent(locationId.toString())}/devices/${encodeURIComponent(deviceId)}/simCard`, {
+      params: params,
+    });
   }
 
   // #endregion

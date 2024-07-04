@@ -8,6 +8,10 @@ export enum SimStatus {
   Active = 1,
   Reserved = 2,
   Expired = 3,
+  Suspended = 4,
+  Deactivated = 5,
+  Cancelled = 6,
+  NotExist = 7,
 }
 
 export enum DeviceSimulationStatus {
