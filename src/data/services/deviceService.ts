@@ -17,6 +17,10 @@ import { DeviceModelsApi } from '../api/app/deviceModels/deviceModelsApi';
 import { GetDeviceParametersApiResponse } from '../api/app/devicesConfiguration/getDeviceParametersApiResponse';
 import { GetLastNMeasurementsApiResponse } from '../api/app/deviceMeasurements/getLastNMeasurementsApiResponse';
 import { UpdateDeviceModel } from '../api/app/devices/updateDeviceApiResponse';
+import { WsSubscription } from "../../modules/wsHub/wsSubscription";
+import { WsSubscriptionType } from "../../modules/wsHub/wsSubscriptionType";
+import { WsSubscriptionOperation } from "../../modules/wsHub/wsSubscriptionOperation";
+import { WsHub } from "../../modules/wsHub/wsHub";
 
 @injectable('DeviceService')
 export class DeviceService extends BaseService {
@@ -25,6 +29,7 @@ export class DeviceService extends BaseService {
   @inject('DevicesConfigurationApi') protected readonly devicesConfigurationApi!: DevicesConfigurationApi;
   @inject('DeviceMeasurementsApi') protected readonly deviceMeasurementsApi!: DeviceMeasurementsApi;
   @inject('DeviceModelsApi') protected readonly deviceModelsApi!: DeviceModelsApi;
+  @inject('WsHub') protected readonly wsHub!: WsHub;
 
   constructor() {
     super();
@@ -459,14 +464,19 @@ export class DeviceService extends BaseService {
    *
    * @param {number} locationId Location ID for the specific device.
    * @param {string} deviceId Specifies the device ID.
-   * @param {number} status New SIM card status: 1 = Activate, 5 = Deactivate.
-   * @param {number} [simId] SIM card ID to activate/deactivate.
+   * @param [params] Request parameters.
+   * @param {number} params.status New SIM card status: 1 = Activate, 5 = Deactivate.
+   * @param {number} [params.simId] SIM card ID to activate/deactivate.
    * @returns {Promise<ApiResponseBase>}
    */
-  public activateSimCard(locationId: number, deviceId: string, params: {
+  public activateSimCard(
+    locationId: number,
+    deviceId: string,
+    params: {
       status: number,
       simId?: number,
-    }): Promise<ApiResponseBase> {
+    }
+  ): Promise<ApiResponseBase> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
     }
@@ -488,7 +498,6 @@ export class DeviceService extends BaseService {
    * @param {number} spaceId Location space ID.
    * @returns {Promise<ApiResponseBase>}
    */
-
   public linkSpace(deviceId: string, locationId: number, spaceId: number): Promise<ApiResponseBase> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
@@ -512,7 +521,6 @@ export class DeviceService extends BaseService {
    * @param {number} spaceId Location space ID.
    * @returns {Promise<ApiResponseBase>}
    */
-
   public unlinkSpace(deviceId: string, locationId: number, spaceId: number): Promise<ApiResponseBase> {
     if (!deviceId || deviceId.length === 0) {
       return this.reject(`Device ID can not be empty [${deviceId}].`);
@@ -530,6 +538,32 @@ export class DeviceService extends BaseService {
   }
 
   // #endregion
+
+  /**
+   * Subscribe for device parameters (current measurements) changes
+   * @param {number} locationId Location ID.
+   * @param {string} [deviceId] Device ID (optional)
+   * @returns {WsSubscription}
+   */
+  public subscribeForDeviceParameters(locationId: number, deviceId?: string): WsSubscription {
+    return this.wsHub.subscribe(WsSubscriptionType.DEVICE_PARAMETERS, WsSubscriptionOperation.CREATE_OR_UPDATE_OR_DELETE, {
+      locationId: locationId,
+      ...(deviceId ? {deviceId: deviceId} : {}),
+    });
+  }
+
+  /**
+   * Subscribe for device SIM cards changes
+   * @param {number} locationId Location ID.
+   * @param {string} deviceId Device ID
+   * @returns {WsSubscription}
+   */
+  public subscribeForSimCards(locationId: number, deviceId: string): WsSubscription {
+    return this.wsHub.subscribe(WsSubscriptionType.DEVICE_SIM_CARD_ATTRIBUTES, WsSubscriptionOperation.CREATE_OR_UPDATE_OR_DELETE, {
+      locationId: locationId,
+      deviceId: deviceId,
+    });
+  }
 }
 
 export interface DeviceCommandResult extends SendCommandToDeviceApiResponse {

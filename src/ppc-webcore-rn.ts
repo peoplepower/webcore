@@ -32,7 +32,7 @@ class LocalStorageMimic implements LocalStorageProvider {
 
   [name: string]: any;
 
-  get(target, key) {
+  get(target: any, key: string) {
     return this[key] || this.storageObject[key];
   }
 

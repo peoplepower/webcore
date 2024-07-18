@@ -1,4 +1,13 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {
+  AxiosError,
+  AxiosHeaders,
+  AxiosRequestConfig,
+  AxiosResponse,
+  HeadersDefaults,
+  InternalAxiosRequestConfig,
+  RawAxiosRequestHeaders
+} from 'axios';
+import { AxiosRequestHeaders } from "axios/index";
 
 export interface DalResponsePromise<T> extends Promise<T> {
 }
@@ -20,11 +29,19 @@ export interface DalRequestConfig<T> extends AxiosRequestConfig<T> {
   retryCount?: number;
 }
 
+export interface DalRequestConfigInternal<T> extends DalRequestConfig<T>, InternalAxiosRequestConfig<T> {
+  headers: AxiosRequestHeaders;
+}
+
 export interface DalResponse<T> extends AxiosResponse<T> {
-  config: DalRequestConfig<T>;
+  config: DalRequestConfigInternal<T>;
 }
 
 export interface DalError<T> extends AxiosError<T> {
-  config: DalRequestConfig<T>;
+  config: DalRequestConfigInternal<T>;
   response?: DalResponse<T>;
+}
+
+export interface CreateDalDefaults<D = any> extends Omit<DalRequestConfig<D>, 'headers'> {
+  headers?: RawAxiosRequestHeaders | AxiosHeaders | Partial<HeadersDefaults>;
 }
