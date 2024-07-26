@@ -29,6 +29,11 @@ import { StoriesService } from './data/services/storiesService';
 import { FilesService } from './data/services/filesService';
 import { QueryService } from './data/services/queryService';
 import { QuestionsService } from './data/services/questionsService';
+import { AppApiDal } from "./data/api/app/appApiDal";
+import { AppApiOAuthDal } from "./data/api/app/appApiOAuthDal";
+import { AppApiReportsDal } from "./data/api/app/appApiReportsDal";
+import { BotApiDal } from "./data/api/bot/botApiDal";
+import { DeviceStreamingApiDal } from "./data/api/deviceStreamingApi/deviceStreamingApiDal";
 
 @injectable('WebCoreApis')
 export class WebCoreApis {
@@ -64,10 +69,24 @@ export class WebCoreServices {
   @inject('QuestionsService') questions!: QuestionsService;
 }
 
+@injectable('WebCoreDals')
+export class WebCoreDals {
+  @inject('AppApiDal') public readonly appApiDal!: AppApiDal;
+  @inject('AppApiOAuthDal') public readonly appApiOAuthDal!: AppApiOAuthDal;
+  @inject('AppApiReportsDal') public readonly appApiReportsDal!: AppApiReportsDal;
+  @inject('BotApiDal') public readonly botApiDal!: BotApiDal;
+  @inject('DeviceStreamingApiDal') public readonly deviceStreamingApiDal!: DeviceStreamingApiDal;
+}
+
 @injectable('WebCore')
 export class WebCore {
   @inject('WebCoreApis') public api!: WebCoreApis;
   @inject('WebCoreServices') public services!: WebCoreServices;
+
+  /**
+   * Data access layers. Use it to manually assemble requests.
+   */
+  @inject('WebCoreDals') public dals!: WebCoreDals;
 
   @inject('Tuner') private tuner!: Tuner;
   @inject('Envir') private envir!: Envir;
