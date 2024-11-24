@@ -49,23 +49,61 @@ export enum CallCenterAlertStatus {
   Reported = 3,
 }
 
+export enum CallCenterTestStatus {
+  /**
+   * Test pending
+   */
+  TestPending = 1,
+  /**
+   * Active or scheduled test
+   */
+  Active = 2,
+  /**
+   * Cancel test pending
+   */
+  Cancel = 3,
+  /**
+   * Test is off
+   */
+  Off = 4,
+}
+
 export interface GetCallCenterApiResponse extends ApiResponseBase {
   callCenter: {
     status: CallCenterStatus;
+    code: string;
+    userId: number;
     missingFields: Array<string>;
     contacts: Array<{
+      userId: number;
       firstName: string;
       lastName: string;
       phone: string;
       phoneType: PhoneType;
+      ecv: boolean;
     }>;
-    notDispatch?: boolean;
     codeword: string;
+    notDispatch?: boolean;
     permit: string;
     alertStatus: CallCenterAlertStatus;
     alertDate: string;
     alertDateMs: number;
     alertStatusDate: string;
     alertStatusDateMs: number;
+
+    /**
+     * Call Center tests listing
+     */
+    tests?: Array<{
+      testId: number;
+      status: CallCenterTestStatus;
+      startDate: string;
+      startDateMs: number;
+      endDate: string;
+      endDateMs: number;
+      comment: string;
+      userId: number;
+      externalTestId: number;
+    }>;
   };
 }

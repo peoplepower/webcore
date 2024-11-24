@@ -34,6 +34,13 @@ export enum UserPermission {
   OrganizationBilling = 11 // Access to bill generation
 }
 
+export enum GenderType {
+  Unknown = 0,
+  Male = 1,
+  Female = 2,
+  Other = 3,
+}
+
 export enum LocationPriorityCategory {
   Empty = 0, // Empty location - typically ignore this location
   Okay = 1, // Home is running just fine
@@ -333,6 +340,9 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      */
     userName: string;
 
+    /**
+     * Account creation timestamp.
+     */
     creationDate?: string;
     creationDateMs?: number;
 
@@ -440,7 +450,6 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      * en - English
      * cn - Chinese
      * fr - French
-     * ru - Russian
      * etc.
      */
     language: string;
@@ -461,6 +470,19 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      */
     organizationId: number;
 
+    /**
+     * Birth year.
+     */
+    birthYear?: number;
+
+    /**
+     * Gender.
+     */
+    gender?: GenderType;
+
+    /**
+     *
+     */
     authClients?: Array<{
       appId: string;
       appName: string;

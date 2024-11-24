@@ -1,5 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { AccessibilityType, PhoneType } from './createUserAndLocationApiResponse';
+import { GenderType } from './getUserInformationApiResponse'
 
 export interface UpdateUserApiResponse extends ApiResponseBase {
 }
@@ -103,6 +104,16 @@ export interface UserModel {
    * @type {AccessibilityType}
    */
   accessibility?: AccessibilityType;
+
+  /**
+   * Year of birth.
+   */
+  birthYear?: number;
+
+  /**
+   * Gender.
+   */
+  gender?: GenderType;
 }
 
 export interface UpdateUserModel {

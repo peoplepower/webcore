@@ -3,6 +3,8 @@ import { inject, injectable } from '../../../../modules/common/di';
 import { GetCallCenterApiResponse } from './getCallCenterApiResponse';
 import { UpdateCallCenterApiResponse, UpdateCallCenterModel } from './updateCallCenterApiResponse';
 import { GetCallCenterAlertsApiResponse } from './getCallCenterAlertsApiResponse';
+import { CreateCallCenterTestApiResponse, CreateCallCenterTestModel } from './createCallCenterTestApiResponse'
+import { ApiResponseBase } from '../../../models/apiResponseBase'
 
 /**
  * Using this API, User can specify call center contacts and check the call center service status.
@@ -58,5 +60,41 @@ export class ProfessionalMonitoringApi {
    */
   getCallCenterAlerts(params: { locationId: number }): Promise<GetCallCenterAlertsApiResponse> {
     return this.dal.get('callCenterAlerts', {params: params});
+  }
+
+  /**
+   * Create call center test
+   * See {@link https://iotapps.docs.apiary.io/#/reference/professional-monitoring/call-center-on-test/create-call-center-test}
+   *
+   * Create or update a test for a call center account.
+   * User optional startDate to endDate model attributes to schedule a test.
+   *
+   * @param params Request parameters.
+   * @param {number} params.locationId Location ID.
+   * @param {number} [params.testId] Call center test ID to update existing test.
+   * @param {CreateCallCenterTestModel} testModel Body parameters for the test.
+   * @returns {Promise<CreateCallCenterTestApiResponse>}
+   */
+  createCallCenterTest(
+    params: {
+      locationId: number,
+      testId?: number
+    },
+    testModel: CreateCallCenterTestModel
+  ): Promise<CreateCallCenterTestApiResponse> {
+    return this.dal.post('callCenterTest', testModel, {params: params});
+  }
+
+  /**
+   * Cancel a specific call center test or all active tests.
+   * See {@link https://iotapps.docs.apiary.io/#/reference/professional-monitoring/call-center-on-test/cancel-call-center-test}
+   *
+   * @param params Request parameters.
+   * @param {number} params.locationId Location ID.
+   * @param {number} [params.testId] Call center test ID to cancel a specific test.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  cancelCallCenterTest(params: { locationId: number, testId?: number }): Promise<ApiResponseBase> {
+    return this.dal.delete('callCenterTest', {params: params});
   }
 }
