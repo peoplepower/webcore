@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { EmailVerificationStatus, PhoneVerificationStatus } from '../userAccounts/getUserInformationApiResponse';
+import { EmailVerificationStatus, GenderType, PhoneVerificationStatus } from '../userAccounts/getUserInformationApiResponse';
 import { AccessibilityType, PhoneType } from '../userAccounts/createUserAndLocationApiResponse';
 
 export enum LocationAccessLevel {
@@ -66,25 +66,35 @@ export interface LocationUser {
     verified: boolean;
     status: EmailVerificationStatus;
   };
+
   phone?: string;
   phoneType?: PhoneType;
   smsStatus?: PhoneVerificationStatus;
   locationAccess: LocationAccessLevel;
+  category: LocationNotificationsCategory;
+
+  /**
+   * Temporary user access.
+   */
   temporary: boolean;
   accessEndDate?: string;
   accessEndDateMs?: number;
-  category: LocationNotificationsCategory;
+
+  phoneChennels?: {
+    sms: boolean;
+    mms: boolean;
+    voice: boolean;
+  };
+
   smsPhone?: string;
   language: string;
   avatarFileId?: number;
-  schedules?: Array<{
-    daysOfWeek: number;
-    startTime: number;
-    endTime: number;
-  }>;
 
   /**
    * Bitmask representation of accessibility preferences.
    */
   accessibility?: AccessibilityType;
+
+  birthYear?: number;
+  gender?: GenderType;
 }

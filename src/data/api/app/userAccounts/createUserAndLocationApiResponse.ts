@@ -1,5 +1,6 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { Pronoun } from './getPronounsApiResponse';
+import { GenderType } from './getUserInformationApiResponse'
 
 export enum PhoneType {
   Unknown = 0,
@@ -101,7 +102,6 @@ export interface CreateUserAndLocationModel {
      * en - English
      * cn - Chinese
      * fr - French
-     * ru - Russian
      * etc
      */
     language?: string;
@@ -122,6 +122,16 @@ export interface CreateUserAndLocationModel {
      * Use the Files API to upload an avatar image.
      */
     avatarFileId?: number;
+
+    /**
+     * Gender.
+     */
+    gender?: GenderType;
+
+    /**
+     * Year of birth.
+     */
+    birthYear?: number;
   };
 
   /**
