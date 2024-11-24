@@ -5,6 +5,8 @@ import { ProfessionalMonitoringApi } from '../api/app/professionalMonitoring/pro
 import { GetCallCenterApiResponse } from '../api/app/professionalMonitoring/getCallCenterApiResponse';
 import { GetCallCenterAlertsApiResponse } from '../api/app/professionalMonitoring/getCallCenterAlertsApiResponse';
 import { UpdateCallCenterApiResponse, UpdateCallCenterModel } from '../api/app/professionalMonitoring/updateCallCenterApiResponse';
+import { CreateCallCenterTestApiResponse, CreateCallCenterTestModel } from '../api/app/professionalMonitoring/createCallCenterTestApiResponse';
+import { ApiResponseBase } from '../models/apiResponseBase';
 
 @injectable('ProfessionalMonitoringService')
 export class ProfessionalMonitoringService extends BaseService {
@@ -72,7 +74,56 @@ export class ProfessionalMonitoringService extends BaseService {
       parameters.sortCollection = 'callCenterAlerts';
     }
 
-    return this.authService.ensureAuthenticated().then(() => this.professionalMonitoringApi.getCallCenterAlerts(parameters));
+    return this.authService.ensureAuthenticated().then(() =>
+      this.professionalMonitoringApi.getCallCenterAlerts(parameters)
+    );
+  }
+
+  /**
+   * Create or update call center test.
+   * @param {number} locationId Location ID.
+   * @param {CreateCallCenterTestModel} testModel Call center test model.
+   * @param {number} [testId] Call center test ID to update existing test.
+   * @return {Promise<CreateCallCenterTestApiResponse>}
+   */
+  public createCallCenterTest(locationId: number, testModel: CreateCallCenterTestModel, testId?: number): Promise<CreateCallCenterTestApiResponse> {
+    let parameters: {
+      locationId: number;
+      testId?: number;
+    } = {
+      locationId: locationId,
+    }
+
+    if (testId) {
+      parameters.testId = testId;
+    }
+
+    return this.authService.ensureAuthenticated().then(() =>
+      this.professionalMonitoringApi.createCallCenterTest(parameters, testModel),
+    );
+  }
+
+  /**
+   * Cancel call center test(s).
+   * @param {number} locationId Location ID.
+   * @param {number} [testId] Call center test ID to cancel a specific test.
+   * @return {Promise<ApiResponseBase>}
+   */
+  public cancelCallCenterTest(locationId: number, testId?: number): Promise<ApiResponseBase> {
+    let parameters: {
+      locationId: number;
+      testId?: number;
+    } = {
+      locationId: locationId,
+    }
+
+    if (testId) {
+      parameters.testId = testId;
+    }
+
+    return this.authService.ensureAuthenticated().then(() =>
+      this.professionalMonitoringApi.cancelCallCenterTest(parameters),
+    );
   }
 }
 
