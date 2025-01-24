@@ -117,6 +117,7 @@ export class DeviceService extends BaseService {
    * @param {number} [params.spaceId] Filter devices by space ID.
    * @param {number} [params.spaceType] Filter devices by space type.
    * @param {string} [params.sortBy] Sort collection by field.
+   * @param {prospect} [params.prospect] Return device prospects (status = 2).
    * @returns {Promise<LocationDevicesList>}
    */
   public getLocationDevices(
@@ -128,6 +129,7 @@ export class DeviceService extends BaseService {
       spaceType?: number;
       sortBy?: string;
       sortOrder?: string;
+      prospect?: boolean;
     },
   ): Promise<LocationDevicesList> {
     if (locationId < 1 || isNaN(locationId)) {
@@ -143,11 +145,13 @@ export class DeviceService extends BaseService {
       spaceType?: number;
       sortBy?: string;
       sortOrder?: string;
+      prospect?: boolean;
     } = {
       locationId: locationId,
       sortCollection: 'devices',
       checkPersistent: params && params.checkPersistent,
       getTags: params && params.getTags,
+      prospect: params && params.prospect,
     };
 
     if (params) {
