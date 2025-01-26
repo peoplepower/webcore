@@ -152,7 +152,7 @@ export class AuthService extends BaseService {
     }
     if (passcodeType === PasscodeType.Totp) {
       params.totp = true;
-    } else if (passcodeType === PasscodeType.EMail) {
+    } else if (passcodeType === PasscodeType.Email) {
       params.prefDeliveryType = PasscodeDeliveryType.Email
     } else {
       params.prefDeliveryType = PasscodeDeliveryType.Sms
@@ -752,7 +752,7 @@ export interface LogoutApiResponse extends ApiResponseBase {
 }
 
 export enum PasscodeType {
-  EMail = 2,
+  Email = 2,
   Sms = 3,
   Totp = 4
 }
