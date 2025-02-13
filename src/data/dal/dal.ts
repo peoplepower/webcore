@@ -6,7 +6,9 @@ export abstract class Dal {
   protected readonly axios: AxiosInstance;
 
   protected constructor(defaultConfig?: CreateDalDefaults, protected interceptors?: Interceptor[]) {
-    this.axios = Axios.create(defaultConfig);
+    // @ts-ignore Fix react native error with axios package (Axios cjs package do not have default Axios Instance exported)
+    const createFunc: typeof Axios.create = Axios.create ?? Axios.default.create;
+    this.axios = createFunc(defaultConfig);
 
     interceptors?.forEach((i) => {
       // NOTE: request interceptors will be executed in reversed order,

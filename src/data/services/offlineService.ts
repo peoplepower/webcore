@@ -113,7 +113,9 @@ export class OfflineService extends BaseService {
     this.pingPromise = this.cloudConfigService
       .getBaseUrl()
       .then((url) => {
-        return Axios.get('espapi/watch', {baseURL: url});
+        // @ts-ignore Fix react native error with axios package (Axios cjs package do not have default Axios Instance exported)
+        const getFunc: typeof Axios.get = Axios.get ?? Axios.default.get;
+        return getFunc('espapi/watch', {baseURL: url});
       })
 
       .then((resp) => {
