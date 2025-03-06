@@ -42,7 +42,6 @@ export class QuestionsService extends BaseService {
       appInstanceId?: number;
       lang?: string;
       limit?: number;
-
       sortCollection?: string;
       sortBy?: string;
       sortOrder?: string;

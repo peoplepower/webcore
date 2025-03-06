@@ -204,9 +204,23 @@ export interface QuestionCollection {
   name: string;
 
   /**
+   * Multi-lingual collection name.
+   */
+  mlName?: {
+    [key: string]: string;
+  };
+
+  /**
    * The title of the group
    */
   description?: string;
+
+  /**
+   * Multi-lingual collection description.
+   */
+  mlDescription?: {
+    [key: string]: string;
+  };
 
   /**
    * Icon to show next to the collection, if any.
