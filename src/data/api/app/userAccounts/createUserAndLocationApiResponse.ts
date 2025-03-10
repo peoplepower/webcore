@@ -14,7 +14,7 @@ export enum AccessibilityType {
   VisualImpairment = 1,
   HearingImpairment = 2,
   MobilityImpairment = 4,
-  СommunicationImpairment = 8,
+  CommunicationImpairment = 8,
   PhysicalImpairment = 16,
   CognitiveImpairment = 32,
 }
