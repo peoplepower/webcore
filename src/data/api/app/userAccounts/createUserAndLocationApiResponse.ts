@@ -1,5 +1,4 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { Pronoun } from './getPronounsApiResponse';
 import { GenderType } from './getUserInformationApiResponse'
 
 export enum PhoneType {
@@ -12,9 +11,12 @@ export enum PhoneType {
 
 export enum AccessibilityType {
   None = 0,
-  Blind = 1,
-  Deaf = 2,
-  Immobile = 4,
+  VisualImpairment = 1,
+  HearingImpairment = 2,
+  MobilityImpairment = 4,
+  CommunicationImpairment = 8,
+  PhysicalImpairment = 16,
+  CognitiveImpairment = 32,
 }
 
 export interface CreateUserAndLocationApiResponse extends ApiResponseBase {
