@@ -61,6 +61,11 @@ export interface LocationUser {
    */
   role?: UserRole;
 
+  /**
+   * Hide user for the non-admin users.
+   */
+  hidden?: boolean;
+
   email?: {
     email: string;
     verified: boolean;
@@ -74,7 +79,7 @@ export interface LocationUser {
   category: LocationNotificationsCategory;
 
   /**
-   * Temporary user access.
+   * Temporary user access (deprecated).
    */
   temporary: boolean;
   accessEndDate?: string;
@@ -97,4 +102,9 @@ export interface LocationUser {
 
   birthYear?: number;
   gender?: GenderType;
+
+  /**
+   * Call tree order.
+   */
+  callOrder?: number;
 }
