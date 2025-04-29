@@ -4,6 +4,7 @@ import { GetUserPropertiesApiResponse } from './getUserPropertiesApiResponse';
 import { UpdateUserPropertiesApiResponse, UpdateUserPropertiesModel } from './updateUserPropertiesApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { GetUserOrSystemPropertyApiResponse } from "./getUserOrSystemPropertyApiResponse";
+import { ParamDisplayType } from '../devicesConfiguration/getDeviceParametersApiResponse'
 
 /**
  * System Properties are one of the most useful tools to manage and synchronize the behavior of production apps,
@@ -92,6 +93,7 @@ export class SystemAndUserPropertiesApi {
     params: {
       value: string;
       userId?: number;
+      displayType?: ParamDisplayType;
     },
   ): Promise<ApiResponseBase> {
     return this.dal.put('userProperty/' + encodeURIComponent(name), {}, {params: params});
