@@ -56,6 +56,24 @@ export class SystemPropertiesService extends BaseService {
   }
 
   /**
+   * Gets branded idle timeouts
+   * @returns {Promise<{[brand: string]: number} | undefined>}
+   */
+  public getBrandedIdleTimeoutConfig(): Promise<BrandedIdleTimeoutConfig | undefined> {
+    return this.systemAndUserPropertiesApi.getSystemProperty('ppc.web.brandedIdleTimeout')
+      .then(str => {
+        if (str) {
+          try {
+            return JSON.parse(str);
+          } catch (e) {
+            this.logger.error(`Unable to parse as JSON 'ppc.web.brandedIdleTimeout' System Property: ${str}`, e);
+          }
+        }
+        return undefined;
+      });
+  }
+
+  /**
    * Get current user system of measurements
    * @returns {Promise<'metric' | 'us'>}
    */
@@ -87,4 +105,11 @@ export enum SystemOfMeasurement {
    * United States customary units / imperial units
    */
   Us = 'us',
+}
+
+/**
+ * Brand (organization.brand) to timout (in seconds) map
+ */
+export interface BrandedIdleTimeoutConfig {
+  [brand: string]: number;
 }
