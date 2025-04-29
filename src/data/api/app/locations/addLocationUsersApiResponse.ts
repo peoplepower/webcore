@@ -11,12 +11,26 @@ export interface AddLocationUsersModel {
 export interface AddSingleLocationUserModel {
   id: number;
   locationAccess?: LocationAccessLevel;
-  temporary?: boolean;
   category?: LocationNotificationsCategory;
   nickname?: string;
+
+  /**
+   * Deprecated.
+   */
+  temporary?: boolean;
 
   /**
    * User role.
    */
   role?: UserRole;
+
+  /**
+   * Hide user for the non-admin users.
+   */
+  hidden?: boolean;
+
+  /**
+   * Call tree order.
+   */
+  callOrder?: number;
 }

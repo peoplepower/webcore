@@ -44,6 +44,8 @@ export enum ParamDisplayType {
   MultipleSelectCheckboxes = 40,
   MultipleSelectDropdown = 41,
   Textbox = 5,
+  TextboxPlainText = 50,
+  TextboxPhone = 51,
   DayOfWeek = 6,
   DayOfWeekMultiple = 60,
   DayOfWeekSingleDay = 61,
