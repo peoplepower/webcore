@@ -151,6 +151,14 @@ export interface GetDeviceModelsApiResponse extends ApiResponseBase {
         };
 
         /**
+         * Historical-only parameters.
+         * Parameters not listed in current device measurements.
+         */
+        historicalParams?: Array<{
+          name: string;
+        }>;
+
+        /**
          * Dictionary of brands that are supported as a bundle.
          * Each brand contains a bundle story ID, and an array of model ids with the number of devices included in bundle
          */
