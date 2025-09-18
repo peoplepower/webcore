@@ -7,7 +7,6 @@ import pkg from './package.json' with {type: 'json'};
 const tsConfig = {
   tsconfig: './tsconfig.bundle.json',
   checkJs: false,
-  sourceMap: false,
 };
 
 export default command => {

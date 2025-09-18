@@ -39,6 +39,11 @@ export enum NarrativeType {
    * Important "insights" (location)
    */
   Insight = 5,
+
+  /**
+   * Support ticket (location).
+   */
+  SupportTicket = 6,
 }
 
 export interface Narrative {

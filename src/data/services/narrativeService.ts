@@ -83,16 +83,17 @@ export class NarrativeService extends BaseService {
    * See {@link https://iotapps.docs.apiary.io/#reference/user-accounts/narratives/get-narratives}
    *
    * @param {number} locationId Location ID.
-   * @param params Request parameters
-   * @param {number} params.rowCount Maximum number of elements per page
-   * @param {number} [params.narrativeId] Filter by Narrative ID
-   * @param {NarrativePriority} [params.priority] Filter by priority higher or equal than that
-   * @param {NarrativePriority} [params.toPriority] Filter by priority less or equal than that
-   * @param {NarrativeType | Array<NarrativeType>} [params.narrativeType] Filter by narrative type, multiple values allowed
+   * @param params Request parameters.
+   * @param {number} params.rowCount Maximum number of elements per page.
+   * @param {number} [params.narrativeId] Filter by Narrative ID.
+   * @param {NarrativePriority} [params.priority] Filter by priority higher or equal than that.
+   * @param {NarrativePriority} [params.toPriority] Filter by priority less or equal than that.
+   * @param {NarrativeType | Array<NarrativeType>} [params.narrativeType] Filter by narrative type, multiple values allowed.
    * @param {string} [params.searchBy] Filter by title or description. Use * for a wildcard.
-   * @param {string} [params.startDate] Narrative date range start
-   * @param {string} [params.endDate] Narrative date range end
-   * @param {string} [params.pageMarker] Marker to the next page
+   * @param {string} [params.startDate] Narrative date range start.
+   * @param {string} [params.endDate] Narrative date range end.
+   * @param {string} [params.pageMarker] Marker to the next page.
+   * @param {number} [params.parentId] Filter by parent narrative ID.
    * @returns {Promise<GetNarrativesApiResponse>}
    */
   public getNarratives(
@@ -107,6 +108,7 @@ export class NarrativeService extends BaseService {
       startDate?: string;
       endDate?: string;
       pageMarker?: string;
+      parentId?: number;
     },
   ): Promise<NarrativesSearchResult> {
     return this.locationsApi.getNarratives(locationId, params);
