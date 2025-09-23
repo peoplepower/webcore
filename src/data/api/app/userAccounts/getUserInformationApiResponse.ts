@@ -64,9 +64,9 @@ export interface LocationInfo {
   id: number;
 
   /**
-   * Parent location ID.
+   * Parent location IDs.
    */
-  parentId?: number;
+  parentIds?: number[];
 
   /**
    * External ID (integrations)
