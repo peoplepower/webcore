@@ -10,24 +10,9 @@ export enum LocationAccessLevel {
 }
 
 export enum LocationNotificationsCategory {
-  /**
-   * Does not get smart home alerts
-   */
   NoAlerts = 0,
-
-  /**
-   * First to get smart home alerts
-   */
-  HomeOwner = 1,
-
-  /**
-   * Get alerts if a resident doesn't respond
-   */
-  FamilyOrFriend = 2,
-
-  /**
-   * Get reminded to call or check in
-   */
+  AlertedFirst = 1,
+  AlertedSecond = 2,
   SocialRemindersOnly = 3,
 }
 
@@ -43,6 +28,17 @@ export enum UserRole {
   ProfessionalCaregiver = 4,
 }
 
+/**
+ * Location user residency status.
+ * For the context of assisted living communities and families.
+ */
+export enum ResidencyStatus {
+  Unknown = 0,
+  Resident = 1,
+  CommunityStaff = 2,
+  LivesNearby = 3,
+  LivesRemotely = 4,
+}
 
 export interface GetLocationUsersApiResponse extends ApiResponseBase {
   users: LocationUser[];
@@ -60,6 +56,11 @@ export interface LocationUser {
    * User role.
    */
   role?: UserRole;
+
+  /**
+   * User's residency status.
+   */
+  residency?: ResidencyStatus;
 
   /**
    * Hide user for the non-admin users.

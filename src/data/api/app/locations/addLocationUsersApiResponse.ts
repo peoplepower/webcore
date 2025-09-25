@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { LocationAccessLevel, LocationNotificationsCategory, UserRole } from './getLocationUsersApiResponse';
+import { LocationAccessLevel, LocationNotificationsCategory, ResidencyStatus, UserRole } from './getLocationUsersApiResponse';
 
 export interface AddLocationUsersApiResponse extends ApiResponseBase {
 }
@@ -12,6 +12,7 @@ export interface AddSingleLocationUserModel {
   id: number;
   locationAccess?: LocationAccessLevel;
   category?: LocationNotificationsCategory;
+  residency?: ResidencyStatus;
   nickname?: string;
 
   /**
