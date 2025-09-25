@@ -33,6 +33,54 @@ export class LocationService extends BaseService {
   }
 
   /**
+   * Create new Location for existing user.
+   * @param {LocationModel} location
+   * @param {number} [parentId] Parent location ID to assing the new location as a sub-location there.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public createLocation(location: LocationModel, parentId?: number): Promise<ApiResponseBase> {
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.addNewLocationToUser(location, void 0, parentId));
+  }
+
+  /**
+   * Add Sub-Location to existing Location.
+   * An administrator of a location can assign a sub-location to this location. A sub-location must have "subType" > 0.
+   * @param {number} locationId Location ID to assing sub-location to.
+   * @param {number} subLocationId Location ID to assign as sub-location.
+   * @param {number} [startDate] Optional start date of the sub-location assignment, default is now.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public addSubLocation(locationId: number, subLocationId: number, startDate?: number): Promise<ApiResponseBase> {
+    if (!locationId || isNaN(locationId) || locationId < 1) {
+      return this.reject(`Location ID is incorrect [${locationId}].`);
+    }
+    if (!subLocationId || isNaN(subLocationId) || subLocationId < 1) {
+      return this.reject(`Sub-Location ID is incorrect [${subLocationId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.addSubLocation(locationId, subLocationId, startDate));
+  }
+
+  /**
+   * Delete Sub-Location from existing Location.
+   * An administrator of a location can stop a sub-location association to this location.
+   * @param {number} locationId Location ID to remove sub-location from.
+   * @param {number} subLocationId Sub-Location ID to remove.
+   * @param {number} [endDate] Optional end date of the sub-location assignment, default is now.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public deleteSubLocation(locationId: number, subLocationId: number, endDate?: number): Promise<ApiResponseBase> {
+    if (!locationId || isNaN(locationId) || locationId < 1) {
+      return this.reject(`Location ID is incorrect [${locationId}].`);
+    }
+    if (!subLocationId || isNaN(subLocationId) || subLocationId < 1) {
+      return this.reject(`Sub-Location ID is incorrect [${subLocationId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.deleteSubLocation(locationId, subLocationId, endDate));
+  }
+
+  /**
    * Change the scene at a Location.
    *
    * By changing the scene at a location, you may cause user-defined Rules to execute such as

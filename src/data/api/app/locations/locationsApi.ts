@@ -1,8 +1,8 @@
 import { AppApiDal } from '../appApiDal';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { inject, injectable } from '../../../../modules/common/di';
-import { AddNewLocationToUserApiResponse, AddNewLocationToUserModel } from './addNewLocationToUserApiResponse';
-import { EditLocationApiResponse, EditLocationModel } from './editLocationApiResponse';
+import { AddNewLocationToUserApiResponse, NewLocationModel } from './addNewLocationToUserApiResponse';
+import { EditLocationApiResponse, EditLocationModel, LocationModel } from './editLocationApiResponse';
 import { GetLocationScenesHistoryApiResponse } from './getLocationScenesHistoryApiResponse';
 import { GetCountriesApiResponse } from './getCountriesApiResponse';
 import { GetLocationUsersApiResponse } from './getLocationUsersApiResponse';
@@ -36,16 +36,17 @@ export class LocationsApi {
    * Add a new Location to an existing User.
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/new-location/add-a-new-location-to-an-existing-user}
    *
-   * @param {AddNewLocationToUserModel} location New Location.
+   * @param {NewLocationModel} location New Location.
    * @param {number} [userId] User ID. Optional parameter. This parameter is used by administrator accounts to update a specific user's account.
+   * @param {number} [parentId] Parent location ID to assign the new location as a sub-location there.
    * @returns {Promise<AddNewLocationToUserApiResponse>}
    */
-  addNewLocationToUser(location: AddNewLocationToUserModel, userId?: number): Promise<AddNewLocationToUserApiResponse> {
-    return this.dal.post('location', location, {params: {userId: userId}});
+  addNewLocationToUser(location: NewLocationModel, userId?: number, parentId?: number): Promise<AddNewLocationToUserApiResponse> {
+    return this.dal.post('location', {location: location}, {params: {userId: userId, parentId: parentId}});
   }
 
   /**
-   * Edit location.
+   * Edit Location.
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/update-location/edit-location}
    *
    * @param {EditLocationModel} location Location.
@@ -57,7 +58,7 @@ export class LocationsApi {
   }
 
   /**
-   * Delete location.
+   * Delete Location.
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/update-location/delete-location}
    *
    * @param {number} locationId Location ID to delete.
@@ -65,6 +66,42 @@ export class LocationsApi {
    */
   deleteLocation(locationId: number): Promise<ApiResponseBase> {
     return this.dal.delete(`location/${encodeURIComponent(locationId.toString())}`);
+  }
+
+  /**
+   * Add Sub-Location.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Locations/operation/Add%20Sub-Location}
+   *
+   * @param {number} locationId Parent Location ID to assign sub-location.
+   * @param {number} subLocationId Existing Location ID to add as a sub-location.
+   * @param {number} [startDate] Assignment start date otherwise set to now.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  addSubLocation(locationId: number, subLocationId: number, startDate?: number): Promise<ApiResponseBase> {
+    return this.dal.put(`location/${encodeURIComponent(locationId.toString())}/subs`, { locationId: locationId }, {
+      params: {
+        subLocationId: subLocationId,
+        startDate: startDate,
+      },
+    });
+  }
+
+  /**
+   * Delete Sub-Location.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Locations/operation/Delete%20Sub-Location}
+   *
+   * @param {number} locationId Parent Location ID to remove sub-location from.
+   * @param {number} subLocationId Existing Location ID to remove as a sub-location.
+   * @param {number} [endDate] Assignment end date otherwise set to now.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  deleteSubLocation(locationId: number, subLocationId: number, endDate?: number): Promise<ApiResponseBase> {
+    return this.dal.delete(`location/${encodeURIComponent(locationId.toString())}/subs`, {
+      params: {
+        subLocationId: subLocationId,
+        endDate: endDate,
+      },
+    });
   }
 
   // #region -------------------- Location Scenes --------------------
@@ -312,6 +349,7 @@ export class LocationsApi {
    * @param {string} [params.startDate] Narrative date range start.
    * @param {string} [params.endDate] Narrative date range end date.
    * @param {string} [params.pageMarker] Marker to the next page.
+   * @param {number} [params.parentId] Filter by parent narrative ID.
    * @returns {Promise<GetNarrativesApiResponse>}
    */
   getNarratives(
@@ -326,6 +364,7 @@ export class LocationsApi {
       startDate?: string;
       endDate?: string;
       pageMarker?: string;
+      parentId?: number;
     },
     analyticKey?: string,
   ): Promise<GetNarrativesApiResponse> {

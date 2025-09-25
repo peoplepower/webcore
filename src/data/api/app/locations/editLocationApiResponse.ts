@@ -24,12 +24,23 @@ export enum LocationType {
   Entertainment = 52,
 }
 
+/**
+ * Location configuration type:
+ * All - Location can have users, devices, subscriptions, bots, etc. (representing residential space or residents).
+ * Devices Only - Location can only have devices (representing physical spaces).
+ */
+export enum LocationSubType {
+  All = 0,
+  DevicesOnly = 1,
+}
+
 export interface EditLocationApiResponse extends ApiResponseBase {
 }
 
 export interface LocationModel {
   name?: string;
   type?: LocationType;
+  subType?: LocationSubType;
   utilityAccountNo?: string;
   timezone?: {
     id: string;

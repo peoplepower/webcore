@@ -2,7 +2,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { AccessibilityType, PhoneType } from './createUserAndLocationApiResponse';
 import { ResourceType } from '../paidServices/getSoftwareSubscriptionsApiResponse';
 import { LocationAccessLevel, LocationNotificationsCategory } from '../locations/getLocationUsersApiResponse';
-import { LocationType } from '../locations/editLocationApiResponse';
+import { LocationSubType, LocationType } from '../locations/editLocationApiResponse';
 
 export enum PhoneVerificationStatus {
   Unknown = 0,
@@ -64,9 +64,31 @@ export interface LocationInfo {
   id: number;
 
   /**
+   * Parent location IDs.
+   */
+  parentIds?: number[];
+
+  /**
+   * External ID (integrations)
+   */
+  externalId?: string;
+
+  /**
    * Name of the location (i.e. "My House" or "Upstairs Bedroom")
    */
   name?: string;
+
+  /**
+   * Location type.
+   * @type {number}
+   */
+  type: LocationType;
+
+  /**
+   * Location sub-type.
+   * @type {number}
+   */
+  subType: LocationSubType;
 
   /**
    * Organization ID to which location belongs to.
@@ -114,19 +136,6 @@ export interface LocationInfo {
     dst: boolean;
     name: string;
   };
-
-  /**
-   * Location type
-   * 10 - Residence
-   * 20 - General business / Other
-   * 21 - Municipal / Government
-   * 22 - Hotel / Lodging
-   * 23 - Restaurant
-   * 24 - Retail
-   * 25 - Office
-   * @type {number}
-   */
-  type: LocationType;
 
   creationDate?: string;
   creationDateMs?: number;

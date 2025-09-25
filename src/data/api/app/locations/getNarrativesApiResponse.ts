@@ -39,10 +39,23 @@ export enum NarrativeType {
    * Important "insights" (location)
    */
   Insight = 5,
+
+  /**
+   * Support ticket (location).
+   */
+  SupportTicket = 6,
 }
 
 export interface Narrative {
   id: number;
+
+  /**
+   * Parent narrative details.
+   */
+  parentId?: number;
+  parentNarrativeDate?: number;
+  parentNarrativeDateMs?: number;
+
   narrativeType: NarrativeType;
   locationId: number;
   organizationId?: number;
@@ -89,6 +102,9 @@ export interface Narrative {
     language?: string;
   };
 
+  /**
+   * Returned for removal narrative types.
+   */
   location?: {
     id: number;
     name: string;

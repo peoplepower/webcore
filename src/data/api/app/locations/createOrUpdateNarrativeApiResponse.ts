@@ -26,6 +26,13 @@ export interface CreateOrUpdateNarrativeApiResponse extends ApiResponseBase {
 
 export interface CreateOrUpdateNarrativeModel {
   narrativeTime?: number;
+
+  /**
+   * Define parent narrative.
+   */
+  parentId?: number;
+  parentNarrativeTime?: number;
+
   priority?: NarrativePriority;
   status?: NarrativeStatus;
   icon?: string;
