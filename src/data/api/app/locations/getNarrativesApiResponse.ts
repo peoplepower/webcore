@@ -48,6 +48,14 @@ export enum NarrativeType {
 
 export interface Narrative {
   id: number;
+
+  /**
+   * Parent narrative details.
+   */
+  parentId?: number;
+  parentNarrativeDate?: number;
+  parentNarrativeDateMs?: number;
+
   narrativeType: NarrativeType;
   locationId: number;
   organizationId?: number;
@@ -94,6 +102,9 @@ export interface Narrative {
     language?: string;
   };
 
+  /**
+   * Returned for removal narrative types.
+   */
   location?: {
     id: number;
     name: string;
