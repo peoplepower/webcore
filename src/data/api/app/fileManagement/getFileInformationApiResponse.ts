@@ -33,10 +33,5 @@ export interface GetFileInformationApiResponse extends ApiResponseBase {
         email: string;
       };
     };
-    tags: Array<{
-      tag: string;
-      appId?: number;
-      appName?: string;
-    }>;
   };
 }

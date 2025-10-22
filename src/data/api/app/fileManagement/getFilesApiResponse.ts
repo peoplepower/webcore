@@ -50,11 +50,6 @@ export interface GetFilesApiResponse extends ApiResponseBase {
       type: number;
       desc: string;
     };
-    tags?: Array<{
-      tag: string;
-      appId?: number;
-      appName?: string;
-    }>;
     user?: {
       id: number;
       firstName?: string;
