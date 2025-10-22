@@ -220,9 +220,9 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
   tags?: Array<{
     tag: string;
     organizationId?: number;
-    organizationName?: string;
     appId?: number;
-    appName?: string;
+    creationDate?: string;
+    creationDateMs?: number;
   }>;
 
   /**

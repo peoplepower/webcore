@@ -501,16 +501,14 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     }>;
 
     /**
-     * The administrator can only see device, location and user tags, but not file tags.
-     * Users can only see file tags but not other tags.
-     * File tags would be used to help them as they search for one of their private files.
+     * User tags.
      */
     tags?: Array<{
       tag: string;
       organizationId?: number;
-      organizationName?: string;
       appId?: number;
-      appName?: string;
+      creationDate?: string;
+      creationDateMs?: number;
     }>;
   };
 

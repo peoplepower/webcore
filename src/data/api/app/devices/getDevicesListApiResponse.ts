@@ -106,7 +106,9 @@ export interface GetDevicesListApiResponse extends ApiResponseBase {
     tags?: Array<{
       tag: string;
       appId?: number;
-      appName?: string;
+      organizationId?: number;
+      creationDate?: string;
+      creationDateMs?: number;
     }>;
 
   }>;
