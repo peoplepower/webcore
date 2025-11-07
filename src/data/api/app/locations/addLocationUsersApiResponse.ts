@@ -16,11 +16,6 @@ export interface AddSingleLocationUserModel {
   nickname?: string;
 
   /**
-   * Deprecated.
-   */
-  temporary?: boolean;
-
-  /**
    * User role.
    */
   role?: UserRole;

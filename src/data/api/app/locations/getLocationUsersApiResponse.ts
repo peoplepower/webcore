@@ -58,6 +58,12 @@ export interface LocationUser {
   role?: UserRole;
 
   /**
+   * Organization administrator role.
+   * Determine if the user is an organization administrator.
+   */
+  roleId?: number;
+
+  /**
    * User's residency status.
    */
   residency?: ResidencyStatus;
@@ -78,13 +84,6 @@ export interface LocationUser {
   smsStatus?: PhoneVerificationStatus;
   locationAccess: LocationAccessLevel;
   category: LocationNotificationsCategory;
-
-  /**
-   * Temporary user access (deprecated).
-   */
-  temporary: boolean;
-  accessEndDate?: string;
-  accessEndDateMs?: number;
 
   phoneChennels?: {
     sms: boolean;

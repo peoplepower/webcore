@@ -24,7 +24,7 @@ export enum UserPermission {
   GrantRoles = 1, // Grant roles
   ReportsAccess = 2, // Access to any data in reports
   OrganizationAdmin = 3, // Access to users, locations, devices in specific organization (administrator)
-  SuperAdmin = 4, // Create/update/delete organizations, groups, administrators
+  SuperAdmin = 4, // Create/update/delete organizations, administrators
   PaidServices = 5, // Paid services administrator
   BotStoreAdmin = 6, // Bot store administrator
   SystemAdmin = 7, // System administrator
@@ -100,11 +100,28 @@ export interface LocationInfo {
    */
   organization?: {
     id: number;
+    parentId?: number;
+    brand?: string;
     name: string;
     domainName: string;
     features: string;
-    groupId?: number;
-    groupName?: string;
+    creationDateMs: number;
+
+    /**
+     * Organization contact information.
+     */
+    contactName1?: string;
+    contactPhone1?: string;
+    contactEmail1?: string;
+    addrCity?: string;
+    addrStreet1?: string;
+    addrStreet2?: string;
+    zip?: string;
+
+    /**
+     * Organization legal information.
+     */
+    termOfService?: string;
   };
 
   /**
@@ -180,6 +197,8 @@ export interface LocationInfo {
    * 30 - update location information and manage devices.
    */
   locationAccess: LocationAccessLevel;
+  accessEndDate?: string;
+  accessEndDateMs?: number;
 
   /**
    * User's category in this location:
@@ -324,10 +343,10 @@ export interface LocationInfo {
 
   services?: Array<{
     name: string;
-    desc: string;
+    desc?: string;
     amount: number;
     resourceType: ResourceType;
-    resourceId: string;
+    resourceId?: string;
     startDate: string;
     startDateMs: number;
     endDate: string;
@@ -393,24 +412,19 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     };
 
     /**
-     * Additional user permissions:
-     * 0 - access any objects
-     * 1 - grant roles
-     * 2 - reports access
-     * 3 - organization admin
-     * 4 - devices and users access
-     * 5 - paid services administrator
-     * 6 - bot store administrator
-     * 7 - system administrator
-     * 8 - manage customer services
+     * Organization administrator role.
+     * Role is a set of permissions, works universally across organizations.
      */
-    permission?: Array<UserPermission>;
-
     role?: {
       id: number;
       name: string;
       description: string;
     };
+
+    /**
+     * User's administrative permissions.
+     */
+    permission?: Array<UserPermission>;
 
     /**
      * When the user sends messages in a community social network, enabling this flag will cause their name to be
