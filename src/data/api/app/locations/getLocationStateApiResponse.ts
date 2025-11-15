@@ -10,6 +10,7 @@ import { TrendsHighlightsLocationState } from "./states/trendsHighlightsLocation
 import { SummaryLocationState } from "./states/summaryLocationState";
 import { OccupancyOverviewLocationState } from "./states/occupancyOverviewLocationState";
 import { LocationPropertiesLocationState } from "./states/locationPropertiesLocationState";
+import { LocationHighlightsLocationState } from "./states/locationHighlightsLocationState";
 
 export interface GetLocationStateApiResponse extends ApiResponseBase {
   /**
@@ -39,6 +40,7 @@ export type LocationStateName = 'dashboard_header'
   | 'summary'
   | 'occupancy_overview'
   | 'location_properties'
+  | 'location_highlights'
   | string;
 
 export type LocationStateValue<T extends LocationStateName> =
@@ -53,4 +55,5 @@ export type LocationStateValue<T extends LocationStateName> =
     | T extends 'summary' ? SummaryLocationState : never
     | T extends 'occupancy_overview' ? OccupancyOverviewLocationState : never
     | T extends 'location_properties' ? LocationPropertiesLocationState : never
+    | T extends 'location_highlights' ? LocationHighlightsLocationState : never
     | Object;
