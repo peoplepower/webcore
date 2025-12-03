@@ -19,11 +19,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Setup pnpm
+    # Setup pnpm with version defined in package.json
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
-      with:
-        version: 10
 
     # Use specific node version and publish package
     - name: Setup node and publish package
