@@ -13,10 +13,10 @@ Modify global NPM config at *~/.npmrc* with *GITHUB_TOKEN* value and registry as
 //npm.pkg.github.com/:_authToken=
 ```
 
-Then, install package using `npm`
+You have to install [PNPM](https://pnpm.io) first, then install package using `pnpm` command:
 
 ``` bash
-npm install @peoplepower/webcore`
+pnpm install @peoplepower/webcore`
 ```
 
 ## Import
