@@ -1,10 +1,10 @@
 {
   "name": "@peoplepower/webcore",
-  "version": "2.0.0",
-  "description": "Client JS/TS SDK for People Power App API",
+  "version": "2.0.1",
+  "description": "Client JS/TS SDK for Care Daily Cloud API",
   "keywords": [
     "WebCore",
-    "People Power",
+    "Care Daily",
     "Client SDK",
     "App API"
   ],
@@ -16,17 +16,23 @@
     "README.md",
     "LICENSE"
   ],
-  "author": "Aleksei Tolkachev <aleksei@peoplepowerco.com>",
   "contributors": [
-    "Max Filatov <max@peoplepowerco.com>"
+    {
+      "name": "Aleksei Tolkachev",
+      "email": "aleksei@caredaily.ai"
+    },
+    {
+      "name": "Max Filatov",
+      "email": "max@caredaily.ai"
+    }
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/peoplepower/webcore.git"
   },
   "license": "Apache-2.0",
+  "packageManager": "pnpm@10.24.0",
   "engines": {
-    "npm": ">=10.7.0 <11.0.0",
     "node": ">=20.15.1 <21.0.0"
   },
   "scripts": {
