@@ -23,15 +23,26 @@ jobs:
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
 
-    # Use specific node version and publish package
+    # Use specific node version and setup .npmrc
     - name: Setup node and publish package
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
         cache: 'pnpm'
         registry-url: 'https://npm.pkg.github.com'
-    - run: pnpm install
+
+    # Update .npmrc for security
+    - name: Configure .npmrc for security
+      run: echo "block-exotic-subdeps=true" >> .npmrc
+    - run: echo "minimum-release-age=4320" >> .npmrc
+
+    # Install dependencies and build the package
+    - name: Install dependencies and run build
+      run: pnpm install
     - run: pnpm build
-    - run: pnpm publish --access public --no-git-checks
+
+    # Publish package to GitHub Packages
+    - name: Publish package
+      run: pnpm publish --access public --no-git-checks
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
