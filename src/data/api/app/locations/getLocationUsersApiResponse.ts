@@ -100,7 +100,7 @@ export interface LocationUser {
    */
   accessibility?: AccessibilityType;
 
-  birthYear?: number;
+  birthDate?: string;
   gender?: GenderType;
 
   /**

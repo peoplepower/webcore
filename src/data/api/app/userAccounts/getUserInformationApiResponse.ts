@@ -494,9 +494,10 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     organizationId: number;
 
     /**
-     * Birth year.
+     * User birth date.
+     * Format as yyyy-MM-dd.
      */
-    birthYear?: number;
+    birthDate?: string;
 
     /**
      * Gender.

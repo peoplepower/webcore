@@ -106,9 +106,10 @@ export interface UserModel {
   accessibility?: AccessibilityType;
 
   /**
-   * Year of birth.
+   * Birth date.
+   * Format as yyyy-MM-dd.
    */
-  birthYear?: number;
+  birthDate?: string;
 
   /**
    * Gender.

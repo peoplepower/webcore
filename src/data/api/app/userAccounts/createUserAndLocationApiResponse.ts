@@ -132,9 +132,10 @@ export interface CreateUserAndLocationModel {
     gender?: GenderType;
 
     /**
-     * Year of birth.
+     * User birth date.
+     * Format as yyyy-MM-dd.
      */
-    birthYear?: number;
+    birthDate?: string;
   };
 
   /**
