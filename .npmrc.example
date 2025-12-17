@@ -2,3 +2,5 @@
 //npm.pkg.github.com/:_authToken=GITHUB_TOKEN
 
 engine-strict=true
+minimum-release-age=4320
+block-exotic-subdeps=true
