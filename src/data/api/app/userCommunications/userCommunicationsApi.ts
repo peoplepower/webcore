@@ -18,6 +18,8 @@ import { GetQuestionsApiResponse, QuestionStatus } from './getQuestionsApiRespon
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from './answerQuestionsApiResponse';
 import { PostSupportTicketApiResponse, PostSupportTicketModel } from './postSupportTicketApiResponse';
+import { GetSurveyQuestionsApiResponse } from './getSurveyQuestionsApiResponse';
+import { AnswerSurveyQuestionsApiResponse, AnswerSurveyQuestionsModel, SurveyQuestionStatus } from './answerSurveyQuestionsApiResponse';
 
 /**
  * User Communications.
@@ -362,7 +364,7 @@ export class UserCommunicationsApi {
    * Allows to update message.
    * @deprecated Functionality deprecated from Server v1.26
    *
-   * @param {number} messageId Id of the message to update attributes for.
+   * @param {number} messageId ID of the message to update attributes for.
    * @param {UpdateMessageModel} model Message model
    * @param [params] Request parameters.
    * @param {boolean} [params.read] Flag to specify whether we want to mark the message as read or unread
@@ -386,7 +388,7 @@ export class UserCommunicationsApi {
    * Allows to reply to the particular message.
    * @deprecated Functionality deprecated from Server v1.26
    *
-   * @param {number} messageId Id of the message to reply to.
+   * @param {number} messageId ID of the message to reply to.
    * @param {ReplyToMessageModel} model Message to send
    * @returns {Promise<ReplyToMessageApiResponse>}
    */
@@ -398,10 +400,44 @@ export class UserCommunicationsApi {
    * Allows to delete previously submitted message.
    * @deprecated Functionality deprecated from Server v1.26
    *
-   * @param {number} messageId Id of the message to delete.
+   * @param {number} messageId ID of the message to delete.
    * @returns {Promise<DeleteMessageApiResponse>}
    */
   deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
     return this.dal.delete('messages/' + encodeURIComponent(messageId.toString()));
   }
+
+  // #region -------------------- Surveys --------------------
+
+  /**
+   * Return open organization survey details, sections, questions, and previously submitted answers.
+   * Should be used by normal users with temporary survey API_KEY.
+   *
+   * @returns {Promise<GetSurveyQuestionsApiResponse>}
+   */
+  getSurveyQuestions(): Promise<GetSurveyQuestionsApiResponse> {
+    return this.dal.get('surveyQuestions');
+  }
+
+  /**
+   * Answer survey questions which saves them historically for the specific user.
+   * A user can submit a portion of answers in one API call. Some of answers can overwrite previous.
+   *
+   * @param {AnswerSurveyQuestionsModel} [model] Answers content.
+   * @param [params] Request parameters.
+   * @param {SurveyQuestionStatus} [params.status] Change survey response status.
+   * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
+   */
+  answerSurveyQuestions(model?: AnswerSurveyQuestionsModel, params?: {
+    status?: SurveyQuestionStatus}
+  ): Promise<AnswerSurveyQuestionsApiResponse> {
+    const parameters = {
+      params: params,
+      headers: {'Content-Type': 'application/json'}, // Explicitly tell the content type even if model is null
+    };
+    return this.dal.put('surveyQuestions', model, parameters);
+  }
+
+
+  // #endregion
 }
