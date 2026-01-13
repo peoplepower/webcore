@@ -349,7 +349,7 @@ export enum QuestionResponseType {
 }
 
 
-//region Question Response Display Types
+// #region Question Response Display Types
 
 export type QuestionDisplayType<QRT extends QuestionResponseType> =
   QRT extends QuestionResponseType.Boolean ? BooleanResponseDisplayType :
@@ -492,6 +492,21 @@ export enum DateTimeResponseDisplayType {
   Date = 1
 }
 
-export type TextBoxResponseDisplayType = undefined;
+export enum TextBoxResponseDisplayType {
+  /**
+   * Text input field
+   */
+  TextInput = 0,
 
-//endregion
+  /**
+   * Phone number with country code and phone number
+   */
+  PhoneNumber = 1,
+
+  /**
+   * Text area (default to 3 rows)
+   */
+  TextArea = 2,
+};
+
+// #endregion
