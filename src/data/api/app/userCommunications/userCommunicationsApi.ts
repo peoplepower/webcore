@@ -412,32 +412,49 @@ export class UserCommunicationsApi {
   /**
    * Return open organization survey details, sections, questions, and previously submitted answers.
    * Should be used by normal users with temporary survey API_KEY.
+   * @param {string} token temporary API token for survey
    *
    * @returns {Promise<GetSurveyQuestionsApiResponse>}
    */
-  getSurveyQuestions(): Promise<GetSurveyQuestionsApiResponse> {
-    return this.dal.get('surveyQuestions');
+  getSurveyQuestions(
+    token: string
+  ): Promise<GetSurveyQuestionsApiResponse> {
+    return this.dal.get(
+      'surveyQuestions',
+      {
+        headers: {API_KEY: token},
+        noAuth: true
+      }
+    );
   }
 
   /**
    * Answer survey questions which saves them historically for the specific user.
    * A user can submit a portion of answers in one API call. Some of answers can overwrite previous.
    *
+   * @param {string} token temporary API token for survey
    * @param {AnswerSurveyQuestionsModel} [model] Answers content.
    * @param [params] Request parameters.
    * @param {SurveyQuestionStatus} [params.status] Change survey response status.
    * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
    */
-  answerSurveyQuestions(model?: AnswerSurveyQuestionsModel, params?: {
-    status?: SurveyQuestionStatus}
+  answerSurveyQuestions(
+    token: string,
+    model: AnswerSurveyQuestionsModel,
+    params?: {
+      status?: SurveyQuestionStatus
+    }
   ): Promise<AnswerSurveyQuestionsApiResponse> {
-    const parameters = {
-      params: params,
-      headers: {'Content-Type': 'application/json'}, // Explicitly tell the content type even if model is null
-    };
-    return this.dal.put('surveyQuestions', model, parameters);
+    return this.dal.put(
+      'surveyQuestions',
+      model,
+      {
+        params: params,
+        headers: {API_KEY: token},
+        noAuth: true
+      }
+    );
   }
-
 
   // #endregion
 }

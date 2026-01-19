@@ -4,7 +4,11 @@ import { UserCommunicationsApi } from '../api/app/userCommunications/userCommuni
 import { GetQuestionsApiResponse, QuestionStatus } from '../api/app/userCommunications/getQuestionsApiResponse';
 import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from '../api/app/userCommunications/answerQuestionsApiResponse';
 import { GetSurveyQuestionsApiResponse } from '../api/app/userCommunications/getSurveyQuestionsApiResponse';
-import { AnswerSurveyQuestionsApiResponse, AnswerSurveyQuestionsModel, SurveyQuestionStatus } from '../api/app/userCommunications/answerSurveyQuestionsApiResponse';
+import {
+  AnswerSurveyQuestionsApiResponse,
+  AnswerSurveyQuestionsModel,
+  SurveyQuestionStatus
+} from '../api/app/userCommunications/answerSurveyQuestionsApiResponse';
 
 @injectable('QuestionsService')
 export class QuestionsService extends BaseService {
@@ -84,28 +88,36 @@ export class QuestionsService extends BaseService {
   /**
    * Get survey questions.
    *
+   * @param {string} token temporary API token for survey (should come in URL params)
    * @returns {Promise<GetSurveyQuestionsApiResponse>}
    */
-  getSurveyQuestions(): Promise<GetSurveyQuestionsApiResponse> {
-    return this.userCommunicationsApi.getSurveyQuestions();
+  getSurveyQuestions(
+    token: string
+  ): Promise<GetSurveyQuestionsApiResponse> {
+    return this.userCommunicationsApi.getSurveyQuestions(token);
   }
 
   /**
    * Answer survey questions which saves them historically for the specific user.
-   * A user can submit a portion of answers in one API call. Some of answers can overwrite previous.
+   * A user can submit a portion of answers in one API call. Some of the answers can overwrite previous.
    *
+   * @param {string} token temporary API token for survey (should come in URL params)
    * @param {AnswerSurveyQuestionsModel} model Answers content.
    * @param [params] Requested parameters.
    * @param {SurveyQuestionStatus} [params.status] Change survey response status.
    * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
    */
-  answerSurveyQuestions(model: AnswerSurveyQuestionsModel, params?: {
-    status?: SurveyQuestionStatus}
+  answerSurveyQuestions(
+    token: string,
+    model: AnswerSurveyQuestionsModel,
+    params?: {
+      status?: SurveyQuestionStatus
+    }
   ): Promise<AnswerSurveyQuestionsApiResponse> {
     if (!model) {
       return this.reject('No answers provided.');
     }
 
-    return this.userCommunicationsApi.answerSurveyQuestions(model, params);
+    return this.userCommunicationsApi.answerSurveyQuestions(token, model, params);
   }
 }

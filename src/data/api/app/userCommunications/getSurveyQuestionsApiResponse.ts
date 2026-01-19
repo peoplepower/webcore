@@ -8,7 +8,7 @@ export enum SurveyStatus {
 
 export interface SurveyQuestion {
   /**
-   * Question key uniqie within the survey
+   * Question key unique within the survey
    */
   questionKey: string;
 
@@ -18,7 +18,7 @@ export interface SurveyQuestion {
   sectionId?: number;
 
   /**
-   * Ordering number within the the section
+   * Ordering number within the section
    */
   orderNum: number;
 
@@ -128,11 +128,11 @@ export interface GetSurveyQuestionsApiResponse extends ApiResponseBase {
 
       parentSectionId?: number;
       title?: string;
-    }>;
 
-    /**
-     * Survey questions
-     */
-    questions?: SurveyQuestion[];
+      /**
+       * Section questions
+       */
+      questions?: SurveyQuestion[];
+    }>;
   };
 }
