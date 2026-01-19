@@ -2,8 +2,19 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { QuestionDisplayType, QuestionResponseOption, QuestionResponseType, SliderQuestionSettings } from './getQuestionsApiResponse';
 
 export enum SurveyStatus {
+  /**
+   * Inactive (cannot be answered)
+   */
   Inactive = 0,
   Active = 1,
+}
+
+export enum SurveyAnswerStatus {
+  /**
+   * Open to submit answers
+   */
+  Open = 0,
+  Closed = 1,
 }
 
 export interface SurveyQuestion {
@@ -82,6 +93,11 @@ export interface GetSurveyQuestionsApiResponse extends ApiResponseBase {
      * Survey status
      */
     status: SurveyStatus;
+
+    /**
+     * Survey answer status
+     */
+    answerStatus: SurveyAnswerStatus;
 
     /**
      * Title of the survey
