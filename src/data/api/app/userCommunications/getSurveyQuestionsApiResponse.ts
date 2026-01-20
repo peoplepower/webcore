@@ -34,6 +34,12 @@ export interface SurveyQuestion {
   orderNum: number;
 
   /**
+   * Question is optional to answer.
+   * false by default
+   */
+  optional?: boolean
+
+  /**
    * Question text
    */
   question: string;
