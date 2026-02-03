@@ -19,9 +19,9 @@ export class AuthInterceptor implements Interceptor {
   request(config: DalRequestConfig<any>): any {
     if (!config.noAuth && (!config.headers || !config.headers['API_KEY']) && this.authService) {
       if (!config.headers) {
-        config.headers = {}; //Just to make sure it is initialized in case its undefined
+        config.headers = {}; // Just to make sure it is initialized in case its undefined.
       }
-      let key = this.authService.apiKey; // todo make getting api key as promise to let it working if we are logging in.
+      let key = this.authService.apiKey; // TODO: Make getting api key as promise to let it working if we are logging in.
       if (key && key.length >= 0) {
         config.headers['API_KEY'] = key;
       }

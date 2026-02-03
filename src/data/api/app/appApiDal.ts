@@ -17,8 +17,8 @@ export class AppApiDal extends Dal {
         // custom params serializer
         paramsSerializer: (params) => {
           return qs.stringify(params, {
-            arrayFormat: 'repeat', // this will make {a: ['b', 'c']} compiles to 'a=b&a=c' not 'a[]=b&a[]=c'
-            //indices: false
+            arrayFormat: 'repeat', // This will make {a: ['b', 'c']} compiles to 'a=b&a=c' not 'a[]=b&a[]=c'
+            // indices: false
           });
         },
       },

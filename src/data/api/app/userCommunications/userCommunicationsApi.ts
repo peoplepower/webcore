@@ -14,12 +14,8 @@ import { GetNotificationsApiResponse } from './getNotificationsApiResponse';
 import { UpdateCrowdFeedbackApiResponse, UpdateCrowdFeedbackModel } from './updateCrowdFeedbackApiResponse';
 import { UpdateMessageApiResponse, UpdateMessageModel } from './updateMessageApiResponse';
 import { VoteForCrowdFeedbackApiResponse } from './voteForCrowdFeedbackApiResponse';
-import { GetQuestionsApiResponse, QuestionStatus } from './getQuestionsApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from './answerQuestionsApiResponse';
 import { PostSupportTicketApiResponse, PostSupportTicketModel } from './postSupportTicketApiResponse';
-import { GetSurveyQuestionsApiResponse } from './getSurveyQuestionsApiResponse';
-import { AnswerSurveyQuestionsApiResponse, AnswerSurveyQuestionsModel, SurveyQuestionStatus } from './answerSurveyQuestionsApiResponse';
 
 /**
  * User Communications.
@@ -217,8 +213,7 @@ export class UserCommunicationsApi {
 
   /**
    * Updates particular crowd feedback entry.
-   * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
+   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
    *
    * @param {number} feedbackId Feedback ID to update
    * @param {UpdateCrowdFeedbackModel} model Feedback Crowd Feedback Model
@@ -230,8 +225,7 @@ export class UserCommunicationsApi {
 
   /**
    * Updates particular crowd feedback entry.
-   * See {@link
-   * http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
+   * See {@link http://docs.iotapps.apiary.io/#reference/user-communications/get-specific-crowd-feedback/update-feedback}
    *
    * @param {number} feedbackId Feedback ID to vote on
    * @param {number} rank 1 to cast a vote, 0 to remove a vote.
@@ -242,68 +236,9 @@ export class UserCommunicationsApi {
   }
 
   /**
-   * Retrieve requested questions.
-   *
-   * For an individual user, there should be at most one unanswered question available per day, unless the question is urgent.
-   * For public users, there can be many questions as we are using this on public surveys during a sign-up process.
-   *
-   * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/questions/get-questions}
-   *
-   * @param params Requested parameters.
-   * @param {number} params.locationId Location ID to get questions.
-   * @param {QuestionStatus | QuestionStatus[]} [params.answerStatus] Return questions with requested answer statuses.
-   *  By default, questions with statuses 2 and 3 are returned.
-   *  Multiple values are supported.
-   * @param {boolean} [params.editable] Filter answered questions:
-   *   - true - return only editable answered questions,
-   *   - false - return only not editable answered questions,
-   *  otherwise return all answered questions.
-   * @param {string} [params.collectionName] Questions collection name filter.
-   * @param {number} [params.questionId] Extract a specific question ID.
-   * @param {number} [params.appInstanceId] Only retrieve questions for a specific bot.
-   * @param {string} [params.lang] Questions text language. If not set, user's or default language will be used.
-   * @param {number} [params.limit] Maximum number of questions to return. The default is unlimited.
-   * @returns {Promise<GetQuestionsApiResponse>}
-   */
-  getQuestions(params: {
-    locationId: number;
-    answerStatus?: QuestionStatus | QuestionStatus[];
-    editable?: boolean;
-    collectionName?: string;
-    questionId?: number;
-    appInstanceId?: number;
-    lang?: string;
-    limit?: number;
-
-    sortCollection?: string;
-    sortBy?: string;
-    sortOrder?: string;
-    firstRow?: number;
-    rowCount?: number;
-  }): Promise<GetQuestionsApiResponse> {
-    return this.dal.get('questions', {params: params});
-  }
-
-  /**
-   * Answer question(s)
-   * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/questions/answer-questions}
-   * @param {number} locationId Location ID to answer question(s).
-   * @param {AnswerQuestionsModel} model Answers content.
-   * @returns {Promise<AnswerQuestionsApiResponse>}
-   */
-  answerQuestions(locationId: number, model: AnswerQuestionsModel): Promise<AnswerQuestionsApiResponse> {
-    const parameters = {
-      params: {
-        locationId: locationId,
-      },
-      headers: {'Content-Type': 'application/json'},
-    };
-    return this.dal.put('questions', model, parameters);
-  }
-
-  /**
    * Post support ticket.
    * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/support-ticket/post-support-ticket}
+   *
    * @param {PostSupportTicketModel} model Ticket content.
    * @param [params] Request params
    * @param {number} [params.userId] Request support for this user by an administrator.
@@ -406,55 +341,4 @@ export class UserCommunicationsApi {
   deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
     return this.dal.delete('messages/' + encodeURIComponent(messageId.toString()));
   }
-
-  // #region -------------------- Surveys --------------------
-
-  /**
-   * Return open organization survey details, sections, questions, and previously submitted answers.
-   * Should be used by normal users with temporary survey API_KEY.
-   * @param {string} token temporary API token for survey
-   *
-   * @returns {Promise<GetSurveyQuestionsApiResponse>}
-   */
-  getSurveyQuestions(
-    token: string
-  ): Promise<GetSurveyQuestionsApiResponse> {
-    return this.dal.get(
-      'surveyQuestions',
-      {
-        headers: {API_KEY: token},
-        noAuth: true
-      }
-    );
-  }
-
-  /**
-   * Answer survey questions which saves them historically for the specific user.
-   * A user can submit a portion of answers in one API call. Some of answers can overwrite previous.
-   *
-   * @param {string} token temporary API token for survey
-   * @param {AnswerSurveyQuestionsModel} [model] Answers content.
-   * @param [params] Request parameters.
-   * @param {SurveyQuestionStatus} [params.status] Change survey response status.
-   * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
-   */
-  answerSurveyQuestions(
-    token: string,
-    model: AnswerSurveyQuestionsModel,
-    params?: {
-      status?: SurveyQuestionStatus
-    }
-  ): Promise<AnswerSurveyQuestionsApiResponse> {
-    return this.dal.put(
-      'surveyQuestions',
-      model,
-      {
-        params: params,
-        headers: {API_KEY: token},
-        noAuth: true
-      }
-    );
-  }
-
-  // #endregion
 }

@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { QuestionStatus } from './getQuestionsApiResponse';
+import { QuestionStatus } from '../questions/getQuestionsApiResponse';
 
 export interface AnswerQuestionsModel {
   questions: Array<{
