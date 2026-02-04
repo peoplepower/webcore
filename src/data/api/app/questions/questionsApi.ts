@@ -1,6 +1,6 @@
 import { AppApiDal } from '../appApiDal';
 import { inject, injectable } from '../../../../modules/common/di';
-import { GetSurveyQuestionsApiResponse } from './getSurveyQuestionsApiResponse';
+import { GetSurveyQuestionsApiResponse, SurveyStatus } from './getSurveyQuestionsApiResponse';
 import { GetQuestionsApiResponse, QuestionStatus } from './getQuestionsApiResponse';
 import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from './answerQuestionsApiResponse';
 import { AnswerSurveyQuestionsApiResponse, AnswerSurveyQuestionsModel, SurveyQuestionStatus } from './answerSurveyQuestionsApiResponse';
@@ -91,6 +91,7 @@ export class QuestionsApi {
    * @param {string} [params.surveyKey] Unique survey key to filter answers.
    * @param {string} [params.startDate] Start date to filter answers (ISO 8601 format).
    * @param {string} [params.endDate] End date to filter answers (ISO 8601 format).
+   * @param {SurveyStatus} [params.status] Survey answer status to filter answers.
    * @returns {Promise<GetSurveyAnswersApiResponse>}
    */
   getSurveyAnswers(params: {
@@ -99,12 +100,13 @@ export class QuestionsApi {
     surveyKey?: string;
     startDate?: string;
     endDate?: string;
+    status?: SurveyStatus;
   }): Promise<GetSurveyAnswersApiResponse> {
     return this.dal.get('surveyAnswers', { params: params });
   }
 
   /**
-   * Initialize new survey answering session.
+   * Initialize new survey answering session (instance of survey).
    * Creates a new survey answer record for the requested user.
    * A user or a bot can submit answers to some survey questions in this request. Or question answers can be copied from a previously submitted survey by ID.
    * See {@link https://app.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Questions/operation/Start%20Answering%20Survey}

@@ -4,12 +4,14 @@ import { UserCommunicationsApi } from '../api/app/userCommunications/userCommuni
 import { QuestionsApi } from '../api/app/questions/questionsApi';
 import { GetQuestionsApiResponse, QuestionStatus } from '../api/app/questions/getQuestionsApiResponse';
 import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from '../api/app/questions/answerQuestionsApiResponse';
-import { GetSurveyQuestionsApiResponse } from '../api/app/questions/getSurveyQuestionsApiResponse';
+import { GetSurveyQuestionsApiResponse, SurveyStatus } from '../api/app/questions/getSurveyQuestionsApiResponse';
 import {
   AnswerSurveyQuestionsApiResponse,
   AnswerSurveyQuestionsModel,
   SurveyQuestionStatus
 } from '../api/app/questions/answerSurveyQuestionsApiResponse';
+import { GetSurveyAnswersApiResponse } from '../api/app/questions/getSurveyAnswersApiResponse';
+import { StartSurveyAnsweringApiResponse, StartSurveyAnsweringModel } from '../api/app/questions/startSurveyAnsweringApiResponse';
 
 @injectable('QuestionsService')
 export class QuestionsService extends BaseService {
@@ -211,6 +213,75 @@ export class QuestionsService extends BaseService {
     }
 
     return this.questionsApi.answerSurveyQuestions(model, token, params);
+  }
+
+  /**
+   * Retrieve survey answers (instances of survey for specific user/location).
+   * Returns history of survey answers, and pending surveys to be answered.
+   *
+   * @param {object} params Request parameters.
+   * @param {number} params.locationId Location ID to get survey answers for.
+   * @param {number} [params.userId] User ID to get survey answers for.
+   * @param {string} [params.surveyKey] Unique survey key to filter answers.
+   * @param {string} [params.startDate] Start date to filter answers (ISO 8601 format).
+   * @param {string} [params.endDate] End date to filter answers (ISO 8601 format).
+   * @param {SurveyStatus} [params.status] Survey answer status to filter answers.
+   * @returns {Promise<GetSurveyAnswersApiResponse>}
+   */
+  getSurveyAnswers(params: {
+    locationId: number;
+    userId?: number;
+    surveyKey?: string;
+    startDate?: string;
+    endDate?: string;
+    status?: SurveyStatus;
+  }): Promise<GetSurveyAnswersApiResponse> {
+    if (params.locationId < 1 || isNaN(params.locationId)) {
+      return this.reject(`Location ID is incorrect [${params.locationId}].`);
+    }
+    if (params.userId && (params.userId < 0 || isNaN(params.userId))) {
+      return this.reject(`User ID is incorrect [${params.userId}].`);
+    }
+
+    return this.questionsApi.getSurveyAnswers(params);
+  }
+
+  /**
+   * Initialize new survey answering session (instance of survey).
+   * Creates a new survey answer record for the requested user.
+   *
+   * @param {StartSurveyAnsweringModel} [model] Optionally pre-answer provided question(s).
+   * @param {object} params Request parameters.
+   * @param {number} params.locationId Location ID where the survey is being answered.
+   * @param {string} params.surveyKey Unique survey key.
+   * @param {number} params.userId User ID who should answer the survey.
+   * @param {number} [params.preAnswerId] Copy question answers from this answer record.
+   * @param {boolean} [params.sendToUser] If true, a notification will be sent to the user with a link to the survey.
+   * @param {number} [params.notificationCategory] Send the email to organization notification user with this category.
+   * @returns {Promise<StartSurveyAnsweringApiResponse>}
+   */
+  startSurveyAnswering(
+    model: StartSurveyAnsweringModel | undefined,
+    params: {
+      locationId: number,
+      surveyKey: string,
+      userId: number,
+      preAnswerId?: number,
+      sendToUser?: boolean,
+      notificationCategory?: number,
+    }
+  ): Promise<StartSurveyAnsweringApiResponse> {
+    if (params.locationId < 1 || isNaN(params.locationId)) {
+      return this.reject(`Location ID is incorrect [${params.locationId}].`);
+    }
+    if (params.userId < 1 || isNaN(params.userId)) {
+      return this.reject(`User ID is incorrect [${params.userId}].`);
+    }
+    if (!params.surveyKey || params.surveyKey.length === 0) {
+      return this.reject('Survey key is not provided.');
+    }
+
+    return this.questionsApi.startSurveyAnswering(model, params);
   }
 
   // #endregion
