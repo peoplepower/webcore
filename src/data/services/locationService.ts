@@ -4,7 +4,6 @@ import { LocationsApi } from '../api/app/locations/locationsApi';
 import { UserService } from './userService';
 import { BaseService } from './baseService';
 import { GetCountriesApiResponse } from '../api/app/locations/getCountriesApiResponse';
-import { LocationModel } from '../api/app/locations/editLocationApiResponse';
 import { AuthService } from './authService';
 import { GetLocationUsersApiResponse } from '../api/app/locations/getLocationUsersApiResponse';
 import { AddLocationUsersApiResponse, AddLocationUsersModel } from '../api/app/locations/addLocationUsersApiResponse';
@@ -20,6 +19,8 @@ import { WsSubscriptionOperation } from '../../modules/wsHub/wsSubscriptionOpera
 import { WsSubscription } from '../../modules/wsHub/wsSubscription';
 import { WsHub } from '../../modules/wsHub/wsHub';
 import { UpdateLocationUserApiResponse, UpdateLocationUserModel } from "../api/app/locations/updateLocationUserApiResponse";
+import { NewLocationModel } from '../api/app/locations/createLocationApiResponse';
+import { LocationModel } from '../api/app/locations/editLocationApiResponse';
 
 @injectable('LocationService')
 export class LocationService extends BaseService {
@@ -34,12 +35,37 @@ export class LocationService extends BaseService {
 
   /**
    * Create new Location for existing user.
-   * @param {LocationModel} location
+   * @param {NewLocationModel} location
    * @param {number} [parentId] Parent location ID to assing the new location as a sub-location there.
    * @returns {Promise<ApiResponseBase>}
    */
-  public createLocation(location: LocationModel, parentId?: number): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated().then(() => this.locationsApi.addNewLocationToUser(location, void 0, parentId));
+  public createLocation(location: NewLocationModel, parentId?: number): Promise<ApiResponseBase> {
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.createLocation(location, void 0, parentId));
+  }
+
+  /**
+   * Updates location with new location properties values.
+   * @param {number} locationId
+   * @param {LocationModel} location
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public updateLocation(locationId: number, location: LocationModel): Promise<ApiResponseBase> {
+    return this.authService.ensureAuthenticated().then(() => this.locationsApi.editLocation(location, locationId));
+  }
+
+  /**
+   * Delete location completely.
+   * @param {number} locationId Location ID to delete.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public deleteLocation(locationId: number): Promise<ApiResponseBase> {
+    if (locationId < 1 || isNaN(locationId)) {
+      return this.reject(`Location ID is incorrect [${locationId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationsApi.deleteLocation(locationId);
+    });
   }
 
   /**
@@ -118,31 +144,6 @@ export class LocationService extends BaseService {
    */
   public getCountries(countryCode?: string | string[]): Promise<CountriesList> {
     return this.locationsApi.getCountries({sortCollection: 'countries', sortBy: 'name', countryCode});
-  }
-
-  /**
-   * Updates location with new location properties values.
-   * @param {number} locationId
-   * @param {LocationModel} location
-   * @returns {Promise<ApiResponseBase>}
-   */
-  public updateLocation(locationId: number, location: LocationModel): Promise<ApiResponseBase> {
-    return this.authService.ensureAuthenticated().then(() => this.locationsApi.editLocation({location: location}, locationId));
-  }
-
-  /**
-   * Delete location completely.
-   * @param {number} locationId Location ID to delete.
-   * @returns {Promise<ApiResponseBase>}
-   */
-  public deleteLocation(locationId: number): Promise<ApiResponseBase> {
-    if (locationId < 1 || isNaN(locationId)) {
-      return this.reject(`Location ID is incorrect [${locationId}].`);
-    }
-
-    return this.authService.ensureAuthenticated().then(() => {
-      return this.locationsApi.deleteLocation(locationId);
-    });
   }
 
   /**

@@ -1,5 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
-import { NewLocationModel } from '../locations/addNewLocationToUserApiResponse';
+import { NewLocationModel } from '../locations/createLocationApiResponse';
 import { GenderType } from './getUserInformationApiResponse'
 
 export enum PhoneType {

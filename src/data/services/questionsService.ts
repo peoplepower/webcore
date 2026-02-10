@@ -1,26 +1,34 @@
 import { inject, injectable } from '../../modules/common/di';
 import { BaseService } from './baseService';
 import { UserCommunicationsApi } from '../api/app/userCommunications/userCommunicationsApi';
-import { GetQuestionsApiResponse, QuestionStatus } from '../api/app/userCommunications/getQuestionsApiResponse';
-import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from '../api/app/userCommunications/answerQuestionsApiResponse';
-import { GetSurveyQuestionsApiResponse } from '../api/app/userCommunications/getSurveyQuestionsApiResponse';
+import { QuestionsApi } from '../api/app/questions/questionsApi';
+import { GetQuestionsApiResponse, QuestionStatus } from '../api/app/questions/getQuestionsApiResponse';
+import { AnswerQuestionsApiResponse, AnswerQuestionsModel } from '../api/app/questions/answerQuestionsApiResponse';
+import { GetSurveyQuestionsApiResponse, SurveyStatus } from '../api/app/questions/getSurveyQuestionsApiResponse';
 import {
   AnswerSurveyQuestionsApiResponse,
   AnswerSurveyQuestionsModel,
   SurveyQuestionStatus
-} from '../api/app/userCommunications/answerSurveyQuestionsApiResponse';
+} from '../api/app/questions/answerSurveyQuestionsApiResponse';
+import { GetSurveyAnswersApiResponse } from '../api/app/questions/getSurveyAnswersApiResponse';
+import { StartSurveyAnsweringApiResponse, StartSurveyAnsweringModel } from '../api/app/questions/startSurveyAnsweringApiResponse';
 
 @injectable('QuestionsService')
 export class QuestionsService extends BaseService {
   @inject('UserCommunicationsApi') protected readonly userCommunicationsApi!: UserCommunicationsApi;
+  @inject('QuestionsApi') protected readonly questionsApi!: QuestionsApi;
+
+  constructor() {
+    super();
+  }
+
+  // #region Location Questions
 
   /**
-   * Retrieve requested questions.
-   *
+   * Retrieve location question(s).
    * For an individual user, there should be at most one unanswered question available per day, unless the question is urgent.
    * For public users, there can be many questions as we are using this on public surveys during a sign-up process.
-   *
-   * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/questions/get-questions}
+   * See {@link https://app.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Questions/operation/Get%20Bot%20Questions}
    *
    * @param {number} locationId Location ID to get questions.
    * @param [params] Requested parameters.
@@ -64,11 +72,13 @@ export class QuestionsService extends BaseService {
       ...params,
     }
 
-    return this.userCommunicationsApi.getQuestions(parameters);
+    return this.questionsApi.getQuestions(parameters);
   }
 
   /**
    * Answer question(s).
+   * The body and response is designed to handle answers to multiple questions simultaneously.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Questions/operation/Answer%20Bot%20Questions}
    *
    * @param {number} locationId Location ID to answer question(s).
    * @param {AnswerQuestionsModel} model Body with answers.
@@ -82,35 +92,119 @@ export class QuestionsService extends BaseService {
       return this.reject('No answers provided.');
     }
 
-    return this.userCommunicationsApi.answerQuestions(locationId, model);
+    return this.questionsApi.answerQuestions(locationId, model);
   }
 
+  // #endregion
+
+  // #region Survey Questions
+
   /**
-   * Get survey questions.
+   * Get survey questions without user authorization.
+   * Requires a unique survey token.
    *
-   * @param {string} token temporary API token for survey (should come in URL params)
+   * @param {string} token Unique API token for survey (should come in URL params).
    * @returns {Promise<GetSurveyQuestionsApiResponse>}
    */
   getSurveyQuestions(
     token: string
+  ): Promise<GetSurveyQuestionsApiResponse>;
+
+  /**
+   * Get survey questions for an authenticated user.
+   * Requires additional mandatory parameters.
+   *
+   * @param {string} [token] Temporary API token for survey (should come in URL params).
+   * @param params Requested parameters.
+   * @param {number} params.locationId Mandatory location ID when a user is authenticated.
+   * @param {number} params.answerId Specific answer ID to retrieve when a user is authenticated.
+   * @returns {Promise<GetSurveyQuestionsApiResponse>}
+   */
+  getSurveyQuestions(
+    token: undefined,
+    params: {
+      locationId: number,
+      answerId: number,
+    },
+  ): Promise<GetSurveyQuestionsApiResponse>;
+
+  /**
+   * Get survey questions.
+   * Can be called by unauthenticated users with a token, or by authenticated users with additional parameters.
+   *
+   * @param {string} [token] Temporary API token for survey (should come in URL params).
+   * @param [params] Requested parameters.
+   * @param {number} params.locationId Mandatory location ID when a user is authenticated.
+   * @param {number} params.answerId Specific answer ID to retrieve when a user is authenticated.
+   * @returns {Promise<GetSurveyQuestionsApiResponse>}
+   */
+  getSurveyQuestions(
+    token?: string,
+    params?: {
+      locationId: number,
+      answerId: number,
+    },
   ): Promise<GetSurveyQuestionsApiResponse> {
-    return this.userCommunicationsApi.getSurveyQuestions(token);
+    return this.questionsApi.getSurveyQuestions(token, params);
   }
 
   /**
-   * Answer survey questions which saves them historically for the specific user.
-   * A user can submit a portion of answers in one API call. Some of the answers can overwrite previous.
+   * Answer survey questions as unauthenticated user.
+   * Requires mandatory unique token.
    *
-   * @param {string} token temporary API token for survey (should come in URL params)
    * @param {AnswerSurveyQuestionsModel} model Answers content.
+   * @param {string} token Temporary API token for survey (should come in URL params).
    * @param [params] Requested parameters.
    * @param {SurveyQuestionStatus} [params.status] Change survey response status.
    * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
    */
   answerSurveyQuestions(
-    token: string,
     model: AnswerSurveyQuestionsModel,
+    token: string,
     params?: {
+      status?: SurveyQuestionStatus
+    }
+  ): Promise<AnswerSurveyQuestionsApiResponse>;
+
+  /**
+   * Answer survey questions for an authenticated user.
+   * Requires mandatory parameters if the user is authenticated.
+   *
+   * @param {AnswerSurveyQuestionsModel} model Answers content.
+   * @param params Requested parameters.
+   * @param {number} params.locationId Mandatory location ID when a user is authenticated.
+   * @param {number} params.answerId Specific answer ID to retrieve when a user is authenticated.
+   * @param {SurveyQuestionStatus} [params.status] Change survey response status.
+   * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
+   */
+  answerSurveyQuestions(
+    model: AnswerSurveyQuestionsModel,
+    token: undefined,
+    params: {
+      locationId: number;
+      answerId: number;
+      status?: SurveyQuestionStatus
+    }
+  ): Promise<AnswerSurveyQuestionsApiResponse>;
+
+  /**
+   * Answer survey questions which saves them historically for the specific user.
+   * A user can submit a portion of answers in one API call. Some of the answers can overwrite previous.
+   *
+   * @param {string} [token] Temporary API token for survey (should come in URL params)
+   * @param {AnswerSurveyQuestionsModel} model Answers content.
+   * @param [params] Requested parameters.
+   * @param {number} [params.locationId] Location ID when a user is authenticated.
+   * @param {number} [params.answerId] Specific answer ID to retrieve when a user is authenticated.
+   * @param {SurveyQuestionStatus} [params.status] Change survey response status.
+   * @returns {Promise<AnswerSurveyQuestionsApiResponse>}
+   */
+  answerSurveyQuestions(
+    model: AnswerSurveyQuestionsModel,
+    token?: string,
+    params?: {
+      locationId?: number;
+      answerId?: number;
       status?: SurveyQuestionStatus
     }
   ): Promise<AnswerSurveyQuestionsApiResponse> {
@@ -118,6 +212,77 @@ export class QuestionsService extends BaseService {
       return this.reject('No answers provided.');
     }
 
-    return this.userCommunicationsApi.answerSurveyQuestions(token, model, params);
+    return this.questionsApi.answerSurveyQuestions(model, token, params);
   }
+
+  /**
+   * Retrieve survey answers (instances of survey for specific user/location).
+   * Returns history of survey answers, and pending surveys to be answered.
+   *
+   * @param {object} params Request parameters.
+   * @param {number} params.locationId Location ID to get survey answers for.
+   * @param {number} [params.userId] User ID to get survey answers for.
+   * @param {string} [params.surveyKey] Unique survey key to filter answers.
+   * @param {string} [params.startDate] Start date to filter answers (ISO 8601 format).
+   * @param {string} [params.endDate] End date to filter answers (ISO 8601 format).
+   * @param {SurveyStatus} [params.status] Survey answer status to filter answers.
+   * @returns {Promise<GetSurveyAnswersApiResponse>}
+   */
+  getSurveyAnswers(params: {
+    locationId: number;
+    userId?: number;
+    surveyKey?: string;
+    startDate?: string;
+    endDate?: string;
+    status?: SurveyStatus;
+  }): Promise<GetSurveyAnswersApiResponse> {
+    if (params.locationId < 1 || isNaN(params.locationId)) {
+      return this.reject(`Location ID is incorrect [${params.locationId}].`);
+    }
+    if (params.userId && (params.userId < 0 || isNaN(params.userId))) {
+      return this.reject(`User ID is incorrect [${params.userId}].`);
+    }
+
+    return this.questionsApi.getSurveyAnswers(params);
+  }
+
+  /**
+   * Initialize new survey answering session (instance of survey).
+   * Creates a new survey answer record for the requested user.
+   *
+   * @param {StartSurveyAnsweringModel} [model] Optionally pre-answer provided question(s).
+   * @param {object} params Request parameters.
+   * @param {number} params.locationId Location ID where the survey is being answered.
+   * @param {string} params.surveyKey Unique survey key.
+   * @param {number} params.userId User ID who should answer the survey.
+   * @param {number} [params.preAnswerId] Copy question answers from this answer record.
+   * @param {boolean} [params.sendToUser] If true, a notification will be sent to the user with a link to the survey.
+   * @param {number} [params.notificationCategory] Send the email to organization notification user with this category.
+   * @returns {Promise<StartSurveyAnsweringApiResponse>}
+   */
+  startSurveyAnswering(
+    model: StartSurveyAnsweringModel | undefined,
+    params: {
+      locationId: number,
+      surveyKey: string,
+      userId: number,
+      preAnswerId?: number,
+      sendToUser?: boolean,
+      notificationCategory?: number,
+    }
+  ): Promise<StartSurveyAnsweringApiResponse> {
+    if (params.locationId < 1 || isNaN(params.locationId)) {
+      return this.reject(`Location ID is incorrect [${params.locationId}].`);
+    }
+    if (params.userId < 1 || isNaN(params.userId)) {
+      return this.reject(`User ID is incorrect [${params.userId}].`);
+    }
+    if (!params.surveyKey || params.surveyKey.length === 0) {
+      return this.reject('Survey key is not provided.');
+    }
+
+    return this.questionsApi.startSurveyAnswering(model, params);
+  }
+
+  // #endregion
 }

@@ -1,8 +1,8 @@
 import { AppApiDal } from '../appApiDal';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { inject, injectable } from '../../../../modules/common/di';
-import { AddNewLocationToUserApiResponse, NewLocationModel } from './addNewLocationToUserApiResponse';
-import { EditLocationApiResponse, EditLocationModel, LocationModel } from './editLocationApiResponse';
+import { CreateLocationApiResponse, NewLocationModel } from './createLocationApiResponse';
+import { EditLocationApiResponse, LocationModel } from './editLocationApiResponse';
 import { GetLocationScenesHistoryApiResponse } from './getLocationScenesHistoryApiResponse';
 import { GetCountriesApiResponse } from './getCountriesApiResponse';
 import { GetLocationUsersApiResponse } from './getLocationUsersApiResponse';
@@ -39,9 +39,9 @@ export class LocationsApi {
    * @param {NewLocationModel} location New Location.
    * @param {number} [userId] User ID. Optional parameter. This parameter is used by administrator accounts to update a specific user's account.
    * @param {number} [parentId] Parent location ID to assign the new location as a sub-location there.
-   * @returns {Promise<AddNewLocationToUserApiResponse>}
+   * @returns {Promise<CreateLocationApiResponse>}
    */
-  addNewLocationToUser(location: NewLocationModel, userId?: number, parentId?: number): Promise<AddNewLocationToUserApiResponse> {
+  createLocation(location: NewLocationModel, userId?: number, parentId?: number): Promise<CreateLocationApiResponse> {
     return this.dal.post('location', {location: location}, {params: {userId: userId, parentId: parentId}});
   }
 
@@ -49,12 +49,12 @@ export class LocationsApi {
    * Edit Location.
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/update-location/edit-location}
    *
-   * @param {EditLocationModel} location Location.
+   * @param {LocationModel} location Location.
    * @param {number} locationId Location ID to update.
    * @returns {Promise<EditLocationApiResponse>}
    */
-  editLocation(location: EditLocationModel, locationId: number): Promise<EditLocationApiResponse> {
-    return this.dal.put(`location/${encodeURIComponent(locationId.toString())}`, location);
+  editLocation(location: LocationModel, locationId: number): Promise<EditLocationApiResponse> {
+    return this.dal.put(`location/${encodeURIComponent(locationId.toString())}`, {location: location});
   }
 
   /**

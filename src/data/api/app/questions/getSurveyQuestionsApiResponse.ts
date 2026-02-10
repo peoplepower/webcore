@@ -7,6 +7,7 @@ export enum SurveyStatus {
    */
   Inactive = 0,
   Active = 1,
+  Closed = 2,
 }
 
 export enum SurveyAnswerStatus {
@@ -24,25 +25,25 @@ export interface SurveyQuestion {
   questionKey: string;
 
   /**
-   * Section ID
-   */
-  sectionId?: number;
-
-  /**
    * Ordering number within the section
    */
   orderNum: number;
+
+  /**
+   * Question text
+   */
+  question: string;
+
+  /**
+   * Question description
+   */
+  description?: string;
 
   /**
    * Question is optional to answer.
    * false by default
    */
   optional?: boolean
-
-  /**
-   * Question text
-   */
-  question: string;
 
   /**
    * The type of question answer expected
@@ -140,19 +141,29 @@ export interface GetSurveyQuestionsApiResponse extends ApiResponseBase {
     /**
      * List of survey sections
      */
-    sections?: Array<{
+    sections: Array<{
+      /**
+       * Section ID (unique for the survey)
+       */
       sectionId: number;
+
+      /**
+       * Section title
+       */
+      title?: string;
+
+      /**
+       * Section description
+       */
+      description?: string;
 
       /**
        * Ordering number within the survey or the parent section
        */
       orderNum: number;
 
-      parentSectionId?: number;
-      title?: string;
-
       /**
-       * Section questions
+       * Questions within current section
        */
       questions?: SurveyQuestion[];
     }>;

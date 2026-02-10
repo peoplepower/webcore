@@ -21,7 +21,7 @@ import { EntityStoriesApi } from './entityStories/entityStoriesApi';
 import { FileManagementApi } from './fileManagement/fileManagementApi';
 import { ApplicationFilesApi } from './applicationFiles/applicationFilesApi';
 import { MediaApi } from './media/mediaApi';
-import { CirclesApi } from './circles/circlesApi';
+import { QuestionsApi } from './questions/questionsApi';
 
 @injectable('AppApi')
 export class AppApi {
@@ -47,5 +47,5 @@ export class AppApi {
   @inject('DevicesConfigurationApi') public readonly devicesConfiguration!: DevicesConfigurationApi;
   @inject('ProfessionalMonitoringApi') public readonly professionalMonitoringApi!: ProfessionalMonitoringApi;
   @inject('SystemAndUserPropertiesApi') public readonly systemAndUserPropertiesApi!: SystemAndUserPropertiesApi;
-  @inject('CirclesApi') public readonly circles!: CirclesApi;
+  @inject('QuestionsApi') public readonly questionsApi!: QuestionsApi;
 }

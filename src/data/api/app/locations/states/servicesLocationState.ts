@@ -1,4 +1,4 @@
-import { Question } from "../../userCommunications/getQuestionsApiResponse";
+import { Question } from "../../questions/getQuestionsApiResponse";
 
 export interface ServicesLocationState {
   cards?: ServicesLocationStateCard[];
