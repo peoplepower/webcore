@@ -153,14 +153,14 @@ export interface GetSurveyQuestionsApiResponse extends ApiResponseBase {
       title?: string;
 
       /**
+       * Section description
+       */
+      description?: string;
+
+      /**
        * Ordering number within the survey or the parent section
        */
       orderNum: number;
-
-      /**
-       * Parent Section ID (optional) for nesting
-       */
-      parentSectionId?: number;
 
       /**
        * Questions within current section
