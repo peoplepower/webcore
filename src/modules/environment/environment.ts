@@ -1,6 +1,10 @@
-import { Environment } from './environment';
 import { LiteEvent } from '../common/liteEvent';
 import { injectable } from '../common/di';
+
+export type Environment =
+  | 'dev' // Development environment
+  | 'test' // Automatic tests environment
+  | 'prod'; // Production environment
 
 const DEFAULT_ENV: Environment = 'dev'; // Default environment
 

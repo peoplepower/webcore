@@ -1,9 +1,8 @@
 import webcoreConfig from '../../config';
 import { LiteEvent } from '../common/liteEvent';
 import { WebCoreConfig } from './config';
-import { Envir } from '../envir/envir';
+import { Envir, Environment } from '../environment/environment';
 import { inject, injectable } from '../common/di';
-import { Environment } from '../envir/environment';
 
 const DEFAULT_CONFIG_NAME = 'default';
 

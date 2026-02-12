@@ -5,14 +5,9 @@ import { AuthService } from './data/services/authService';
 import { OperationTokenService } from './data/services/operationTokenService';
 import { OfflineService } from './data/services/offlineService';
 import { CloudConfigService } from './data/services/cloudConfigService';
-import { inject, injectable } from './modules/common/di';
 import { WeatherService } from './data/services/weatherService';
 import { UserService } from './data/services/userService';
 import { Logger } from './modules/logger/logger';
-import { Tuner } from './modules/tuner/tuner';
-import { WebCoreConfig } from './modules/tuner/config';
-import { Environment } from './modules/envir/environment';
-import { Envir } from './modules/envir/envir';
 import { DeviceService } from './data/services/deviceService';
 import { WcStorage } from './modules/localStorage/localStorage';
 import { UserLocalStorage } from './modules/userLocalStorage/userLocalStorage';
@@ -34,6 +29,13 @@ import { AppApiOAuthDal } from "./data/api/app/appApiOAuthDal";
 import { AppApiReportsDal } from "./data/api/app/appApiReportsDal";
 import { BotApiDal } from "./data/api/bot/botApiDal";
 import { DeviceStreamingApiDal } from "./data/api/deviceStreamingApi/deviceStreamingApiDal";
+
+// Decorators
+import { inject, injectable } from './modules/common/di';
+import { WebCoreConfig } from './modules/tuner/config';
+import { Envir } from './modules/environment/environment';
+import type { Environment } from './modules/environment/environment';
+import type { Tuner } from './modules/tuner/tuner';
 
 @injectable('WebCoreApis')
 export class WebCoreApis {
