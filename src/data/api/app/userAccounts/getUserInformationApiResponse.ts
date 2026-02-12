@@ -1,7 +1,7 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { AccessibilityType, PhoneType } from './createUserAndLocationApiResponse';
 import { ResourceType } from '../paidServices/getSoftwareSubscriptionsApiResponse';
-import { LocationAccessLevel, LocationNotificationsCategory } from '../locations/getLocationUsersApiResponse';
+import { LocationAccessLevel, LocationNotificationsCategory, ResidencyStatus, UserRole } from '../locations/getLocationUsersApiResponse';
 import { LocationSubType, LocationType } from '../locations/editLocationApiResponse';
 
 export enum PhoneVerificationStatus {
@@ -58,6 +58,15 @@ export enum LocationPriorityCategory {
 export enum FileUploadPolicy {
   KeepOldFiles = 0,
   DeleteOldFiles = 1,
+}
+
+/**
+ * External user's role.
+ */
+export enum ExternalUserRole {
+  Resident = 0,
+  CircleMember = 1,
+  SSO = 2,
 }
 
 export interface LocationInfo {
@@ -197,6 +206,11 @@ export interface LocationInfo {
    * 30 - update location information and manage devices.
    */
   locationAccess: LocationAccessLevel;
+
+  /**
+   * Temporary access to location.
+   * NOTE: Exposed in "locationUser" object instead.
+   */
   accessEndDate?: string;
   accessEndDateMs?: number;
 
@@ -222,6 +236,7 @@ export interface LocationInfo {
 
   /**
    * Sales tax rate. The value must be positive and less than 1.
+   * TODO: Candidate for deprecation.
    */
   salesTaxRate?: number;
 
@@ -231,15 +246,45 @@ export interface LocationInfo {
   event: string;
 
   /**
+   * Location user details.
+   * NOTE: Deprecate same properties in user object.
+   */
+  locationUser: {
+    category: LocationNotificationsCategory;
+    locationAccess: LocationAccessLevel;
+    residency: ResidencyStatus;
+    role: UserRole;
+    nickname?: string;
+    smsPhone?: string;
+
+    /**
+     * Emergency contact order.
+     */
+    callOrder?: number;
+
+    /**
+     * User is hidden for other location users.
+     */
+    hidden?: boolean;
+
+    /**
+     * Temporary access to location.
+     */
+    temporary?: boolean;
+    accessEndDate?: string;
+    accessEndDateMs?: number;
+  },
+
+  /**
    * Utility account number, when this user account is linked to acquire data from a utility.
+   * TODO: Candidate for deprecation.
    */
   utilityAccountNo?: string;
 
   /**
    * This represents the approximate size of the location. Please see the request example for more details. Size
-   * units:
-   * ft2 - Square Foot
-   * m2 - Square Meter
+   * units: ft2 - Square Foot; m2 - Square Meter;
+   * TODO: Candidate for deprecation.
    */
   size?: {
     unit: string;
@@ -247,27 +292,32 @@ export interface LocationInfo {
   };
 
   /**
-   * Number of stories in the home / building
+   * Number of stories in the home / building.
+   * TODO: Candidate for deprecation.
    */
   storiesNumber?: number;
 
   /**
    * Number of rooms.
+   * TODO: Candidate for deprecation.
    */
   roomsNumber?: number;
 
   /**
    * Number of bathrooms.
+   * TODO: Candidate for deprecation.
    */
   bathroomsNumber?: number;
 
   /**
    * Total number of people living / working at this location.
+   * TODO: Candidate for deprecation.
    */
   occupantsNumber?: number;
 
   /**
-   * Array of JSON objects describing age ranges in years, and the number of occupants in those age ranges.
+   * Residents age ranges in years, and the number of occupants in those age ranges.
+   * TODO: Candidate for deprecation.
    */
   occupantsRanges?: Array<{
     start: number;
@@ -276,9 +326,11 @@ export interface LocationInfo {
   }>;
 
   /**
-   * Keeps a note about when the location is used by people.1 - Day
+   * Keeps a note about when the location is used by people.
+   * 1 - Day
    * 2 - Night
    * 3 - Both
+   * TODO: Candidate for deprecation.
    */
   usagePeriod?: number;
 
@@ -290,6 +342,7 @@ export interface LocationInfo {
    * 8 - Oil
    * 16 - Biomass
    * 128 - Other
+   * TODO: Candidate for deprecation.
    */
   heatingType?: number;
 
@@ -299,6 +352,7 @@ export interface LocationInfo {
    * 2 - Window A/C
    * 4 - Open windows / fans
    * 128 - Other
+   * TODO: Candidate for deprecation.
    */
   coolingType?: number;
 
@@ -311,6 +365,7 @@ export interface LocationInfo {
    * 16 - Biomass
    * 32 - Solar
    * 128 - Other
+   * TODO: Candidate for deprecation.
    */
   waterHeaterType?: number;
 
@@ -319,6 +374,7 @@ export interface LocationInfo {
    * 1 - Non-programmable
    * 2 - Programmable
    * 3 - Internet Connected
+   * TODO: Candidate for deprecation.
    */
   thermostatType?: number;
   startDate?: string;
@@ -386,6 +442,7 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
 
     /**
      * User's community pseudo name, nickname.
+     * TODO: Candidate for deprecation.
      */
     communityName?: string;
 
@@ -425,13 +482,6 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
      * User's administrative permissions.
      */
     permission?: Array<UserPermission>;
-
-    /**
-     * When the user sends messages in a community social network, enabling this flag will cause their name to be
-     * hidden when they send messages and on lists of individuals who are part of a group inside an organization, etc.
-     * Default is false.
-     */
-    anonymous?: boolean;
 
     /**
      * Location file storage policy.
@@ -505,14 +555,40 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     gender?: GenderType;
 
     /**
+     * Medical record number, used in healthcare organizations.
+     */
+    medicalRecordNumber?: string;
+
+    /**
+     * Partner system user identifiers, e.g. EHR patient ID.
+     */
+    externalUsers?: Array<{
+
+      /**
+       * Partner application ID.
+       */
+      applicationId: string;
+
+      /**
+       * External user ID.
+       */
+      externalUserId: string;
+
+      /**
+       * External user's role in the partner system.
+       */
+      role: ExternalUserRole;
+    }>;
+
+    /**
      *
      */
     authClients?: Array<{
       appId: string;
       appName: string;
       locationId?: number;
-      expiry: string;
-      autoRefresh: boolean;
+      expiry?: string;
+      autoRefresh?: boolean;
     }>;
 
     /**
@@ -538,4 +614,5 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
   model?: {
     [key: string]: string;
   };
+
 }

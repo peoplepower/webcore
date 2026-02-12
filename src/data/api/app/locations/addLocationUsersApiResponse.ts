@@ -29,4 +29,9 @@ export interface AddSingleLocationUserModel {
    * Call tree order.
    */
   callOrder?: number;
+
+  /**
+   * Temporary location access.
+   */
+  temporary?: boolean;
 }

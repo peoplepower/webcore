@@ -3,7 +3,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { inject, injectable } from '../../../../modules/common/di';
 import { CreateUserAndLocationApiResponse, CreateUserAndLocationModel } from './createUserAndLocationApiResponse';
 import { GetSignaturesApiResponse } from './getSignaturesApiResponse';
-import { GetUserInformationApiResponse } from './getUserInformationApiResponse';
+import { ExternalUserRole, GetUserInformationApiResponse } from './getUserInformationApiResponse';
 import { SendVerificationMessageApiResponse, VerificationType } from './sendVerificationMessageApiResponse';
 import { BadgeType, ResetBadgesApiResponse } from './resetBadgesApiResponse';
 import { UpdateUserApiResponse, UpdateUserModel } from './updateUserApiResponse';
@@ -100,6 +100,9 @@ export class UserAccountsApi {
     params?: {
       userId?: number | string;
       organizationId?: number | string;
+      externalUserId?: string;
+      externalAppId?: string;
+      externalRole?: ExternalUserRole;
     },
     noApiKey: boolean = false,
   ): Promise<GetUserInformationApiResponse> {

@@ -32,6 +32,7 @@ export interface UserModel {
 
   /**
    *  User's community pseudo name.
+   * TODO: Candidate for deprecation.
    *  @type {string}
    */
   communityName?: string;
@@ -115,6 +116,11 @@ export interface UserModel {
    * Gender.
    */
   gender?: GenderType;
+
+  /**
+   * Medical record number.
+   */
+  medicalRecordNumber?: string;
 }
 
 export interface UpdateUserModel {

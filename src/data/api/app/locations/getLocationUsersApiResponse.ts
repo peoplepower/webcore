@@ -19,6 +19,7 @@ export enum LocationNotificationsCategory {
 /**
  * Location user role.
  * Used by Bots and UI to determine who is who.
+ * TODO: Consider to add additional roles here.
  */
 export enum UserRole {
   EmptyRole = 0,
@@ -66,10 +67,10 @@ export interface LocationUser {
   /**
    * User's residency status.
    */
-  residency?: ResidencyStatus;
+  residency: ResidencyStatus;
 
   /**
-   * Hide user for the non-admin users.
+   * Hide user for other location users.
    */
   hidden?: boolean;
 
@@ -85,6 +86,9 @@ export interface LocationUser {
   locationAccess: LocationAccessLevel;
   category: LocationNotificationsCategory;
 
+  /**
+   * Available communication channels.
+   */
   phoneChennels?: {
     sms: boolean;
     mms: boolean;
@@ -107,4 +111,16 @@ export interface LocationUser {
    * Call tree order.
    */
   callOrder?: number;
+
+  /**
+   * Medical record number.
+   */
+  medicalRecordNumber?: string;
+
+  /**
+   * Temporary access to location.
+   */
+  temporary?: boolean;
+  accessEndDate?: string;
+  accessEndDateMs?: number;
 }

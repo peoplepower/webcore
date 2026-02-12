@@ -2,7 +2,7 @@ import { inject, injectable } from '../../modules/common/di';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { AuthService } from './authService';
 import { UserAccountsApi } from '../api/app/userAccounts/userAccountsApi';
-import { GetUserInformationApiResponse } from '../api/app/userAccounts/getUserInformationApiResponse';
+import { ExternalUserRole, GetUserInformationApiResponse } from '../api/app/userAccounts/getUserInformationApiResponse';
 import { LiteEvent } from '../../modules/common/liteEvent';
 import { UpdateUserApiResponse, UserModel } from '../api/app/userAccounts/updateUserApiResponse';
 import { SystemAndUserPropertiesApi } from '../api/app/systemAndUserProperties/systemAndUserPropertiesApi';
@@ -66,15 +66,22 @@ export class UserService extends BaseService {
 
   /**
    * Gets user information.
-   * @param {number} [userId]
-   * @param {number} [organizationId]
+   * @param {number} [userId] Used by administrators to receive a specific user's account.
+   * @param {number} [organizationId] Organization ID to get user status from a specific organization.
+   * @param {string} [externalUserId] External user ID.
+   * @param {string} [externalAppId] External application ID.
+   * @param {ExternalUserRole} [externalRole] External user role.
+   *
    * @returns {Promise<UserInformation>}
    */
-  public getUserInfo(userId?: number, organizationId?: number): Promise<UserInformation> {
+  public getUserInfo(userId?: number, organizationId?: number, externalUserId?: string, externalAppId?: string, externalRole?: ExternalUserRole): Promise<UserInformation> {
     return this.authService.ensureAuthenticated().then(() =>
       this.userAccountsApi.getUserInformation({
         userId: userId,
         organizationId: organizationId,
+        externalUserId: externalUserId,
+        externalAppId: externalAppId,
+        externalRole: externalRole,
       })
     );
   }
