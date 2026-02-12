@@ -40,7 +40,8 @@
     "build": "bun run build:cjs && bun run build:esm && bun run build:types",
     "build:cjs": "bun build src/webcore.ts --format cjs --sourcemap=linked --external axios --external qs --target node --outdir dist --entry-naming webcore.cjs.js",
     "build:esm": "bun build src/webcore.ts --format esm --sourcemap=linked --external axios --external qs --target node --outdir dist --entry-naming webcore.esm.js",
-    "build:types": "tsc --project tsconfig.json"
+    "build:types": "tsc --project tsconfig.json",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/node": "20.15.0",
