@@ -116,11 +116,6 @@ export interface UserModel {
    * Gender.
    */
   gender?: GenderType;
-
-  /**
-   * Medical record number.
-   */
-  medicalRecordNumber?: string;
 }
 
 export interface UpdateUserModel {

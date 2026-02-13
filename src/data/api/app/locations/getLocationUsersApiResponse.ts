@@ -113,11 +113,6 @@ export interface LocationUser {
   callOrder?: number;
 
   /**
-   * Medical record number.
-   */
-  medicalRecordNumber?: string;
-
-  /**
    * Temporary access to location.
    */
   temporary?: boolean;

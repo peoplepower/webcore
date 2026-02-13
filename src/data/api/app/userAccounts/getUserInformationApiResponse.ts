@@ -199,30 +199,6 @@ export interface LocationInfo {
   smsPhone?: string;
 
   /**
-   * User's location access permissions:
-   * 0 - none;
-   * 10 - read location/device data;
-   * 20 - control devices and location events;
-   * 30 - update location information and manage devices.
-   */
-  locationAccess: LocationAccessLevel;
-
-  /**
-   * Temporary access to location.
-   * NOTE: Exposed in "locationUser" object instead.
-   */
-  accessEndDate?: string;
-  accessEndDateMs?: number;
-
-  /**
-   * User's category in this location:
-   * 0 - none;
-   * 1 - owner/lives here;
-   * 2 - supporter.
-   */
-  userCategory: LocationNotificationsCategory;
-
-  /**
    * The latitude in degrees. Positive values indicate latitudes north of the equator. Negative values indicate
    * latitudes south of the equator.
    */
@@ -250,8 +226,16 @@ export interface LocationInfo {
    * NOTE: Deprecate same properties in user object.
    */
   locationUser: {
+    /**
+     * User's category in this location.
+     */
     category: LocationNotificationsCategory;
+
+    /**
+     * User's location access permissions.
+     */
     locationAccess: LocationAccessLevel;
+
     residency: ResidencyStatus;
     role: UserRole;
     nickname?: string;
@@ -555,11 +539,6 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
     gender?: GenderType;
 
     /**
-     * Medical record number, used in healthcare organizations.
-     */
-    medicalRecordNumber?: string;
-
-    /**
      * Partner system user identifiers, e.g. EHR patient ID.
      */
     externalUsers?: Array<{
@@ -607,12 +586,4 @@ export interface GetUserInformationApiResponse extends ApiResponseBase {
    * Location information.
    */
   locations: Array<LocationInfo>;
-
-  /**
-   * Additional user properties. i.e.: 'admin: true'
-   */
-  model?: {
-    [key: string]: string;
-  };
-
 }
