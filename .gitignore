@@ -24,6 +24,6 @@ yarn.lock
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
+# Environment variables
 .env
 .env.test
