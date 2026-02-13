@@ -13,7 +13,14 @@ Modify global NPM config at *~/.npmrc* with *GITHUB_TOKEN* value and registry as
 //npm.pkg.github.com/:_authToken=
 ```
 
-You have to install [PNPM](https://pnpm.io) first, then install package using `pnpm` command:
+Install [Bun](https://bun.com) globally as it's used as bundler and test runner:
+
+```bash
+curl -fsSL https://bun.com/install | bash # MacOS / Linux
+powershell -c "irm bun.sh/install.ps1|iex" # Windows
+```
+
+While you can use `npm`, `yarn`, `bun` we're recommending to install [PNPM](https://pnpm.io) for better security polices support and configuration, then install package using `pnpm` command:
 
 ``` bash
 pnpm install @peoplepower/webcore`

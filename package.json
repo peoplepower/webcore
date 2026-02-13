@@ -41,9 +41,10 @@
     "build:cjs": "bun build src/webcore.ts --format cjs --sourcemap=linked --external axios --external qs --target node --outdir dist --entry-naming webcore.cjs.js",
     "build:esm": "bun build src/webcore.ts --format esm --sourcemap=linked --external axios --external qs --target node --outdir dist --entry-naming webcore.esm.js",
     "build:types": "tsc --project tsconfig.json",
-    "test": "bun test"
+    "test:build": "bun test ./tests/build.test.ts"
   },
   "devDependencies": {
+    "@types/bun": "1.3.8",
     "@types/node": "20.15.0",
     "@types/qs": "6.14.0",
     "rimraf": "6.1.2",

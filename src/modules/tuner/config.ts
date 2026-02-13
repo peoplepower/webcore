@@ -1,5 +1,5 @@
 import { LoggerConfig } from '../logger/loggerConfig';
-import { LocalStorageProvider } from '../localStorage/localStorage';
+import type { LocalStorageProvider } from '../localStorage/localStorage';
 
 export class WebCoreConfig {
   /**

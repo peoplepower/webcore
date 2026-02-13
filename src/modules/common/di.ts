@@ -13,7 +13,7 @@ export class Container {
   public addInjectable<T>(constructor: new (...args: any[]) => T, typeName?: string) {
     let name = typeName || constructor.name;
     if (this.constructors.hasOwnProperty(name)) {
-      throw new Error(`DI error: injectable with such name already exists: ${name}`);
+      throw new Error(`DI error: Injectable with such name already exists: ${name}`);
     }
     this.constructors[name] = constructor;
   }
@@ -28,7 +28,7 @@ export class Container {
     if (!this.constructors.hasOwnProperty(identifier)) {
       throw new Error(`DI error: There is no object with name ${identifier} in DI Container`);
     }
-    return new this.constructors[identifier]();
+    return new this.constructors[identifier]!();
   }
 
   /**
@@ -98,7 +98,7 @@ export function inject<T>(typeOrName?: string | (new (...args: any[]) => T)): Fu
   return function (target: Object, propertyName: string) {
     if (!typeOrName) {
       throw new Error(
-        `DI error: you should pass type name to @inject() decorator on "${propertyName}" property in "${target.constructor.name}" class`,
+        `DI error: You should pass type name to @inject() decorator on "${propertyName}" property in "${target.constructor.name}" class`,
       );
     }
     let identifier: string;

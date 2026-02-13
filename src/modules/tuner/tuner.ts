@@ -1,8 +1,9 @@
 import webcoreConfig from '../../config';
 import { LiteEvent } from '../common/liteEvent';
-import { WebCoreConfig } from './config';
-import { Envir, Environment } from '../environment/environment';
 import { inject, injectable } from '../common/di';
+import { WebCoreConfig } from './config';
+import { Envir } from '../environment/envir';
+import type { Environment } from '../environment/environment';
 
 const DEFAULT_CONFIG_NAME = 'default';
 
@@ -117,6 +118,10 @@ export class Tuner {
   }
 
   public addConfig(environment: Environment, config: WebCoreConfig) {
+    if (!this.configs[environment]) {
+      this.configs[environment] = [];
+    }
+
     this.configs[environment].push(config);
     this.loadConfig();
   }

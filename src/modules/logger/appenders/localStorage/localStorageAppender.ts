@@ -7,7 +7,7 @@ import { LogLevel } from '../../logLevel';
  * LocalStorage logger appender
  */
 export class LocalStorageAppender extends Appender {
-  protected config: LocalStorageAppenderConfig;
+  protected override config: LocalStorageAppenderConfig;
   protected messages: LogMessage[];
 
   constructor(config: LocalStorageAppenderConfig) {

@@ -296,11 +296,11 @@ describe('ES2020 target compliance', () => {
     expect(instance.greet()).toBe('hello');
 
     // Verify singleton behavior
-    expect(container.get('TestService')).toBe(instance);
+    expect(container.get<TestService>('TestService')).toBe(instance);
   });
 
   test('SDK environment module compiles and runs under Bun ES2020 runtime', async () => {
-    const { Envir } = await import('../src/modules/environment/environment');
+    const { Envir } = await import('../src/modules/environment/envir');
     const { container } = await import('../src/modules/common/di');
 
     const envir = container.get<InstanceType<typeof Envir>>('Envir');

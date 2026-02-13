@@ -18,7 +18,7 @@ const localStorageCurrentCloudKey = 'Main-Cloud';
 export class CloudConfigService extends BaseService {
   @inject('CommonApi') public readonly commonApi!: CommonApi;
   @inject('WcStorage') protected readonly wcStorage!: WcStorage;
-  @inject('Logger') protected readonly logger!: Logger;
+  @inject('Logger') protected override readonly logger!: Logger;
   @inject('Tuner') private readonly tuner!: Tuner;
 
   /**
@@ -148,7 +148,11 @@ export class CloudConfigService extends BaseService {
       }
 
       // By default, choose the first one
-      return this.setCurrentCloud(clouds[0]);
+      const firstCloud = clouds[0];
+      if (!firstCloud) {
+        return Promise.reject(new CoreApiError('No cloud configuration available'));
+      }
+      return this.setCurrentCloud(firstCloud);
     });
   }
 

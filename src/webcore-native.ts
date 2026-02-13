@@ -1,7 +1,7 @@
 import { WebCore } from './webcore';
-import { LocalStorageProvider } from './modules/localStorage/localStorage';
-import { Environment } from './modules/environment/environment';
 import { WebCoreConfig } from './modules/tuner/config';
+import type { LocalStorageProvider } from './modules/localStorage/localStorage';
+import type { Environment } from './modules/environment/environment';
 // @ts-ignore
 import { AsyncStorage } from 'react-native';
 // @ts-ignore

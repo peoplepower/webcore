@@ -78,7 +78,10 @@ export class Logger {
   private log(level: LogLevel, ...args: any[]) {
     if (this.config.maxLevel! <= level && level <= this.config.minLevel! && this.appenders) {
       for (let i = 0; i < this.appenders.length; i++) {
-        this.appenders[i].log(level, ...args);
+        const appender = this.appenders[i];
+        if (appender) {
+          appender.log(level, ...args);
+        }
       }
     }
   }

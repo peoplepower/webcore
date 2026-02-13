@@ -33,7 +33,9 @@ import { DeviceStreamingApiDal } from "./data/api/deviceStreamingApi/deviceStrea
 // Decorators
 import { inject, injectable } from './modules/common/di';
 import { WebCoreConfig } from './modules/tuner/config';
-import { Envir } from './modules/environment/environment';
+import { Envir } from './modules/environment/envir';
+
+// Types
 import type { Environment } from './modules/environment/environment';
 import type { Tuner } from './modules/tuner/tuner';
 

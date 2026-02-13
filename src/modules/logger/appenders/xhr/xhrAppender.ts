@@ -7,7 +7,7 @@ import { LogLevel } from '../../logLevel';
  * XHR logger appender
  */
 export class XhrAppender extends Appender {
-  protected config: XhrAppenderConfig;
+  protected override config: XhrAppenderConfig;
   protected messages: LogMessage[];
 
   constructor(config: XhrAppenderConfig) {
@@ -48,7 +48,10 @@ export class XhrAppender extends Appender {
       xhr.setRequestHeader('Content-Type', 'application/json');
       if (me.config.headers) {
         for (let headerName in me.config.headers) {
-          xhr.setRequestHeader(headerName, me.config.headers[headerName]);
+          const headerValue = me.config.headers[headerName];
+          if (headerValue !== undefined) {
+            xhr.setRequestHeader(headerName, headerValue);
+          }
         }
       }
       xhr.send(JSON.stringify(new XhrLogMessagePackage(messages)));
