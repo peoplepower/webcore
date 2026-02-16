@@ -7,7 +7,7 @@ import { LogLevel } from '../../logLevel';
  * LocalStorage logger appender
  */
 export class LocalStorageAppender extends Appender {
-  protected config: LocalStorageAppenderConfig;
+  protected override config: LocalStorageAppenderConfig;
   protected messages: LogMessage[];
 
   constructor(config: LocalStorageAppenderConfig) {
@@ -24,7 +24,7 @@ export class LocalStorageAppender extends Appender {
     }
 
     if (globalThis && 'localStorage' in globalThis && globalThis['localStorage'] !== null) {
-      let me = this;
+      const me = this;
       if (globalThis.addEventListener) {
         globalThis.addEventListener('unload', function () {
           me.dropToLocalStorage();
@@ -57,10 +57,10 @@ export class LocalStorageAppender extends Appender {
   }
 
   public dropToLocalStorage() {
-    let messages = this.messages;
+    const messages = this.messages;
     this.messages = [];
     try {
-      let lsValue = localStorage.getItem(this.config.localStorageKey!);
+      const lsValue = localStorage.getItem(this.config.localStorageKey!);
       let oldMessages: LogMessage[] = lsValue ? JSON.parse(lsValue) || [] : [];
       oldMessages.concat(messages);
       if (oldMessages.length > this.config.size!) {

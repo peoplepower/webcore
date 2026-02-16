@@ -2,12 +2,12 @@ import {
   AxiosError,
   AxiosHeaders,
   AxiosRequestConfig,
+  AxiosRequestHeaders,
   AxiosResponse,
   HeadersDefaults,
   InternalAxiosRequestConfig,
   RawAxiosRequestHeaders
 } from 'axios';
-import { AxiosRequestHeaders } from "axios/index";
 
 export interface DalResponsePromise<T> extends Promise<T> {
 }

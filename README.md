@@ -1,6 +1,6 @@
 # WebCore Client SDK
 
-JavaScript/TypeScript SDK for People Power IoT Suite public API - <https://iotapps.docs.apiary.io>
+JavaScript/TypeScript SDK for Care Daily public API - <https://iotapps.docs.apiary.io>
 
 ## Installation
 
@@ -13,7 +13,7 @@ Modify global NPM config at *~/.npmrc* with *GITHUB_TOKEN* value and registry as
 //npm.pkg.github.com/:_authToken=
 ```
 
-You have to install [PNPM](https://pnpm.io) first, then install package using `pnpm` command:
+While you can use `npm` or `yarn`, we're recommending to install [PNPM](https://pnpm.io) for better security polices support and configuration, then install package using `pnpm` command:
 
 ``` bash
 pnpm install @peoplepower/webcore`
@@ -23,19 +23,19 @@ pnpm install @peoplepower/webcore`
 
 WebCore is bundled to several formats:
 
-- `dist/ppc-webcore.cjs.js` - CommonJS module (for Node)
-- `dist/ppc-webcore.esm.js` - ES module (for bundlers)
-- `dist/types/` - folder for type definitions and compiled sources per-file (not bundled). This folder contains project in ES module format. So you could use sources from there directly if you want to import interfaces, enums or separate classes (e.g. in another Typescript project).
+- `./dist/webcore.cjs.js` - CommonJS module (for Node).
+- `./dist/webcore.esm.js` - ES module (for bundlers).
+
+Type definitions at `./dist/types/` are compiled sources per-file (not bundled). This folder contains project in ES module format. So you could use sources from there directly if you want to import interfaces, enums or separate classes (e.g. in another TypeScript project).
 
 Please, avoid importing two modules at the same time. This will lead to the appearance of hard-to-diagnose errors.
 
-Bundles are compiled to ES5 format, so it should work almost in every environment.
-We could enable browser-friendly UMD build (for injecting right into the web page) by request.
+Bundles are compiled to ES2020 format. We could enable browser-friendly UMD build (for injecting right into the web page) by request.
 
 ### Typescript Import
 
 ``` typescript
-import { WebCore } from '@peoplepower/webcore/dist/types/ppc-webcore';
+import { WebCore } from '@peoplepower/webcore/dist/types/webcore';
 import type { Environment } from '@peoplepower/webcore/dist/types/modules/envir/environment';
 import type { WebCoreConfig } from '@peoplepower/webcore/dist/types/modules/tuner/config';
 
@@ -51,7 +51,7 @@ const webCoreInstance = new WebCore(env, config);
 export default webCoreInstance;
 ```
 
-### Bundler (webpack) Import with JavaScript
+### Bundler (Webpack) Import with JavaScript
 
 ``` javascript
 import { WebCore } from '@peoplepower/webcore';
@@ -79,10 +79,10 @@ Check out [configuration interface](src/modules/tuner/config.ts) to see availabl
 
 ### Auth and Current User Info
 
-WebCore automatically store last used API_KEY in local storage and re-authenticate on startup. It also stores current user information in cache
+WebCore automatically store last used `API_KEY` in local storage and re-authenticate on startup. It also stores current user information in cache
 
 ``` typescript
-import { WebCore } from '/webcoreInstanceModule'; // file described above.
+import { WebCore } from '../webcoreInstanceModule'; // File described above.
 
 /**
  * Check if we are currently authenticated (sync)
@@ -149,10 +149,9 @@ public getUserAvatarUrl(): Promise<string | undefined> {
 
 ### React Native Example
 
-This library was originally designed to work in browser or NodeJS environment, but you could also use it in React Native.
-The problem is React Native has no `localStorage` and `btoa`.
+This library was originally designed to work in browser or NodeJS environment, but you could also use it in React Native. The problem is React Native has no `localStorage` and `btoa`.
 
-This realization is just example. You should adapt it for your environment. The same code is located [here](src/ppc-webcore-rn.ts).
+This realization is just example. You should adapt it for your environment. The same example code is located at [./src/webcore-native.ts](./src/webcore-native.ts).
 
 ``` typescript
 import { WebCore } from '@peoplepower/webcore';
@@ -171,7 +170,7 @@ if (!global.atob) {
   global.atob = decode;
 }
 
-const ASYNC_STORAGE_KEY = 'PPC_WEBCORE_DATA';
+const ASYNC_STORAGE_KEY = 'WEBCORE_DATA';
 
 /**
  * Fake sync local storage. You could use any realization that fit your needs.

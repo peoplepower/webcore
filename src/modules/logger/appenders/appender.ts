@@ -15,7 +15,7 @@ export abstract class Appender {
       config.maxLevel = LogLevel.Emergency;
     }
     if (config.minLevel < config.maxLevel) {
-      let m = config.minLevel;
+      const m = config.minLevel;
       config.minLevel = config.maxLevel;
       config.maxLevel = m;
     }

@@ -97,9 +97,9 @@ export class EnergyManagementApi {
       reduceNoise?: boolean;
     },
   ): Promise<GetDeviceEnergyUsageAggregatedApiResponse> {
-    let deviceIdEncoded = encodeURIComponent(deviceId.toString());
-    let aggregationEncoded = encodeURIComponent(aggregation.toString());
-    let startDateEncoded = encodeURIComponent(startDate.toString());
+    const deviceIdEncoded = encodeURIComponent(deviceId.toString());
+    const aggregationEncoded = encodeURIComponent(aggregation.toString());
+    const startDateEncoded = encodeURIComponent(startDate.toString());
 
     return this.dal.get(`devices/${deviceIdEncoded}/energyUsage/${aggregationEncoded}/${startDateEncoded}`, {params: params});
   }

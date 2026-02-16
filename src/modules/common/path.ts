@@ -3,7 +3,7 @@
  */
 export class Path {
   private static CombineInternal(path1: string, path2: string, pathSeparator?: string): string {
-    let separator = pathSeparator || '/';
+    const separator = pathSeparator || '/';
     path1 = path1 || '';
     path2 = path2 || '';
 

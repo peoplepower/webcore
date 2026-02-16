@@ -2,7 +2,7 @@ import { AppApiDal } from '../appApiDal';
 import { inject, injectable } from '../../../../modules/common/di';
 import { GetDeviceActivationInfoApiResponse } from './getDeviceActivationInfoApiResponse';
 import { GetDeviceActivationInfoAtLocationApiResponse } from './getDeviceActivationInfoAtLocationApiResponse';
-import { GetDeviceByIdApiResponse, SimStatus } from './getDeviceByIdApiResponse';
+import { GetDeviceByIdApiResponse } from './getDeviceByIdApiResponse';
 import { GetDevicePropertiesApiResponse } from './getDevicePropertiesApiResponse';
 import { GetDevicesListApiResponse } from './getDevicesListApiResponse';
 import { GetFirmwareJobsApiResponse } from './getFirmwareJobsApiResponse';

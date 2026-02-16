@@ -228,7 +228,7 @@ export class UserAccountsApi {
       keepKeyVersion?: boolean;
     },
   ): Promise<ApiResponseBase> {
-    let {passcode, ...urlParams} = params || {};
+    const {passcode, ...urlParams} = params || {};
     return this.dal.put(
       'newPassword',
       {

@@ -17,5 +17,5 @@ export enum LocationTimeStateAggregation {
   Hour = 1,
   Day = 2,
   Month = 3,
-  Week = 3,
+  Week = 4,
 }

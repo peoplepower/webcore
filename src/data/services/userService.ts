@@ -27,7 +27,7 @@ export class UserService extends BaseService {
 
   constructor() {
     super();
-    let me = this;
+    const me = this;
     setTimeout(() => {
       me.init();
     });
@@ -39,7 +39,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UserInformation>}
    */
   public getCurrentUserInfo(force?: boolean): Promise<UserInformation> {
-    let me = this;
+    const me = this;
     if (me.getCurrentUserInfoPromise) {
       return Promise.resolve(me.getCurrentUserInfoPromise);
     }
@@ -153,7 +153,7 @@ export class UserService extends BaseService {
    * @returns {Promise<UserCreationResult>}
    */
   public registerNewUser(user: CreateUserAndLocationModel, operationToken?: string, strongPassword?: boolean, brand?: string): Promise<UserCreationResult> {
-    let params = {
+    const params = {
       strongPassword: !!strongPassword,
       brand: brand || void 0,
     };
@@ -263,7 +263,7 @@ export class UserService extends BaseService {
   // #endregion
 
   private init() {
-    let me = this;
+    const me = this;
     me.authService.ensureAuthenticated().then(function () {
       me.initCurrentUserInfo();
       me.authService.onLogin.on(() => {
@@ -276,7 +276,7 @@ export class UserService extends BaseService {
   }
 
   private initCurrentUserInfo(force?: boolean): Promise<UserInformation> {
-    let me = this;
+    const me = this;
     if (me.initCurrentUserInfoPromise) {
       return Promise.resolve(me.initCurrentUserInfoPromise);
     }
