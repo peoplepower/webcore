@@ -39,6 +39,10 @@ export class DeviceService extends BaseService {
 
   /**
    * Gets supported device types.
+   * @param {boolean} [simple] Return only device type fields without user and attributes information.
+   * @param {string} [sortCollection] Sort collection by field. Use 'deviceTypes' to sort by device type fields.
+   * @param {string} [sortBy] Sort collection by specific field.
+   * @param {number} [organizationId] Filter device types by organization ID.
    * @returns {Promise<DeviceTypes>}
    */
   public getSupportedDeviceTypes(
@@ -458,37 +462,6 @@ export class DeviceService extends BaseService {
     return this.authService.ensureAuthenticated().then(() => {
       return this.devicesConfigurationApi.getDeviceParameters({paramName: paramName});
     });
-  }
-
-  /**
-   * Activate / Deactivate SIM card for the specific device.
-   * Available SIM statuses for this action:
-   * - Activate (status = 1): 0 = New, 5 = Deactivated.
-   * - Deactivate (status = 5): 1 = Active, 4 = Suspended.
-   *
-   * @param {number} locationId Location ID for the specific device.
-   * @param {string} deviceId Specifies the device ID.
-   * @param [params] Request parameters.
-   * @param {number} params.status New SIM card status: 1 = Activate, 5 = Deactivate.
-   * @param {number} [params.simId] SIM card ID to activate/deactivate.
-   * @returns {Promise<ApiResponseBase>}
-   */
-  public activateSimCard(
-    locationId: number,
-    deviceId: string,
-    params: {
-      status: number,
-      simId?: number,
-    }
-  ): Promise<ApiResponseBase> {
-    if (!deviceId || deviceId.length === 0) {
-      return this.reject(`Device ID can not be empty [${deviceId}].`);
-    }
-    if (locationId < 1 || isNaN(locationId)) {
-      return this.reject(`Location ID is incorrect [${locationId}].`);
-    }
-
-    return this.devicesApi.activateSimCard(deviceId, locationId, params);
   }
 
   // #endregion

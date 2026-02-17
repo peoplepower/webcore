@@ -4,7 +4,6 @@
     "sourceMap": true,
     "noEmit": false,
     "declaration": true,
-    "emitDeclarationOnly": false,
     "declarationDir": "dist/types",
     "outDir": "dist/types",
     "removeComments": false,

@@ -7,10 +7,8 @@ temp/
 # Build folder
 dist/
 
-# Optional npm cache directory
+# Optional cache folders
 .npm
-
-# Optional eslint cache
 .eslintcache
 
 # Optional REPL history

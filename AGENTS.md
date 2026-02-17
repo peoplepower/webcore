@@ -6,6 +6,12 @@ This file provides guidance to AI Agents like Claude Code, Gemini CLI, OpenCode,
 
 WebCore is a TypeScript client SDK (`@peoplepower/webcore`) for the Care Daily Cloud API. It produces dual-format bundles (ESM + CJS) published to GitHub Packages.
 
+- **Application API Documentation**: <https://sboxall.peoplepowerco.com/cloud/apidocs/yaml/cloud.yaml>
+- **Bots API Documentation**: <https://sboxall.peoplepowerco.com/cloud/apidocs/yaml/bots.yaml>
+- **Package Manager**: PNPM 10.x (required)
+- **Node Version**: >=20.15.1 <21.0.0
+- **Publishing**: GitHub Package Registry
+
 ## Commands
 
 ```bash
@@ -15,7 +21,7 @@ pnpm test:build # Run build output integrity tests (vitest)
 pnpm lint # Run code check with eslint
 ```
 
-There is no lint command configured. Tests are in `tests/` and run via Vitest.
+Tests are in `tests/` and run via Vitest.
 
 ## Architecture
 
