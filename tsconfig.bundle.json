@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
     "outDir": "dist/",
-    "lib": ["ESNext", "DOM"],
-    "target": "es2020",
-    "module": "es2020",
 
-    // Bundler mode
+    "lib": ["ESNext", "DOM"],
+    "target": "es5",
+    "module": "es6",
+    "sourceMap": true,
+    "declaration": false,
+
     "moduleResolution": "node",
     "esModuleInterop": true,
     "noEmit": true,
 
-    // Best practices
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
-    // Some stricter flags
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 
-    // Common types
     "typeRoots": ["node_modules/@types"]
-  }
+  },
+  "include": ["src/**/*"]
 }
