@@ -24,5 +24,11 @@ dist/
 .env*
 !.env.example
 
-# System files
+# Miscellaneous
 .DS_Store
+
+# Agents
+AGENTS.md
+CLAUDE.md
+.claude/
+.github/copilot-instructions.md
