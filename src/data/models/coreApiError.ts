@@ -64,7 +64,7 @@ export class CoreApiError {
   }
 
   public getMessage(): string {
-    let msg: string[] = [];
+    const msg: string[] = [];
     if (this.apiError) {
       if (this.apiError.resultCode) {
         msg.push('Result code: ' + this.apiError.resultCode);

@@ -222,7 +222,7 @@ export class MessagingService extends BaseService {
     if (userId && (isNaN(userId) || userId < 1)) {
       return this.reject(`userId parameter value is incorrect: ${userId}`);
     }
-    let params = userId ? {userId: userId} : undefined;
+    const params = userId ? {userId: userId} : undefined;
     return this.userCommunicationsApi.getNotificationSubscriptions(params);
   }
 
@@ -291,7 +291,7 @@ export class MessagingService extends BaseService {
    * @returns {Promise<RequestSupportApiResponse>}
    */
   public requestSupport(model: RequestSupportModel, appName?: string): Promise<RequestSupportApiResponse> {
-    let params = appName ? {appName: appName} : undefined;
+    const params = appName ? {appName: appName} : undefined;
     return this.userCommunicationsApi.requestSupport(model, params);
   }
 
@@ -306,7 +306,7 @@ export class MessagingService extends BaseService {
     model: PostSupportTicketModel,
     userId?: number,
   ): Promise<PostSupportTicketApiResponse> {
-    let params: {
+    const params: {
       userId?: number;
     } = {};
 

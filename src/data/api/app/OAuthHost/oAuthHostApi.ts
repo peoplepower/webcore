@@ -38,7 +38,7 @@ export class OAuthHostApi {
       state?: string;
     },
   ): Promise<string> {
-    let paramsStr = this.queryService.encodeQueryParams(
+    const paramsStr = this.queryService.encodeQueryParams(
       {
         client_id: params.clientId,
         response_type: params.responseType,
@@ -76,7 +76,7 @@ export class OAuthHostApi {
       brand?: string;
     },
   ): Promise<string> {
-    let paramsStr = this.queryService.encodeQueryParams(
+    const paramsStr = this.queryService.encodeQueryParams(
       {
         client_id: params.clientId,
         response_type: params.responseType,
@@ -111,9 +111,9 @@ export class OAuthHostApi {
    */
   getAccessToken(params: { code?: string; refresh_token?: string; client_id?: string }): Promise<GetAccessTokenApiResponse> {
     //TODO: Find out what should be put as 'secret' actually. Putting apiKey for now
-    let clientIdAndSecretEncoded = btoa(`${params.client_id}:${this.authService.apiKey}`);
+    const clientIdAndSecretEncoded = btoa(`${params.client_id}:${this.authService.apiKey}`);
 
-    let body = this.queryService.encodeQueryParams({
+    const body = this.queryService.encodeQueryParams({
       code: params.code,
       refresh_token: params.refresh_token,
       client_id: params.client_id,

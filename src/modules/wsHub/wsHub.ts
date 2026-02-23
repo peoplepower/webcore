@@ -203,18 +203,18 @@ export class WsHub {
    */
   send(data: { goal: WsPacketGoal; [propName: string]: any }, noAuth: boolean = false): Promise<WsResponseBase> {
     this.ensureConnected();
-    let request: WsRequestBase = {
+    const request: WsRequestBase = {
       ...data,
       id: this.generateMessageId(),
     };
-    let packet = new WsPacket(request, !noAuth);
+    const packet = new WsPacket(request, !noAuth);
     this.packetQueue.push(packet);
     this.processPacketQueue();
     return packet.receiveDeferred.promise; // return deferred that will be resolved when packet response will be received;
   }
 
   subscribe(type: WsSubscriptionType, operation: WsSubscriptionOperation, params: WsSubscriptionParams): WsSubscription {
-    let subscription = new WsSubscription(type, operation, params);
+    const subscription = new WsSubscription(type, operation, params);
 
     this.ensureConnectedAndAuthenticated();
 
@@ -226,7 +226,7 @@ export class WsHub {
       this.subscriptions = this.subscriptions.filter((s) => s !== subscription);
       subscription.status = SubscriptionStatus.CANCELLED;
       if (!!this.webSocket && this.webSocket.readyState === WebSocket.OPEN && !!subscription.id) {
-        let dataString = this.encode({
+        const dataString = this.encode({
           id: this.generateMessageId(),
           goal: WsPacketGoal.Unsubscribe,
           subscription: {
@@ -275,7 +275,7 @@ export class WsHub {
   /**
    * Subscribe for new WebSocket messages
    * @param {(data: WsResponseBase) => void} callback
-   * @return {() => void} unsubscribe function
+   * @return {() => void} Unsubscribe function
    */
   onMessage(callback: (data?: WsResponseBase) => void): () => void {
     this.onMessageReceivedEvent.on(callback);
@@ -287,7 +287,7 @@ export class WsHub {
   /**
    * Subscribe for status change event
    * @param {(data: WebSocketConnectionStatus) => void} callback
-   * @return {() => void} unsubscribe function
+   * @return {() => void} Unsubscribe function
    */
   onStatusChange(callback: (status?: WebSocketConnectionStatus) => void) {
     this.onStatusChangeEvent.on(callback);
@@ -328,16 +328,16 @@ export class WsHub {
     this.setStatus(WebSocketConnectionStatus.CONNECTING);
     this.webSocket = new WebSocket(url);
 
-    let onOpenFunc = (event: Event) => {
+    const onOpenFunc = (event: Event) => {
       this.onWsOpen(event);
     };
-    let onCloseFunc = (event: CloseEvent) => {
+    const onCloseFunc = (event: CloseEvent) => {
       this.onWsClose(event);
     };
-    let onErrorFunc = (event: Event) => {
+    const onErrorFunc = (event: Event) => {
       this.onWsError(event);
     };
-    let onMessageFunc = (event: MessageEvent) => {
+    const onMessageFunc = (event: MessageEvent) => {
       this.onWsMessage(event);
     };
 
@@ -359,7 +359,7 @@ export class WsHub {
 
   //region Web Socket event handlers
 
-  private onWsOpen(event: Event) {
+  private onWsOpen(_event: Event) {
     this.logger.debug('[WebSocket] WebSocket connection was successfully established');
     this.setStatus(WebSocketConnectionStatus.OPEN);
 
@@ -381,7 +381,7 @@ export class WsHub {
     this.processPacketQueue();
   }
 
-  private onWsClose(event: CloseEvent) {
+  private onWsClose(_event: CloseEvent) {
     this.logger.debug('[WebSocket] WebSocket connection was closed');
     this.setStatus(WebSocketConnectionStatus.DISCONNECTED);
 
@@ -433,7 +433,7 @@ export class WsHub {
       return;
     }
 
-    let data = event.data;
+    const data = event.data;
 
     let handled = false;
 
@@ -451,17 +451,17 @@ export class WsHub {
       handled = true;
     } else if (typeof data === 'string') {
       // handle plain JSON packet
-      let decoded = this.decode(data);
+      const decoded = this.decode(data);
       if (!decoded) {
         return;
       }
-      let jsonObj: WsResponseBase = decoded!;
+      const jsonObj: WsResponseBase = decoded!;
 
       this.lastPacketSendOrReceived = new Date();
       this.logger.debug('[WebSocket] Received message: ' + data);
 
-      let isError: boolean = jsonObj.resultCode !== 0;
-      let errorMsg = jsonObj.resultCodeMessage;
+      const isError: boolean = jsonObj.resultCode !== 0;
+      const errorMsg = jsonObj.resultCodeMessage;
 
       // Process packets
       this.packetQueue.forEach((packet) => {
@@ -494,7 +494,7 @@ export class WsHub {
             s.status = SubscriptionStatus.CANCELLED;
             return false;
           } else if (jsonObj.goal === WsPacketGoal.Data) {
-            let dataMessage = jsonObj as DataWsMessage;
+            const dataMessage = jsonObj as DataWsMessage;
             if (isError) {
               s.errorEvent.trigger(dataMessage);
             } else if (dataMessage.data.operation === WsSubscriptionOperation.CREATE) {
@@ -569,7 +569,7 @@ export class WsHub {
       ) {
         packet.attempt++;
         packet.sent = new Date();
-        let dataString = this.encode(packet.request);
+        const dataString = this.encode(packet.request);
         this.webSocket!.send(dataString);
         this.logger.debug('[WebSocket] Message sent: ' + dataString);
 
@@ -614,7 +614,7 @@ export class WsHub {
       .forEach((s) => {
         s.status = SubscriptionStatus.PENDING;
         s.id = this.generateMessageId();
-        let dataString = this.encode({
+        const dataString = this.encode({
           id: s.id,
           goal: WsPacketGoal.Subscribe,
           subscription: {
@@ -637,7 +637,7 @@ export class WsHub {
     let jsonObj: WsResponseBase;
     try {
       jsonObj = JSON.parse(response);
-    } catch (e) {
+    } catch {
       this.logger.warn('[WebSockets] Unable to parse JSON from server message: ' + response);
       return;
     }

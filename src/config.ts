@@ -1,7 +1,7 @@
 import { WebCoreConfig } from './modules/tuner/config';
 import { LogLevel } from './modules/logger/logLevel';
 
-let configs: { [env: string]: WebCoreConfig[] } = {
+const configs: { [env: string]: WebCoreConfig[] } = {
   default: [
     {
       localStoragePrefix: 'ppc.',

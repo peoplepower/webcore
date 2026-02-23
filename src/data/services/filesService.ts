@@ -68,7 +68,7 @@ export class FilesService extends BaseService {
     return this.cloudConfigService.getBaseUrl().then((baseUrl) => {
       let downloadFileUrl: string = Path.Combine(baseUrl, `/cloud/json/appfiles/${encodeURIComponent(fileId.toString())}`);
       if (params) {
-        let queryParams = qs.stringify(params);
+        const queryParams = qs.stringify(params);
         if (queryParams) {
           downloadFileUrl = `${downloadFileUrl}?${queryParams}`;
         }

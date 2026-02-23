@@ -6,7 +6,7 @@ import { LogLevel } from '../../logLevel';
  * Console logger appender
  */
 export class ConsoleAppender extends Appender {
-  protected config!: ConsoleAppenderConfig;
+  protected override config!: ConsoleAppenderConfig;
 
   private readonly consoleStyle: { [logLevel: string]: string };
 

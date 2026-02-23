@@ -153,7 +153,7 @@ export class QuestionsApi {
       answerId: number,
     },
   ): Promise<GetSurveyQuestionsApiResponse> {
-    let headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
 
     return this.dal.get(
       'surveyQuestions',
@@ -186,7 +186,7 @@ export class QuestionsApi {
       status?: SurveyQuestionStatus
     }
   ): Promise<AnswerSurveyQuestionsApiResponse> {
-    let headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+    const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
 
     return this.dal.put(
       'surveyQuestions',

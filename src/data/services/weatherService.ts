@@ -22,9 +22,9 @@ export class WeatherService {
       if (!userInfo || !userInfo.locations || !userInfo.locations[0]) {
         return Promise.reject('User has no location assigned!');
       }
-      let location = userInfo.locations[0];
-      let lat = Number(location.latitude);
-      let lng = Number(location.longitude);
+      const location = userInfo.locations[0];
+      const lat = Number(location.latitude);
+      const lng = Number(location.longitude);
       if (!lat || !lng) {
         return Promise.reject('User location has no lat/lng coordinates assigned!');
       }

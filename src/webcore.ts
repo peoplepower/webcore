@@ -114,5 +114,5 @@ export class WebCore {
   }
 }
 
-// Additional exports for admin webcore
+// Additional exports for WebCore Admin
 export * from './modules/common/di';

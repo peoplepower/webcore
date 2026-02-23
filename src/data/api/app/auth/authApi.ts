@@ -85,7 +85,7 @@ export class AuthApi {
     // Now server decode password header in that way: URLDecoder.decode(password, Constants.UTF8)
     // So we can use encodeURIComponent function for encoding
     // See @link{https://docs.oracle.com/javase/8/docs/api/java/net/URLDecoder.html#decode-java.lang.String-java.lang.String-}
-    let headers: { [headerName: string]: string } = {};
+    const headers: { [headerName: string]: string } = {};
     if (pwd) {
       headers['PASSWORD'] = encodeURIComponent(pwd);
     }
@@ -146,7 +146,7 @@ export class AuthApi {
     brand?: string;
   }): Promise<LoginApiResponse> {
     params = params || {};
-    let headers: { [headerName: string]: string } = {};
+    const headers: { [headerName: string]: string } = {};
     if (params?.apiKey) {
       headers['API_KEY'] = params.apiKey;
     }

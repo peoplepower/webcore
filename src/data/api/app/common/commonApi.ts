@@ -89,7 +89,7 @@ export class CommonApi {
     brand?: string;
     appName?: string;
   }): Promise<GetServerApiResponse> {
-    let {type, ...reqParams} = params;
+    const {type, ...reqParams} = params;
     return this.dal.get('settingsServer/' + encodeURIComponent(type), {
       params: reqParams,
     });

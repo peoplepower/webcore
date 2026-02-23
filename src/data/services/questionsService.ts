@@ -66,7 +66,7 @@ export class QuestionsService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    let parameters = {
+    const parameters = {
       locationId,
       sortCollection: 'questions',
       ...params,

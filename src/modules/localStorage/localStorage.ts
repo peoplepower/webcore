@@ -15,7 +15,7 @@ export class WcStorage {
       throw new Error('Unable to get value with empty path from localStorage');
     }
     // if not in local storage, the string "undefined" is returned sometimes
-    let text: string | undefined | null = this.ls.getItem(this.tuner.config.localStoragePrefix + path);
+    const text: string | undefined | null = this.ls.getItem(this.tuner.config.localStoragePrefix + path);
     if (text === null || typeof text === 'undefined' || text === 'undefined') {
       // this.logger.debug(`WcStorage.get("${path}") - path not found, returned undefined`);
       return undefined;
@@ -26,7 +26,7 @@ export class WcStorage {
       // Try to parse a json
       try {
         return <T>JSON.parse(text);
-      } catch (e) {
+      } catch {
         return <T>(<any>text);
       }
     }

@@ -31,7 +31,7 @@ export class Tuner {
   constructor() {
     this.configs = webcoreConfig;
     this.loadConfig();
-    let me = this;
+    const me = this;
     this.envir.onChangeEvent.on((env) => {
       if (env) {
         me.loadConfig();
@@ -40,10 +40,10 @@ export class Tuner {
   }
 
   private loadConfig() {
-    let defaultConfigs = this.configs[DEFAULT_CONFIG_NAME] || [];
-    let envConfigs = this.configs[this.envir.environment] || [];
-    let configs = [...defaultConfigs, ...envConfigs];
-    let newCfg = <WebCoreConfig>Object.assign({}, ...configs);
+    const defaultConfigs = this.configs[DEFAULT_CONFIG_NAME] || [];
+    const envConfigs = this.configs[this.envir.environment] || [];
+    const configs = [...defaultConfigs, ...envConfigs];
+    const newCfg = <WebCoreConfig>Object.assign({}, ...configs);
     if (!this.checkJsonEquality(newCfg, this.currentConfig)) {
       this.currentConfig = newCfg;
       this.onChangeEvent.trigger(this.currentConfig);
@@ -56,7 +56,7 @@ export class Tuner {
    * @param {any} y
    */
   private checkJsonEquality(x: any, y: any): boolean {
-    let me = this;
+    const me = this;
 
     if (x === y) {
       return true;
@@ -105,7 +105,7 @@ export class Tuner {
 
     // Nested objects
     if (typeof x === 'object') {
-      let keys = Object.keys(x);
+      const keys = Object.keys(x);
       return Object.keys(y).every((i) => keys.indexOf(i) !== -1) && keys.every((i) => me.checkJsonEquality(x[i], y[i]));
     }
 
@@ -118,7 +118,10 @@ export class Tuner {
   }
 
   public addConfig(environment: Environment, config: WebCoreConfig) {
-    this.configs[environment].push(config);
+    if (!this.configs[environment]) {
+      this.configs[environment] = [];
+    }
+    this.configs[environment]!.push(config);
     this.loadConfig();
   }
 }

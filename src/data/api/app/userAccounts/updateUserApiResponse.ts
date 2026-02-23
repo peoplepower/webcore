@@ -32,6 +32,7 @@ export interface UserModel {
 
   /**
    *  User's community pseudo name.
+   * TODO: Candidate for deprecation.
    *  @type {string}
    */
   communityName?: string;

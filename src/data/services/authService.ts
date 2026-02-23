@@ -79,12 +79,12 @@ export class AuthService extends BaseService {
   }
 
   public get apiKeyExpire() {
-    let expireDateStr = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
+    const expireDateStr = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
     return expireDateStr ? new Date(expireDateStr) : undefined;
   }
 
   public get apiKeyExpirePeriod(): number | undefined {
-    let val = this.wcStorage.get(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD);
+    const val = this.wcStorage.get(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD);
     return val != null ? parseInt(val as string, 10) : undefined;
   }
 
@@ -94,12 +94,12 @@ export class AuthService extends BaseService {
   }
 
   private init() {
-    let _apiKey = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY);
+    const _apiKey = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY);
     if (_apiKey) {
       this.logger.debug('API key extracted from local storage: ' + _apiKey);
       this._apiKey = _apiKey;
       this._apiKeyType = this.wcStorage.get<ApiKeyType>(LOCAL_STORAGE_API_KEY_TYPE) ?? undefined;
-      let keyExpire = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
+      const keyExpire = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
       if (keyExpire) {
         this.setUpKeyExpireTimeout(keyExpire);
       }
@@ -115,7 +115,7 @@ export class AuthService extends BaseService {
     }
     if (!this.ensureAuthenticatedPromise) {
       this.ensureAuthenticatedPromise = new Promise<boolean>((resolve) => {
-        let eventSubscriptionCanceller = this.onLogin.on(() => {
+        const eventSubscriptionCanceller = this.onLogin.on(() => {
           eventSubscriptionCanceller();
           delete this.ensureAuthenticatedPromise;
           resolve(true);
@@ -187,7 +187,7 @@ export class AuthService extends BaseService {
     admin?: boolean,
     brand?: string,
   ): Promise<LoginInfo> {
-    let keyType = admin ? 11 : 0; // Admin or User key type
+    const keyType = admin ? 11 : 0; // Admin or User key type
     await this.logoutFromThisBrowser()
     const params: any = {
       passcode: passcode,
@@ -216,7 +216,7 @@ export class AuthService extends BaseService {
     admin?: boolean,
     brand?: string,
   ): Promise<LoginInfo> {
-    let keyType = admin ? 11 : 0; // Admin or User key type
+    const keyType = admin ? 11 : 0; // Admin or User key type
     await this.logoutFromThisBrowser()
     const params: any = {
       passcode: passcode,
@@ -239,8 +239,8 @@ export class AuthService extends BaseService {
    * @returns {Promise<LoginApiResponse>}
    */
   loginByKey(apiKey: string, admin?: boolean, brand?: string): Promise<LoginApiResponse> {
-    let me = this;
-    let keyType = admin ? 11 : 0; // Admin or User key type
+    const me = this;
+    const keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
       .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType, brand: brand}))
       .then((result) => {
@@ -344,7 +344,7 @@ export class AuthService extends BaseService {
    * @returns {Promise<LoginInfo>}
    */
   public refreshToken(brand?: string): Promise<LoginInfo> {
-    let me = this;
+    const me = this;
     return me.authApi.loginByKey({apiKey: me._apiKey, brand: brand, keyType: me._apiKeyType}).then((result) => {
       me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
       me._apiKey = result.key;
@@ -370,7 +370,7 @@ export class AuthService extends BaseService {
       return Promise.reject(`Username can not be empty [${username}].`);
     }
     // let keyType = admin ? 11 : 0; // Admin or User key type
-    let brandName = brand ? brand : undefined;
+    const brandName = brand ? brand : undefined;
     return this.authApi
       .sendPasscode({
         username: username,
@@ -412,9 +412,9 @@ export class AuthService extends BaseService {
    * @param {string} [brand] Optional brand
    */
   public setUpKeyExpireTimeout(keyExpireDate: string | number, brand?: string) {
-    let me = this;
+    const me = this;
     if (keyExpireDate) {
-      let keyExpireDateObj = new Date(keyExpireDate);
+      const keyExpireDateObj = new Date(keyExpireDate);
       let expirePeriod = keyExpireDateObj.getTime() - new Date().getTime() - API_KEY_EXPIRE_ADDITIONAL_DELAY;
       if (isNaN(expirePeriod) || expirePeriod <= 0) {
         me.logger.debug('API key has expired: ' + me._apiKey);
@@ -479,7 +479,7 @@ export class AuthService extends BaseService {
    * @returns {Promise<LogoutApiResponse>}
    */
   public logoutFromAllBrowsers() {
-    let me = this;
+    const me = this;
     return me.authApi.logout().then(() => {
       me.logger.debug('System logged out from all the browsers');
       me._apiKey = undefined;
@@ -676,7 +676,7 @@ export class AuthService extends BaseService {
       ["sign"]
     )
 
-    let signature = await globalThis.crypto.subtle.sign(
+    const signature = await globalThis.crypto.subtle.sign(
       "RSASSA-PKCS1-v1_5",
       encodedPrivateKey,
       binaryTempKey
