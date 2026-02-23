@@ -60,7 +60,7 @@ export class ProfessionalMonitoringService extends BaseService {
       return this.reject(`Location ID is incorrect [${locationId}].`);
     }
 
-    let parameters: {
+    const parameters: {
       locationId: number;
       sortCollection?: string;
       sortBy?: string;
@@ -87,7 +87,7 @@ export class ProfessionalMonitoringService extends BaseService {
    * @return {Promise<CreateCallCenterTestApiResponse>}
    */
   public createCallCenterTest(locationId: number, testModel: CreateCallCenterTestModel, testId?: number): Promise<CreateCallCenterTestApiResponse> {
-    let parameters: {
+    const parameters: {
       locationId: number;
       testId?: number;
     } = {
@@ -110,7 +110,7 @@ export class ProfessionalMonitoringService extends BaseService {
    * @return {Promise<ApiResponseBase>}
    */
   public cancelCallCenterTest(locationId: number, testId?: number): Promise<ApiResponseBase> {
-    let parameters: {
+    const parameters: {
       locationId: number;
       testId?: number;
     } = {

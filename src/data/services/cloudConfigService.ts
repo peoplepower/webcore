@@ -18,7 +18,7 @@ const localStorageCurrentCloudKey = 'Main-Cloud';
 export class CloudConfigService extends BaseService {
   @inject('CommonApi') public readonly commonApi!: CommonApi;
   @inject('WcStorage') protected readonly wcStorage!: WcStorage;
-  @inject('Logger') protected readonly logger!: Logger;
+  @inject('Logger') protected override readonly logger!: Logger;
   @inject('Tuner') private readonly tuner!: Tuner;
 
   /**
@@ -124,20 +124,20 @@ export class CloudConfigService extends BaseService {
     }
 
     return this.getClouds().then((clouds) => {
-      let savedCloud = this.wcStorage.get<CloudConfig>(localStorageCurrentCloudKey);
+      const savedCloud = this.wcStorage.get<CloudConfig>(localStorageCurrentCloudKey);
 
       if (savedCloud) {
         if (!clouds || clouds.length <= 0) {
           return this.setCurrentCloud(savedCloud);
         }
-        let savedCloudFromServer = clouds.find((c) => {
+        const savedCloudFromServer = clouds.find((c) => {
           return savedCloud!.name && c.name && savedCloud!.name.toLowerCase() === c.name.toLowerCase();
         });
         if (savedCloudFromServer) {
           return this.setCurrentCloud(savedCloudFromServer);
         }
       } else if (this.tuner?.config?.cloudName && clouds?.length > 0) {
-        let cloud = clouds.find(c => c.name.toLowerCase() === this.tuner?.config?.cloudName?.toLowerCase());
+        const cloud = clouds.find(c => c.name.toLowerCase() === this.tuner?.config?.cloudName?.toLowerCase());
         if (cloud) {
           return this.setCurrentCloud(cloud);
         }
@@ -148,7 +148,7 @@ export class CloudConfigService extends BaseService {
       }
 
       // By default, choose the first one
-      return this.setCurrentCloud(clouds[0]);
+      return this.setCurrentCloud(clouds[0]!);
     });
   }
 
@@ -173,7 +173,7 @@ export class CloudConfigService extends BaseService {
    */
   protected getApiUrlForCloud(cloud: CloudConfig): string {
     if (cloud && cloud.servers) {
-      let apiInfo = cloud.servers.find((c) => c.type?.toLocaleLowerCase() === apiServerTypeName.toLowerCase());
+      const apiInfo = cloud.servers.find((c) => c.type?.toLocaleLowerCase() === apiServerTypeName.toLowerCase());
       if (apiInfo) {
         return (apiInfo.ssl ? 'https://' : 'http://') + apiInfo.host + (apiInfo.port ? ':' + apiInfo.port : '');
         // apiInfo.path; // todo this field should contains path to the API
@@ -194,7 +194,7 @@ export class CloudConfigService extends BaseService {
         type: ServerType.WsApi,
       })
       .then((data) => {
-        let server = data.server;
+        const server = data.server;
 
         let path = server.path;
         if (path && !path.startsWith('/')) {

@@ -10,7 +10,7 @@ export class UserLocalStorage {
   @inject('WcStorage') protected readonly wcStorage!: WcStorage;
 
   public set(path: string, data: string | number | boolean | object): Promise<void> {
-    let me = this;
+    const me = this;
     return this.userService.getCurrentUserInfo().then(function (userInfo) {
       if (userInfo && userInfo.user) {
         return me.wcStorage.set(userInfo.user.id + '.' + path, data);
@@ -19,7 +19,7 @@ export class UserLocalStorage {
   }
 
   public get<T>(path: string): Promise<T | null | undefined> {
-    let me = this;
+    const me = this;
     return this.userService.getCurrentUserInfo().then(function (userInfo) {
       if (userInfo && userInfo.user) {
         return me.wcStorage.get<T>(userInfo.user.id + '.' + path);
@@ -28,7 +28,7 @@ export class UserLocalStorage {
   }
 
   public remove(path: string): Promise<void> {
-    let me = this;
+    const me = this;
     return this.userService.getCurrentUserInfo().then(function (userInfo) {
       if (userInfo && userInfo.user) {
         return me.wcStorage.remove(userInfo.user.id + '.' + path);

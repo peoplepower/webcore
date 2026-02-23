@@ -1,4 +1,4 @@
-import { WebCore } from './ppc-webcore';
+import { WebCore } from './webcore';
 import { LocalStorageProvider } from './modules/localStorage/localStorage';
 import { Environment } from './modules/envir/environment';
 import { WebCoreConfig } from './modules/tuner/config';
@@ -38,7 +38,7 @@ class LocalStorageMimic implements LocalStorageProvider {
 
   key(index: number): string | null {
     return Object.entries(this.storageObject)
-      .find(([key, value], i) => index === i)
+      .find(([_key, _value], i) => index === i)
       ?.[1];
   }
 
@@ -50,7 +50,7 @@ class LocalStorageMimic implements LocalStorageProvider {
         try {
           const obj = JSON.parse(data || '');
           this.storageObject = obj || {};
-        } catch (e) {
+        } catch {
           this.storageObject = {};
         }
       },
@@ -62,7 +62,7 @@ class LocalStorageMimic implements LocalStorageProvider {
   }
 
   private save() {
-    let str = JSON.stringify(this.storageObject);
+    const str = JSON.stringify(this.storageObject);
     AsyncStorage.setItem(ASYNC_STORAGE_KEY, str);
   }
 
@@ -103,7 +103,7 @@ const config: WebCoreConfig = {
 };
 
 const wsPromise = ls.load().then(() => {
-  let webCore = new WebCore(env, config);
+  const webCore = new WebCore(env, config);
   // webCore.services.auth.loginByKey(apiKey);
   return webCore;
 });

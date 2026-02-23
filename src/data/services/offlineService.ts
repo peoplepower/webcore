@@ -74,7 +74,7 @@ export class OfflineService extends BaseService {
   }
 
   private pingRecursive(nextPingTimeout: number): Promise<void> {
-    let me = this;
+    const me = this;
     return me
       .ping()
       .then(() => {

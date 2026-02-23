@@ -2,17 +2,13 @@ node_modules/
 .vscode/
 .idea/
 /.npmrc
+temp/
 
 # Build folder
 dist/
 
-.DS_Store
-yarn.lock
-
-# Optional npm cache directory
+# Optional cache folders
 .npm
-
-# Optional eslint cache
 .eslintcache
 
 # Optional REPL history
@@ -25,5 +21,14 @@ yarn.lock
 .yarn-integrity
 
 # Environment variables
-.env
-.env.test
+.env*
+!.env.example
+
+# Miscellaneous
+.DS_Store
+
+# Agents
+AGENTS.md
+CLAUDE.md
+.claude/
+.github/copilot-instructions.md

@@ -1,12 +1,13 @@
 {
   "extends": "./tsconfig.bundle.json",
   "compilerOptions": {
-    "sourceMap": true,
+    "noEmit": false,
     "declaration": true,
     "declarationDir": "dist/types",
     "outDir": "dist/types",
     "removeComments": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "types": ["node"]
   },
   "exclude": ["node_modules", "tests"]
 }

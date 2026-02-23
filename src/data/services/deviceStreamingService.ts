@@ -20,20 +20,20 @@ export class DeviceStreamingService extends BaseService {
         });
       }
 
-      let host = serverData.server.host + (serverData.server.port ? ':' + serverData.server.port : '');
-      let streamingServerUrl = (serverData.server.ssl ? 'https://' : 'http://') + host;
-      let websocketUrl = (serverData.server.ssl ? 'wss://' : 'ws://') + host;
+      const host = serverData.server.host + (serverData.server.port ? ':' + serverData.server.port : '');
+      const streamingServerUrl = (serverData.server.ssl ? 'https://' : 'http://') + host;
+      const websocketUrl = (serverData.server.ssl ? 'wss://' : 'ws://') + host;
 
       return this.streamingApi.getStreamingSession(streamingServerUrl, deviceId).then((streamingSessionInfo) => {
         if (!streamingSessionInfo || !streamingSessionInfo.videoServer || !streamingSessionInfo.sessionId) {
           // disconnected
-          let result: DeviceStreamingServerInfo = {
+          const result: DeviceStreamingServerInfo = {
             connected: false,
           };
           return Promise.resolve(result);
         }
 
-        let streamingRtmpUrl =
+        const streamingRtmpUrl =
           (streamingSessionInfo.videoServerSsl ? 'rtmps' : 'rtmp') +
           '://' +
           streamingSessionInfo.videoServer +
@@ -45,7 +45,7 @@ export class DeviceStreamingService extends BaseService {
           '/' +
           streamingSessionInfo.sessionId;
 
-        let streamingHLSUrl =
+        const streamingHLSUrl =
           (streamingSessionInfo.videoServerSsl ? 'https' : 'http') +
           '://' +
           streamingSessionInfo.videoServer +
@@ -56,7 +56,7 @@ export class DeviceStreamingService extends BaseService {
           '&deviceId=' +
           deviceId;
 
-        let result: DeviceStreamingServerInfo = {
+        const result: DeviceStreamingServerInfo = {
           connected: true,
           rtmpUrl: streamingRtmpUrl,
           hlsUrl: streamingHLSUrl,

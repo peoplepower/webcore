@@ -11,7 +11,7 @@ export class Container {
    * @param {string} [typeName]
    */
   public addInjectable<T>(constructor: new (...args: any[]) => T, typeName?: string) {
-    let name = typeName || constructor.name;
+    const name = typeName || constructor.name;
     if (this.constructors.hasOwnProperty(name)) {
       throw new Error(`DI error: injectable with such name already exists: ${name}`);
     }
@@ -28,7 +28,7 @@ export class Container {
     if (!this.constructors.hasOwnProperty(identifier)) {
       throw new Error(`DI error: There is no object with name ${identifier} in DI Container`);
     }
-    return new this.constructors[identifier]();
+    return new this.constructors[identifier]!();
   }
 
   /**
@@ -67,7 +67,7 @@ export class Container {
       }
       return;
     } else {
-      for (let key in this.injectables) {
+      for (const key in this.injectables) {
         delete this.injectables[key];
       }
       return;
@@ -75,7 +75,7 @@ export class Container {
   }
 }
 
-let container = new Container();
+const container = new Container();
 export { container };
 
 /**

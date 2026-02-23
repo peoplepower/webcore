@@ -52,7 +52,7 @@ export class Logger {
       config.maxLevel = DEFAULT_MAX_LEVEL;
     }
     if (config.minLevel < config.maxLevel) {
-      let m = config.minLevel;
+      const m = config.minLevel;
       config.minLevel = config.maxLevel;
       config.maxLevel = m;
     }
@@ -78,7 +78,7 @@ export class Logger {
   private log(level: LogLevel, ...args: any[]) {
     if (this.config.maxLevel! <= level && level <= this.config.minLevel! && this.appenders) {
       for (let i = 0; i < this.appenders.length; i++) {
-        this.appenders[i].log(level, ...args);
+        this.appenders[i]!.log(level, ...args);
       }
     }
   }

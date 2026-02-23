@@ -21,7 +21,7 @@ export class AuthInterceptor implements Interceptor {
       if (!config.headers) {
         config.headers = {}; // Just to make sure it is initialized in case its undefined.
       }
-      let key = this.authService.apiKey; // TODO: Make getting api key as promise to let it working if we are logging in.
+      const key = this.authService.apiKey; // TODO: Make getting api key as promise to let it working if we are logging in.
       if (key && key.length >= 0) {
         config.headers['API_KEY'] = key;
       }
