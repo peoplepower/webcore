@@ -1,6 +1,6 @@
 {
   "name": "@peoplepower/webcore",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "Client JS/TS SDK for Care Daily Cloud API",
   "type": "module",
   "keywords": [
