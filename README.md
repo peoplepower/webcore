@@ -30,7 +30,7 @@ Type definitions at `./dist/types/` are compiled sources per-file (not bundled).
 
 Please, avoid importing two modules at the same time. This will lead to the appearance of hard-to-diagnose errors.
 
-Bundles are compiled to ES2020 format. We could enable browser-friendly UMD build (for injecting right into the web page) by request.
+Bundles are compiled into ES6 (ES2015) format. We could enable browser-friendly UMD build (for injecting right into the web page) by request. Pre-requisite NodeJS version is 20.15.1 for compatibility.
 
 ### Typescript Import
 
