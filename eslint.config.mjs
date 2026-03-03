@@ -1,10 +1,11 @@
 // @ts-check
 
 import eslint from '@eslint/js';
+import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
-export default tseslint.config({
+export default defineConfig({
   files: ['src/**/*.ts', 'tests/**/*.ts'],
   ignores: ['dist/', 'node_modules/'],
   extends: [
