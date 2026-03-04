@@ -41,7 +41,7 @@ export interface GetSurveyAnswersApiResponse extends ApiResponseBase {
     endDate?: string;
     endDateMs?: number;
 
-    survey: Array<{
+    survey: {
 
       /**
        * Unique survey key
@@ -67,6 +67,31 @@ export interface GetSurveyAnswersApiResponse extends ApiResponseBase {
        * Survey description
        */
       description?: string;
-    }>;
+
+      /**
+       * Survey instructions
+       */
+      instructions?: string;
+
+      /**
+       * Survey answer status. Same as one level up `status` field
+       */
+      answerStatus: number;
+
+      /**
+       * Pagination flag to display survey in UI by pages
+       */
+      pagination: boolean;
+
+      /**
+       * How often the same user can answer the survey in days
+       */
+      minAnswerFrequency: number;
+
+      /**
+       * Send notification to a user after completing the survey
+       */
+      notifyCompletion: boolean;
+    };
   }>;
 }
