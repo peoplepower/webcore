@@ -41,11 +41,6 @@ export interface GetSurveyAnswersApiResponse extends ApiResponseBase {
     endDate?: string;
     endDateMs?: number;
 
-    /**
-     * Same as survey.surveyKey
-     */
-    surveyKey: string;
-
     survey: {
 
       /**
@@ -88,8 +83,14 @@ export interface GetSurveyAnswersApiResponse extends ApiResponseBase {
        */
       pagination: boolean;
 
+      /**
+       * How often the same user can answer the survey in days
+       */
       minAnswerFrequency: number;
 
+      /**
+       * Send notification to a user after completing the survey
+       */
       notifyCompletion: boolean;
     };
   }>;
