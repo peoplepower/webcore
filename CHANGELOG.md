@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning].
 
 - ...
 
+## [3.1.2] - 2026-03-06
+
+### Fixed
+- Set package type to CommonJS (default) for compatibility
+
 ## [3.1.1] - 2026-03-04
 
 ### Added
@@ -33,5 +38,6 @@ and this project adheres to [Semantic Versioning].
 
 <!-- Versions -->
 [unreleased]: https://github.com/peoplepower/webcore/compare/3.1.2...HEAD
+[3.1.2]: https://github.com/peoplepower/webcore/compare/3.1.1..3.1.2
 [3.1.1]: https://github.com/peoplepower/webcore/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/peoplepower/webcore/releases/tag/3.1.0
