@@ -11,7 +11,6 @@ import { SummaryLocationState } from "./states/summaryLocationState";
 import { OccupancyOverviewLocationState } from "./states/occupancyOverviewLocationState";
 import { LocationPropertiesLocationState } from "./states/locationPropertiesLocationState";
 import { LocationHighlightsLocationState } from "./states/locationHighlightsLocationState";
-import { LocationConnectionsLocationState } from "./states/locationConnectionsLocationState";
 
 export interface GetLocationStateApiResponse extends ApiResponseBase {
   /**
@@ -42,7 +41,6 @@ export type LocationStateName = 'dashboard_header'
   | 'occupancy_overview'
   | 'location_properties'
   | 'location_highlights'
-  | 'connections'
   | string;
 
 export type LocationStateValue<T extends LocationStateName> =
@@ -58,5 +56,4 @@ export type LocationStateValue<T extends LocationStateName> =
     | T extends 'occupancy_overview' ? OccupancyOverviewLocationState : never
     | T extends 'location_properties' ? LocationPropertiesLocationState : never
     | T extends 'location_highlights' ? LocationHighlightsLocationState : never
-    | T extends 'connections' ? LocationConnectionsLocationState : never
     | Object;

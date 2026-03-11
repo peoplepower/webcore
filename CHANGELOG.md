@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning].
 
 - ...
 
+## [3.1.3] - 2026-03-11
+
+### Deprecated
+- Remove unused `connections` state
+
 ## [3.1.2] - 2026-03-06
 
 ### Fixed
@@ -37,7 +42,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.2...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.3...HEAD
+[3.1.3]: https://github.com/peoplepower/webcore/compare/3.1.2..3.1.3
 [3.1.2]: https://github.com/peoplepower/webcore/compare/3.1.1..3.1.2
 [3.1.1]: https://github.com/peoplepower/webcore/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/peoplepower/webcore/releases/tag/3.1.0
