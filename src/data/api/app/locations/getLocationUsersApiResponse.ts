@@ -27,6 +27,8 @@ export enum UserRole {
   PrimaryCaregiver = 2,
   SecondaryCaregiver = 3,
   ProfessionalCaregiver = 4,
+  TrustedCircleMember = 5,
+  AttendingDoctor = 6,
 }
 
 /**

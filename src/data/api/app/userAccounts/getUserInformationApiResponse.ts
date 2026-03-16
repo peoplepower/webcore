@@ -67,6 +67,7 @@ export enum ExternalUserRole {
   Resident = 0,
   CircleMember = 1,
   SSO = 2,
+  Doctor = 6,
 }
 
 export interface LocationInfo {

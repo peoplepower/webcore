@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
-- ...
+### Changed
+- User role types updated
 
 ## [3.1.3] - 2026-03-11
 
