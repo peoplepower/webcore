@@ -5,6 +5,7 @@ import { GetLastNMeasurementsApiResponse } from './getLastNMeasurementsApiRespon
 import { GetMeasurementsHistoryApiResponse, IntervalAggregationAlgorithm } from './getMeasurementsHistoryApiResponse';
 import { GetCurrentDeviceMeasurementsApiResponse } from './getCurrentDeviceMeasurementsApiResponse';
 import { CommandParametersModel, SendCommandToDeviceApiResponse } from './sendCommandToDeviceApiResponse';
+import { GetExternalParametersApiResponse } from './getExternalParametersApiResponse';
 
 /**
  * Device Measurements API.
@@ -163,5 +164,27 @@ export class DeviceMeasurementsApi {
     },
   ): Promise<GetMeasurementsHistoryApiResponse> {
     return this.dal.get(`devices/${encodeURIComponent(deviceId)}/parametersByDate/${encodeURIComponent(startDate)}`, {params: params});
+  }
+
+  /**
+   * Get external parameters for the specified device.
+   * Returns value of the parameter passed in the request.
+   *
+   * @param params Request parameters.
+   * @param {string} params.deviceId Device ID to obtain information on.
+   * @param {number} params.locationId Request information on a specific location.
+   * @param {string|string[]} params.paramName Parameter name or names to obtain information on.
+   * @param {string|number|boolean} [params.paramValue] Optional parameter value to filter by. Only parameters with this value will be returned.
+   * @param {number|string} [params.paramTime] Optional parameter time to filter by. Only parameters with this time will be returned. Example: 2014-08-01T12:00:00-08:00
+   * @returns {Promise<GetExternalParametersApiResponse>}
+   */
+  getExternalParameters(params: {
+    deviceId: string,
+    locationId: number,
+    paramName: string | string[],
+    paramValue?: string | number | boolean,
+    paramTime?: number | string,
+  }): Promise<GetExternalParametersApiResponse> {
+    return this.dal.get(`externalParameters`, {params: params});
   }
 }
