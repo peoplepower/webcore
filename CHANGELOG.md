@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
+- /
+
+## [3.1.5] - 2026-03-30
+
+### Added
+- Added Get External Parameters API
+
+## [3.1.4] - 2026-03-14
 
 ### Changed
 - User role types updated
@@ -43,7 +51,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.3...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.5...HEAD
+[3.1.4]: https://github.com/peoplepower/webcore/compare/3.1.3..3.1.4
 [3.1.3]: https://github.com/peoplepower/webcore/compare/3.1.2..3.1.3
 [3.1.2]: https://github.com/peoplepower/webcore/compare/3.1.1..3.1.2
 [3.1.1]: https://github.com/peoplepower/webcore/compare/3.1.0...3.1.1
