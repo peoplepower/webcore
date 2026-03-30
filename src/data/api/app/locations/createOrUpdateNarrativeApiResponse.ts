@@ -38,8 +38,11 @@ export interface CreateOrUpdateNarrativeModel {
   icon?: string;
   title?: string;
   description?: string;
+
+  /**
+   * Free form synthetic data.
+   */
   target?: {
-    fileIDs?: number[];
-    field?: string;
+    [field: string]: any;
   };
 }

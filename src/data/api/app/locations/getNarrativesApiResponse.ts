@@ -68,8 +68,12 @@ export interface Narrative {
   icon?: string;
   title?: string;
   description?: string;
+
+  /**
+   * Free form synthetic data.
+   */
   target?: {
-    [field: string]: string;
+    [field: string]: any;
   };
 
   /**

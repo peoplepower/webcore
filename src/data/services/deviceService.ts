@@ -21,6 +21,7 @@ import { WsSubscription } from "../../modules/wsHub/wsSubscription";
 import { WsSubscriptionType } from "../../modules/wsHub/wsSubscriptionType";
 import { WsSubscriptionOperation } from "../../modules/wsHub/wsSubscriptionOperation";
 import { WsHub } from "../../modules/wsHub/wsHub";
+import { GetExternalParametersApiResponse } from '../api/app/deviceMeasurements/getExternalParametersApiResponse';
 
 @injectable('DeviceService')
 export class DeviceService extends BaseService {
@@ -411,6 +412,52 @@ export class DeviceService extends BaseService {
 
     return this.authService.ensureAuthenticated().then(() => {
       return this.deviceMeasurementsApi.sendCommandToDevice(deviceId, command, {locationId: locationId});
+    });
+  }
+
+  /**
+   * Get external parameters for the specific device.
+   *
+   * @param {string} deviceId Device ID for which to get external parameters
+   * @param {number} locationId Device location ID
+   * @param {string | string[]} paramName Parameter name to retrieve
+   * @param [params] Additional parameters
+   * @param {string|number|boolean} [params.paramValue] Value of the parameter
+   * @param {number|string} [params.paramTime] Time of the parameter
+   * @returns {Promise<GetExternalParametersApiResponse>}
+   */
+  public getExternalParameters(
+    deviceId: string,
+    locationId: number,
+    paramName: string | string[],
+    params?: {
+      paramValue?: string | number | boolean;
+      paramTime?: number | string;
+    }
+  ): Promise<GetExternalParametersApiResponse> {
+    if (!deviceId || deviceId.length === 0) {
+      return this.reject(`Device ID can not be empty [${deviceId}].`);
+    }
+    if (locationId < 1 || isNaN(locationId)) {
+      return this.reject(`Location ID is incorrect [${locationId}].`);
+    }
+
+    const parameters: {
+      deviceId: string;
+      locationId: number;
+      paramName: string | string[];
+      paramValue?: string | number | boolean;
+      paramTime?: number | string;
+    } = {
+      deviceId: deviceId,
+      locationId: locationId,
+      paramName: paramName,
+      paramValue: params && params.paramValue,
+      paramTime: params && params.paramTime,
+    };
+
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.deviceMeasurementsApi.getExternalParameters(parameters);
     });
   }
 
