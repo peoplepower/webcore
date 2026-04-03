@@ -91,8 +91,8 @@ export class NarrativeService extends BaseService {
    * @param {NarrativePriority} [params.toPriority] Filter by priority less or equal than that.
    * @param {NarrativeType | Array<NarrativeType>} [params.narrativeType] Filter by narrative type, multiple values allowed.
    * @param {string} [params.searchBy] Filter by title or description. Use * for a wildcard.
-   * @param {string} [params.startDate] Narrative date range start.
-   * @param {string} [params.endDate] Narrative date range end.
+   * @param {string|number} [params.startDate] Narrative date range start.
+   * @param {string|number} [params.endDate] Narrative date range end.
    * @param {string} [params.pageMarker] Marker to the next page.
    * @returns {Promise<GetNarrativesApiResponse>}
    */
@@ -106,8 +106,8 @@ export class NarrativeService extends BaseService {
       toPriority?: NarrativePriority;
       narrativeType?: NarrativeType | Array<NarrativeType>;
       searchBy?: string;
-      startDate?: string;
-      endDate?: string;
+      startDate?: string | number;
+      endDate?: string | number;
       pageMarker?: string;
     },
   ): Promise<NarrativesSearchResult> {
