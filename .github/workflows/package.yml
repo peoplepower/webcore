@@ -34,7 +34,7 @@ jobs:
     # Update .npmrc for security
     - name: Configure .npmrc for security
       run: echo "block-exotic-subdeps=true" >> .npmrc
-    - run: echo "minimum-release-age=4320" >> .npmrc
+    - run: echo "minimum-release-age=10080" >> .npmrc
 
     # Install dependencies and build the package
     - name: Install dependencies and run build

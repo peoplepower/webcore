@@ -346,8 +346,8 @@ export class LocationsApi {
    * @param {NarrativePriority} [params.toPriority] Filter by priority less or equal than that.
    * @param {NarrativeStatus} [params.status] Filter by status, deleted are not returned by default.
    * @param {string} [params.searchBy] Filter by title or description. Use * for a wildcard.
-   * @param {string} [params.startDate] Narrative date range start.
-   * @param {string} [params.endDate] Narrative date range end date.
+   * @param {string|number} [params.startDate] Narrative date range start.
+   * @param {string|number} [params.endDate] Narrative date range end date.
    * @param {string} [params.pageMarker] Marker to the next page.
    * @param {number} [params.parentId] Filter by parent narrative ID.
    * @returns {Promise<GetNarrativesApiResponse>}
@@ -361,8 +361,8 @@ export class LocationsApi {
       toPriority?: NarrativePriority;
       status?: NarrativeStatus;
       searchBy?: string;
-      startDate?: string;
-      endDate?: string;
+      startDate?: string | number;
+      endDate?: string | number;
       pageMarker?: string;
       parentId?: number;
     },
