@@ -11,7 +11,7 @@ import { UserService } from './data/services/userService';
 import { Logger } from './modules/logger/logger';
 import { Tuner } from './modules/tuner/tuner';
 import { WebCoreConfig } from './modules/tuner/config';
-import { Environment } from './modules/envir/environment';
+import type { Environment } from './modules/envir/environment';
 import { Envir } from './modules/envir/envir';
 import { DeviceService } from './data/services/deviceService';
 import { WcStorage } from './modules/localStorage/localStorage';

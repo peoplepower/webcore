@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
-- /
+- Migration to Vite 8 and Rolldown
 
 ## [3.1.6] - 2026-03-31
 
