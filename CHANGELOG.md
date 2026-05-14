@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
+- 
+
+## [3.1.7] - 2026-05-14
+
+### Changed
 - Migration to Vite 8 and Rolldown
+- Security update for GH Actions and packages
 
 ## [3.1.6] - 2026-03-31
 
