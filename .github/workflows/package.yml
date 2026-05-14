@@ -38,7 +38,7 @@ jobs:
 
     # Install dependencies and build the package
     - name: Install dependencies and run build
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
     - run: pnpm build
 
     # Publish package to GitHub Packages

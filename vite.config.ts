@@ -2,10 +2,10 @@ import { resolve } from 'path';
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json' with {type: 'json'};
 
-const tsConfig = {
-  tsconfig: './tsconfig.bundle.json',
-  checkJs: false,
-};
+// const tsConfig = {
+//   tsconfig: './tsconfig.bundle.json',
+//   checkJs: false,
+// };
 
 type BuildFormat = 'es' | 'cjs' | 'umd';
 
