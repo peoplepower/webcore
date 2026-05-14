@@ -1,12 +1,11 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vitest/config';
-import typescript from '@rollup/plugin-typescript';
 import pkg from './package.json' with {type: 'json'};
 
-const tsConfig = {
-  tsconfig: './tsconfig.bundle.json',
-  checkJs: false,
-};
+// const tsConfig = {
+//   tsconfig: './tsconfig.bundle.json',
+//   checkJs: false,
+// };
 
 type BuildFormat = 'es' | 'cjs' | 'umd';
 
@@ -36,11 +35,8 @@ export default defineConfig({
     },
     minify: false,
     sourcemap: true,
-    rollupOptions: {
+    rolldownOptions: {
       external: ['axios', 'qs'],
-      plugins: [
-        typescript(tsConfig),
-      ],
     },
   },
   test: {

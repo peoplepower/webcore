@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
-- /
+- 
+
+## [3.1.7] - 2026-05-14
+
+### Changed
+- Migration to Vite 8 and Rolldown
+- Security update for GH Actions and packages
 
 ## [3.1.6] - 2026-03-31
 
@@ -56,7 +62,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.6...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.7...HEAD
+[3.1.7]: https://github.com/peoplepower/webcore/compare/3.1.6..3.1.7
 [3.1.6]: https://github.com/peoplepower/webcore/compare/3.1.5..3.1.6
 [3.1.5]: https://github.com/peoplepower/webcore/compare/3.1.4..3.1.5
 [3.1.4]: https://github.com/peoplepower/webcore/compare/3.1.3..3.1.4

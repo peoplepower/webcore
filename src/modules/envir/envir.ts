@@ -1,4 +1,4 @@
-import { Environment } from './environment';
+import type { Environment } from './environment';
 import { LiteEvent } from '../common/liteEvent';
 import { injectable } from '../common/di';
 
