@@ -1,6 +1,5 @@
 import { AppApiDal } from '../appApiDal';
 import { inject, injectable } from '../../../../modules/common/di';
-import { DeleteMessageApiResponse } from './deleteMessageApiResponse';
 import { GetCrowdFeedbackByIdApiResponse } from './getCrowdFeedbackByIdApiResponse';
 import { GetMessagesApiResponse, MessageStatus } from './getMessagesApiResponse';
 import { GetNotificationSubscriptionsApiResponse, NotificationType } from './getNotificationSubscriptionsApiResponse';
@@ -336,9 +335,42 @@ export class UserCommunicationsApi {
    * @deprecated Functionality deprecated from Server v1.26
    *
    * @param {number} messageId ID of the message to delete.
-   * @returns {Promise<DeleteMessageApiResponse>}
+   * @returns {Promise<ApiResponseBase>}
    */
-  deleteMessage(messageId: number): Promise<DeleteMessageApiResponse> {
+  deleteMessage(messageId: number): Promise<ApiResponseBase> {
     return this.dal.delete('messages/' + encodeURIComponent(messageId.toString()));
   }
+
+  // #region -------------------- Push Notifications --------------------
+
+  /**
+   * Register application for push notifications.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/User-Communications/operation/Register%20App%20for%20Push%20Notifications}
+   *
+   * @param {string} appName Unique application name to register for push notifications.
+   * @param {string} token The iOS notification token or the Android device registration ID.
+   * @param [params] Request parameters.
+   * @param {boolean} [params.badge] Support badge icons.
+   * @param {string} [params.brand] If set, the app will not receive notifications addressed to different brands.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  registerPushNotifications(appName: string, token: string, params?: {
+    badge?: boolean;
+    brand?: string;
+  }): Promise<ApiResponseBase> {
+    return this.dal.put(`notificationToken/${encodeURIComponent(appName)}/${encodeURIComponent(token)}`, {}, {params: params});
+  }
+
+  /**
+   * Unregister application from push notifications.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/User-Communications/operation/Unregister%20App%20for%20Push%20Notifications}
+   *
+   * @param {string} token The iOS notification token or the Android device registration ID.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  unregisterPushNotifications(token: string): Promise<ApiResponseBase> {
+    return this.dal.delete(`notificationToken/${encodeURIComponent(token)}`);
+  }
+
+  // #endregion
 }
