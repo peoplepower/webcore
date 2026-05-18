@@ -319,4 +319,38 @@ export class MessagingService extends BaseService {
 
     return this.authService.ensureAuthenticated().then(() => this.userCommunicationsApi.postSupportTicket(model, params));
   }
+
+  /**
+   * Register application for push notifications.
+   * @param {string} appName Unique application name to register for push notifications.
+   * @param {string} token The iOS notification token or the Android device registration ID.
+   * @param [params] Request parameters.
+   * @param {boolean} [params.badge] Support badge icons.
+   * @param {string} [params.brand] If set, the app will not receive notifications addressed to different brands.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public registerForPushNotifications(appName: string, token: string, params?: {
+    badge?: boolean;
+    brand?: string;
+  }): Promise<ApiResponseBase> {
+    if (!appName) {
+      return this.reject('Application name is required for push notification registration.');
+    }
+    if (!token) {
+      return this.reject('Token is required for push notification registration.');
+    }
+    return this.userCommunicationsApi.registerPushNotifications(appName, token, params);
+  }
+
+  /**
+   * Unregister application from push notifications.
+   * @param {string} token The iOS notification token or the Android device registration ID.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public unregisterPushNotifications(token: string): Promise<ApiResponseBase> {
+    if (!token) {
+      return this.reject('Token is required to unregister from push notifications.');
+    }
+    return this.userCommunicationsApi.unregisterPushNotifications(token);
+  }
 }
