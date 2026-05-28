@@ -40,15 +40,14 @@ export class XhrAppender extends Appender {
 
   private send() {
     const messages = this.messages;
-    const me = this;
     this.messages = [];
-    setTimeout(function () {
+    setTimeout(() => {
       const xhr = new XMLHttpRequest();
-      xhr.open(me.config.method!, me.config.path!, true);
+      xhr.open(this.config.method!, this.config.path!, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
-      if (me.config.headers) {
-        for (const headerName in me.config.headers) {
-          xhr.setRequestHeader(headerName, me.config.headers[headerName]!);
+      if (this.config.headers) {
+        for (const headerName in this.config.headers) {
+          xhr.setRequestHeader(headerName, this.config.headers[headerName]!);
         }
       }
       xhr.send(JSON.stringify(new XhrLogMessagePackage(messages)));

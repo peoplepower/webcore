@@ -3,4 +3,5 @@
 
 engine-strict=true
 min-release-age=7
+ignore-scripts=true
 block-exotic-subdeps=true

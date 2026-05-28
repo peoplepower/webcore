@@ -7,7 +7,6 @@ import { LogLevel } from '../../logLevel';
  */
 export class ConsoleAppender extends Appender {
   protected override config!: ConsoleAppenderConfig;
-
   private readonly consoleStyle: { [logLevel: string]: string };
 
   constructor(config: ConsoleAppenderConfig) {
@@ -20,9 +19,9 @@ export class ConsoleAppender extends Appender {
 
     // Styles for console messages
     this.consoleStyle = {};
-    this.consoleStyle[LogLevel.Emergency] = 'color: dark-red; font-size: xx-large; background-color: red';
-    this.consoleStyle[LogLevel.Alert] = 'color: red; font-size: x-large; background-color: #fff0f0';
-    this.consoleStyle[LogLevel.Critical] = 'color: red; font-size: large; background-color: #fff0f0';
+    this.consoleStyle[LogLevel.Emergency] = 'color: dark-red; background-color: red';
+    this.consoleStyle[LogLevel.Alert] = 'color: red; background-color: #fff0f0';
+    this.consoleStyle[LogLevel.Critical] = 'color: red; background-color: #fff0f0';
     this.consoleStyle[LogLevel.Error] = 'color: red; background-color: #fff0f0';
     this.consoleStyle[LogLevel.Warn] = 'color: #e87a20;';
     this.consoleStyle[LogLevel.Notice] = 'color: blue;';
@@ -33,7 +32,7 @@ export class ConsoleAppender extends Appender {
   log(level: LogLevel, ...args: any[]): void {
     if (this.config.maxLevel! <= level && level <= this.config.minLevel! && args.length > 0) {
       if (this.config.colors && this.consoleStyle[level]) {
-        // todo check if colors are supported
+        // TODO: Check if colors are supported
         if (args[0] && (typeof args[0] === 'string' || args[0] instanceof String)) {
           args.splice(1, 0, this.consoleStyle[level]);
           args[0] = '%c' + args[0];

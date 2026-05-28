@@ -27,9 +27,8 @@ export class UserService extends BaseService {
 
   constructor() {
     super();
-    const me = this;
     setTimeout(() => {
-      me.init();
+      this.init();
     });
   }
 
@@ -39,29 +38,28 @@ export class UserService extends BaseService {
    * @returns {Promise<UserInformation>}
    */
   public getCurrentUserInfo(force?: boolean): Promise<UserInformation> {
-    const me = this;
-    if (me.getCurrentUserInfoPromise) {
-      return Promise.resolve(me.getCurrentUserInfoPromise);
+    if (this.getCurrentUserInfoPromise) {
+      return Promise.resolve(this.getCurrentUserInfoPromise);
     }
-    if (me.currentUserInfo && !force) {
-      return Promise.resolve(me.currentUserInfo);
+    if (this.currentUserInfo && !force) {
+      return Promise.resolve(this.currentUserInfo);
     }
-    me.getCurrentUserInfoPromise = me.authService
+    this.getCurrentUserInfoPromise = this.authService
       .ensureAuthenticated()
       .then(() => {
-        return me.initCurrentUserInfo(force);
+        return this.initCurrentUserInfo(force);
       })
       .then(
         (data) => {
-          delete me.getCurrentUserInfoPromise;
+          delete this.getCurrentUserInfoPromise;
           return data;
         },
         (error) => {
-          delete me.getCurrentUserInfoPromise;
+          delete this.getCurrentUserInfoPromise;
           return Promise.reject(error);
         },
       );
-    return Promise.resolve(me.getCurrentUserInfoPromise);
+    return Promise.resolve(this.getCurrentUserInfoPromise);
   }
 
   /**
@@ -263,34 +261,32 @@ export class UserService extends BaseService {
   // #endregion
 
   private init() {
-    const me = this;
-    me.authService.ensureAuthenticated().then(function () {
-      me.initCurrentUserInfo();
-      me.authService.onLogin.on(() => {
-        me.initCurrentUserInfo();
+    this.authService.ensureAuthenticated().then(() => {
+      this.initCurrentUserInfo();
+      this.authService.onLogin.on(() => {
+        this.initCurrentUserInfo();
       });
-      me.authService.onLogout.on(() => {
-        me.clearCurrentUserInfo();
+      this.authService.onLogout.on(() => {
+        this.clearCurrentUserInfo();
       });
     });
   }
 
   private initCurrentUserInfo(force?: boolean): Promise<UserInformation> {
-    const me = this;
-    if (me.initCurrentUserInfoPromise) {
-      return Promise.resolve(me.initCurrentUserInfoPromise);
+    if (this.initCurrentUserInfoPromise) {
+      return Promise.resolve(this.initCurrentUserInfoPromise);
     }
-    if (me.currentUserInfo && !force) {
-      return Promise.resolve(me.currentUserInfo);
+    if (this.currentUserInfo && !force) {
+      return Promise.resolve(this.currentUserInfo);
     }
-    me.initCurrentUserInfoPromise = me.userAccountsApi.getUserInformation().then(function (userInfo) {
-      // me.logger.debug('User info loaded', userInfo);
-      me.currentUserInfo = userInfo;
-      delete me.initCurrentUserInfoPromise;
-      me.onCurrentUserInfoUpdated.trigger(me.currentUserInfo);
+    this.initCurrentUserInfoPromise = this.userAccountsApi.getUserInformation().then((userInfo) => {
+      // this.logger.debug('User info loaded', userInfo);
+      this.currentUserInfo = userInfo;
+      delete this.initCurrentUserInfoPromise;
+      this.onCurrentUserInfoUpdated.trigger(this.currentUserInfo);
       return userInfo;
     });
-    return Promise.resolve(me.initCurrentUserInfoPromise);
+    return Promise.resolve(this.initCurrentUserInfoPromise);
   }
 
   private clearCurrentUserInfo(): void {

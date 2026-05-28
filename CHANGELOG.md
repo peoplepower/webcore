@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
+## [3.2.0] - 2026-05-27
+
+### Changed
+- Updated dependencies for security and performance improvements
+
+### Deprecated
+- Remove deprecated `anonimous` user parameter
+
 ## [3.1.8] - 2026-05-14
 
 ### Changed
@@ -71,7 +79,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.1.8...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.2.0...HEAD
+[3.2.0]: https://github.com/peoplepower/webcore/compare/3.1.8..3.2.0
 [3.1.8]: https://github.com/peoplepower/webcore/compare/3.1.7..3.1.8
 [3.1.7]: https://github.com/peoplepower/webcore/compare/3.1.6..3.1.7
 [3.1.6]: https://github.com/peoplepower/webcore/compare/3.1.5..3.1.6

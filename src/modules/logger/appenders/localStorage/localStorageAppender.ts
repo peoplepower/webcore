@@ -24,19 +24,18 @@ export class LocalStorageAppender extends Appender {
     }
 
     if (globalThis && 'localStorage' in globalThis && globalThis['localStorage'] !== null) {
-      const me = this;
       if (globalThis.addEventListener) {
-        globalThis.addEventListener('unload', function () {
-          me.dropToLocalStorage();
+        globalThis.addEventListener('unload', () => {
+          this.dropToLocalStorage();
         });
       } else {
-        globalThis.onunload = function () {
-          me.dropToLocalStorage();
+        globalThis.onunload = () => {
+          this.dropToLocalStorage();
         };
       }
 
-      setInterval(function () {
-        me.dropToLocalStorage();
+      setInterval(() => {
+        this.dropToLocalStorage();
       }, 5000);
     } else {
       console.warn('localStorage is unavailable, so LocalStorageAppender for logger is not working');

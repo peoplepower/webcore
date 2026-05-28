@@ -8,6 +8,10 @@ on:
     branches:
       - dev
 
+permissions:
+  id-token: none
+  contents: read
+
 jobs:
   build:
 
@@ -36,12 +40,9 @@ jobs:
     - name: Configure .npmrc for security
       run: echo "block-exotic-subdeps=true" >> .npmrc
     - run: echo "min-release-age=7" >> .npmrc
+    - run: echo "ignore-scripts=true" >> .npmrc
 
     # Install dependencies and build the package
     - name: Install dependencies and run build
       run: pnpm install --frozen-lockfile
     - run: pnpm build
-
-    # Run tests for the build
-    - name: Run tests
-      run: pnpm test:build

@@ -31,10 +31,9 @@ export class Tuner {
   constructor() {
     this.configs = webcoreConfig;
     this.loadConfig();
-    const me = this;
     this.envir.onChangeEvent.on((env) => {
       if (env) {
-        me.loadConfig();
+        this.loadConfig();
       }
     });
   }
@@ -56,8 +55,6 @@ export class Tuner {
    * @param {any} y
    */
   private checkJsonEquality(x: any, y: any): boolean {
-    const me = this;
-
     if (x === y) {
       return true;
     }
@@ -100,13 +97,13 @@ export class Tuner {
       if (x.length !== y.length) {
         return false;
       }
-      return x.every((e, i) => me.checkJsonEquality(x[i], y[i]));
+      return x.every((e, i) => this.checkJsonEquality(x[i], y[i]));
     }
 
     // Nested objects
     if (typeof x === 'object') {
       const keys = Object.keys(x);
-      return Object.keys(y).every((i) => keys.indexOf(i) !== -1) && keys.every((i) => me.checkJsonEquality(x[i], y[i]));
+      return Object.keys(y).every((i) => keys.indexOf(i) !== -1) && keys.every((i) => this.checkJsonEquality(x[i], y[i]));
     }
 
     // All other cases

@@ -95,7 +95,7 @@ export function injectable<T>(typeName: string) {
  *     late type resolution in case of circular module dependency
  */
 export function inject<T>(typeOrName?: string | (new (...args: any[]) => T)): Function {
-  return function (target: Object, propertyName: string) {
+  return function (target: object, propertyName: string) {
     if (!typeOrName) {
       throw new Error(
         `DI error: you should pass type name to @inject() decorator on "${propertyName}" property in "${target.constructor.name}" class`,

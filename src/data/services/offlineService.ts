@@ -74,28 +74,27 @@ export class OfflineService extends BaseService {
   }
 
   private pingRecursive(nextPingTimeout: number): Promise<void> {
-    const me = this;
-    return me
+    return this
       .ping()
       .then(() => {
         return new Promise<void>((resolve) => {
           setTimeout(() => {
             setTimeout(() => {
-              me.setState(OnlineState.Online);
+              this.setState(OnlineState.Online);
             });
             resolve();
           }, this.tuner.config?.ping?.afterPingTimeout || AFTER_PING_TIMEOUT);
         });
       })
       .catch(() => {
-        me.setState(OnlineState.Offline);
+        this.setState(OnlineState.Offline);
         let timeout = nextPingTimeout + (this.tuner.config?.ping?.pingIntervalIncrease || PING_INTERVAL_INCREASE);
         if (timeout > (this.tuner.config?.ping?.maxPingInterval || MAX_PING_INTERVAL)) {
           timeout = this.tuner.config?.ping?.maxPingInterval || MAX_PING_INTERVAL;
         }
-        return new Promise<void>(function (resolve) {
+        return new Promise<void>((resolve) => {
           setTimeout(() => {
-            resolve(me.pingRecursive(timeout));
+            resolve(this.pingRecursive(timeout));
           }, timeout);
         });
       });
