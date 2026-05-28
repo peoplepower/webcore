@@ -10,28 +10,25 @@ export class UserLocalStorage {
   @inject('WcStorage') protected readonly wcStorage!: WcStorage;
 
   public set(path: string, data: string | number | boolean | object): Promise<void> {
-    const me = this;
-    return this.userService.getCurrentUserInfo().then(function (userInfo) {
+    return this.userService.getCurrentUserInfo().then((userInfo) => {
       if (userInfo && userInfo.user) {
-        return me.wcStorage.set(userInfo.user.id + '.' + path, data);
+        return this.wcStorage.set(userInfo.user.id + '.' + path, data);
       }
     });
   }
 
   public get<T>(path: string): Promise<T | null | undefined> {
-    const me = this;
-    return this.userService.getCurrentUserInfo().then(function (userInfo) {
+    return this.userService.getCurrentUserInfo().then((userInfo) => {
       if (userInfo && userInfo.user) {
-        return me.wcStorage.get<T>(userInfo.user.id + '.' + path);
+        return this.wcStorage.get<T>(userInfo.user.id + '.' + path);
       }
     });
   }
 
   public remove(path: string): Promise<void> {
-    const me = this;
-    return this.userService.getCurrentUserInfo().then(function (userInfo) {
+    return this.userService.getCurrentUserInfo().then((userInfo) => {
       if (userInfo && userInfo.user) {
-        return me.wcStorage.remove(userInfo.user.id + '.' + path);
+        return this.wcStorage.remove(userInfo.user.id + '.' + path);
       }
     });
   }

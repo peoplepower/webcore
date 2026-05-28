@@ -50,7 +50,7 @@ export interface GetBotInfoApiResponse extends ApiResponseBase {
       whatsnew?: string;
     }>;
 
-    schedules?: Array<Object>;
+    schedules?: Array<object>;
 
     deviceTypes?: Array<{
       id: number;

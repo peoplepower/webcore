@@ -13,6 +13,7 @@ import { CloudConfigService } from "./cloudConfigService";
 import { CloudType } from "../api/app/common/getApiSettingsApiResponse";
 import { Tuner } from "../../modules/tuner/tuner";
 import { hashString } from "../../modules/common/hash";
+import { redactSecret } from "../../modules/common/redact";
 import { CreateTotpSecretApiResponse } from "../api/app/auth/createTotpSecretApiResponse";
 import { ConfirmTotpSecretApiResponse } from "../api/app/auth/confirmTotpSecretApiResponse";
 import { GetTotpFactorsApiResponse } from "../api/app/auth/getTotpFactorsApiResponse";
@@ -96,7 +97,7 @@ export class AuthService extends BaseService {
   private init() {
     const _apiKey = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY);
     if (_apiKey) {
-      this.logger.debug('API key extracted from local storage: ' + _apiKey);
+      this.logger.debug('API key extracted from local storage: ' + redactSecret(_apiKey));
       this._apiKey = _apiKey;
       this._apiKeyType = this.wcStorage.get<ApiKeyType>(LOCAL_STORAGE_API_KEY_TYPE) ?? undefined;
       const keyExpire = this.wcStorage.get<string>(LOCAL_STORAGE_API_KEY_EXPIRE);
@@ -239,25 +240,24 @@ export class AuthService extends BaseService {
    * @returns {Promise<LoginApiResponse>}
    */
   loginByKey(apiKey: string, admin?: boolean, brand?: string): Promise<LoginApiResponse> {
-    const me = this;
     const keyType = admin ? 11 : 0; // Admin or User key type
     return this.logoutFromThisBrowser()
       .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType, brand: brand}))
       .then((result) => {
-        me.logger.debug('Logged in by API_KEY', result);
+        this.logger.debug('Logged in by API_KEY', {keyType: result.keyType, keyExpire: result.keyExpire});
 
         // NOTE: Dmitriy said that if API_KEY is valid enough - server will not generate new API_KEY. ¯\_(ツ)_/¯
         const key = result.key || apiKey;
 
-        me._apiKey = key;
-        me._apiKeyType = result.keyType;
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY, key);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-        me.wcStorage.remove(LOCAL_STORAGE_LAST_USERNAME);
-        me.setUpKeyExpireTimeout(result.keyExpire!, brand);
-        me.onLogin.trigger();
+        this._apiKey = key;
+        this._apiKeyType = result.keyType;
+        this.wcStorage.set(LOCAL_STORAGE_API_KEY, key);
+        this.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
+        this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
+        this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
+        this.wcStorage.remove(LOCAL_STORAGE_LAST_USERNAME);
+        this.setUpKeyExpireTimeout(result.keyExpire!, brand);
+        this.onLogin.trigger();
         return result;
       })
       .catch((err) => {
@@ -344,16 +344,15 @@ export class AuthService extends BaseService {
    * @returns {Promise<LoginInfo>}
    */
   public refreshToken(brand?: string): Promise<LoginInfo> {
-    const me = this;
-    return me.authApi.loginByKey({apiKey: me._apiKey, brand: brand, keyType: me._apiKeyType}).then((result) => {
-      me.logger.debug('API key has refreshed from: ' + me._apiKey, result);
-      me._apiKey = result.key;
-      me._apiKeyType = result.keyType;
-      me.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
-      me.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
-      me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
-      me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
-      me.setUpKeyExpireTimeout(result.keyExpire!, brand);
+    return this.authApi.loginByKey({apiKey: this._apiKey, brand: brand, keyType: this._apiKeyType}).then((result) => {
+      this.logger.debug('API key has refreshed', {keyType: result.keyType, keyExpire: result.keyExpire});
+      this._apiKey = result.key;
+      this._apiKeyType = result.keyType;
+      this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);
+      this.wcStorage.set(LOCAL_STORAGE_API_KEY_TYPE, result.keyType);
+      this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, result.keyExpire);
+      this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE_PERIOD, new Date(result.keyExpire!).getTime() - new Date().getTime());
+      this.setUpKeyExpireTimeout(result.keyExpire!, brand);
       return result;
     });
   }
@@ -390,7 +389,7 @@ export class AuthService extends BaseService {
    */
   public getTempToken(brand?: string): Promise<LoginInfo> {
     return this.authApi.loginByKey({keyType: 1, brand: brand}).then((result) => {
-      this.logger.debug('Temporary API key has been requested.', result);
+      this.logger.debug('Temporary API key has been requested.', {keyType: result.keyType, keyExpire: result.keyExpire});
       return result;
     });
   }
@@ -412,14 +411,13 @@ export class AuthService extends BaseService {
    * @param {string} [brand] Optional brand
    */
   public setUpKeyExpireTimeout(keyExpireDate: string | number, brand?: string) {
-    const me = this;
     if (keyExpireDate) {
       const keyExpireDateObj = new Date(keyExpireDate);
       let expirePeriod = keyExpireDateObj.getTime() - new Date().getTime() - API_KEY_EXPIRE_ADDITIONAL_DELAY;
       if (isNaN(expirePeriod) || expirePeriod <= 0) {
-        me.logger.debug('API key has expired: ' + me._apiKey);
-        me.logoutFromThisBrowser();
-        me.onNeedRelogin.trigger();
+        this.logger.debug('API key has expired');
+        this.logoutFromThisBrowser();
+        this.onNeedRelogin.trigger();
       } else {
         // setTimeout is buggy: it will fire immediately if timeout is bigger that 0x7FFFFFFF
         if (expirePeriod >= 0x7fffffff) {
@@ -431,13 +429,13 @@ export class AuthService extends BaseService {
           this.apiKeyExpireTimeout = undefined;
         }
 
-        me.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, keyExpireDateObj.toISOString());
-        this.apiKeyExpireTimeout = setTimeout(function () {
-          me.logger.debug(`API key (${me._apiKey}) is about to expire. Refreshing...`);
-          me.refreshToken(brand)
+        this.wcStorage.set(LOCAL_STORAGE_API_KEY_EXPIRE, keyExpireDateObj.toISOString());
+        this.apiKeyExpireTimeout = setTimeout(() => {
+          this.logger.debug('API key is about to expire. Refreshing...');
+          this.refreshToken(brand)
             .catch(() => {
-              me.logoutFromThisBrowser();
-              me.onNeedRelogin.trigger();
+              this.logoutFromThisBrowser();
+              this.onNeedRelogin.trigger();
             });
         }, expirePeriod);
       }
@@ -479,15 +477,14 @@ export class AuthService extends BaseService {
    * @returns {Promise<LogoutApiResponse>}
    */
   public logoutFromAllBrowsers() {
-    const me = this;
-    return me.authApi.logout().then(() => {
-      me.logger.debug('System logged out from all the browsers');
-      me._apiKey = undefined;
-      me.wcStorage.remove(LOCAL_STORAGE_API_KEY);
-      me._apiKeyType = this._apiKeyType;
+    return this.authApi.logout().then(() => {
+      this.logger.debug('System logged out from all the browsers');
+      this._apiKey = undefined;
+      this.wcStorage.remove(LOCAL_STORAGE_API_KEY);
+      this._apiKeyType = undefined;
       this.wcStorage.remove(LOCAL_STORAGE_API_KEY_TYPE);
       this.clearKeyExpireTimeout();
-      me.onLogout.trigger();
+      this.onLogout.trigger();
     });
   }
 
@@ -700,7 +697,7 @@ export class AuthService extends BaseService {
   }
 
   private afterLogin(result: LoginApiResponse, username: string, appName: string, brand?: string): LoginApiResponse {
-    this.logger.debug('Logged in as: ' + username, result);
+    this.logger.debug('Logged in as: ' + username, {keyType: result.keyType, keyExpire: result.keyExpire});
     this._apiKey = result.key;
     this._apiKeyType = result.keyType;
     this.wcStorage.set(LOCAL_STORAGE_API_KEY, result.key);

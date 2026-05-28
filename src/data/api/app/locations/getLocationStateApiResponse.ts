@@ -56,4 +56,4 @@ export type LocationStateValue<T extends LocationStateName> =
     | T extends 'occupancy_overview' ? OccupancyOverviewLocationState : never
     | T extends 'location_properties' ? LocationPropertiesLocationState : never
     | T extends 'location_highlights' ? LocationHighlightsLocationState : never
-    | Object;
+    | object;

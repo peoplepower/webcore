@@ -94,13 +94,6 @@ export interface CreateUserAndLocationModel {
     appName: string;
 
     /**
-     * When the user sends messages in a community social network, enabling this flag will cause their name to be
-     * hidden when they send messages and on lists of individuals who are part of a group inside an organization, etc.
-     * Default is false.
-     */
-    anonymous?: boolean;
-
-    /**
      * User's preferred language. For example:
      * en - English
      * cn - Chinese

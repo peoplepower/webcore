@@ -9,7 +9,6 @@ dist/
 
 # Optional cache folders
 .npm
-.eslintcache
 
 # Optional REPL history
 .node_repl_history
@@ -31,4 +30,6 @@ dist/
 AGENTS.md
 CLAUDE.md
 .claude/
+.agents/
 .github/copilot-instructions.md
+skills-lock.json
