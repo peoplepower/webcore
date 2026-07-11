@@ -119,6 +119,7 @@ export class QuestionsApi {
    * @param {number} [params.preAnswerId] Copy question answers from this answer record.
    * @param {boolean} [params.sendToUser] If true, a notification will be sent to the user with a link to the survey.
    * @param {number} [params.notificationCategory] Send the email to organization notification user with this category.
+   * @param {number} [params.botNotificationId] Send the email to organization notification users selected by this notification ID.
    * @returns {Promise<StartSurveyAnsweringApiResponse>}
    */
   startSurveyAnswering(
@@ -130,6 +131,7 @@ export class QuestionsApi {
       preAnswerId?: number,
       sendToUser?: boolean,
       notificationCategory?: number,
+      botNotificationId?: number,
     },
   ): Promise<StartSurveyAnsweringApiResponse> {
     return this.dal.post('surveyAnswers', model, { params: params });

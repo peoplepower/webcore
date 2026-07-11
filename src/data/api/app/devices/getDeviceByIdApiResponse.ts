@@ -90,12 +90,28 @@ export interface GetDeviceByIdApiResponse extends ApiResponseBase {
     newDevice: boolean;
 
     /**
-     * Device proxy ID (gateway)
+     * Device proxy ID (gateway).
      */
     proxyId?: string;
 
     /**
-     * Device simulation status
+     * Device zone ID.
+     */
+    zoneId?: string;
+
+    /**
+     * Device integration cloud ID.
+     * Related to third-party clouds API.
+     */
+    applicationId?: number;
+
+    /**
+     * Device integration authentication ID.
+     */
+    authId?: string;
+
+    /**
+     * Device simulation status.
      */
     simulated?: DeviceSimulationStatus,
 
