@@ -10,6 +10,8 @@ import { GetListOfBotsApiResponse } from '../api/bot/endUserBotShop/getListOfBot
 import { BotInstanceStatus, ConfigureBotBody } from '../api/bot/endUserBotShop/configureBotApiResponse';
 import { GetBotSummaryApiResponse } from '../api/bot/endUserBotShop/getBotSummaryApiResponse';
 import { DataStreamMessage, DataStreamScope } from '../api/bot/endUserBotShop/dataStreamMessageApiResponse';
+import { GetBotNotificationsApiResponse } from '../api/bot/endUserBotShop/getBotNotificationsApiResponse';
+import { UpdateBotNotificationsModel, UpdateBotNotificationsApiResponse } from '../api/bot/endUserBotShop/updateBotNotificationsApiResponse';
 
 @injectable('BotService')
 export class BotService extends BaseService {
@@ -278,6 +280,44 @@ export class BotService extends BaseService {
   ): Promise<ApiResponseBase> {
     return this.authService.ensureAuthenticated().then(() => this.botShopApi.sendDataStreamMessage(message, params));
   }
+
+  // #region Administrative Actions
+
+  /**
+   * Returns a list of notification settings for the bots in organization.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/bots.html#tag/End-User-Bot-Shop-APIs/operation/Get%20Bot%20Notifications}
+   *
+   * @param {number} organizationId Organization ID.
+   * @param {string} [bundle] Filter by the bot bundle ID.
+   *
+   * @returns {Promise<GetBotNotificationsApiResponse>}
+   */
+  getBotNotifications(organizationId: number, bundle?: string): Promise<GetBotNotificationsApiResponse> {
+    if (!organizationId || organizationId < 0 || isNaN(organizationId)) {
+      return this.reject(`Organization ID is incorrect [${organizationId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.getBotNotifications(organizationId, { bundle: bundle }));
+  }
+
+  /**
+   * Update linked notification groups for bots' notifications in organization.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/bots.html#tag/End-User-Bot-Shop-APIs/operation/Update%20Bot%20Notifications}
+   *
+   * @param {number} organizationId Organization ID.
+   * @param {string} bundle Bot bundle ID.
+   * @param {UpdateBotNotificationsModel} groups The model contains the list of groups.
+   * @returns {Promise<UpdateBotNotificationsApiResponse>}
+   */
+  updateBotNotifications(organizationId: number, bundle: string, groups: UpdateBotNotificationsModel): Promise<UpdateBotNotificationsApiResponse> {
+    if (!organizationId || organizationId < 0 || isNaN(organizationId)) {
+      return this.reject(`Organization ID is incorrect [${organizationId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => this.botShopApi.updateBotNotifications(organizationId, groups, { bundle: bundle }));
+  }
+
+  // #endregion
 }
 
 export interface BotsList extends SearchBotsApiResponse {

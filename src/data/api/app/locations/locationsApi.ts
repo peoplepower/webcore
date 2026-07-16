@@ -15,7 +15,7 @@ import {
   NarrativeScope,
   NarrativeStatus,
 } from './createOrUpdateNarrativeApiResponse';
-import { GetNarrativesApiResponse } from './getNarrativesApiResponse';
+import { GetNarrativesApiResponse, NarrativeType } from './getNarrativesApiResponse';
 import { GetLocationStateApiResponse, LocationStateName } from './getLocationStateApiResponse';
 import { GetLocationTotalsApiResponse } from './getLocationTotalsApiResponse';
 import { SetLocationStateApiResponse, SetLocationStateModel } from './setLocationStateApiResponse';
@@ -344,7 +344,9 @@ export class LocationsApi {
    * @param {number} [params.narrativeId] Filter by Narrative ID.
    * @param {NarrativePriority} [params.priority] Filter by priority higher or equal than that.
    * @param {NarrativePriority} [params.toPriority] Filter by priority less or equal than that.
+   * @param {number|number[]} [params.narrativeType] Filter by narrative type(s).
    * @param {NarrativeStatus} [params.status] Filter by status, deleted are not returned by default.
+   * @param {string} [params.eventType] Filter by event type.
    * @param {string} [params.searchBy] Filter by title or description. Use * for a wildcard.
    * @param {string|number} [params.startDate] Narrative date range start.
    * @param {string|number} [params.endDate] Narrative date range end date.
@@ -359,7 +361,9 @@ export class LocationsApi {
       narrativeId?: number;
       priority?: NarrativePriority;
       toPriority?: NarrativePriority;
+      narrativeType?: NarrativeType | NarrativeType[];
       status?: NarrativeStatus;
+      eventType?: string;
       searchBy?: string;
       startDate?: string | number;
       endDate?: string | number;

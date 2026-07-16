@@ -46,6 +46,22 @@ export interface GetDevicesListApiResponse extends ApiResponseBase {
     proxyId?: string;
 
     /**
+     * Device zone ID.
+     */
+    zoneId?: string;
+
+    /**
+     * Device integration cloud ID.
+     * Related to third-party clouds API.
+     */
+    applicationId?: number;
+
+    /**
+     * Device integration authentication ID.
+     */
+    authId?: string;
+
+    /**
      * Device simulation status
      */
     simulated?: DeviceSimulationStatus,

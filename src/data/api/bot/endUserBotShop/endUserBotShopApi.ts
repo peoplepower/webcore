@@ -8,6 +8,8 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { BotCategory, BotCoreClass, BotObjectName, BotType, SearchBotsApiResponse } from './searchBotsApiResponse';
 import { GetBotSummaryApiResponse } from './getBotSummaryApiResponse';
 import { DataStreamMessage, DataStreamScope } from './dataStreamMessageApiResponse';
+import { GetBotNotificationsApiResponse } from './getBotNotificationsApiResponse';
+import { UpdateBotNotificationsModel, UpdateBotNotificationsApiResponse } from './updateBotNotificationsApiResponse';
 
 /**
  * The Bot Shop APIs allow a user to discover and manage their bots.
@@ -171,10 +173,8 @@ export class BotShopApi {
   }
 
   /**
-   * Get bots summary.
-   * See {@link https://iotbots.docs.apiary.io/#reference/end-user-bot-shop-apis/data-stream/get-summary}
-   *
    * Returns microservices and data stream addresses for specified location or organization.
+   * See {@link https://iotbots.docs.apiary.io/#reference/end-user-bot-shop-apis/data-stream/get-summary}
    *
    * @param [params] Request parameters.
    * @param {number} [params.locationId] Location ID.
@@ -188,7 +188,6 @@ export class BotShopApi {
   /**
    * Get bot object (binary file).
    * Each bot can contain a publicly available icon and/or other images.
-   *
    * See {@link https://iotbots.docs.apiary.io/#/reference/end-user-bot-shop-ap-is/bot-objects/get-an-object}
    *
    * @param params Request parameters.
@@ -210,4 +209,41 @@ export class BotShopApi {
       }
     );
   }
+
+  // #region -------------- Administrative Actions ----------------
+
+  /**
+   * Returns a list of notification settings for the bots in organization.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/bots.html#tag/End-User-Bot-Shop-APIs/operation/Get%20Bot%20Notifications}
+   *
+   * @param {number} organizationId Organization ID.
+   * @param [params] Request parameters.
+   * @param {string} [params.bundle] Filter by the bot bundle ID.
+   *
+   * @returns {Promise<GetBotNotificationsApiResponse>}
+   */
+  getBotNotifications(organizationId: number, params?: {
+    bundle?: string;
+  }): Promise<GetBotNotificationsApiResponse> {
+    return this.dal.get(`cloud/appstore/botNotifications/${encodeURIComponent(organizationId.toString())}`, {params: params});
+  }
+
+  /**
+   * Update linked notification groups for bots' notifications in organization.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/bots.html#tag/End-User-Bot-Shop-APIs/operation/Update%20Bot%20Notifications}
+   *
+   * @param {number} organizationId Organization ID.
+   * @param {UpdateBotNotificationsModel} model The model contains the list of groups.
+   * @param params Request parameters.
+   * @param {string} params.bundle Bot bundle ID.
+   *
+   * @returns {Promise<UpdateBotNotificationsApiResponse>}
+   */
+  updateBotNotifications(organizationId: number, model: UpdateBotNotificationsModel, params: {
+    bundle: string;
+  }): Promise<UpdateBotNotificationsApiResponse> {
+    return this.dal.put(`cloud/appstore/botNotifications/${encodeURIComponent(organizationId.toString())}`, model, {params: params});
+  }
+
+  // #endregion
 }
