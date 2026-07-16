@@ -61,7 +61,7 @@ export class LocalStorageAppender extends Appender {
     try {
       const lsValue = localStorage.getItem(this.config.localStorageKey!);
       let oldMessages: LogMessage[] = lsValue ? JSON.parse(lsValue) || [] : [];
-      oldMessages.concat(messages);
+      oldMessages = oldMessages.concat(messages);
       if (oldMessages.length > this.config.size!) {
         oldMessages = oldMessages.slice(oldMessages.length - this.config.size! - 1, oldMessages.length - 1);
       }
