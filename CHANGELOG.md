@@ -8,11 +8,14 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
-## [3.3.0] - 2026-07-13
+## [3.3.0] - 2026-07-16
 
 ### Added
 - Support zone relationship for devices
 - Add bot notifications and notification groups
+
+### Deprecated
+- Remove deprecated notification users functionality
 
 ## [3.2.1] - 2026-06-11
 
