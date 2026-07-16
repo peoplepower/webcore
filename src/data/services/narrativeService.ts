@@ -7,6 +7,7 @@ import {
   CreateOrUpdateNarrativeModel,
   NarrativePriority,
   NarrativeScope,
+  NarrativeStatus,
 } from '../api/app/locations/createOrUpdateNarrativeApiResponse';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { GetNarrativesApiResponse, NarrativeType } from '../api/app/locations/getNarrativesApiResponse';
@@ -90,6 +91,8 @@ export class NarrativeService extends BaseService {
    * @param {NarrativePriority} [params.priority] Filter by priority higher or equal than that.
    * @param {NarrativePriority} [params.toPriority] Filter by priority less or equal than that.
    * @param {NarrativeType | Array<NarrativeType>} [params.narrativeType] Filter by narrative type, multiple values allowed.
+   * @param {NarrativeStatus} [params.status] Filter by narrative status.
+   * @param {string} [params.eventType] Filter by event type.
    * @param {string} [params.searchBy] Filter by title or description. Use * for a wildcard.
    * @param {string|number} [params.startDate] Narrative date range start.
    * @param {string|number} [params.endDate] Narrative date range end.
@@ -105,6 +108,8 @@ export class NarrativeService extends BaseService {
       priority?: NarrativePriority;
       toPriority?: NarrativePriority;
       narrativeType?: NarrativeType | Array<NarrativeType>;
+      status?: NarrativeStatus;
+      eventType?: string;
       searchBy?: string;
       startDate?: string | number;
       endDate?: string | number;
