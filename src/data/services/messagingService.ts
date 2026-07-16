@@ -12,7 +12,7 @@ import { PostSupportTicketApiResponse, PostSupportTicketModel } from '../api/app
 import { AuthService } from './authService';
 
 /**
- * Exposes interface to operate the messages that are send from user to user in the system.
+ * Exposes interface to operate the messages that are sent from user to user in the system.
  */
 @injectable('MessagingService')
 export class MessagingService extends BaseService {
@@ -28,7 +28,7 @@ export class MessagingService extends BaseService {
    * @deprecated Functionality deprecated from Server v1.26
    *
    * @param [params] Request parameters.
-   * @param {MessageStatus} [params.status] Status of the messages to get (receive).
+   * @param {MessageStatus} [params.status] Status of the messages to retrieve.
    * @param {number} [params.messageId] Filter messages and replies by the original message ID.
    * @param {number} [params.userId] User ID to get messages for, for use by administrators only.
    * @param {number} [params.type] This field is available for the application developer to use as needed.
@@ -59,7 +59,7 @@ export class MessagingService extends BaseService {
    * @deprecated Functionality deprecated from Server v1.26
    *
    * @param params Request parameters.
-   * @param {MessageStatus} [params.status] Status of the messages to get (receive).
+   * @param {MessageStatus} [params.status] Status of the messages to retrieve.
    * @param {number} params.messageId Filter messages and replies by the original message ID.
    * @param {number} [params.userId] User ID to get messages for, for use by administrators only.
    * @param {number} [params.type] This field is available for the application developer to use as needed. It is unused
