@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning].
 - Updated dependencies for security and performance improvements
 
 ### Deprecated
-- Remove deprecated `anonimous` user parameter
+- Remove deprecated `anonymous` user parameter
 
 ## [3.1.8] - 2026-05-14
 
@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning].
 - Location `connections` state notation
 
 ### Fixed
-- Removed duplicats in [Survey Answers API](https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Questions/operation/Get%20Survey%20Answers) response
+- Removed duplicates in [Survey Answers API](https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Questions/operation/Get%20Survey%20Answers) response
 
 ## [3.1.0] - 2026-03-02
 
