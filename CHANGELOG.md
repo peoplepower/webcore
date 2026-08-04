@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
+## [3.3.1] - 2026-07-31
+
+### Deprecated
+- Remove bot notifications and notification groups
+
 ## [3.3.0] - 2026-07-16
 
 ### Added
@@ -93,8 +98,9 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.2.2...HEAD
-[3.2.2]: https://github.com/peoplepower/webcore/compare/3.2.1..3.2.2
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.3.1...HEAD
+[3.3.1]: https://github.com/peoplepower/webcore/compare/3.3.0..3.3.1
+[3.3.0]: https://github.com/peoplepower/webcore/compare/3.2.1..3.3.0
 [3.2.1]: https://github.com/peoplepower/webcore/compare/3.2.0..3.2.1
 [3.2.0]: https://github.com/peoplepower/webcore/compare/3.1.8..3.2.0
 [3.1.8]: https://github.com/peoplepower/webcore/compare/3.1.7..3.1.8
