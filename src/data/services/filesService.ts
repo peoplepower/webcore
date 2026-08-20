@@ -4,13 +4,29 @@ import { ApplicationFilesApi } from '../api/app/applicationFiles/applicationFile
 import { AppFileType, GetApplicationFilesApiResponse } from '../api/app/applicationFiles/getApplicationFilesApiResponse';
 import { GetApplicationFileUrlApiResponse } from '../api/app/applicationFiles/getApplicationFileUrlApiResponse';
 import { CloudConfigService } from './cloudConfigService';
+import { PublicMediaDal } from '../dal/publicMediaDal';
 import { Path } from '../../modules/common/path';
 import * as qs from 'qs';
+
+const publicMediaBaseUrl = 'https://webmedia.peoplepowerco.com/';
+
+/**
+ * Directory each public media type is stored in, relative to the public media base url.
+ */
+const publicMediaPaths: { [type in PublicMediaType]: string } = {
+  logo: '/logos/',
+};
+
+/**
+ * Default timeout (ms) of the public media file existence check request.
+ */
+const publicMediaCheckTimeout = 10000;
 
 @injectable('FilesService')
 export class FilesService extends BaseService {
   @inject('ApplicationFilesApi') protected readonly applicationFilesApi!: ApplicationFilesApi;
   @inject('CloudConfigService') protected readonly cloudConfigService!: CloudConfigService;
+  @inject('PublicMediaDal') protected readonly publicMediaDal!: PublicMediaDal;
 
   /**
    * Returns a list of application files filtered by query parameters.
@@ -102,4 +118,107 @@ export class FilesService extends BaseService {
     }
     return this.applicationFilesApi.getApplicationFileUrl(fileId, params);
   }
+
+  /**
+   * Builds URL of a publicly available branded media file.
+   *
+   * No Cloud API and no authorization is involved here: files are served by the public media host
+   * (`https://webmedia.peoplepowerco.com/` by default) and the URL is composed from the naming convention:
+   * `{baseUrl}/logos/{brand}-logo[-vertical][-white][@2x].{svg|png}`.
+   *
+   * Examples for the `peoplepower` brand:
+   * - `https://webmedia.peoplepowerco.com/logos/peoplepower-logo.svg` (defaults)
+   * - `https://webmedia.peoplepowerco.com/logos/peoplepower-logo@2x.png` (`fileFormat: 'PNG'`)
+   * - `https://webmedia.peoplepowerco.com/logos/peoplepower-logo-vertical.svg` (`orientation: 'portrait'`)
+   * - `https://webmedia.peoplepowerco.com/logos/peoplepower-logo-vertical-white@2x.png` (all of the above + `white`)
+   *
+   * NOTE about `params.checkExistence`: the public media host does not send any `Access-Control-Allow-Origin`
+   * header and rejects preflight requests, so the existence check can only succeed where the same origin policy
+   * is not enforced (Node.js, React Native, server side rendering). In a browser the check request is blocked by
+   * CORS for every URL, existing or not, therefore it is disabled by default. To validate a URL from a browser
+   * render it in an `<img>` tag (image loading is not restricted by CORS) and handle the `error` event.
+   *
+   * @param {string} brand Brand name, e.g. `peoplepower`.
+   * @param {PublicMediaType} mediaType Type of the media file. Only `logo` is supported for now.
+   * @param [params] Request parameters.
+   * @param {PublicMediaFileFormat} [params.fileFormat] File format, `SVG` by default.
+   * @param {PublicMediaOrientation} [params.orientation] Media orientation, `landscape` by default.
+   * @param {boolean} [params.white] Get the white (inverted) version of the media file.
+   * @param {boolean} [params.checkExistence] Check that the file is really available before resolving the URL
+   *     and reject if it is not. Disabled by default, see the CORS note above.
+   * @param {number} [params.timeout] Timeout (ms) of the existence check request, 10000 by default.
+   * @param {string} [params.baseUrl] Public media host to use instead of the default one.
+   *
+   * @returns {Promise<string>} Full URL of the media file.
+   */
+  getPublicMedia(
+    brand: string,
+    mediaType: PublicMediaType,
+    params?: {
+      fileFormat?: PublicMediaFileFormat;
+      orientation?: PublicMediaOrientation;
+      white?: boolean;
+      checkExistence?: boolean;
+      timeout?: number;
+      baseUrl?: string;
+    },
+  ): Promise<string> {
+    if (!brand || !brand.trim()) {
+      return this.reject(`Brand can not be empty [${brand}].`);
+    }
+    if (!mediaType || !publicMediaPaths.hasOwnProperty(mediaType)) {
+      return this.reject(`Unsupported public media type [${mediaType}].`);
+    }
+
+    const fileFormat: PublicMediaFileFormat = params?.fileFormat || 'SVG';
+    if (fileFormat !== 'SVG' && fileFormat !== 'PNG') {
+      return this.reject(`Unsupported public media file format [${fileFormat}].`);
+    }
+
+    const orientation: PublicMediaOrientation = params?.orientation || 'landscape';
+    if (orientation !== 'landscape' && orientation !== 'portrait') {
+      return this.reject(`Unsupported public media orientation [${orientation}].`);
+    }
+
+    const fileName =
+      encodeURIComponent(brand.trim()) +
+      `-${mediaType}` +
+      (orientation === 'portrait' ? '-vertical' : '') +
+      (params?.white ? '-white' : '') +
+      (fileFormat === 'PNG' ? '@2x.png' : '.svg');
+
+    const mediaUrl = Path.Combine(params?.baseUrl || publicMediaBaseUrl, publicMediaPaths[mediaType], fileName);
+
+    if (!params?.checkExistence) {
+      return Promise.resolve(mediaUrl);
+    }
+
+    return this.publicMediaDal
+      .head<void>(mediaUrl, {
+        noAuth: true,
+        timeout: params.timeout || publicMediaCheckTimeout,
+      })
+      .then(() => mediaUrl)
+      .catch((error) => {
+        const status = error?.response?.status;
+        return this.reject(
+          `Public media file is not available [${mediaUrl}]${status ? ` (status ${status})` : ''}: ${error?.message || error}`,
+        );
+      });
+  }
 }
+
+/**
+ * Type of a publicly available media file. Only brand logos are supported for now.
+ */
+export type PublicMediaType = 'logo';
+
+/**
+ * File format of a publicly available media file.
+ */
+export type PublicMediaFileFormat = 'SVG' | 'PNG';
+
+/**
+ * Orientation of a publicly available media file.
+ */
+export type PublicMediaOrientation = 'landscape' | 'portrait';
