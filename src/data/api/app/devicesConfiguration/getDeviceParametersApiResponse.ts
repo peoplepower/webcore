@@ -155,6 +155,10 @@ export interface GetDeviceParametersApiResponse extends ApiResponseBase {
     displayInfo?: {
       displayType: ParamDisplayType;
       valueType: ParamValueType;
+
+      /**
+       * Default option ID for listed options.
+       */
       defaultOption?: number;
 
       /**
@@ -169,6 +173,10 @@ export interface GetDeviceParametersApiResponse extends ApiResponseBase {
       icon?: string;
 
       mlName: {
+        [key: string]: string;
+      };
+
+      mlDescription?: {
         [key: string]: string;
       };
 
@@ -189,10 +197,25 @@ export interface GetDeviceParametersApiResponse extends ApiResponseBase {
        */
       linkedParams?: string[];
 
+      /**
+       * Attributes for ranged parameters.
+       */
       minValue?: number;
       maxValue?: number;
       step?: number;
       ranged?: boolean;
+
+      /**
+       * Configurable paramater.
+       * Request to change value could be sent to device.
+       */
+      configured?: boolean;
+
+      /**
+       * Parameter could be refreshed.
+       * Request to gather new value could be sent.
+       */
+      refreshable?: boolean;
     };
   }>;
 }
