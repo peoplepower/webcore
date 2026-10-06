@@ -9,7 +9,7 @@ import { RequestSupportApiResponse, RequestSupportModel } from './requestSupport
 import { SearchCrowdFeedbackApiResponse } from './searchCrowdFeedbackApiResponse';
 import { SendMessageApiResponse, SendMessageModel } from './sendMessageApiResponse';
 import { SendNotificationApiResponse, SendNotificationModel } from './sendNotificationApiResponse';
-import { GetNotificationsApiResponse } from './getNotificationsApiResponse';
+import { GetNotificationsApiResponse, NotificationDeliveryType, NotificationSourceType } from './getNotificationsApiResponse';
 import { UpdateCrowdFeedbackApiResponse, UpdateCrowdFeedbackModel } from './updateCrowdFeedbackApiResponse';
 import { UpdateMessageApiResponse, UpdateMessageModel } from './updateMessageApiResponse';
 import { VoteForCrowdFeedbackApiResponse } from './voteForCrowdFeedbackApiResponse';
@@ -74,14 +74,16 @@ export class UserCommunicationsApi {
    *
    * @param {SendNotificationModel} model Notification
    * @param [params] Request parameters
-   * @param {number} [params.userId] Send a notification to this user by an administrator
-   * @param {number} [params.organizationId] Use templates of specific organization specified by its Id
+   * @param {number} [params.userId] Send a notification to this user by an administrator.
+   * @param {number} [params.locationId] Send a notification to users on this location.
+   * @param {number} [params.organizationId] Use templates of specific organization specified by its Id.
    * @returns {Promise<SendNotificationApiResponse>}
    */
   sendNotification(
     model: SendNotificationModel,
     params?: {
       userId?: number;
+      locationId?: number;
       organizationId?: number;
     },
   ): Promise<SendNotificationApiResponse> {
@@ -92,18 +94,23 @@ export class UserCommunicationsApi {
    * Gets notifications.
    * See {@link https://iotapps.docs.apiary.io/#reference/user-communications/send-a-notification/get-notifications}
    *
-   * @param params Request parameters
-   * @param {string} params.startDate Start date to select notifications
-   * @param {number} [params.userId] Get notifications for this user by an administrator
-   * @param {string} [params.endDate] End date to select notifications. Default is the current date
-   * @param {number} [params.locationId] Get notifications related to this location
+   * @param params Request parameters.
+   * @param {string} params.startDate Start date to select notifications.
+   * @param {string} [params.endDate] End date to select notifications. Default is the current date.
+   * @param {number} [params.userId] Get notifications related to this user.
+   * @param {number} [params.locationId] Get notifications related to this location.
+   * @param {number} [params.escalationId] Get notifications related to this escalation.
    * @returns {Promise<SendNotificationApiResponse>}
    */
   getNotifications(params: {
     startDate: string;
-    userId?: number;
     endDate?: string;
+    userId?: number;
     locationId?: number;
+    escalationId?: number;
+    sourceType?: NotificationSourceType;
+    deliveryType?: NotificationDeliveryType;
+    notificationType?: NotificationType;
   }): Promise<GetNotificationsApiResponse> {
     return this.dal.get('notifications', {params: params});
   }

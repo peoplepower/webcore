@@ -2,14 +2,15 @@ import { inject, injectable } from '../../modules/common/di';
 import { UserCommunicationsApi } from '../api/app/userCommunications/userCommunicationsApi';
 import { GetMessagesApiResponse, MessageStatus } from '../api/app/userCommunications/getMessagesApiResponse';
 import { Message } from '../api/app/userCommunications/sendMessageApiResponse';
-import { GetNotificationSubscriptionsApiResponse } from '../api/app/userCommunications/getNotificationSubscriptionsApiResponse';
-import { GetNotificationsApiResponse } from '../api/app/userCommunications/getNotificationsApiResponse';
+import { GetNotificationSubscriptionsApiResponse, NotificationType } from '../api/app/userCommunications/getNotificationSubscriptionsApiResponse';
+import { GetNotificationsApiResponse, NotificationDeliveryType, NotificationSourceType } from '../api/app/userCommunications/getNotificationsApiResponse';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { RequestSupportApiResponse, RequestSupportModel } from '../api/app/userCommunications/requestSupportApiResponse';
 import { BaseService } from './baseService';
 import { UpdateMessageModel } from '../api/app/userCommunications/updateMessageApiResponse';
 import { PostSupportTicketApiResponse, PostSupportTicketModel } from '../api/app/userCommunications/postSupportTicketApiResponse';
 import { AuthService } from './authService';
+import { SendNotificationApiResponse, SendNotificationModel } from '../api/app/userCommunications/sendNotificationApiResponse';
 
 /**
  * Exposes interface to operate the messages that are send from user to user in the system.
@@ -51,7 +52,8 @@ export class MessagingService extends BaseService {
     if (params && !params.rowCount) {
       params.rowCount = 300;
     }
-    return this.userCommunicationsApi.getMessages(params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.getMessages(params));
   }
 
   /**
@@ -93,7 +95,8 @@ export class MessagingService extends BaseService {
       params.rowCount = 300;
     }
 
-    return this.userCommunicationsApi.getMessages(params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.getMessages(params));
   }
 
   /**
@@ -120,16 +123,17 @@ export class MessagingService extends BaseService {
       return this.reject(`userId parameter value is incorrect: ${userId}`);
     }
 
-    return this.userCommunicationsApi.getMessages({
-      userId: userId,
-      status: status,
-      type: type,
-      sortCollection: 'messages',
-      searchBy: searchBy,
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      rowCount: 300, // magic number. Check CC-433 task
-    });
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.getMessages({
+        userId: userId,
+        status: status,
+        type: type,
+        sortCollection: 'messages',
+        searchBy: searchBy,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        rowCount: 300, // magic number. Check CC-433 task
+      }));
   }
 
   /**
@@ -144,7 +148,8 @@ export class MessagingService extends BaseService {
       return this.reject('Message to be sent can not be null.');
     }
 
-    return this.userCommunicationsApi.sendMessage({message: message});
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.sendMessage({message: message}));
   }
 
   /**
@@ -167,7 +172,8 @@ export class MessagingService extends BaseService {
       return this.reject('Reply message to be sent can not be null.');
     }
 
-    return this.userCommunicationsApi.replyToMessage(replyToMessageId, {message: reply});
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.replyToMessage(replyToMessageId, {message: reply}));
   }
 
   /**
@@ -195,7 +201,8 @@ export class MessagingService extends BaseService {
     }
 
     const messageModel: UpdateMessageModel | undefined = messageProperties ? {message: messageProperties} : undefined;
-    return this.userCommunicationsApi.updateMessage(messageId, messageModel, {read: markAsRead});
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.updateMessage(messageId, messageModel, {read: markAsRead}));
   }
 
   /**
@@ -210,7 +217,8 @@ export class MessagingService extends BaseService {
       return this.reject(`messageId parameter value is incorrect: ${messageId}`);
     }
 
-    return this.userCommunicationsApi.deleteMessage(messageId);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.deleteMessage(messageId));
   }
 
   /**
@@ -223,7 +231,8 @@ export class MessagingService extends BaseService {
       return this.reject(`userId parameter value is incorrect: ${userId}`);
     }
     const params = userId ? {userId: userId} : undefined;
-    return this.userCommunicationsApi.getNotificationSubscriptions(params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.getNotificationSubscriptions(params));
   }
 
   /**
@@ -256,7 +265,40 @@ export class MessagingService extends BaseService {
     if (isNaN(type) || type < 0) {
       return this.reject(`Type parameter value is incorrect: ${type}`);
     }
-    return this.userCommunicationsApi.setNotificationSubscriptions(type, params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.setNotificationSubscriptions(type, params));
+  }
+
+  /**
+   * Sends a notification (push, email, SMS or device message) to a user or location users.
+   * @param {SendNotificationModel} model Notification model.
+   * @param [params] Request parameters.
+   * @param {number} [params.userId] Send a notification to this user by an administrator.
+   * @param {number} [params.locationId] Send a notification to users on this location.
+   * @param {number} [params.organizationId] Use templates of specific organization specified by its ID.
+   * @returns {Promise<SendNotificationApiResponse>}
+   */
+  public sendNotification(
+    model: SendNotificationModel,
+    params?: {
+      userId?: number;
+      locationId?: number;
+      organizationId?: number;
+    },
+  ): Promise<SendNotificationApiResponse> {
+    if (params) {
+      if (params.userId !== undefined && (isNaN(params.userId) || params.userId < 1)) {
+        return this.reject(`User ID is incorrect: ${params.userId}`);
+      }
+      if (params.locationId !== undefined && (isNaN(params.locationId) || params.locationId < 1)) {
+        return this.reject(`Location ID is incorrect: ${params.locationId}`);
+      }
+      if (params.organizationId !== undefined && (isNaN(params.organizationId) || params.organizationId < 1)) {
+        return this.reject(`Organization ID is incorrect: ${params.organizationId}`);
+      }
+    }
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.sendNotification(model, params));
   }
 
   /**
@@ -266,6 +308,11 @@ export class MessagingService extends BaseService {
    * @param {string} [params.endDate] End date to select notifications. Default is the current date.
    * @param {number} [params.userId] Get notifications for this user by an administrator.
    * @param {number} [params.locationId] Get notifications related to this location.
+   * @param {number} [params.escalationId] Get notifications related to this escalation.
+   * @param {NotificationSourceType} [params.sourceType] Get notifications related to this source type.
+   * @param {NotificationDeliveryType} [params.deliveryType] Get notifications related to this delivery type.
+   * @param {NotificationType} [params.notificationType] Get notifications related to this notification type.
+   * @param {number} [params.rowCount] Maximum number of notifications to return.
    * @returns {Promise<GetNotificationsApiResponse>}
    */
   public getNotifications(params: {
@@ -273,6 +320,10 @@ export class MessagingService extends BaseService {
     endDate?: string;
     userId?: number;
     locationId?: number;
+    escalationId?: number;
+    sourceType?: NotificationSourceType;
+    deliveryType?: NotificationDeliveryType;
+    notificationType?: NotificationType;
     rowCount?: number;
   }): Promise<GetNotificationsApiResponse> {
     if (!params || !params.startDate) {
@@ -281,7 +332,8 @@ export class MessagingService extends BaseService {
     if (params && !params.rowCount) {
       params.rowCount = 300;
     }
-    return this.userCommunicationsApi.getNotifications(params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.getNotifications(params));
   }
 
   /**
@@ -292,7 +344,8 @@ export class MessagingService extends BaseService {
    */
   public requestSupport(model: RequestSupportModel, appName?: string): Promise<RequestSupportApiResponse> {
     const params = appName ? {appName: appName} : undefined;
-    return this.userCommunicationsApi.requestSupport(model, params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.requestSupport(model, params));
   }
 
   /**
@@ -317,7 +370,8 @@ export class MessagingService extends BaseService {
       params.userId = userId;
     }
 
-    return this.authService.ensureAuthenticated().then(() => this.userCommunicationsApi.postSupportTicket(model, params));
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.postSupportTicket(model, params));
   }
 
   /**
@@ -339,7 +393,8 @@ export class MessagingService extends BaseService {
     if (!token) {
       return this.reject('Token is required for push notification registration.');
     }
-    return this.userCommunicationsApi.registerPushNotifications(appName, token, params);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.registerPushNotifications(appName, token, params));
   }
 
   /**
@@ -351,6 +406,7 @@ export class MessagingService extends BaseService {
     if (!token) {
       return this.reject('Token is required to unregister from push notifications.');
     }
-    return this.userCommunicationsApi.unregisterPushNotifications(token);
+    return this.authService.ensureAuthenticated()
+      .then(() => this.userCommunicationsApi.unregisterPushNotifications(token));
   }
 }
