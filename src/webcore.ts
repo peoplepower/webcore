@@ -23,7 +23,7 @@ import { MessagingService } from './data/services/messagingService';
 import { RulesService } from './data/services/rulesService';
 import { SubscriptionsService } from './data/services/subscriptionsService';
 import { ProfessionalMonitoringService } from './data/services/professionalMonitoringService';
-import { NarrativeService } from './data/services/narrativeService';
+import { EventsService } from './data/services/eventsService';
 import { BotService } from './data/services/botService';
 import { StoriesService } from './data/services/storiesService';
 import { FilesService } from './data/services/filesService';
@@ -58,7 +58,7 @@ export class WebCoreServices {
   @inject('SystemPropertiesService') systemProperties!: SystemPropertiesService;
   @inject('DeviceStreamingService') deviceStreaming!: DeviceStreamingService;
   @inject('MessagingService') messaging!: MessagingService;
-  @inject('NarrativeService') narrative!: NarrativeService;
+  @inject('EventsService') events!: EventsService;
   @inject('ProfessionalMonitoringService') professionalMonitoring!: ProfessionalMonitoringService;
   @inject('RulesService') rules!: RulesService;
   @inject('SubscriptionsService') subscriptions!: SubscriptionsService;

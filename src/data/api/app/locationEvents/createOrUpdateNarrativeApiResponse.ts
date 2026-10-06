@@ -1,4 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { NarrativeType } from './getNarrativesApiResponse';
 
 export enum NarrativeScope {
   Location = 1,
@@ -33,9 +34,22 @@ export interface CreateOrUpdateNarrativeModel {
   parentId?: number;
   parentNarrativeTime?: number;
 
+  /**
+   * Related escalation.
+   */
+  escalationId?: number;
+
   priority?: NarrativePriority;
   status?: NarrativeStatus;
+  narrativeType?: NarrativeType;
+  eventType?: string;
+
+  /**
+   * Define icon name and icon font collection.
+   */
   icon?: string;
+  iconFont?: string;
+
   title?: string;
   description?: string;
 

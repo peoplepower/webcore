@@ -16,6 +16,9 @@ export interface GetNotificationsApiResponse extends ApiResponseBase {
     sourceType?: NotificationSourceType;
     sourceId?: number;
     messageText?: string;
+    userId?: number;
+    locationId?: number;
+    escalationId?: number;
   }>;
 }
 

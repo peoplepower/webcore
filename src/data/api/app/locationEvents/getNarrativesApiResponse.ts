@@ -2,7 +2,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { PhoneType } from '../userAccounts/createUserAndLocationApiResponse';
 import { EmailVerificationStatus, PhoneVerificationStatus } from '../userAccounts/getUserInformationApiResponse';
 import { NarrativePriority, NarrativeStatus } from './createOrUpdateNarrativeApiResponse';
-import { LocationType } from "./editLocationApiResponse";
+import { LocationType } from "../locations/editLocationApiResponse";
 
 export interface GetNarrativesApiResponse extends ApiResponseBase {
   nextMarker: string;
@@ -55,6 +55,11 @@ export interface Narrative {
   parentId?: number;
   parentNarrativeDate?: number;
   parentNarrativeDateMs?: number;
+
+  /**
+   * Related escalation.
+   */
+  escalationId?: number;
 
   narrativeType: NarrativeType;
   locationId: number;

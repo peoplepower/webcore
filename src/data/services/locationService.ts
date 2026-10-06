@@ -1,15 +1,16 @@
 import { inject, injectable } from '../../modules/common/di';
 import { ApiResponseBase } from '../models/apiResponseBase';
 import { LocationsApi } from '../api/app/locations/locationsApi';
+import { LocationEventsApi } from '../api/app/locationEvents/locationEventsApi';
 import { UserService } from './userService';
 import { BaseService } from './baseService';
 import { GetCountriesApiResponse } from '../api/app/locations/getCountriesApiResponse';
 import { AuthService } from './authService';
 import { GetLocationUsersApiResponse } from '../api/app/locations/getLocationUsersApiResponse';
 import { AddLocationUsersApiResponse, AddLocationUsersModel } from '../api/app/locations/addLocationUsersApiResponse';
-import { GetLocationStateApiResponse, LocationStateName } from '../api/app/locations/getLocationStateApiResponse';
-import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from '../api/app/locations/getLocationTimeStateApiResponse';
-import { SetLocationStateApiResponse, SetLocationStateModel } from '../api/app/locations/setLocationStateApiResponse';
+import { GetLocationStateApiResponse, LocationStateName } from '../api/app/locationEvents/getLocationStateApiResponse';
+import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from '../api/app/locationEvents/getLocationTimeStateApiResponse';
+import { SetLocationStateApiResponse, SetLocationStateModel } from '../api/app/locationEvents/setLocationStateApiResponse';
 import { GetLocationScenesHistoryApiResponse } from '../api/app/locations/getLocationScenesHistoryApiResponse';
 import { GetSpacesApiResponse } from '../api/app/locations/getSpacesApiResponse';
 import { UpdateLocationSpaceApiResponse, UpdateLocationSpaceModel } from '../api/app/locations/updateSpaceApiResponse';
@@ -26,6 +27,7 @@ import { LocationModel } from '../api/app/locations/editLocationApiResponse';
 export class LocationService extends BaseService {
   @inject('AuthService') protected readonly authService!: AuthService;
   @inject('LocationsApi') protected readonly locationsApi!: LocationsApi;
+  @inject('LocationEventsApi') protected readonly locationEventsApi!: LocationEventsApi;
   @inject('UserService') protected readonly userService!: UserService;
   @inject('WsHub') protected readonly wsHub!: WsHub;
 
@@ -226,7 +228,7 @@ export class LocationService extends BaseService {
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationsApi.getLocationState(locationId, name);
+      return this.locationEventsApi.getLocationState(locationId, name);
     });
   }
 
@@ -278,11 +280,11 @@ export class LocationService extends BaseService {
     }
 
     if (analyticKey) {
-      return this.locationsApi.setLocationState(locationId, params, value, analyticKey);
+      return this.locationEventsApi.setLocationState(locationId, params, value, analyticKey);
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationsApi.setLocationState(locationId, params, value);
+      return this.locationEventsApi.setLocationState(locationId, params, value);
     });
   }
 
@@ -320,7 +322,7 @@ export class LocationService extends BaseService {
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationsApi.getLocationTimeState(locationId, params);
+      return this.locationEventsApi.getLocationTimeState(locationId, params);
     });
   }
 
@@ -352,7 +354,7 @@ export class LocationService extends BaseService {
     },
   ): Promise<GetLocationTimeStateApiResponse> {
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationsApi.getLocationTimeState(locationId, params);
+      return this.locationEventsApi.getLocationTimeState(locationId, params);
     });
   }
 
@@ -382,11 +384,11 @@ export class LocationService extends BaseService {
     analyticKey?: string,
   ): Promise<SetLocationStateApiResponse> {
     if (analyticKey) {
-      return this.locationsApi.setLocationState(locationId, params, value, analyticKey);
+      return this.locationEventsApi.setLocationState(locationId, params, value, analyticKey);
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationsApi.setLocationState(locationId, params, value);
+      return this.locationEventsApi.setLocationState(locationId, params, value);
     });
   }
 

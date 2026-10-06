@@ -1,6 +1,7 @@
 import { AuthApi } from './auth/authApi';
 import { UserAccountsApi } from './userAccounts/userAccountsApi';
 import { LocationsApi } from './locations/locationsApi';
+import { LocationEventsApi } from './locationEvents/locationEventsApi';
 import { DevicesApi } from './devices/devicesApi';
 import { CommonApi } from './common/commonApi';
 import { DeviceMeasurementsApi } from './deviceMeasurements/deviceMeasurementsApi';
@@ -36,6 +37,7 @@ export class AppApi {
   @inject('OAuthClientApi') public readonly oAuthClientApi!: OAuthClientApi;
   @inject('UserAccountsApi') public readonly userAccounts!: UserAccountsApi;
   @inject('LocationsApi') public readonly locations!: LocationsApi;
+  @inject('LocationEventsApi') public readonly locationEvents!: LocationEventsApi;
   @inject('DeviceModelsApi') public readonly deviceModelsApi!: DeviceModelsApi;
   @inject('PaidServicesApi') public readonly paidServicesApi!: PaidServicesApi;
   @inject('EntityStoriesApi') public readonly entityStoriesApi!: EntityStoriesApi;
