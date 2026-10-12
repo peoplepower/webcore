@@ -27,7 +27,7 @@ export abstract class Dal {
   }
 
   public request<T>(config: DalRequestConfig<T>): DalResponsePromise<T> {
-    return this.axios.request(config);
+    return this.axios.request(config) as DalResponsePromise<T>;
   }
 
   public get<T>(url: string, config?: DalRequestConfig<T>): DalResponsePromise<T> {

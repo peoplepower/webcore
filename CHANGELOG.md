@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
+## [3.4.0] - 2026-10-12
+
+### Added
+- Escalations APIs and services.
+- Escalations bindings to narratives and notifications.
+
+### Changed
+- Narratives and location states moved to `locationEvents` namespace.
+- Dependencies updated for security and performance improvements.
+
 ## [3.3.2] - 2026-08-20
 
 ### Added
@@ -102,7 +112,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.3.2...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.0...HEAD
+[3.4.0]: https://github.com/peoplepower/webcore/compare/3.3.2..3.4.0
 [3.3.2]: https://github.com/peoplepower/webcore/compare/3.3.1..3.3.2
 [3.3.1]: https://github.com/peoplepower/webcore/compare/3.3.0..3.3.1
 [3.3.0]: https://github.com/peoplepower/webcore/compare/3.2.1..3.3.0

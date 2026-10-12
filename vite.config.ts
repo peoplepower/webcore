@@ -24,7 +24,8 @@ const getFileNameForFormat = (format: BuildFormat): string => {
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/webcore.ts'),
+      // Requires Node 22 or higher.
+      entry: resolve(import.meta.dirname, 'src/webcore.ts'),
       formats: ['es', 'cjs'],
       fileName: (format) => getFileNameForFormat(format as BuildFormat),
     },

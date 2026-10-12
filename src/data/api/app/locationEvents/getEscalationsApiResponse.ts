@@ -4,7 +4,17 @@ import { DeviceSimulationStatus } from '../devices/getDeviceByIdApiResponse';
 export interface GetEscalationsApiResponse extends ApiResponseBase {
   escalations: Array<{
     escalationId: number;
+
+    /**
+     * Residential location ID.
+     */
     locationId: number;
+
+    /**
+     * Event location ID if different from the residential location ID.
+     * Provided in case of deveice-only escalations, when device is located in different location than the resident.
+     */
+    eventLocationId?: number;
 
     /**
      * Escalation type.
@@ -34,8 +44,9 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
 
     /**
      * Resident (user) related to escalation.
+     * Normally linked to the residential location.
      */
-    userId: number;
+    userId?: number;
 
     /**
      * Device triggered escalation.
@@ -76,7 +87,7 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
      * Bot and service related to escalation.
      */
     createBotInstanceId: number;
-    createBotService: string;
+    createBotService?: string;
 
     /**
      * Confirmation attributes.
@@ -88,10 +99,10 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     /**
      * Resolution attributes.
      */
-    resolveUserId: number;
-    resolveSourceType: EscalationSourceType;
-    resolutionDate: string;
-    resolutionDateMs: number;
+    resolveUserId?: number;
+    resolveSourceType?: EscalationSourceType;
+    resolutionDate?: string;
+    resolutionDateMs?: number;
   }>;
 }
 
