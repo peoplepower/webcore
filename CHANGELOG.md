@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
 
-## [3.4.0] - 2026-10-12
+## [3.4.0] - 2026-10-13
 
 ### Added
 - Escalations APIs and services.

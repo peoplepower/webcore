@@ -6,15 +6,21 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     escalationId: number;
 
     /**
-     * Residential location ID.
+     * Related residential location.
      */
-    locationId: number;
+    location: {
+      locationId: number;
+      locationName?: string;
+    };
 
     /**
      * Event location ID if different from the residential location ID.
      * Provided in case of deveice-only escalations, when device is located in different location than the resident.
      */
-    eventLocationId?: number;
+    eventLocation?: {
+      locationId: number;
+      locationName?: string;
+    };
 
     /**
      * Escalation type.
@@ -27,7 +33,7 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     status: EscalationStatus;
 
     title: string;
-    description: string;
+    description?: string;
 
     /**
      * Escalation priority.
@@ -44,9 +50,12 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
 
     /**
      * Resident (user) related to escalation.
-     * Normally linked to the residential location.
      */
-    userId?: number;
+    user?: {
+      userId: number;
+      firstName?: string;
+      lastName?: string;
+    };
 
     /**
      * Device triggered escalation.
@@ -90,9 +99,17 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     createBotService?: string;
 
     /**
+     * User confirmed escalation.
+     */
+    confirmUser?: {
+      userId: number;
+      firstName?: string;
+      lastName?: string;
+    };
+
+    /**
      * Confirmation attributes.
      */
-    confirmUserId?: number;
     confirmationDate?: string;
     confirmationDateMs?: number;
 
