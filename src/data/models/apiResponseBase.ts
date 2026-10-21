@@ -16,7 +16,7 @@ export interface ApiResponseBase {
   keyExpireMs?: number;
 
   /**
-   * API key type: 0 - User (default), 11 - Admin
+   * API key type
    */
   keyType?: ApiKeyType;
 

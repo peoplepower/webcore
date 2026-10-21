@@ -2,7 +2,7 @@ import { WcStorage } from '../../modules/localStorage/localStorage';
 import { LiteEvent } from '../../modules/common/liteEvent';
 import { AuthApi } from '../api/app/auth/authApi';
 import { ApiKeyType, LoginApiResponse, PasscodeDeliveryType } from '../api/app/auth/loginApiResponse';
-import { SendPasscodeApiResponse } from '../api/app/auth/sendPasscodeApiResponse';
+import { PasscodeMessagePrefix, SendPasscodeApiResponse } from '../api/app/auth/sendPasscodeApiResponse';
 import { inject, injectable } from '../../modules/common/di';
 import { BaseService } from './baseService';
 import { ApiResponseBase } from '../models/apiResponseBase';
@@ -75,6 +75,13 @@ export class AuthService extends BaseService {
     return this._apiKey;
   }
 
+  /**
+   * Type of the current API_KEY, e.g. to check if the user is logged in with an admin API_KEY.
+   */
+  public get apiKeyType(): ApiKeyType | undefined {
+    return this._apiKeyType;
+  }
+
   public get lastUsername(): string | undefined {
     return this.wcStorage.get(LOCAL_STORAGE_LAST_USERNAME) || undefined;
   }
@@ -142,15 +149,19 @@ export class AuthService extends BaseService {
     appName: string,
     admin?: boolean,
     passcodeType?: PasscodeType,
-    brand?: string
+    brand?: string,
+    staff?: boolean,
   ): Promise<LoginInfo> {
     const params: any = {
       appName: appName,
       brand: brand
     }
-    if (admin) {
-      params.keyType = 11
+
+    // Login as admin or staff member
+    if (admin || staff) {
+      params.keyType = admin ? ApiKeyType.AdminApiKey : ApiKeyType.StaffApiKey;
     }
+
     if (passcodeType === PasscodeType.Totp) {
       params.totp = true;
     } else if (passcodeType === PasscodeType.Email) {
@@ -187,8 +198,15 @@ export class AuthService extends BaseService {
     appName: string,
     admin?: boolean,
     brand?: string,
+    staff?: boolean,
   ): Promise<LoginInfo> {
-    const keyType = admin ? 11 : 0; // Admin or User key type
+    let keyType = ApiKeyType.NormalApiKey;
+
+    // Define key type for admin or staff member
+    if (admin || staff) {
+      keyType = admin ? ApiKeyType.AdminApiKey : ApiKeyType.StaffApiKey;
+    }
+
     await this.logoutFromThisBrowser()
     const params: any = {
       passcode: passcode,
@@ -216,8 +234,15 @@ export class AuthService extends BaseService {
     appName: string,
     admin?: boolean,
     brand?: string,
+    staff?: boolean,
   ): Promise<LoginInfo> {
-    const keyType = admin ? 11 : 0; // Admin or User key type
+    let keyType = ApiKeyType.NormalApiKey;
+
+    // Define key type for admin or staff member
+    if (admin || staff) {
+      keyType = admin ? ApiKeyType.AdminApiKey : ApiKeyType.StaffApiKey;
+    }
+
     await this.logoutFromThisBrowser()
     const params: any = {
       passcode: passcode,
@@ -237,16 +262,23 @@ export class AuthService extends BaseService {
    * @param {string} apiKey Temporary or normal API_KEY
    * @param {boolean} [admin] Use if need to get admin API_KEY type.
    * @param {string} [brand] Brand name.
+   * @param {boolean} [staff] Use if need to get staff API_KEY type.
    * @returns {Promise<LoginApiResponse>}
    */
-  loginByKey(apiKey: string, admin?: boolean, brand?: string): Promise<LoginApiResponse> {
-    const keyType = admin ? 11 : 0; // Admin or User key type
+  loginByKey(apiKey: string, admin?: boolean, brand?: string, staff?: boolean): Promise<LoginApiResponse> {
+    let keyType = ApiKeyType.NormalApiKey;
+
+    // Define key type for admin or staff member
+    if (admin || staff) {
+      keyType = admin ? ApiKeyType.AdminApiKey : ApiKeyType.StaffApiKey;
+    }
+
     return this.logoutFromThisBrowser()
       .then(() => this.authApi.loginByKey({apiKey: apiKey, keyType: keyType, brand: brand}))
       .then((result) => {
         this.logger.debug('Logged in by API_KEY', {keyType: result.keyType, keyExpire: result.keyExpire});
 
-        // NOTE: Dmitriy said that if API_KEY is valid enough - server will not generate new API_KEY. ¯\_(ツ)_/¯
+        // NOTE: If API_KEY is valid enough server will not generate new API_KEY
         const key = result.key || apiKey;
 
         this._apiKey = key;
@@ -303,7 +335,9 @@ export class AuthService extends BaseService {
    * @param {string} privateKey Private key stored on server.
    * @param {string} appName Application name that was used to generate privateKey.
    * @param {boolean} [admin] Use if you need to get admin API_KEY type.
-   * @param {string} [brand] Optional brand name
+   * @param {string} [brand] Optional brand name.
+   * @param {boolean} [staff] Use if you need to get staff API_KEY type.
+   * @returns {Promise<LoginInfo>}
    */
   public async loginBySignature(
     username: string,
@@ -312,21 +346,28 @@ export class AuthService extends BaseService {
     appName: string,
     admin?: boolean,
     brand?: string,
+    staff?: boolean,
   ): Promise<LoginInfo> {
     await this.logoutFromThisBrowser();
 
+    let keyType = ApiKeyType.NormalApiKey;
+
+    // Define key type for admin or staff member
+    if (admin || staff) {
+      keyType = admin ? ApiKeyType.AdminApiKey : ApiKeyType.StaffApiKey;
+    }
+
     let params: any = {
-      keyType: admin ? 11 : 0, // Admin or User key type
+      keyType: keyType,
       appName: appName,
       sign: true,
       brand: brand
     };
-    const getTempKeyResult = await this.authApi.login(username, password, params)
-
-    const signature = await this.sign(privateKey, getTempKeyResult.key)
+    const getTempKeyResult = await this.authApi.login(username, password, params);
+    const signature = await this.sign(privateKey, getTempKeyResult.key);
 
     params = {
-      keyType: admin ? 11 : 0,
+      keyType: keyType,
       appName: appName,
       sign: true,
       signAlgorithm: 'SHA512withRSA',
@@ -358,24 +399,33 @@ export class AuthService extends BaseService {
   }
 
   /**
-   * Send an SMS verification code to specific user.
+   * Send verification code (OTP) to specific user.
    * @param {string} username The username.
-   * @param {boolean} [admin] Use if need to get admin API_KEY type.
    * @param {string} [brand] Optional brand name.
+   * @param {PasscodeDeliveryType} [deliveryType] Optional prefered delivery type.
+   * @param {PasscodeMessagePrefix} [smsPrefix] Optional passcode SMS prefix.
+   * @param {string} [appHash] Optional 11-chars application hash.
    * @returns {Promise<SendPasscodeApiResponse>}
    */
-  public sendPasscode(username: string, admin?: boolean, brand?: string): Promise<SendPasscodeApiResponse> {
+  public sendPasscode(
+    username: string,
+    brand?: string,
+    deliveryType?: PasscodeDeliveryType,
+    smsPrefix?: PasscodeMessagePrefix,
+    appHash?: string,
+  ): Promise<SendPasscodeApiResponse> {
     if (!username || username.length === 0) {
       return Promise.reject(`Username can not be empty [${username}].`);
     }
-    // let keyType = admin ? 11 : 0; // Admin or User key type
+
     const brandName = brand ? brand : undefined;
     return this.authApi
       .sendPasscode({
         username: username,
-        type: 2,
-        // keyType: keyType,
         brand: brandName,
+        prefDeliveryType: deliveryType,
+        prefix: smsPrefix,
+        appHash: appHash,
       })
       .then((result) => {
         return result;
@@ -712,7 +762,11 @@ export class AuthService extends BaseService {
   }
 
   /**
-   * Preserve digital signature for future logins
+   * Preserve digital signature for future logins.
+   * @param {string} username Unique username.
+   * @param {string} appName Application name.
+   * @param {ApiKeyType} [keyType] API_KEY type.
+   * @returns {Promise<void>}
    */
   private async preserveSignature(username: string, appName: string, keyType?: ApiKeyType): Promise<void> {
     if (keyType != null && keyType !== ApiKeyType.AdminApiKey) {

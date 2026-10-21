@@ -32,26 +32,8 @@ export enum WsPacketGoal {
    */
   Data = 6,
 
-  // Following goals are not supported yet
-  // NOTE: numbers may change!
-  //
-  // /**
-  //  * Request (get) action and response for some data for specific data model (used by Client only)
-  //  */
-  // Request = 7,
-  //
-  // /**
-  //  * Update (put) of existing data for specific data model
-  //  */
-  // Update = 8,
-  //
-  // /**
-  //  * Add new item(s) (post) into the data model
-  //  */
-  // Create = 9,
-  //
-  // /**
-  //  * Delete some item(s) from some data model
-  //  */
-  // Delete = 10
+  /**
+   * AI request/response chat
+   */
+  Chat = 7,
 }

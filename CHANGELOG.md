@@ -6,12 +6,14 @@ The format is based on [Keep a Changelog],
 and this project adheres to [Semantic Versioning].
 
 ## [Unreleased]
+-
 
 ## [3.4.0] - 2026-10-13
 
 ### Added
-- Escalations APIs and services.
+- Escalations APIs, WebSocket and services.
 - Escalations bindings to narratives and notifications.
+- Staff user authentication.
 
 ### Changed
 - Narratives and location states moved to `locationEvents` namespace.

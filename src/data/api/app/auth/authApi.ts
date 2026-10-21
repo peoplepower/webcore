@@ -3,7 +3,7 @@ import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { GetOperationTokenApiResponse, OperationTokenType } from './getOperationTokenApiResponse';
 import { ApiKeyType, LoginApiResponse, PasscodeDeliveryType } from './loginApiResponse';
 import { inject, injectable } from '../../../../modules/common/di';
-import { PasscodeMessagePrefix, PasscodeNotificationType, SendPasscodeApiResponse } from './sendPasscodeApiResponse';
+import { PasscodeMessagePrefix, SendPasscodeApiResponse } from './sendPasscodeApiResponse';
 import { GetPrivateKeyApiResponse } from "./getPrivateKeyApiResponse";
 import { CreateTotpSecretApiResponse } from "./createTotpSecretApiResponse";
 import { ConfirmTotpSecretApiResponse } from "./confirmTotpSecretApiResponse";
@@ -165,13 +165,12 @@ export class AuthApi {
   }
 
   /**
-   * Send a temporary pass code to a user.
-   * Currently, it can be sent only by SMS, if the user has a valid mobile phone number.
+   * Send a temporary passcode to a user.
+   * It can be sent only by SMS or Email, if the user has a valid mobile phone number or email address.
    * See {@link https://iotapps.docs.apiary.io/#reference/login-and-logout/passcode/send-passcode}
    *
    * @param params Request parameters.
    * @param {string} params.username The username.
-   * @param {PasscodeNotificationType} params.type Notification type: 2 = SMS.
    * @param {number} [params.brand] A parameter identifying a customer's specific notification template.
    * @param {PasscodeMessagePrefix} [params.prefix] Message prefix type.
    * @param {string} [params.appHash] 11-character app hash.
@@ -180,7 +179,6 @@ export class AuthApi {
    */
   sendPasscode(params: {
     username: string;
-    type: PasscodeNotificationType;
     brand?: string;
     prefix?: PasscodeMessagePrefix;
     appHash?: string;

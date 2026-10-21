@@ -49,6 +49,21 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     eventDateMs: number;
 
     /**
+     * Bot and service related to escalation.
+     */
+    createBotInstanceId: number;
+    createBotService?: string;
+
+    /**
+     * User created escalation.
+     */
+    createUser?: {
+      userId: number;
+      firstName?: string;
+      lastName?: string;
+    };
+
+    /**
      * Resident (user) related to escalation.
      */
     user?: {
@@ -93,10 +108,10 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     }
 
     /**
-     * Bot and service related to escalation.
+     * Confirmation attributes.
      */
-    createBotInstanceId: number;
-    createBotService?: string;
+    confirmationDate?: string;
+    confirmationDateMs?: number;
 
     /**
      * User confirmed escalation.
@@ -108,18 +123,20 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     };
 
     /**
-     * Confirmation attributes.
-     */
-    confirmationDate?: string;
-    confirmationDateMs?: number;
-
-    /**
      * Resolution attributes.
      */
-    resolveUserId?: number;
     resolveSourceType?: EscalationSourceType;
     resolutionDate?: string;
     resolutionDateMs?: number;
+
+    /**
+     * User resolved escalation.
+     */
+    resolveUser?: {
+      userId: number;
+      firstName?: string;
+      lastName?: string;
+    };
   }>;
 }
 
