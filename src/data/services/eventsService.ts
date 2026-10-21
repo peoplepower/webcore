@@ -18,6 +18,10 @@ import {
   GetEscalationsApiResponse,
 } from '../api/app/locationEvents/getEscalationsApiResponse';
 import { UpdateEscalationModel } from '../api/app/locationEvents/updateEscalationApiResponse';
+import { WsHub } from '../../modules/wsHub/wsHub';
+import { WsSubscription } from '../../modules/wsHub/wsSubscription';
+import { WsSubscriptionType } from '../../modules/wsHub/wsSubscriptionType';
+import { WsSubscriptionOperation } from '../../modules/wsHub/wsSubscriptionOperation';
 
 /**
  * Events Service.
@@ -27,6 +31,7 @@ import { UpdateEscalationModel } from '../api/app/locationEvents/updateEscalatio
 export class EventsService extends BaseService {
   @inject('AuthService') protected readonly authService!: AuthService;
   @inject('LocationEventsApi') protected readonly locationEventsApi!: LocationEventsApi;
+  @inject('WsHub') protected readonly wsHub!: WsHub;
 
   // #region ------------------------- Narratives -------------------------
 
@@ -241,6 +246,34 @@ export class EventsService extends BaseService {
 
     return this.authService.ensureAuthenticated().then(() => {
       return this.locationEventsApi.updateEscalation(locationId, escalationId, {escalation: escalation});
+    });
+  }
+
+  /**
+   * Subscribe for location escalations created, updated or deleted.
+   * The escalation is provided in the `escalation` field of the subscription data.
+   *
+   * @param {number} locationId Location ID.
+   * @param params Subscription filter parameters.
+   * @param {EscalationStatus|EscalationStatus[]} [params.status] Filter by escalation status(es).
+   * @param {EscalationType[]} [params.escalationTypes] Filter by escalation type(s).
+   * @param {string[]} [params.locationTags] Location tags (groups).
+   * @param {EscalationPriority} [params.priority] Starting priority.
+   * @param {EscalationPriority} [params.priorityTo] Ending priority.
+   * @returns {WsSubscription}
+   */
+  public subscribeForLocationEscalations(
+    locationId: number,
+    params: {
+      escalationTypes?: EscalationType[];
+      locationTags?: string[];
+      priority?: EscalationPriority;
+      priorityTo?: EscalationPriority;
+    } = {},
+  ): WsSubscription {
+    return this.wsHub.subscribe(WsSubscriptionType.ESCALATIONS, WsSubscriptionOperation.CREATE_OR_UPDATE_OR_DELETE, {
+      locationId: locationId,
+      ...params,
     });
   }
 

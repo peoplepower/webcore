@@ -75,6 +75,13 @@ export class AuthService extends BaseService {
     return this._apiKey;
   }
 
+  /**
+   * Type of the current API_KEY, e.g. to check if the user is logged in with an admin API_KEY.
+   */
+  public get apiKeyType(): ApiKeyType | undefined {
+    return this._apiKeyType;
+  }
+
   public get lastUsername(): string | undefined {
     return this.wcStorage.get(LOCAL_STORAGE_LAST_USERNAME) || undefined;
   }
