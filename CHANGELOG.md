@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
+## [3.4.1] - 2026-10-23
+
+### Changed
+- Security update to Node.js v22.23.4.
+
 ## [3.4.0] - 2026-10-13
 
 ### Added
@@ -114,7 +119,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.0...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.1...HEAD
+[3.4.1]: https://github.com/peoplepower/webcore/compare/3.4.0..3.4.1
 [3.4.0]: https://github.com/peoplepower/webcore/compare/3.3.2..3.4.0
 [3.3.2]: https://github.com/peoplepower/webcore/compare/3.3.1..3.3.2
 [3.3.1]: https://github.com/peoplepower/webcore/compare/3.3.0..3.3.1
