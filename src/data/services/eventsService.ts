@@ -18,6 +18,7 @@ import {
   GetEscalationsApiResponse,
 } from '../api/app/locationEvents/getEscalationsApiResponse';
 import { UpdateEscalationModel } from '../api/app/locationEvents/updateEscalationApiResponse';
+import { EventSubscriptionModel, GetEventSubscriptionsApiResponse } from '../api/app/locationEvents/getEventSubscriptionsApiResponse';
 import { WsHub } from '../../modules/wsHub/wsHub';
 import { WsSubscription } from '../../modules/wsHub/wsSubscription';
 import { WsSubscriptionType } from '../../modules/wsHub/wsSubscriptionType';
@@ -25,7 +26,7 @@ import { WsSubscriptionOperation } from '../../modules/wsHub/wsSubscriptionOpera
 
 /**
  * Events Service.
- * Location events: narratives and escalations.
+ * Location events: narratives, escalations and event subscriptions.
  */
 @injectable('EventsService')
 export class EventsService extends BaseService {
@@ -274,6 +275,59 @@ export class EventsService extends BaseService {
     return this.wsHub.subscribe(WsSubscriptionType.ESCALATIONS, WsSubscriptionOperation.CREATE_OR_UPDATE_OR_DELETE, {
       locationId: locationId,
       ...params,
+    });
+  }
+
+  // #endregion
+
+  // #region ------------------------ Event Subscriptions ------------------------
+
+  /**
+   * Get all event subscriptions of the signed in user.
+   *
+   * @returns {Promise<GetEventSubscriptionsApiResponse>}
+   */
+  public getEventSubscriptions(): Promise<GetEventSubscriptionsApiResponse> {
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationEventsApi.getEventSubscriptions();
+    });
+  }
+
+  /**
+   * Subscribe the signed in user to location events.
+   * Each subscription is defined either for a single location or for an organization.
+   * Organization subscriptions are available for organization admins and staff users, and can be optionally narrowed by location tags.
+   *
+   * @param {EventSubscriptionModel[]} subscriptions One or multiple subscriptions to subscribe for.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public subscribeToEvents(subscriptions: EventSubscriptionModel[]): Promise<ApiResponseBase> {
+    if (!subscriptions || subscriptions.length === 0) {
+      return this.reject('At least one subscription must be provided.');
+    }
+    if (subscriptions.some((subscription) => subscription.locationId == null && subscription.organizationId == null)) {
+      return this.reject('Either location ID or organization ID must be provided for each subscription.');
+    }
+
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationEventsApi.subscribeToEvents(subscriptions);
+    });
+  }
+
+  /**
+   * Delete event subscriptions of the signed in user.
+   * If no subscription IDs are provided, all user event subscriptions are deleted.
+   *
+   * @param {number|number[]} [subscriptionId] Subscription ID(s) to delete.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  public deleteEventSubscriptions(subscriptionId?: number | number[]): Promise<ApiResponseBase> {
+    if (subscriptionId != null && ([] as number[]).concat(subscriptionId).some((id) => id < 1 || isNaN(id))) {
+      return this.reject(`Subscription ID is incorrect [${subscriptionId}].`);
+    }
+
+    return this.authService.ensureAuthenticated().then(() => {
+      return this.locationEventsApi.deleteEventSubscriptions(subscriptionId != null ? { subscriptionId: subscriptionId } : undefined);
     });
   }
 

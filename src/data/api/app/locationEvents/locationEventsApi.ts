@@ -14,6 +14,7 @@ import { SetLocationStateApiResponse, SetLocationStateModel } from './setLocatio
 import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from './getLocationTimeStateApiResponse';
 import { EscalationPriority, EscalationStatus, EscalationType, GetEscalationsApiResponse } from './getEscalationsApiResponse';
 import { UpdateEscalationModel } from './updateEscalationApiResponse';
+import { EventSubscriptionModel, GetEventSubscriptionsApiResponse } from './getEventSubscriptionsApiResponse';
 
 /**
  * Location Events API.
@@ -323,6 +324,51 @@ export class LocationEventsApi {
         escalationId: escalationId,
       },
       headers: analyticKey ? {ANALYTIC_API_KEY: analyticKey} : {},
+    });
+  }
+
+  // #endregion
+
+  // #region ------------------- Event Subscriptions -------------------
+
+  /**
+   * Get event subscriptions.
+   * Get all event subscriptions of the signed in user.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Location-Events/operation/Get%20Event%20Subscriptions}
+   *
+   * @returns {Promise<GetEventSubscriptionsApiResponse>}
+   */
+  getEventSubscriptions(): Promise<GetEventSubscriptionsApiResponse> {
+    return this.dal.get('eventSubscriptions');
+  }
+
+  /**
+   * Subscribe to events.
+   * Subscribe the signed in user to location events. Each subscription is defined either for a single location or for an organization.
+   * Organization subscriptions are available for organization admins and staff users, and can be optionally narrowed by location tags.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Location-Events/operation/Subscribe%20to%20Events}
+   *
+   * @param {EventSubscriptionModel[]} model One or multiple subscriptions to subscribe for.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  subscribeToEvents(model: EventSubscriptionModel[]): Promise<ApiResponseBase> {
+    return this.dal.post('eventSubscriptions', { subscriptions: model });
+  }
+
+  /**
+   * Delete event subscriptions.
+   * Delete event subscriptions of the signed in user. If no subscription IDs are provided, all user event subscriptions are deleted.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Location-Events/operation/Delete%20Event%20Subscriptions}
+   *
+   * @param [params] Request parameters.
+   * @param {number|number[]} [params.subscriptionId] Subscription ID(s) to delete.
+   * @returns {Promise<ApiResponseBase>}
+   */
+  deleteEventSubscriptions(params?: {
+    subscriptionId?: number|number[];
+  }): Promise<ApiResponseBase> {
+    return this.dal.delete('eventSubscriptions', {
+      params: params,
     });
   }
 
