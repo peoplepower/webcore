@@ -321,13 +321,13 @@ export class EventsService extends BaseService {
    * @param {number|number[]} [subscriptionId] Subscription ID(s) to delete.
    * @returns {Promise<ApiResponseBase>}
    */
-  public deleteEventSubscription(subscriptionId?: number | number[]): Promise<ApiResponseBase> {
+  public deleteEventSubscriptions(subscriptionId?: number | number[]): Promise<ApiResponseBase> {
     if (subscriptionId != null && ([] as number[]).concat(subscriptionId).some((id) => id < 1 || isNaN(id))) {
       return this.reject(`Subscription ID is incorrect [${subscriptionId}].`);
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationEventsApi.deleteEventSubscription(subscriptionId != null ? { subscriptionId: subscriptionId } : undefined);
+      return this.locationEventsApi.deleteEventSubscriptions(subscriptionId != null ? { subscriptionId: subscriptionId } : undefined);
     });
   }
 

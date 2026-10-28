@@ -364,7 +364,7 @@ export class LocationEventsApi {
    * @param {number|number[]} [params.subscriptionId] Subscription ID(s) to delete.
    * @returns {Promise<ApiResponseBase>}
    */
-  deleteEventSubscription(params?: {
+  deleteEventSubscriptions(params?: {
     subscriptionId?: number|number[];
   }): Promise<ApiResponseBase> {
     return this.dal.delete('eventSubscriptions', {
