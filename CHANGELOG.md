@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
+## [3.4.2] - 2026-10-28
+
+### Added
+- Event subscriptions (push notifications) APIs
+
 ## [3.4.1] - 2026-10-23
 
 ### Changed
@@ -119,7 +124,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.1...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.2...HEAD
+[3.4.2]: https://github.com/peoplepower/webcore/compare/3.4.1..3.4.2
 [3.4.1]: https://github.com/peoplepower/webcore/compare/3.4.0..3.4.1
 [3.4.0]: https://github.com/peoplepower/webcore/compare/3.3.2..3.4.0
 [3.3.2]: https://github.com/peoplepower/webcore/compare/3.3.1..3.3.2
