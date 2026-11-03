@@ -1,4 +1,5 @@
 import { ApiResponseBase } from '../../../models/apiResponseBase';
+import { FileUploadPolicy } from '../userAccounts/getUserInformationApiResponse';
 
 export enum LocationType {
   Residence = 10,
@@ -67,6 +68,11 @@ export interface LocationModel {
    * External system ID
    */
   externalId?: string;
+
+  /**
+   * Location's preferred language.
+   */
+  language?: string;
 
   /**
    * Location address.
@@ -188,6 +194,11 @@ export interface LocationModel {
    * NOTE: Remove this field (deprecated).
    */
   thermostatType?: number;
+
+  /**
+   * Location file storage policy.
+   */
+  fileUploadPolicy?: FileUploadPolicy | number;
 
   /**
    * Test location flag.

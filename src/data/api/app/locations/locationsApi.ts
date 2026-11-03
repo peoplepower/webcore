@@ -12,6 +12,7 @@ import { GetLocationTotalsApiResponse } from './getLocationTotalsApiResponse';
 import { UpdateLocationSpaceApiResponse, UpdateLocationSpaceModel } from './updateSpaceApiResponse';
 import { GetLocationPrioritiesApiResponse } from './getLocationPrioritiesApiResponse';
 import { UpdateLocationUserApiResponse, UpdateLocationUserModel } from "./updateLocationUserApiResponse";
+import { GetSubLocationsHistoryApiResponse } from './getSubLocationsHistoryApiResponse';
 
 /**
  * Locations API.
@@ -63,10 +64,10 @@ export class LocationsApi {
    *
    * @param {number} locationId Parent Location ID to assign sub-location.
    * @param {number} subLocationId Existing Location ID to add as a sub-location.
-   * @param {number} [startDate] Assignment start date otherwise set to now.
+   * @param {string|number} [startDate] Assignment start date otherwise set to now.
    * @returns {Promise<ApiResponseBase>}
    */
-  addSubLocation(locationId: number, subLocationId: number, startDate?: number): Promise<ApiResponseBase> {
+  addSubLocation(locationId: number, subLocationId: number, startDate?: string | number): Promise<ApiResponseBase> {
     return this.dal.put(`location/${encodeURIComponent(locationId.toString())}/subs`, { locationId: locationId }, {
       params: {
         subLocationId: subLocationId,
@@ -93,6 +94,29 @@ export class LocationsApi {
     });
   }
 
+  /**
+   * Get Sub-Locations history.
+   * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Locations/operation/Get%20Sub-Locations}
+   *
+   * @param {number} locationId Location ID to get sub-locations history.
+   * @param {Object} params Request parameters.
+   * @param {string|number} params.startDate History date range start.
+   * @param {string|number} [params.endDate] History date range end.
+   * @param {boolean} [params.parents] Get history of parent or child locations.
+   * @param {number} [params.rowCount] Maximum number of results.
+   * @returns {Promise<GetSubLocationsHistoryApiResponse>}
+   */
+  getSubLocationsHistory(locationId: number, params: {
+    startDate: string | number;
+    endDate?: string | number;
+    parents?: boolean;
+    rowCount?: number;
+  }): Promise<GetSubLocationsHistoryApiResponse> {
+    return this.dal.get(`location/${encodeURIComponent(locationId.toString())}/subs`, {
+      params: params,
+    });
+  }
+
   // #region -------------------- Location Scenes --------------------
 
   /**
@@ -115,11 +139,11 @@ export class LocationsApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/locations/location-scenes/location-scenes-history}
    *
    * @param {string} locationId The Location ID.
-   * @param {string} [startDate] Optional. Start date to begin receiving data.
-   * @param {string} [endDate] Optional. End date to stop receiving data. Default is the current date.
+   * @param {string|number} [startDate] Optional. Start date to begin receiving data.
+   * @param {string|number} [endDate] Optional. End date to stop receiving data. Default is the current date.
    * @returns {Promise<GetLocationScenesHistoryApiResponse>}
    */
-  getLocationScenesHistory(locationId: number, startDate?: string, endDate?: string): Promise<GetLocationScenesHistoryApiResponse> {
+  getLocationScenesHistory(locationId: number, startDate?: string | number, endDate?: string | number): Promise<GetLocationScenesHistoryApiResponse> {
     return this.dal.get('location/' + encodeURIComponent(locationId.toString()) + '/events', {
       params: {
         startDate: startDate,

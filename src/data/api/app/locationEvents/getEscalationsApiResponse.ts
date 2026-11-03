@@ -41,6 +41,11 @@ export interface GetEscalationsApiResponse extends ApiResponseBase {
     priority: EscalationPriority;
 
     /**
+     * Escalation icon name.
+     */
+    icon?: string;
+
+    /**
      * Escalation date.
      */
     creationDate: string;

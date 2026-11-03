@@ -218,7 +218,8 @@ export interface LocationInfo {
   salesTaxRate?: number;
 
   /**
-   * The last user in location status like HOME, AWAY, SLEEP, VACATION, etc. It is used in analytic rules.
+   * The last user in location status like HOME, AWAY, SLEEP, VACATION, etc.
+   * It is used in analytic rules.
    */
   event: string;
 
@@ -393,6 +394,16 @@ export interface LocationInfo {
     endDate: string;
     endDateMs: number;
   }>;
+
+  /**
+   * Location's preferred language.
+   */
+  language: string;
+
+  /**
+   * Location file storage policy.
+   */
+  fileUploadPolicy: FileUploadPolicy | number;
 
   /**
    * Test location.
