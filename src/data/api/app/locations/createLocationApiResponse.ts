@@ -10,4 +10,9 @@ export interface NewLocationModel extends LocationModel {
    * Unique domain name to register location in organization.
    */
   appName?: string;
+
+  /**
+   * Organization ID, where the location is related.
+   */
+  organizationId?: number;
 }

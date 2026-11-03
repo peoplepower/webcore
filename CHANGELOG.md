@@ -8,10 +8,14 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
-## [3.4.2] - 2026-10-28
+## [3.4.2] - 2026-11-03
 
 ### Added
 - Event subscriptions (push notifications) APIs
+- Sub-locations history API
+
+### Changed
+- Security update to PNPM v12.15.0
 
 ## [3.4.1] - 2026-10-23
 
