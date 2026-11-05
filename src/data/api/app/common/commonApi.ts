@@ -68,18 +68,14 @@ export class CommonApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/cloud-connectivity/server-instances/get-server}
    *
    * @param [params] request parameters
-   * @param {ServerType} [params.type] Server type
-   *    appapi - restful API
-   *    wsapi - websockets API
-   *    deviceio - device IO API
-   *    streaming - streaming API
-   *    webapp - web UI app
+   * @param {ServerType} [params.type] Server type.
    * @param {string} [params.deviceId] Device ID to receive streaming server
    * @param {boolean} [params.connected] Check, if the device is connected to the streaming server:
    *    false - return the best available server - default,
    *    true - return the server, where the device is connected now or nothing.
    * @param {string} [params.brand] Return brand specific server, if available.
    * @param {string} [params.appName] Return app specific server, if available.
+   * @param {boolean} [params.crtTag] Wrap MQTT certificates and a key with the beginning and end tags.
    * @returns {Promise<GetServerApiResponse>}
    */
   getServer(params: {
@@ -88,10 +84,11 @@ export class CommonApi {
     connected?: boolean;
     brand?: string;
     appName?: string;
+    crtTag?: boolean;
   }): Promise<GetServerApiResponse> {
-    const {type, ...reqParams} = params;
+    const {type, ...parameters} = params;
     return this.dal.get('settingsServer/' + encodeURIComponent(type), {
-      params: reqParams,
+      params: parameters,
     });
   }
 
@@ -101,12 +98,7 @@ export class CommonApi {
    * See {@link https://iotapps.docs.apiary.io/#reference/cloud-connectivity/server-instance-url/get-server-url}
    *
    * @param [params] request parameters
-   * @param {ServerType} [params.type] Server type
-   *    appapi - restful API
-   *    wsapi - websockets API
-   *    deviceio - device IO API
-   *    streaming - streaming API
-   *    webapp - web UI app
+   * @param {ServerType} [params.type] Server type.
    * @param {boolean} [params.ssl] Flag to return SSL version of the URL, if available, default true.
    * @param {string} [params.deviceId] Device ID to receive device server For maximum scalability,
    *    we recommend a device check in with this API about every hour to discover, if it needs to switch servers.
