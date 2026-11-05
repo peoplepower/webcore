@@ -28,37 +28,55 @@ export interface TimezoneModel {
 
 export interface CloudConfig {
   /**
-   * Cloud name
+   * Cloud unique name identificator.
    */
   name: string;
+
+  /**
+   * Cloud type.
+   */
+  type: CloudType;
+
+  /**
+   * Cloud instance description.
+   */
+  description?: string;
+
+  /**
+   * The current cloud software version.
+   */
+  version?: string;
 
   currentTime: string;
   currentTimeMs: number;
   defaultTimezone: TimezoneModel;
+
+  /**
+   * Servers for connection.
+   */
   servers: CloudServerConfig[];
-  type: CloudType;
 }
 
 export interface CloudServerConfig {
   /**
-   * Server Type
-   *   appapi - restful API
-   *   wsapi - websockets API
-   *   deviceio - device IO API
-   *   streaming - streaming API
-   *   webapp - web UI app
+   * Server type.
    */
   type: ServerType;
 
   /**
-   * Server Host
+   * Server host.
    */
   host: string;
 
   /**
-   * Default Port
+   * Default port.
    */
   port: number;
+
+  /**
+   * Server brand.
+   */
+  brand?: string;
 
   /**
    * Optional path
@@ -71,17 +89,7 @@ export interface CloudServerConfig {
   ssl: boolean;
 
   /**
-   * Alternative Port. Used to provide a different way to connect, usually without SSL.
-   */
-  altPort: number;
-
-  /**
-   * Alternative SSL. true - SSL, false - No SSL
-   */
-  altSsl: boolean;
-
-  /**
-   * Server version. Optional
+   * Server version. Optional.
    */
   version?: number;
 }
@@ -105,7 +113,7 @@ export enum ServerType {
   /**
    * Streaming API
    */
-  Streaming = 'streaming',
+  Streaming = 'mqtt',
 
   /**
    * Web UI app

@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning].
 ## [Unreleased]
 -
 
+## [3.4.3] - 2026-11-05
+
+### Changed
+- Server settings responses and paramaters.
+
 ## [3.4.2] - 2026-11-03
 
 ### Added
@@ -128,7 +133,8 @@ and this project adheres to [Semantic Versioning].
 [semantic versioning]: https://semver.org/spec/v2.0.0.html
 
 <!-- Versions -->
-[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.2...HEAD
+[unreleased]: https://github.com/peoplepower/webcore/compare/3.4.3...HEAD
+[3.4.3]: https://github.com/peoplepower/webcore/compare/3.4.2..3.4.3
 [3.4.2]: https://github.com/peoplepower/webcore/compare/3.4.1..3.4.2
 [3.4.1]: https://github.com/peoplepower/webcore/compare/3.4.0..3.4.1
 [3.4.0]: https://github.com/peoplepower/webcore/compare/3.3.2..3.4.0
