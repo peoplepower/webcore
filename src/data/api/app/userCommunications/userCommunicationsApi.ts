@@ -15,6 +15,7 @@ import { UpdateMessageApiResponse, UpdateMessageModel } from './updateMessageApi
 import { VoteForCrowdFeedbackApiResponse } from './voteForCrowdFeedbackApiResponse';
 import { ApiResponseBase } from '../../../models/apiResponseBase';
 import { PostSupportTicketApiResponse, PostSupportTicketModel } from './postSupportTicketApiResponse';
+import { PushSubscriptionType, RegisterPushNotificationsApiResponse } from './registerPushNotificationsApiResponse';
 
 /**
  * User Communications.
@@ -357,14 +358,16 @@ export class UserCommunicationsApi {
    * @param {string} appName Unique application name to register for push notifications.
    * @param {string} token The iOS notification token or the Android device registration ID.
    * @param [params] Request parameters.
+   * @param {PushSubscriptionType} [params.subscriptionType] Type of the notifications, can be used as a bitmask.
    * @param {boolean} [params.badge] Support badge icons.
    * @param {string} [params.brand] If set, the app will not receive notifications addressed to different brands.
-   * @returns {Promise<ApiResponseBase>}
+   * @returns {Promise<RegisterPushNotificationsApiResponse>}
    */
   registerPushNotifications(appName: string, token: string, params?: {
+    subscriptionType?: PushSubscriptionType;
     badge?: boolean;
     brand?: string;
-  }): Promise<ApiResponseBase> {
+  }): Promise<RegisterPushNotificationsApiResponse> {
     return this.dal.put(`notificationToken/${encodeURIComponent(appName)}/${encodeURIComponent(token)}`, {}, {params: params});
   }
 

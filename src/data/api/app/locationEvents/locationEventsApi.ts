@@ -14,7 +14,7 @@ import { SetLocationStateApiResponse, SetLocationStateModel } from './setLocatio
 import { GetLocationTimeStateApiResponse, LocationTimeStateAggregation } from './getLocationTimeStateApiResponse';
 import { EscalationPriority, EscalationStatus, EscalationType, GetEscalationsApiResponse } from './getEscalationsApiResponse';
 import { UpdateEscalationModel } from './updateEscalationApiResponse';
-import { EventSubscriptionModel, GetEventSubscriptionsApiResponse } from './getEventSubscriptionsApiResponse';
+import { EventSubscriptionsModel, GetEventSubscriptionsApiResponse } from './getEventSubscriptionsApiResponse';
 
 /**
  * Location Events API.
@@ -348,10 +348,10 @@ export class LocationEventsApi {
    * Organization subscriptions are available for organization admins and staff users, and can be optionally narrowed by location tags.
    * See {@link https://sboxall.peoplepowerco.com/cloud/apidocs/cloud.html#tag/Location-Events/operation/Subscribe%20to%20Events}
    *
-   * @param {EventSubscriptionModel[]} model One or multiple subscriptions to subscribe for.
+   * @param {EventSubscriptionModel} model One or multiple subscriptions to subscribe for.
    * @returns {Promise<ApiResponseBase>}
    */
-  subscribeToEvents(model: EventSubscriptionModel[]): Promise<ApiResponseBase> {
+  subscribeToEvents(model: EventSubscriptionsModel): Promise<ApiResponseBase> {
     return this.dal.post('eventSubscriptions', { subscriptions: model });
   }
 

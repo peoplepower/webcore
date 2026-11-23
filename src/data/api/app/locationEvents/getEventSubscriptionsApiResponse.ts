@@ -6,9 +6,13 @@ export enum EventSubscriptionDataType {
 }
 
 /**
- * Event subscription to subscribe for.
+ * Event subscription.
  */
-export interface EventSubscriptionModel {
+export interface EventSubscription {
+
+  /**
+   * Subscription data type.
+   */
   dataType: EventSubscriptionDataType;
 
   /**
@@ -37,26 +41,39 @@ export interface EventSubscriptionModel {
    * Escalation types to filter events.
    */
   escalationTypes?: EscalationType[];
+}
+
+/**
+ * Event subscriptions to subscribe for.
+ * Multiple subscriptions allowed for one optional notification token.
+ */
+export interface EventSubscriptionsModel {
+
+  /**
+   * Subscriptions to enable.
+   */
+  subscriptions: Array<EventSubscription>;
 
   /**
    * Push notification token of the mobile device.
+   * If another user will submit the same token, the token will change the owner.
    */
   notificationToken?: string;
 
   /**
    * Mobile app name.
-   * Used for push notifications.
+   * Used for push notifications, required if notification token is provided.
    */
   appName?: string;
 }
 
 /**
- * Existing event subscription.
+ * Active event subscription.
  */
-export interface EventSubscription extends EventSubscriptionModel {
+export interface ActiveEventSubscription extends EventSubscription {
   subscriptionId: number;
 }
 
 export interface GetEventSubscriptionsApiResponse extends ApiResponseBase {
-  subscriptions: Array<EventSubscription>;
+  subscriptions: Array<ActiveEventSubscription>;
 }
