@@ -18,7 +18,7 @@ import {
   GetEscalationsApiResponse,
 } from '../api/app/locationEvents/getEscalationsApiResponse';
 import { UpdateEscalationModel } from '../api/app/locationEvents/updateEscalationApiResponse';
-import { EventSubscriptionModel, GetEventSubscriptionsApiResponse } from '../api/app/locationEvents/getEventSubscriptionsApiResponse';
+import { EventSubscriptionsModel, GetEventSubscriptionsApiResponse } from '../api/app/locationEvents/getEventSubscriptionsApiResponse';
 import { WsHub } from '../../modules/wsHub/wsHub';
 import { WsSubscription } from '../../modules/wsHub/wsSubscription';
 import { WsSubscriptionType } from '../../modules/wsHub/wsSubscriptionType';
@@ -298,19 +298,19 @@ export class EventsService extends BaseService {
    * Each subscription is defined either for a single location or for an organization.
    * Organization subscriptions are available for organization admins and staff users, and can be optionally narrowed by location tags.
    *
-   * @param {EventSubscriptionModel[]} subscriptions One or multiple subscriptions to subscribe for.
+   * @param {EventSubscriptionsModel} model One or multiple subscriptions to subscribe for.
    * @returns {Promise<ApiResponseBase>}
    */
-  public subscribeToEvents(subscriptions: EventSubscriptionModel[]): Promise<ApiResponseBase> {
-    if (!subscriptions || subscriptions.length === 0) {
+  public subscribeToEvents(model: EventSubscriptionsModel): Promise<ApiResponseBase> {
+    if (!model.subscriptions || model.subscriptions.length === 0) {
       return this.reject('At least one subscription must be provided.');
     }
-    if (subscriptions.some((subscription) => subscription.locationId == null && subscription.organizationId == null)) {
+    if (!model.subscriptions.some((subscription) => subscription.locationId == null && subscription.organizationId == null)) {
       return this.reject('Either location ID or organization ID must be provided for each subscription.');
     }
 
     return this.authService.ensureAuthenticated().then(() => {
-      return this.locationEventsApi.subscribeToEvents(subscriptions);
+      return this.locationEventsApi.subscribeToEvents(model);
     });
   }
 

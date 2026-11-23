@@ -11,6 +11,7 @@ import { UpdateMessageModel } from '../api/app/userCommunications/updateMessageA
 import { PostSupportTicketApiResponse, PostSupportTicketModel } from '../api/app/userCommunications/postSupportTicketApiResponse';
 import { AuthService } from './authService';
 import { SendNotificationApiResponse, SendNotificationModel } from '../api/app/userCommunications/sendNotificationApiResponse';
+import { PushSubscriptionType } from '../api/app/userCommunications/registerPushNotificationsApiResponse';
 
 /**
  * Exposes interface to operate the messages that are sent from user to user in the system.
@@ -379,11 +380,13 @@ export class MessagingService extends BaseService {
    * @param {string} appName Unique application name to register for push notifications.
    * @param {string} token The iOS notification token or the Android device registration ID.
    * @param [params] Request parameters.
+   * @param {PushSubscriptionType} [params.subscriptionType] Type of the notifications, can be used as a bitmask.
    * @param {boolean} [params.badge] Support badge icons.
    * @param {string} [params.brand] If set, the app will not receive notifications addressed to different brands.
    * @returns {Promise<ApiResponseBase>}
    */
   public registerForPushNotifications(appName: string, token: string, params?: {
+    subscriptionType?: PushSubscriptionType;
     badge?: boolean;
     brand?: string;
   }): Promise<ApiResponseBase> {
